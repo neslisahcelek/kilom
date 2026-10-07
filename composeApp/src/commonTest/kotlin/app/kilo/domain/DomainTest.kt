@@ -22,20 +22,20 @@ class DeltaTest {
 
     @Test fun negativeDelta() {
         val d = computeDelta(e("b", 71.6, "2024-01-12T08:00:00Z"), e("a", 72.5, "2024-01-10T08:00:00Z"), utc)!!
-        assertEquals(-0.9, d.kg.round1())
+        assertEquals(-0.9, d.kg.round2())
         assertEquals(2, d.days)
     }
 
     @Test fun positiveDelta() {
         val d = computeDelta(e("b", 72.5, "2024-01-11T08:00:00Z"), e("a", 72.1, "2024-01-10T08:00:00Z"), utc)!!
-        assertEquals(0.4, d.kg.round1())
+        assertEquals(0.4, d.kg.round2())
         assertEquals(1, d.days)
     }
 
     @Test fun zeroDeltaIsNotNegativeZero() {
         val d = computeDelta(e("b", 70.0, "2024-01-11T08:00:00Z"), e("a", 70.0, "2024-01-10T08:00:00Z"), utc)!!
         assertEquals(0.0, d.kg)
-        assertEquals("0.0", d.format(WeightUnit.KG))
+        assertEquals("0.00", d.format(WeightUnit.KG))
     }
 
     @Test fun sameDayIsZeroDays() {
@@ -80,37 +80,37 @@ class DeltaTest {
     }
 
     @Test fun deltaFormattingSignsAndUnits() {
-        assertEquals("+0.4", Delta(0.4, 1).format(WeightUnit.KG))
-        assertEquals("-1.2", Delta(-1.2, 1).format(WeightUnit.KG))
-        assertEquals("+0.9", Delta(0.4, 1).format(WeightUnit.LB)) // 0.88 lb
-        assertEquals("-2.6", Delta(-1.2, 1).format(WeightUnit.LB)) // 2.645 lb
+        assertEquals("+0.40", Delta(0.4, 1).format(WeightUnit.KG))
+        assertEquals("-1.20", Delta(-1.2, 1).format(WeightUnit.KG))
+        assertEquals("+0.88", Delta(0.4, 1).format(WeightUnit.LB)) // 0.88 lb
+        assertEquals("-2.65", Delta(-1.2, 1).format(WeightUnit.LB)) // 2.645 lb
     }
 }
 
 class ConversionTest {
     @Test fun kgToLbAndBack() {
-        assertEquals(154.3, 70.0.kgTo(WeightUnit.LB))
-        assertEquals(70.0, 154.3235.lbToKg().round1())
-        assertEquals(220.5, 100.0.kgToLb().round1())
+        assertEquals(154.32, 70.0.kgTo(WeightUnit.LB))
+        assertEquals(70.0, 154.3235.lbToKg().round2())
+        assertEquals(220.46, 100.0.kgToLb().round2())
     }
 
     @Test fun kgToKgRounds() {
-        assertEquals(72.5, 72.46.kgTo(WeightUnit.KG))
+        assertEquals(72.46, 72.46.kgTo(WeightUnit.KG))
     }
 
-    @Test fun round1() {
-        assertEquals(0.0, (-0.04).round1())
-        assertEquals(1.3, 1.26.round1())
+    @Test fun round2() {
+        assertEquals(0.0, (-0.004).round2())
+        assertEquals(1.26, 1.26.round2())
     }
 
     @Test fun formatting() {
-        assertEquals("70.0", formatWeight(70.0, WeightUnit.KG))
-        assertEquals("72.5", formatWeight(72.46, WeightUnit.KG))
-        assertEquals("154.3", formatWeight(70.0, WeightUnit.LB))
-        assertEquals("70.0 kg", formatWeightWithUnit(70.0, WeightUnit.KG))
-        assertEquals("154.3 lb", formatWeightWithUnit(70.0, WeightUnit.LB))
-        assertEquals("-0.4", formatOneDecimal(-0.4))
-        assertEquals("0.0", formatOneDecimal(0.0))
+        assertEquals("70.00", formatWeight(70.0, WeightUnit.KG))
+        assertEquals("72.46", formatWeight(72.46, WeightUnit.KG))
+        assertEquals("154.32", formatWeight(70.0, WeightUnit.LB))
+        assertEquals("70.00 kg", formatWeightWithUnit(70.0, WeightUnit.KG))
+        assertEquals("154.32 lb", formatWeightWithUnit(70.0, WeightUnit.LB))
+        assertEquals("-0.40", formatTwoDecimals(-0.4))
+        assertEquals("0.00", formatTwoDecimals(0.0))
     }
 }
 
@@ -128,9 +128,23 @@ class InputValidationTest {
         assertEquals(72.5, kg("  72,5  "))
     }
 
-    @Test fun roundsToOneDecimal() {
-        assertEquals(72.5, kg("72.54"))
-        assertEquals(72.6, kg("72.56"))
+    @Test fun roundsToTwoDecimals() {
+        assertEquals(72.54, kg("72.544"))
+        assertEquals(72.55, kg("72.546"))
+    }
+
+    @Test fun twoDecimalInputSurvivesSavingAndFormatting() {
+        val value = kg("50,75")!!
+        val entry = WeightEntry.create(value, Instant.parse("2024-01-01T08:00:00Z"))
+        assertEquals(50.75, entry.kg)
+        assertEquals("50.75", formatWeight(entry.kg, WeightUnit.KG))
+        assertEquals("51.00", formatWeight(51.0, WeightUnit.KG))
+    }
+
+    @Test fun twoDecimalPoundsSurviveSavingAndFormatting() {
+        val value = kg("150.25", WeightUnit.LB)!!
+        val entry = WeightEntry.create(value, Instant.parse("2024-01-01T08:00:00Z"))
+        assertEquals("150.25", formatWeight(entry.kg, WeightUnit.LB))
     }
 
     @Test fun rejectsEmptyAndGarbage() {

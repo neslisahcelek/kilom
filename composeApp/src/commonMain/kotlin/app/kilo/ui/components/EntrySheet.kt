@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -279,7 +280,8 @@ fun EntrySheet(
                                 cursorBrush = SolidColor(colors.accent),
                                 modifier = Modifier
                                     .focusRequester(focusRequester)
-                                    .width(IntrinsicSize.Min),
+                                    .width(IntrinsicSize.Min)
+                                    .widthIn(min = 180.dp, max = 230.dp),
                                 decorationBox = { innerTextField ->
                                     Box(contentAlignment = Alignment.CenterEnd) {
                                         if (sheet.input.isEmpty()) {
@@ -352,16 +354,17 @@ fun EntrySheet(
 
     // Date Picker Dialog
     if (showDatePicker) {
-        val maxSelectableUtcMillis = remember(timeZone) {
+        // DatePicker represents calendar dates as UTC midnight, regardless of the device zone.
+        val todayUtcMillis = remember(timeZone) {
             val localToday = Clock.System.now().toLocalDateTime(timeZone).date
-            localToday.atTime(23, 59, 59).toInstant(TimeZone.UTC).toEpochMilliseconds()
+            localToday.atTime(0, 0).toInstant(TimeZone.UTC).toEpochMilliseconds()
         }
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = sheet.selectedDateMillis ?: Clock.System.now().toEpochMilliseconds(),
-            selectableDates = remember(maxSelectableUtcMillis) {
+            initialSelectedDateMillis = sheet.selectedDateMillis ?: todayUtcMillis,
+            selectableDates = remember(todayUtcMillis) {
                 object : SelectableDates {
                     override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                        return utcTimeMillis <= maxSelectableUtcMillis
+                        return utcTimeMillis <= todayUtcMillis
                     }
                 }
             },

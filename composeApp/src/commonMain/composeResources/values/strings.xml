@@ -18,7 +18,7 @@
     <string name="sheet_save">Save</string>
     <string name="sheet_cancel">Cancel</string>
     <string name="sheet_scanning">Reading the scale…</string>
-    <string name="sheet_placeholder">0.0</string>
+    <string name="sheet_placeholder">0.00</string>
     <string name="sheet_ocr_prefilled">Please check the value before saving.</string>
     <string name="error_empty">Enter your weight.</string>
     <string name="error_not_a_number">That doesn\'t look like a number.</string>

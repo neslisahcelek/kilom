@@ -4,9 +4,9 @@ import app.kilo.domain.MAX_KG
 import app.kilo.domain.MIN_KG
 import app.kilo.domain.WeightUnit
 import app.kilo.domain.lbToKg
-import app.kilo.domain.round1
+import app.kilo.domain.round2
 
-/** [value] is expressed in [unit] (as shown on the scale), 1 decimal. */
+/** [value] is expressed in [unit] (as shown on the scale), 2 decimals. */
 data class ParsedWeight(val value: Double, val unit: WeightUnit)
 
 object WeightParser {
@@ -36,7 +36,7 @@ object WeightParser {
                 if (after != null && after.isDigit()) continue
 
                 val rawValue = (m.groupValues[1] + "." + m.groupValues[2]).toDouble()
-                val value = rawValue.round1()
+                val value = rawValue.round2()
                 var score = 1.0
                 var unit = preferred
 

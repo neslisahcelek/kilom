@@ -1,7 +1,7 @@
 package app.kilo.domain
 
 sealed interface WeightInputResult {
-    /** [kg] is the value to store (kg input rounded to 1 decimal; lb input converted exactly so lb round-trips). */
+    /** [kg] is the value to store (kg input rounded to 2 decimals; lb input converted exactly so lb round-trips). */
     data class Valid(val kg: Double) : WeightInputResult
     data class Invalid(val reason: Reason) : WeightInputResult
 
@@ -17,13 +17,13 @@ fun parseWeightInput(text: String, unit: WeightUnit): WeightInputResult {
     if (!numberRegex.matches(t)) return WeightInputResult.Invalid(WeightInputResult.Reason.NOT_A_NUMBER)
     val v = t.toDoubleOrNull()
         ?: return WeightInputResult.Invalid(WeightInputResult.Reason.NOT_A_NUMBER)
-    val entered = v.round1()
+    val entered = v.round2()
     val kg = when (unit) {
         WeightUnit.KG -> entered
         WeightUnit.LB -> entered.lbToKg()
     }
-    // compare on the 1-decimal rounded kg to keep the boundary intuitive
-    val check = kg.round1()
-    if (check < MIN_KG || check > MAX_KG) return WeightInputResult.Invalid(WeightInputResult.Reason.OUT_OF_RANGE)
+    // compare on the 2-decimal rounded kg to keep the boundary intuitive
+    val check = kg.round2()
+    if (check !in MIN_KG..MAX_KG) return WeightInputResult.Invalid(WeightInputResult.Reason.OUT_OF_RANGE)
     return WeightInputResult.Valid(kg)
 }

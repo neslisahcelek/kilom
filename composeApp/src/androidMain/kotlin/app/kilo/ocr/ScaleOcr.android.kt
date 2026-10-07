@@ -17,15 +17,29 @@ private const val MAX_DIMENSION = 2000
 
 actual class ScaleOcr {
     actual suspend fun readText(image: ByteArray): List<String> {
-        val bitmap = withContext(Dispatchers.Default) { decode(image) } ?: return emptyList()
+        logOcr("android recognition_started bytes=${image.size}")
+        val bitmap = withContext(Dispatchers.Default) { decode(image) } ?: run {
+            logOcr("android decode_failed")
+            return emptyList()
+        }
+        logOcr("android decode_completed width=${bitmap.width} height=${bitmap.height}")
         return try {
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
             try {
                 val text = suspendCancellableCoroutine<com.google.mlkit.vision.text.Text?> { cont ->
                     recognizer.process(InputImage.fromBitmap(bitmap, 0))
-                        .addOnSuccessListener { cont.resume(it) }
-                        .addOnFailureListener { cont.resume(null) }
-                        .addOnCanceledListener { cont.cancel() }
+                        .addOnSuccessListener {
+                            logOcr("android recognition_completed blocks=${it.textBlocks.size}")
+                            cont.resume(it)
+                        }
+                        .addOnFailureListener {
+                            logOcr("android recognition_failed exception=${it::class.simpleName}")
+                            cont.resume(null)
+                        }
+                        .addOnCanceledListener {
+                            logOcr("android recognition_cancelled")
+                            cont.cancel()
+                        }
                 }
                 text?.textBlocks
                     ?.flatMap { it.lines }

@@ -13,6 +13,8 @@ import app.kilo.domain.formatWeight
 import app.kilo.domain.lbToKg
 import app.kilo.domain.parseWeightInput
 import app.kilo.ocr.WeightParser
+import app.kilo.ocr.logOcr
+import app.kilo.ocr.logOcrLines
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -22,13 +24,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 /** Localizable error keys; the UI maps them to string resources (no raw exceptions reach the UI). */
 enum class UiError { EMPTY, NOT_A_NUMBER, OUT_OF_RANGE, OCR_NO_RESULT, OCR_FAILED }
@@ -66,7 +69,9 @@ class DashboardViewModel(
     private val prefs: PrefsRepository,
     private val readText: suspend (ByteArray) -> List<String>,
     private val feedback: DashboardFeedback,
-    private val now: () -> Instant = { Clock.System.now() },
+    private val now: () -> Instant = {
+        Clock.System.now().let { Instant.fromEpochSeconds(it.epochSeconds, it.nanosecondsOfSecond) }
+    },
     private val timeZone: () -> TimeZone = { TimeZone.currentSystemDefault() },
 ) : ViewModel() {
 
@@ -83,9 +88,9 @@ class DashboardViewModel(
                     val tz = timeZone()
                     val history = buildHistory(entries, tz)
                     val hero = history.firstOrNull()?.let {
-                        val today = now().toLocalDateTime(tz).date.toEpochDays()
-                        val last = it.entry.at.toLocalDateTime(tz).date.toEpochDays()
-                        HeroState(it, (today - last).toInt().coerceAtLeast(0))
+                        val today = now().toLocalDateTime(tz).date
+                        val last = it.entry.at.toLocalDateTime(tz).date
+                        HeroState(it, last.daysUntil(today).coerceAtLeast(0))
                     }
                     _state.update { it.copy(unit = unit, history = history, hero = hero) }
                 }
@@ -125,19 +130,24 @@ class DashboardViewModel(
     fun onImage(bytes: ByteArray) {
         scanJob?.cancel()
         val currentScanId = ++scanCounter
+        logOcr("scan=$currentScanId started bytes=${bytes.size}")
         _state.update { it.copy(sheet = SheetState(scanning = true, isPrefilledFromOcr = false)) }
         val job = viewModelScope.launch {
             val lines = try {
                 readText(bytes)
             } catch (e: CancellationException) {
+                logOcr("scan=$currentScanId cancelled")
                 throw e
             } catch (e: Exception) {
+                logOcr("scan=$currentScanId recognition_failed exception=${e::class.simpleName}")
                 finishScan(currentScanId) { it.copy(scanning = false, notice = UiError.OCR_FAILED) }
                 return@launch
             }
             ensureActive()
+            logOcrLines(currentScanId, lines)
             val parsed = WeightParser.pick(lines, _state.value.unit)
             if (parsed == null) {
+                logOcr("scan=$currentScanId parser_no_result empty_recognition=${lines.isEmpty()}")
                 finishScan(currentScanId) { it.copy(scanning = false, notice = UiError.OCR_NO_RESULT) }
                 return@launch
             }
@@ -153,7 +163,10 @@ class DashboardViewModel(
                 )
             }
             if (applied) {
+                logOcr("scan=$currentScanId parser_success prefill_applied")
                 feedback.scanComplete()
+            } else {
+                logOcr("scan=$currentScanId parser_success prefill_discarded")
             }
         }
         scanJob = job

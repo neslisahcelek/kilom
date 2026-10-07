@@ -11,9 +11,12 @@ class WeightParserTest {
 
     @Test fun simpleValue() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("72.5"))
 
-    @Test fun twoDecimalValueRounds() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("72.48 kg"))
+    @Test fun twoDecimalValueIsPreserved() = assertEquals(ParsedWeight(72.48, WeightUnit.KG), pick("72.48 kg"))
 
     @Test fun twoDecimalExactRounds() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("72.50 kg"))
+
+    @Test fun digitalScaleValuePreservedWithoutPickingTemperatureOrCapacity() =
+        assertEquals(ParsedWeight(50.75, WeightUnit.KG), pick("50.75 kg", "15 °C", "Max.180kg d=100g"))
 
     @Test fun commaDecimal() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("Weight", "72,5 kg"))
 

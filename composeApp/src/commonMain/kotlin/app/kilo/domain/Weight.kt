@@ -2,6 +2,7 @@ package app.kilo.domain
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import kotlin.math.abs
 import kotlin.math.round
@@ -21,7 +22,8 @@ data class WeightEntry(
             val rand = random.nextLong().let { if (it == Long.MIN_VALUE) 0L else abs(it) }.toString(36)
             return WeightEntry(
                 id = "${at.toEpochMilliseconds()}_$rand",
-                kg = kg.round1(),
+                // Input parsing sets display precision; preserve the exact kg conversion of lb input.
+                kg = kg,
                 at = at,
             )
         }
@@ -36,8 +38,8 @@ const val LB_PER_KG = 2.20462262185
 const val MIN_KG = 20.0
 const val MAX_KG = 500.0
 
-fun Double.round1(): Double {
-    val r = round(this * 10.0) / 10.0
+fun Double.round2(): Double {
+    val r = round(this * 100.0) / 100.0
     return if (r == 0.0) 0.0 else r
 }
 
@@ -45,18 +47,18 @@ fun Double.kgToLb(): Double = this * LB_PER_KG
 fun Double.lbToKg(): Double = this / LB_PER_KG
 
 fun Double.kgTo(unit: WeightUnit): Double = when (unit) {
-    WeightUnit.KG -> this.round1()
-    WeightUnit.LB -> this.kgToLb().round1()
+    WeightUnit.KG -> this.round2()
+    WeightUnit.LB -> this.kgToLb().round2()
 }
 
-fun formatOneDecimal(v: Double): String {
-    val rounded = v.round1()
+fun formatTwoDecimals(v: Double): String {
+    val rounded = v.round2()
     val raw = if (rounded == 0.0) "0.0" else rounded.toString()
-    return if (!raw.contains('.')) "$raw.0" else raw
+    return raw.substringBefore('.') + "." + raw.substringAfter('.', "").padEnd(2, '0')
 }
 
 fun formatWeight(kg: Double, unit: WeightUnit): String =
-    formatOneDecimal(kg.kgTo(unit))
+    formatTwoDecimals(kg.kgTo(unit))
 
 fun formatWeightWithUnit(kg: Double, unit: WeightUnit): String =
     "${formatWeight(kg, unit)} ${unit.label}"
@@ -66,19 +68,19 @@ val WeightUnit.label: String get() = when (this) { WeightUnit.KG -> "kg"; Weight
 /** Change vs previous entry. [kg] is unrounded raw delta; [days] is a calendar-day difference. */
 data class Delta(val kg: Double, val days: Int)
 
-/** Delta value converted to [unit], 1 decimal. */
+/** Delta value converted to [unit], 2 decimals. */
 fun Delta.valueIn(unit: WeightUnit): Double = kg.kgTo(unit)
 
-/** Signed delta string: "+0.4", "-1.2", "0.0". */
+/** Signed delta string: "+0.40", "-1.20", "0.00". */
 fun Delta.format(unit: WeightUnit): String {
     val v = valueIn(unit)
-    val s = formatOneDecimal(v)
-    return if (v > 0) "+$s" else if (v == 0.0) "0.0" else s
+    val s = formatTwoDecimals(v)
+    return if (v > 0) "+$s" else if (v == 0.0) "0.00" else s
 }
 
 fun computeDelta(cur: WeightEntry, prev: WeightEntry?, tz: TimeZone): Delta? = prev?.let {
-    val d = cur.at.toLocalDateTime(tz).date.toEpochDays() - it.at.toLocalDateTime(tz).date.toEpochDays()
-    Delta(cur.kg - it.kg, d.toInt())
+    val d = it.at.toLocalDateTime(tz).date.daysUntil(cur.at.toLocalDateTime(tz).date)
+    Delta(cur.kg - it.kg, d)
 }
 
 /** Derived list row: entry plus delta against the next (older) item in the sorted list. */
