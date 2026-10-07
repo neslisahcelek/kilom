@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kilo</string>
+    <string name="app_name">Kilom</string>
     <string name="hero_empty_title">Henüz kayıt yok</string>
     <string name="hero_empty_subtitle">Tartının fotoğrafını çek veya kilonu girerek başla.</string>
     <string name="hero_since_today">Bugün tartıldın</string>

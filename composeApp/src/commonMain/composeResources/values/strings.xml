@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kilo</string>
+    <string name="app_name">Kilom</string>
     <string name="hero_empty_title">No weigh-ins yet</string>
     <string name="hero_empty_subtitle">Take a photo of your scale or enter your weight to get started.</string>
     <string name="hero_since_today">Weighed in today</string>

@@ -1,6 +1,6 @@
-# Kilo – Minimalist Mağaza Listeleme Metinleri
+# Kilom – Minimalist Mağaza Listeleme Metinleri
 
-Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, doğrudan sonuca odaklanan, **Apple ve modern minimalist estetiğe** uygun yeni mağaza metinleri.
+Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, doğrudan sonuca odaklanan, **Apple ve modern minimalist estetiğe** uygun mağaza metinleri.
 
 ---
 
@@ -8,9 +8,9 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 ## 1. Apple App Store (Türkçe)
 
-- **Uygulama Adı:**
+- **Uygulama Adı (Maks 30 karakter):**
   ```text
-  Kilo: Sade Kilo Takibi
+  Kilom: Sade Kilo Takibi
   ```
 
 - **Alt Başlık / Subtitle (Maks 30 karakter):**
@@ -25,17 +25,17 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Anahtar Kelimeler / Keywords (Maks 100 karakter):**
   ```text
-  kilo,kilo takibi,tartı,minimalist,kilo günlüğü,ağırlık,diyet,form,ocr,fotoğraf,kg,lb
+  kilom,kilo,kilo takibi,tartı,minimalist,kilo günlüğü,ağırlık,diyet,form,ocr,fotoğraf,kg,lb
   ```
 
 - **Açıklama / Description:**
   ```text
-  Kilo, kilo takibini en saf ve en hızlı haline getirir.
+  Kilom, kilo takibini en saf ve en hızlı haline getirir.
 
   Karmaşık grafikler, doldurulması gereken formlar veya zorunlu üyelikler yok. Sadece tartıya çıkın, kilonuzu kaydedin ve gününüze devam edin.
 
   İki Saniyede Kayıt:
-  • Fotoğrafını Çek: Tartınızın fotoğrafını çekin. Kilo sayıyı otomatik okur, tek dokunuşla onaylarsınız.
+  • Fotoğrafını Çek: Tartınızın fotoğrafını çekin. Kilom ekrandaki sayıyı otomatik okur, tek dokunuşla onaylarsınız.
   • Elle Yaz: Büyük ve hızlı sayısal klavye ile anında girin.
 
   Net ve Sade Geri Bildirim:
@@ -58,7 +58,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Uygulama Adı (Maks 30 karakter):**
   ```text
-  Kilo: Minimal Kilo Takibi
+  Kilom: Minimal Kilo Takibi
   ```
 
 - **Kısa Açıklama (Maks 80 karakter):**
@@ -68,7 +68,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Tam Açıklama:**
   ```text
-  Kilo, kilo ölçümünü ve takibini en zahmetsiz hale getiren minimalist bir uygulamadır.
+  Kilom, kilo ölçümünü ve takibini en zahmetsiz hale getiren minimalist bir uygulamadır.
 
   Özellikler:
   • Tartı Fotoğrafı ile Algılama: Kamerayı tartınıza tutun; ekrandaki kilo otomatik algılansın.
@@ -88,9 +88,9 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 ## 1. Apple App Store (English)
 
-- **App Name:**
+- **App Name (Max 30 chars):**
   ```text
-  Kilo: Minimal Weight Tracker
+  Kilom: Minimal Weight Tracker
   ```
 
 - **Subtitle (Max 30 chars):**
@@ -105,17 +105,17 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Keywords (Max 100 chars):**
   ```text
-  weight,tracker,scale,minimal,photo,ocr,scanner,log,weigh-in,body,fast,clean,diet
+  kilom,weight,tracker,scale,minimal,photo,ocr,scanner,log,weigh-in,body,fast,clean,diet
   ```
 
 - **Description:**
   ```text
-  Kilo strips weight tracking down to what actually matters: speed, clarity, and simplicity.
+  Kilom strips weight tracking down to what actually matters: speed, clarity, and simplicity.
 
   No cluttered charts, no mandatory profiles, and no interruptions. Just step on the scale, log your weight, and move on with your day.
 
   Log in Seconds:
-  • Snap a Photo: Take a picture of your scale. Kilo detects the digits instantly—just tap to confirm.
+  • Snap a Photo: Take a picture of your scale. Kilom detects the digits instantly—just tap to confirm.
   • Quick Entry: Clean, oversized keypad for effortless manual logging.
 
   Instant Context:
@@ -136,9 +136,9 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 ## 2. Google Play Store (English)
 
-- **App Name:**
+- **App Name (Max 30 chars):**
   ```text
-  Kilo: Minimal Weight Tracker
+  Kilom: Minimal Weight Tracker
   ```
 
 - **Short Description (Max 80 chars):**
@@ -148,7 +148,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Full Description:**
   ```text
-  Kilo is the fastest, most distraction-free way to track your weight.
+  Kilom is the fastest, most distraction-free way to track your weight.
 
   Features:
   • Scale Photo Scan: Snap your scale display. On-device vision reads the numbers instantly.

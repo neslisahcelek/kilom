@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Kilo</string>
+	<string>Kilom</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,9 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Kilo uses the camera to read your weight from a photo of the scale.</string>
+	<string>Kilom uses the camera to read your weight from a photo of the scale.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Kilo reads your weight from a scale photo you choose from your library.</string>
+	<string>Kilom reads your weight from a scale photo you choose from your library.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

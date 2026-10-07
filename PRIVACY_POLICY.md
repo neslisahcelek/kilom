@@ -1,7 +1,7 @@
-# Privacy Policy / Gizlilik Politikası — Kilo
+# Privacy Policy / Gizlilik Politikası — Kilom
 
 **Last Updated / Son Güncelleme:** October 7, 2026 / 7 Ekim 2026  
-**Application / Uygulama:** Kilo – Minimal Weight Log  
+**Application / Uygulama:** Kilom – Minimal Weight Log  
 **Developer / Geliştirici:** Neslişah Çelek  
 **Contact / İletişim:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)  
 **Live Policy URL / Canlı Web Bağlantısı:** [https://neslisahcelek.github.io/KiloApp/](https://neslisahcelek.github.io/KiloApp/)

@@ -1,4 +1,4 @@
-# Kilo – Minimal Weight Log
+# Kilom – Minimal Weight Log
 
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)](https://github.com/neslisahcelek/KiloApp)
 [![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin-Multiplatform-7F52FF.svg)](https://kotlinlang.org/)
@@ -6,7 +6,7 @@
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20On--Device-success.svg)](https://neslisahcelek.github.io/KiloApp/)
 [![License](https://img.shields.io/badge/License-Proprietary-lightgrey.svg)](#license)
 
-**Kilo**, tartı fotoğrafı ile hızlı ve sade kilo takibi sunan, gizlilik odaklı modern bir mobil uygulamadır.
+**Kilom**, tartı fotoğrafı ile hızlı ve sade kilo takibi sunan, gizlilik odaklı modern bir mobil uygulamadır.
 
 Kotlin Multiplatform (KMP) ve Compose Multiplatform mimarisiyle geliştirilmiş olup, hem **Android** hem de **iOS** cihazlarda tam performans ve yerel deneyim sağlar.
 
@@ -31,7 +31,7 @@ Kotlin Multiplatform (KMP) ve Compose Multiplatform mimarisiyle geliştirilmiş 
 
 ## 🛡️ Gizlilik Politikası & Yasal Uyumluluk (Privacy Policy & Compliance)
 
-Kilo, **Apple App Store** ve **Google Play Store** mağaza gizlilik gereksinimlerini %100 karşılar.
+Kilom, **Apple App Store** ve **Google Play Store** mağaza gizlilik gereksinimlerini %100 karşılar.
 
 - **Canlı Web Sayfası (GitHub Pages):** [https://neslisahcelek.github.io/KiloApp/](https://neslisahcelek.github.io/KiloApp/)  
   *(veya doğrudan [https://neslisahcelek.github.io/KiloApp/privacy.html](https://neslisahcelek.github.io/KiloApp/privacy.html))*
