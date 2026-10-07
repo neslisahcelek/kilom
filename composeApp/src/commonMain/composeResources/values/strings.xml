@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Kilo</string>
+    <string name="hero_empty_title">No weigh-ins yet</string>
+    <string name="hero_empty_subtitle">Take a photo of your scale or enter your weight to get started.</string>
+    <string name="hero_since_today">Weighed in today</string>
+    <string name="hero_since_yesterday">1 day since last weigh-in</string>
+    <string name="hero_since_days">%1$d days since last weigh-in</string>
+    <string name="delta_vs_previous">vs. previous</string>
+    <string name="action_camera">Camera</string>
+    <string name="action_gallery">Gallery</string>
+    <string name="action_manual">Manual</string>
+    <string name="unit_kg">kg</string>
+    <string name="unit_lb">lb</string>
+    <string name="history_title">History</string>
+    <string name="history_empty">Your weigh-ins will appear here.</string>
+    <string name="history_delete">Delete</string>
+    <string name="sheet_title">New weigh-in</string>
+    <string name="sheet_save">Save</string>
+    <string name="sheet_cancel">Cancel</string>
+    <string name="sheet_scanning">Reading the scale…</string>
+    <string name="sheet_placeholder">0.0</string>
+    <string name="sheet_ocr_prefilled">Please check the value before saving.</string>
+    <string name="error_empty">Enter your weight.</string>
+    <string name="error_not_a_number">That doesn\'t look like a number.</string>
+    <string name="error_out_of_range">Enter a weight between 20 and 500 kg (44–1102 lb).</string>
+    <string name="error_ocr_no_result">Couldn\'t read a weight from the photo. Try again or enter it manually.</string>
+    <string name="error_ocr_failed">Something went wrong reading the photo. You can enter the weight manually.</string>
+</resources>

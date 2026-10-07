@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "Kilo uses the camera to read your weight from a photo of the scale.";
+"NSPhotoLibraryUsageDescription" = "Kilo reads your weight from a scale photo you choose from your library.";

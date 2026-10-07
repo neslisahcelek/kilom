@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Kilo</string>
+    <string name="hero_empty_title">Henüz kayıt yok</string>
+    <string name="hero_empty_subtitle">Tartının fotoğrafını çek veya kilonu girerek başla.</string>
+    <string name="hero_since_today">Bugün tartıldın</string>
+    <string name="hero_since_yesterday">Son tartıdan 1 gün önce</string>
+    <string name="hero_since_days">Son tartıdan %1$d gün önce</string>
+    <string name="delta_vs_previous">önceki kayda göre</string>
+    <string name="action_camera">Kamera</string>
+    <string name="action_gallery">Galeri</string>
+    <string name="action_manual">Manuel</string>
+    <string name="unit_kg">kg</string>
+    <string name="unit_lb">lb</string>
+    <string name="history_title">Geçmiş</string>
+    <string name="history_empty">Tartı kayıtların burada görünecek.</string>
+    <string name="history_delete">Sil</string>
+    <string name="sheet_title">Yeni tartı</string>
+    <string name="sheet_save">Kaydet</string>
+    <string name="sheet_cancel">Vazgeç</string>
+    <string name="sheet_scanning">Tartı okunuyor…</string>
+    <string name="sheet_placeholder">0,0</string>
+    <string name="sheet_ocr_prefilled">Kaydetmeden önce değeri kontrol et.</string>
+    <string name="error_empty">Kilonu gir.</string>
+    <string name="error_not_a_number">Bu bir sayıya benzemiyor.</string>
+    <string name="error_out_of_range">20 ile 500 kg (44–1102 lb) arasında bir değer gir.</string>
+    <string name="error_ocr_no_result">Fotoğraftan kilo okunamadı. Tekrar dene veya elle gir.</string>
+    <string name="error_ocr_failed">Fotoğraf okunurken bir sorun oluştu. Kiloyu elle girebilirsin.</string>
+</resources>

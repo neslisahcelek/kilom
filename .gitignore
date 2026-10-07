@@ -1,0 +1,24 @@
+*.iml
+.kotlin/
+.gradle/
+**/build/
+!**/src/**/build/
+local.properties
+.idea/
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Xcode
+xcuserdata/
+*.xcworkspace/xcuserdata/
+iosApp/Pods/
+iosApp/build/
+DerivedData/
+*.xcuserstate
+iosApp/Configuration/Config.xcconfig.local
