@@ -41,7 +41,7 @@
 
 Welcome to **Kilom** ("Kilom", "we", "us", or "our"). Kilom is designed with an uncompromising **privacy-first, on-device architecture**. 
 
-We believe that your personal health and weight tracking data belongs exclusively to you. Kilo is designed so that you do not need to create an account, log in, or transmit any data across the internet. 
+We believe that your personal health and weight tracking data belongs exclusively to you. Kilom is designed so that you do not need to create an account, log in, or transmit any data across the internet. 
 
 **Summary of Our Privacy Guarantee:**
 - We do **not** collect, store, sell, or share any personal information.
@@ -53,28 +53,28 @@ We believe that your personal health and weight tracking data belongs exclusivel
 
 ## 2. Information We Do NOT Collect (Zero Data Collection)
 
-When you use Kilo:
+When you use Kilom:
 - **No Personal Identifiers:** We do not collect your name, email address, phone number, physical address, or device unique identifiers (IDFA, AAID).
 - **No Health Data Off-Device:** Your body weight measurements, tare calculations, goal weights, and progress statistics are stored exclusively in your device's local database.
-- **No Account Information:** Kilo has no backend user authentication; there are no passwords, user accounts, or cloud profiles.
+- **No Account Information:** Kilom has no backend user authentication; there are no passwords, user accounts, or cloud profiles.
 - **No Location Data:** We never request, access, or track your GPS or network location.
-- **No Financial Data:** Kilo does not process payments or collect payment credentials.
+- **No Financial Data:** Kilom does not process payments or collect payment credentials.
 
 ---
 
 ## 3. Device Permissions & On-Device Processing
 
-Kilo requests limited runtime permissions solely to provide core on-device scanning functionality.
+Kilom requests limited runtime permissions solely to provide core on-device scanning functionality.
 
 ### A. Camera (`android.permission.CAMERA` / `NSCameraUsageDescription`)
 - **Purpose:** Used only when you choose to scan your bathroom scale display using the in-app camera scanner.
-- **Usage Description (iOS):** *"Kilo uses the camera to read your weight from a photo of the scale."*
+- **Usage Description (iOS):** *"Kilom uses the camera to read your weight from a photo of the scale."*
 - **Privacy Assurance:** The camera stream and captured photos are processed in temporary volatile memory using native on-device optical character recognition (OCR). The images are **never** transmitted over a network or stored on any server.
 
 ### B. Photo Library / Gallery (`NSPhotoLibraryUsageDescription`)
 - **Purpose:** Used only if you choose an existing photo of a scale display from your photo gallery.
-- **Usage Description (iOS):** *"Kilo reads your weight from a scale photo you choose from your library."*
-- **Privacy Assurance:** Only the specific image you select is accessed by the application. Kilo does not browse, index, or upload your photo library.
+- **Usage Description (iOS):** *"Kilom reads your weight from a scale photo you choose from your library."*
+- **Privacy Assurance:** Only the specific image you select is accessed by the application. Kilom does not browse, index, or upload your photo library.
 
 ### C. On-Device OCR Technology
 - On **iOS**, text recognition is performed using Apple's native **Vision Framework** (`VNRecognizeTextRequest`).
@@ -85,8 +85,8 @@ Kilo requests limited runtime permissions solely to provide core on-device scann
 
 ## 4. Data Storage & Local Retention
 
-- **Local Database:** All user data (weight entries, timestamps, notes, and preferences) is stored locally on the device using an encrypted/sandboxed local database (Room / SQLite).
-- **No Cloud Synchronization:** Kilo does not synchronize your data with cloud servers or third-party storage providers.
+- **Local Database:** All user data (weight entries, timestamps, notes, and preferences) is stored locally on the device using an encrypted/sandboxed local database (multiplatform-settings / SQLite).
+- **No Cloud Synchronization:** Kilom does not synchronize your data with cloud servers or third-party storage providers.
 - **Backup & Portability:** Your data is backed up only according to your own operating system backup policies (e.g., encrypted local iTunes/Finder backup or standard Android operating system backup).
 
 ---
@@ -94,25 +94,25 @@ Kilo requests limited runtime permissions solely to provide core on-device scann
 ## 5. Third-Party Services, SDKs & Analytics
 
 - **No Third-Party Analytics:** We do not use Google Analytics, Firebase Analytics, Flurry, Mixpanel, or any user telemetry SDKs.
-- **No Advertising Networks:** Kilo is 100% ad-free. No advertising identifiers (IDFA, GAID) are read or shared.
-- **No Third-Party Trackers:** No tracking libraries, beacons, pixels, or social media SDKs (e.g., Facebook SDK) are integrated into Kilo.
+- **No Advertising Networks:** Kilom is 100% ad-free. No advertising identifiers (IDFA, GAID) are read or shared.
+- **No Third-Party Trackers:** No tracking libraries, beacons, pixels, or social media SDKs (e.g., Facebook SDK) are integrated into Kilom.
 - **No Server Infrastructure:** We do not operate remote application servers that receive API calls containing your user activity.
 
 ---
 
 ## 6. Children's Privacy (COPPA & GDPR Compliant)
 
-Kilo is suitable for general audiences and complies fully with the Children's Online Privacy Protection Act (**COPPA**) in the United States and the General Data Protection Regulation (**GDPR**) in the European Union.
+Kilom is suitable for general audiences and complies fully with the Children's Online Privacy Protection Act (**COPPA**) in the United States and the General Data Protection Regulation (**GDPR**) in the European Union.
 
-Because Kilo does not collect, retain, or transmit any personal information from any user, we do not knowingly or unknowingly collect personal information from children under 13 (or under 16 in certain European jurisdictions).
+Because Kilom does not collect, retain, or transmit any personal information from any user, we do not knowingly or unknowingly collect personal information from children under 13 (or under 16 in certain European jurisdictions).
 
 ---
 
 ## 7. User Rights and Data Deletion (GDPR / CCPA / KVKK)
 
 Under international data protection regulations (including GDPR, California Consumer Privacy Act (CCPA), and Turkish KVKK):
-- **Right to Access:** You can view all your stored data directly inside the Kilo app history and dashboard at any time.
-- **Right to Erasure (Right to be Forgotten):** You have complete autonomy to delete individual weight records inside the app. To permanently delete all data stored by Kilo, you can delete the app from your device or clear app data via system settings. Since we do not retain copies of your data on servers, deleting the app permanently erases all associated data.
+- **Right to Access:** You can view all your stored data directly inside the Kilom app history and dashboard at any time.
+- **Right to Erasure (Right to be Forgotten):** You have complete autonomy to delete individual weight records inside the app. To permanently delete all data stored by Kilom, you can delete the app from your device or clear app data via system settings. Since we do not retain copies of your data on servers, deleting the app permanently erases all associated data.
 - **Right to Data Portability:** Because all data is stored on-device, you remain in complete control of your data at all times.
 
 ---
@@ -125,7 +125,7 @@ For review transparency and user disclosure:
 - **Data Used to Track You:** None
 - **Data Linked to You:** None
 - **Data Not Linked to You:** None
-- **Classification:** **"Data Not Collected"** (Kilo does not collect any data from this app).
+- **Classification:** **"Data Not Collected"** (Kilom does not collect any data from this app).
 
 ### Google Play Data Safety
 - **Does the app collect or share user data?** **No**.
@@ -142,7 +142,7 @@ We may update this Privacy Policy from time to time to reflect improvements or r
 
 ## 10. Contact Us
 
-If you have questions, feedback, or concerns regarding this Privacy Policy or Kilo's privacy practices, please contact us:
+If you have questions, feedback, or concerns regarding this Privacy Policy or Kilom's privacy practices, please contact us:
 
 - **Developer:** Neslişah Çelek
 - **Email:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)
@@ -156,7 +156,7 @@ If you have questions, feedback, or concerns regarding this Privacy Policy or Ki
 
 **Kilom** ("Kilom", "biz" veya "uygulama") uygulamasına hoş geldiniz. Kilom, ödünsüz bir **cihaz üzerinde (on-device) ve gizlilik odaklı mimari** ile geliştirilmiştir.
 
-Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna ve gizli kalması gerektiğine inanıyoruz. Kilo, bir hesap açmanıza, giriş yapmanıza veya internet üzerinden herhangi bir veri aktarmanıza gerek kalmayacak şekilde tasarlanmıştır.
+Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna ve gizli kalması gerektiğine inanıyoruz. Kilom, bir hesap açmanıza, giriş yapmanıza veya internet üzerinden herhangi bir veri aktarmanıza gerek kalmayacak şekilde tasarlanmıştır.
 
 **Gizlilik Güvencemizin Özeti:**
 - Kişisel bilgilerinizi **toplamıyoruz, saklamıyoruz, satmıyoruz ve paylaşmıyoruz**.
@@ -168,10 +168,10 @@ Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna ve gizli ka
 
 ## 2. Toplanmayan Veriler (Sıfır Veri Toplama)
 
-Kilo uygulamasını kullanırken:
+Kilom uygulamasını kullanırken:
 - **Kişisel Kimlik Bilgileri Toplanmaz:** Ad, soyad, e-posta adresi, telefon numarası, ev adresi veya cihaz kimlikleri (IDFA, AAID) alınmaz.
-- **Sağlık Verileri Cihaz Dışına Çıkmaz:** Kilo ölçümleriniz, hedef kilonuz, kilo değişim farkları ve geçmiş kayıtlarınız yalnızca cihazınızın yerel hafızasında tutulur.
-- **Hesap Bilgisi Yoktur:** Kilo'da sunucu tabanlı kullanıcı kaydı veya girişi bulunmaz. Parola, profil veya bulut hesabı yoktur.
+- **Sağlık Verileri Cihaz Dışına Çıkmaz:** Vücut ağırlığı ölçümleriniz, hedef kilonuz, kilo değişim farkları ve geçmiş kayıtlarınız yalnızca cihazınızın yerel hafızasında tutulur.
+- **Hesap Bilgisi Yoktur:** Kilom'da sunucu tabanlı kullanıcı kaydı veya girişi bulunmaz. Parola, profil veya bulut hesabı yoktur.
 - **Konum Bilgisi Alınmaz:** GPS veya ağ tabanlı konumunuza hiçbir zaman erişilmez ve konum takibi yapılmaz.
 - **Finansal Bilgi İstenmez:** Uygulama ödeme bilgilerinizi veya kredi kartı verilerinizi toplamaz.
 
@@ -179,16 +179,16 @@ Kilo uygulamasını kullanırken:
 
 ## 3. Cihaz İzinleri ve Cihaz Üzerinde İşleme (On-Device OCR)
 
-Kilo, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işletim sisteminden asgari düzeyde izin talep eder:
+Kilom, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işletim sisteminden asgari düzeyde izin talep eder:
 
 ### A. Kamera İzni (`android.permission.CAMERA` / `NSCameraUsageDescription`)
 - **Kullanım Amacı:** Yalnızca uygulama içerisindeki tartı tarama özelliğini kullanarak tartı ekranının fotoğrafını çekmek istediğinizde kullanılır.
-- **iOS İzin Gerekçesi:** *"Kilo uses the camera to read your weight from a photo of the scale."* (Kilo, tartı fotoğrafınızdan kilonuzu okumak için kamerayı kullanır.)
+- **iOS İzin Gerekçesi:** *"Kilom uses the camera to read your weight from a photo of the scale."* (Kilom, tartı fotoğrafınızdan kilonuzu okumak için kamerayı kullanır.)
 - **Gizlilik Güvencesi:** Kamera akışı ve çekilen fotoğraf, yalnızca anlık bellekte (RAM) yerel metin okuma için işlenir. Görseller asla bir uzak sunucuya yüklenmez ve harici olarak saklanmaz.
 
 ### B. Fotoğraf Galerisi İzni (`NSPhotoLibraryUsageDescription`)
 - **Kullanım Amacı:** Yalnızca galerinizde önceden bulunan bir tartı fotoğrafını seçerek kilonuzu otomatik okutmak istediğinizde kullanılır.
-- **iOS İzin Gerekçesi:** *"Kilo reads your weight from a scale photo you choose from your library."* (Kilo, galerinizden seçtiğiniz tartı fotoğrafından kilonuzu okur.)
+- **iOS İzin Gerekçesi:** *"Kilom reads your weight from a scale photo you choose from your library."* (Kilom, galerinizden seçtiğiniz tartı fotoğrafından kilonuzu okur.)
 - **Gizlilik Güvencesi:** Yalnızca sizin bizzat seçtiğiniz tek bir görsel işlenir. Fotoğraf kütüphaneniz taranmaz, yedeklenmez ve dışarıya aktarılmaz.
 
 ### C. Cihaz Üzerinde Optik Karakter Tanıma (On-Device OCR)
@@ -200,8 +200,8 @@ Kilo, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işleti
 
 ## 4. Veri Depolama ve Yerel Saklama
 
-- **Yerel Veritabanı:** Tüm tartı kayıtlarınız, tarih damgaları ve kullanıcı tercihleri cihazınızın güvenli yerel depolama alanında (Room / SQLite) tutulur.
-- **Bulut Senkronizasyonu Yok:** Kilo, verilerinizi hiçbir bulut sunucusuna veya harici depolama sağlayıcısına aktarmaz.
+- **Yerel Veritabanı:** Tüm tartı kayıtlarınız, tarih damgaları ve kullanıcı tercihleri cihazınızın güvenli yerel depolama alanında tutulur.
+- **Bulut Senkronizasyonu Yok:** Kilom, verilerinizi hiçbir bulut sunucusuna veya harici depolama sağlayıcısına aktarmaz.
 - **Yedekleme:** Verileriniz yalnızca cihazınızın kendi yerel işletim sistemi yedekleme politikalarına tabidir (örneğin yerel şifrelenmiş iTunes/Finder yedeği).
 
 ---
@@ -209,7 +209,7 @@ Kilo, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işleti
 ## 5. Üçüncü Taraf Servisler, Reklamlar ve Analitikler
 
 - **Analitik Araç Yok:** Google Analytics, Firebase Analytics, Mixpanel, Flurry gibi kullanıcı davranışını takip eden hiçbir telemetri veya analitik kütüphanesi bulunmaz.
-- **Reklam Ağı Yok:** Kilo %100 reklamsızdır. Reklam kimlikleri (IDFA, GAID) okunmaz ve reklam ağlarıyla paylaşılmaz.
+- **Reklam Ağı Yok:** Kilom %100 reklamsızdır. Reklam kimlikleri (IDFA, GAID) okunmaz ve reklam ağlarıyla paylaşılmaz.
 - **İzleyici (Tracker) Yok:** Facebook SDK, pazarlama pikselleri veya harici takip kodları projede yer almaz.
 - **Sunucu Altyapısı Yok:** Kullanıcı verilerini kaydeden veya işleyen hiçbir özel sunucu işletilmemektedir.
 
@@ -217,7 +217,7 @@ Kilo, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işleti
 
 ## 6. Çocukların Gizliliği
 
-Kilo genel kullanıcı kitlesine yöneliktir ve KVKK, COPPA (Çocukların Çevrimiçi Gizliliğini Koruma Yasası) ile GDPR düzenlemelerine tam uyumludur.
+Kilom genel kullanıcı kitlesine yöneliktir ve KVKK, COPPA (Çocukların Çevrimiçi Gizliliğini Koruma Yasası) ile GDPR düzenlemelerine tam uyumludur.
 
 Uygulama hiçbir kullanıcıdan kişisel veri toplamadığı için, 13 (veya ilgili bölgede 16) yaşından küçük çocuklara ait herhangi bir kişisel veri de kesinlikle toplanmamaktadır.
 
