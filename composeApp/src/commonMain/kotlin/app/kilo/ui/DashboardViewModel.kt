@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -85,7 +85,7 @@ class DashboardViewModel(
                     val hero = history.firstOrNull()?.let {
                         val today = now().toLocalDateTime(tz).date.toEpochDays()
                         val last = it.entry.at.toLocalDateTime(tz).date.toEpochDays()
-                        HeroState(it, (today - last).coerceAtLeast(0))
+                        HeroState(it, (today - last).toInt().coerceAtLeast(0))
                     }
                     _state.update { it.copy(unit = unit, history = history, hero = hero) }
                 }

@@ -78,7 +78,7 @@ fun Delta.format(unit: WeightUnit): String {
 
 fun computeDelta(cur: WeightEntry, prev: WeightEntry?, tz: TimeZone): Delta? = prev?.let {
     val d = cur.at.toLocalDateTime(tz).date.toEpochDays() - it.at.toLocalDateTime(tz).date.toEpochDays()
-    Delta(cur.kg - it.kg, d)
+    Delta(cur.kg - it.kg, d.toInt())
 }
 
 /** Derived list row: entry plus delta against the next (older) item in the sorted list. */

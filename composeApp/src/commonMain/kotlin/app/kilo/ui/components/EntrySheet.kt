@@ -78,7 +78,7 @@ import kilo.composeapp.generated.resources.sheet_placeholder
 import kilo.composeapp.generated.resources.sheet_save
 import kilo.composeapp.generated.resources.sheet_scanning
 import kilo.composeapp.generated.resources.sheet_title
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
