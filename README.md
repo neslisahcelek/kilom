@@ -1,4 +1,4 @@
-# Kilom – Minimal Weight Log
+# Kilom
 
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)](https://github.com/neslisahcelek/KiloApp)
 [![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin-Multiplatform-7F52FF.svg)](https://kotlinlang.org/)

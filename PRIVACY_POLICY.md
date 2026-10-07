@@ -1,7 +1,7 @@
 # Privacy Policy / Gizlilik Politikası — Kilom
 
 **Last Updated / Son Güncelleme:** October 7, 2026 / 7 Ekim 2026  
-**Application / Uygulama:** Kilom – Minimal Weight Log  
+**Application / Uygulama:** Kilom  
 **Developer / Geliştirici:** Neslişah Çelek  
 **Contact / İletişim:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)  
 **Live Policy URL / Canlı Web Bağlantısı:** [https://neslisahcelek.github.io/KiloApp/](https://neslisahcelek.github.io/KiloApp/)
@@ -39,7 +39,7 @@
 
 ## 1. Introduction & Core Privacy Principles
 
-Welcome to **Kilo – Minimal Weight Log** ("Kilo", "we", "us", or "our"). Kilo is designed with an uncompromising **privacy-first, on-device architecture**. 
+Welcome to **Kilom** ("Kilom", "we", "us", or "our"). Kilom is designed with an uncompromising **privacy-first, on-device architecture**. 
 
 We believe that your personal health and weight tracking data belongs exclusively to you. Kilo is designed so that you do not need to create an account, log in, or transmit any data across the internet. 
 
@@ -154,7 +154,7 @@ If you have questions, feedback, or concerns regarding this Privacy Policy or Ki
 
 ## 1. Giriş ve Temel Gizlilik İlkesi
 
-**Kilo – Minimal Weight Log** ("Kilo", "biz" veya "uygulama") uygulamasına hoş geldiniz. Kilo, ödünsüz bir **cihaz üzerinde (on-device) ve gizlilik odaklı mimari** ile geliştirilmiştir.
+**Kilom** ("Kilom", "biz" veya "uygulama") uygulamasına hoş geldiniz. Kilom, ödünsüz bir **cihaz üzerinde (on-device) ve gizlilik odaklı mimari** ile geliştirilmiştir.
 
 Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna ve gizli kalması gerektiğine inanıyoruz. Kilo, bir hesap açmanıza, giriş yapmanıza veya internet üzerinden herhangi bir veri aktarmanıza gerek kalmayacak şekilde tasarlanmıştır.
 

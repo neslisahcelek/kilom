@@ -1,4 +1,4 @@
-# Kilom – Minimalist Mağaza Listeleme Metinleri
+# Kilom – Mağaza Listeleme Metinleri
 
 Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, doğrudan sonuca odaklanan, **Apple ve modern minimalist estetiğe** uygun mağaza metinleri.
 
@@ -8,9 +8,9 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 ## 1. Apple App Store (Türkçe)
 
-- **Uygulama Adı (Maks 30 karakter):**
+- **Uygulama Adı:**
   ```text
-  Kilom: Sade Kilo Takibi
+  Kilom
   ```
 
 - **Alt Başlık / Subtitle (Maks 30 karakter):**
@@ -58,7 +58,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Uygulama Adı (Maks 30 karakter):**
   ```text
-  Kilom: Minimal Kilo Takibi
+  Kilom
   ```
 
 - **Kısa Açıklama (Maks 80 karakter):**
@@ -90,7 +90,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **App Name (Max 30 chars):**
   ```text
-  Kilom: Minimal Weight Tracker
+  Kilom
   ```
 
 - **Subtitle (Max 30 chars):**
@@ -138,7 +138,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **App Name (Max 30 chars):**
   ```text
-  Kilom: Minimal Weight Tracker
+  Kilom
   ```
 
 - **Short Description (Max 80 chars):**
