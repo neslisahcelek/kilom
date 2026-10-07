@@ -47,6 +47,7 @@ data class SheetState(
     val error: UiError? = null,
     val notice: UiError? = null,
     val scanning: Boolean = false,
+    val isPrefilledFromOcr: Boolean = false,
 )
 
 data class UiState(
@@ -61,7 +62,7 @@ class DashboardViewModel(
     private val prefs: PrefsRepository,
     private val readText: suspend (ByteArray) -> List<String>,
     private val feedback: DashboardFeedback,
-    private val now: () -> Instant = { app.kilo.platform.currentInstant() },
+    private val now: () -> Instant = { Clock.System.now() },
     private val timeZone: () -> TimeZone = { TimeZone.currentSystemDefault() },
 ) : ViewModel() {
 
@@ -69,6 +70,7 @@ class DashboardViewModel(
     val state: StateFlow<UiState> = _state.asStateFlow()
 
     private var scanJob: Job? = null
+    private var scanCounter: Long = 0L
 
     init {
         viewModelScope.launch {
@@ -79,7 +81,7 @@ class DashboardViewModel(
                     val hero = history.firstOrNull()?.let {
                         val today = now().toLocalDateTime(tz).date.toEpochDays()
                         val last = it.entry.at.toLocalDateTime(tz).date.toEpochDays()
-                        HeroState(it, (today - last).toInt().coerceAtLeast(0))
+                        HeroState(it, (today - last).coerceAtLeast(0))
                     }
                     _state.update { it.copy(unit = unit, history = history, hero = hero) }
                 }
@@ -100,11 +102,11 @@ class DashboardViewModel(
 
     fun openManual() {
         scanJob?.cancel()
-        _state.update { it.copy(sheet = SheetState()) }
+        _state.update { it.copy(sheet = SheetState(isPrefilledFromOcr = false)) }
     }
 
     fun onInputChange(text: String) {
-        _state.update { it.copy(sheet = it.sheet?.copy(input = text, error = null)) }
+        _state.update { it.copy(sheet = it.sheet?.copy(input = text, error = null, isPrefilledFromOcr = false)) }
     }
 
     fun dismissSheet() {
@@ -114,37 +116,52 @@ class DashboardViewModel(
 
     fun onImage(bytes: ByteArray) {
         scanJob?.cancel()
-        _state.update { it.copy(sheet = SheetState(scanning = true)) }
+        val currentScanId = ++scanCounter
+        _state.update { it.copy(sheet = SheetState(scanning = true, isPrefilledFromOcr = false)) }
         val job = viewModelScope.launch {
             val lines = try {
                 readText(bytes)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                finishScan { it.copy(scanning = false, notice = UiError.OCR_FAILED) }
+                finishScan(currentScanId) { it.copy(scanning = false, notice = UiError.OCR_FAILED) }
                 return@launch
             }
-            ensureActive() // a newer scan / dismissed sheet must not be overwritten
+            ensureActive()
             val parsed = WeightParser.pick(lines, _state.value.unit)
             if (parsed == null) {
-                finishScan { it.copy(scanning = false, notice = UiError.OCR_NO_RESULT) }
+                finishScan(currentScanId) { it.copy(scanning = false, notice = UiError.OCR_NO_RESULT) }
                 return@launch
             }
             val kg = if (parsed.unit == WeightUnit.KG) parsed.value else parsed.value.lbToKg()
             val unit = _state.value.unit
-            if (finishScan { it.copy(scanning = false, notice = null, error = null, input = formatWeight(kg, unit)) }) {
+            val applied = finishScan(currentScanId) {
+                it.copy(
+                    scanning = false,
+                    notice = null,
+                    error = null,
+                    input = formatWeight(kg, unit),
+                    isPrefilledFromOcr = true,
+                )
+            }
+            if (applied) {
                 feedback.scanComplete()
             }
         }
         scanJob = job
     }
 
-    /** Applies [block] to the sheet if it is still open. Returns whether it was applied. */
-    private fun finishScan(block: (SheetState) -> SheetState): Boolean {
+    /** Applies [block] to the sheet only if current scan matches [scanId] and sheet is still waiting. */
+    private fun finishScan(scanId: Long, block: (SheetState) -> SheetState): Boolean {
         var applied = false
         _state.update { s ->
             val sheet = s.sheet
-            if (sheet == null || !sheet.scanning) s else { applied = true; s.copy(sheet = block(sheet)) }
+            if (scanId != scanCounter || sheet == null || !sheet.scanning) {
+                s
+            } else {
+                applied = true
+                s.copy(sheet = block(sheet))
+            }
         }
         return applied
     }

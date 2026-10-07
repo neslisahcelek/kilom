@@ -4,12 +4,14 @@ import app.kilo.domain.MAX_KG
 import app.kilo.domain.MIN_KG
 import app.kilo.domain.WeightUnit
 import app.kilo.domain.lbToKg
+import app.kilo.domain.round1
 
 /** [value] is expressed in [unit] (as shown on the scale), 1 decimal. */
 data class ParsedWeight(val value: Double, val unit: WeightUnit)
 
 object WeightParser {
-    private val candidateRegex = Regex("(\\d{2,3})[.,](\\d)")
+    // Matches numbers with 1 or 2 decimals (e.g., 74.5 or 74.50)
+    private val candidateRegex = Regex("(\\d{2,3})[.,](\\d{1,2})")
     private val labelRegex = Regex("(?i)(kg|lbs?)")
     private val tokenRegex = Regex("^([0-9OoIl|.,]+)(.*)$")
     private val penaltyRegex = Regex("(?i)(bmi|%|fat|water|muscle|bone|kcal|bmr)")
@@ -33,7 +35,8 @@ object WeightParser {
                 if (before != null && (before.isDigit() || before == '.' || before == ',')) continue
                 if (after != null && after.isDigit()) continue
 
-                val value = (m.groupValues[1] + "." + m.groupValues[2]).toDouble()
+                val rawValue = (m.groupValues[1] + "." + m.groupValues[2]).toDouble()
+                val value = rawValue.round1()
                 var score = 1.0
                 var unit = preferred
 

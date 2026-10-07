@@ -11,6 +11,10 @@ class WeightParserTest {
 
     @Test fun simpleValue() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("72.5"))
 
+    @Test fun twoDecimalValueRounds() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("72.48 kg"))
+
+    @Test fun twoDecimalExactRounds() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("72.50 kg"))
+
     @Test fun commaDecimal() = assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("Weight", "72,5 kg"))
 
     @Test fun attachedLabel() = assertEquals(ParsedWeight(70.5, WeightUnit.KG), pick("70.5kg"))

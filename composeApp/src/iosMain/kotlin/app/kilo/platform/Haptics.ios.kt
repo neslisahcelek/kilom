@@ -29,6 +29,3 @@ actual fun rememberHaptics(): Haptics = remember { Haptics() }
 
 @Composable
 actual fun rememberScaleOcr(): ScaleOcr = remember { ScaleOcr() }
-
-actual fun currentInstant(): kotlinx.datetime.Instant =
-    kotlinx.datetime.Instant.fromEpochMilliseconds((platform.Foundation.NSDate().timeIntervalSince1970 * 1000).toLong())

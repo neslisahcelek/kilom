@@ -34,6 +34,3 @@ actual fun rememberHaptics(): Haptics {
 
 @Composable
 actual fun rememberScaleOcr(): ScaleOcr = remember { ScaleOcr() }
-
-actual fun currentInstant(): kotlinx.datetime.Instant =
-    kotlinx.datetime.Instant.fromEpochMilliseconds(System.currentTimeMillis())

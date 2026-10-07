@@ -247,7 +247,7 @@ fun EntrySheet(
                         val noticeMessage = when (sheet.notice) {
                             UiError.OCR_NO_RESULT -> stringResource(Res.string.error_ocr_no_result)
                             UiError.OCR_FAILED -> stringResource(Res.string.error_ocr_failed)
-                            else -> if (sheet.input.isNotEmpty() && sheet.error == null) {
+                            else -> if (sheet.isPrefilledFromOcr && sheet.input.isNotEmpty() && sheet.error == null) {
                                 stringResource(Res.string.sheet_ocr_prefilled)
                             } else null
                         }

@@ -15,5 +15,3 @@ expect fun rememberHaptics(): Haptics
 
 @Composable
 expect fun rememberScaleOcr(): ScaleOcr
-
-expect fun currentInstant(): kotlinx.datetime.Instant

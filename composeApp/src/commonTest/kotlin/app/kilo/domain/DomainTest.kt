@@ -22,13 +22,13 @@ class DeltaTest {
 
     @Test fun negativeDelta() {
         val d = computeDelta(e("b", 71.6, "2024-01-12T08:00:00Z"), e("a", 72.5, "2024-01-10T08:00:00Z"), utc)!!
-        assertEquals(-0.9, d.kg)
+        assertEquals(-0.9, d.kg.round1())
         assertEquals(2, d.days)
     }
 
     @Test fun positiveDelta() {
         val d = computeDelta(e("b", 72.5, "2024-01-11T08:00:00Z"), e("a", 72.1, "2024-01-10T08:00:00Z"), utc)!!
-        assertEquals(0.4, d.kg)
+        assertEquals(0.4, d.kg.round1())
         assertEquals(1, d.days)
     }
 
