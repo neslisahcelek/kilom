@@ -22,3 +22,8 @@ iosApp/build/
 DerivedData/
 *.xcuserstate
 iosApp/Configuration/Config.xcconfig.local
+
+# Logs and crash dumps
+*.log
+hs_err_pid*
+replay_pid*
