@@ -48,7 +48,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
   • Tek ekranda kg ve lb arasında anında geçiş.
   • Yanlış kayıtları sola kaydırarak silme kolaylığı.
 
-  Gizlilik Politikası: https://neslisahcelek.github.io/KiloApp/
+  Gizlilik Politikası: https://neslisahcelek.github.io/Kilom/
   İletişim: neslisah.celek@outlook.com
   ```
 
@@ -78,7 +78,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
   • Dikkatsiz ve Temiz: Reklam yok, üye girişi yok, bildirim kirliliği yok.
   • kg / lb desteği ve sola kaydırarak silme.
 
-  Gizlilik Politikası: https://neslisahcelek.github.io/KiloApp/
+  Gizlilik Politikası: https://neslisahcelek.github.io/Kilom/
   İletişim: neslisah.celek@outlook.com
   ```
 
@@ -128,7 +128,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
   • Seamless 1-tap toggle between kg and lb.
   • Swipe left to delete past entries.
 
-  Privacy Policy: https://neslisahcelek.github.io/KiloApp/
+  Privacy Policy: https://neslisahcelek.github.io/Kilom/
   Support: neslisah.celek@outlook.com
   ```
 
@@ -158,6 +158,6 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
   • Pure & Minimal: Zero ads, zero accounts, no clutter.
   • Instant kg / lb conversion and swipe-to-delete history.
 
-  Privacy Policy: https://neslisahcelek.github.io/KiloApp/
+  Privacy Policy: https://neslisahcelek.github.io/Kilom/
   Contact: neslisah.celek@outlook.com
   ```

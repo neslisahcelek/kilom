@@ -1,9 +1,9 @@
 # Kilom
 
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)](https://github.com/neslisahcelek/KiloApp)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-blue.svg)](https://github.com/neslisahcelek/Kilom)
 [![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin-Multiplatform-7F52FF.svg)](https://kotlinlang.org/)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-4285F4.svg)](https://www.jetbrains.com/lp/compose-multiplatform/)
-[![Privacy](https://img.shields.io/badge/Privacy-100%25%20On--Device-success.svg)](https://neslisahcelek.github.io/KiloApp/)
+[![Privacy](https://img.shields.io/badge/Privacy-100%25%20On--Device-success.svg)](https://neslisahcelek.github.io/Kilom/)
 [![License](https://img.shields.io/badge/License-Proprietary-lightgrey.svg)](#license)
 
 **Kilom**, tartı fotoğrafı ile hızlı ve sade kilo takibi sunan, gizlilik odaklı modern bir mobil uygulamadır.
@@ -33,8 +33,8 @@ Kotlin Multiplatform (KMP) ve Compose Multiplatform mimarisiyle geliştirilmiş 
 
 Kilom, **Apple App Store** ve **Google Play Store** mağaza gizlilik gereksinimlerini %100 karşılar.
 
-- **Canlı Web Sayfası (GitHub Pages):** [https://neslisahcelek.github.io/KiloApp/](https://neslisahcelek.github.io/KiloApp/)  
-  *(veya doğrudan [https://neslisahcelek.github.io/KiloApp/privacy.html](https://neslisahcelek.github.io/KiloApp/privacy.html))*
+- **Canlı Web Sayfası (GitHub Pages):** [https://neslisahcelek.github.io/Kilom/](https://neslisahcelek.github.io/Kilom/)  
+  *(veya doğrudan [https://neslisahcelek.github.io/Kilom/privacy.html](https://neslisahcelek.github.io/Kilom/privacy.html))*
 - **Proje İçi Belge:** [PRIVACY_POLICY.md](PRIVACY_POLICY.md) (Türkçe & English)
 
 ### Mağaza Beyanları (Store Declarations)

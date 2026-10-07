@@ -4,7 +4,7 @@
 **Application / Uygulama:** Kilom  
 **Developer / Geliştirici:** Neslişah Çelek  
 **Contact / İletişim:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)  
-**Live Policy URL / Canlı Web Bağlantısı:** [https://neslisahcelek.github.io/KiloApp/](https://neslisahcelek.github.io/KiloApp/)
+**Live Policy URL / Canlı Web Bağlantısı:** [https://neslisahcelek.github.io/Kilom/](https://neslisahcelek.github.io/Kilom/)
 
 ---
 
@@ -146,7 +146,7 @@ If you have questions, feedback, or concerns regarding this Privacy Policy or Ki
 
 - **Developer:** Neslişah Çelek
 - **Email:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)
-- **GitHub Repository:** [https://github.com/neslisahcelek/KiloApp](https://github.com/neslisahcelek/KiloApp)
+- **GitHub Repository:** [https://github.com/neslisahcelek/Kilom](https://github.com/neslisahcelek/Kilom)
 
 ---
 
@@ -261,4 +261,4 @@ Bu Gizlilik Politikası ile ilgili her türlü soru, öneri veya bilgi talebi i�
 
 - **Geliştirici:** Neslişah Çelek
 - **E-posta:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)
-- **GitHub Deposu:** [https://github.com/neslisahcelek/KiloApp](https://github.com/neslisahcelek/KiloApp)
+- **GitHub Deposu:** [https://github.com/neslisahcelek/Kilom](https://github.com/neslisahcelek/Kilom)
