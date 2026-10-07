@@ -25,4 +25,9 @@
     <string name="error_out_of_range">20 ile 500 kg (44–1102 lb) arasında bir değer gir.</string>
     <string name="error_ocr_no_result">Fotoğraftan kilo okunamadı. Tekrar dene veya elle gir.</string>
     <string name="error_ocr_failed">Fotoğraf okunurken bir sorun oluştu. Kiloyu elle girebilirsin.</string>
+    <string name="date_today">Bugün</string>
+    <string name="date_yesterday">Dün</string>
+    <string name="date_picker_confirm">Seç</string>
+    <string name="date_picker_cancel">Vazgeç</string>
+    <string name="date_picker_title">Tarih seç</string>
 </resources>

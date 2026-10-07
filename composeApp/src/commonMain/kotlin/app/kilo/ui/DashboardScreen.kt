@@ -197,6 +197,7 @@ fun DashboardScreen(
                 sheet = sheet,
                 unit = state.unit,
                 onInputChange = viewModel::onInputChange,
+                onDateSelected = viewModel::onDateSelected,
                 onSave = viewModel::save,
                 onDismiss = viewModel::dismissSheet,
                 hazeState = hazeState,

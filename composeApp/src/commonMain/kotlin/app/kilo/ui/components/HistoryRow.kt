@@ -172,7 +172,7 @@ fun HistoryRow(
     )
 }
 
-private fun monthName(monthNumber: Int): String = when (monthNumber) {
+internal fun monthName(monthNumber: Int): String = when (monthNumber) {
     1 -> "Oca/Jan"
     2 -> "Şub/Feb"
     3 -> "Mar"

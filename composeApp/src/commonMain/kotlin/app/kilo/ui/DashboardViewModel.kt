@@ -25,6 +25,8 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 /** Localizable error keys; the UI maps them to string resources (no raw exceptions reach the UI). */
@@ -44,6 +46,7 @@ data class HeroState(
 
 data class SheetState(
     val input: String = "",
+    val selectedDateMillis: Long? = null,
     val error: UiError? = null,
     val notice: UiError? = null,
     val scanning: Boolean = false,
@@ -107,6 +110,10 @@ class DashboardViewModel(
 
     fun onInputChange(text: String) {
         _state.update { it.copy(sheet = it.sheet?.copy(input = text, error = null, isPrefilledFromOcr = false)) }
+    }
+
+    fun onDateSelected(millis: Long?) {
+        _state.update { it.copy(sheet = it.sheet?.copy(selectedDateMillis = millis)) }
     }
 
     fun dismissSheet() {
@@ -180,7 +187,13 @@ class DashboardViewModel(
                 _state.update { it.copy(sheet = it.sheet?.copy(error = err)) }
             }
             is WeightInputResult.Valid -> {
-                weights.add(WeightEntry.create(r.kg, now()))
+                val entryInstant = sheet.selectedDateMillis?.let { utcMillis ->
+                    val tz = timeZone()
+                    val selectedLocalDate = Instant.fromEpochMilliseconds(utcMillis).toLocalDateTime(TimeZone.UTC).date
+                    val currentTime = now().toLocalDateTime(tz).time
+                    selectedLocalDate.atTime(currentTime).toInstant(tz)
+                } ?: now()
+                weights.add(WeightEntry.create(r.kg, entryInstant))
                 _state.update { it.copy(sheet = null) }
                 feedback.success()
             }

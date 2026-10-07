@@ -6,11 +6,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,16 +29,27 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -49,6 +62,11 @@ import app.kilo.ui.UiError
 import app.kilo.ui.theme.KiloTheme
 import dev.chrisbanes.haze.HazeState
 import kilo.composeapp.generated.resources.Res
+import kilo.composeapp.generated.resources.date_picker_cancel
+import kilo.composeapp.generated.resources.date_picker_confirm
+import kilo.composeapp.generated.resources.date_picker_title
+import kilo.composeapp.generated.resources.date_today
+import kilo.composeapp.generated.resources.date_yesterday
 import kilo.composeapp.generated.resources.error_empty
 import kilo.composeapp.generated.resources.error_not_a_number
 import kilo.composeapp.generated.resources.error_ocr_failed
@@ -60,21 +78,29 @@ import kilo.composeapp.generated.resources.sheet_placeholder
 import kilo.composeapp.generated.resources.sheet_save
 import kilo.composeapp.generated.resources.sheet_scanning
 import kilo.composeapp.generated.resources.sheet_title
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntrySheet(
     sheet: SheetState,
     unit: WeightUnit,
     onInputChange: (String) -> Unit,
+    onDateSelected: (Long?) -> Unit,
     onSave: () -> Unit,
     onDismiss: () -> Unit,
     hazeState: HazeState?,
     modifier: Modifier = Modifier,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
 ) {
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
     val focusRequester = remember { FocusRequester() }
+    var showDatePicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(sheet.scanning) {
         if (!sheet.scanning) {
@@ -161,7 +187,7 @@ fun EntrySheet(
                         )
                     }
 
-                    Spacer(Modifier.height(28.dp))
+                    Spacer(Modifier.height(20.dp))
 
                     if (sheet.scanning) {
                         // Scanning progress indicator
@@ -186,6 +212,47 @@ fun EntrySheet(
                             )
                         }
                     } else {
+                        // Date Pill (tap to choose date)
+                        val todayEpochDays = Clock.System.now().toLocalDateTime(timeZone).date.toEpochDays()
+                        val selectedLocalDate = sheet.selectedDateMillis?.let {
+                            Instant.fromEpochMilliseconds(it).toLocalDateTime(TimeZone.UTC).date
+                        }
+                        val isToday = selectedLocalDate == null || selectedLocalDate.toEpochDays() == todayEpochDays
+                        val isYesterday = selectedLocalDate != null && selectedLocalDate.toEpochDays() == todayEpochDays - 1
+
+                        val dateLabel = when {
+                            isToday -> stringResource(Res.string.date_today)
+                            isYesterday -> stringResource(Res.string.date_yesterday)
+                            else -> "${selectedLocalDate.dayOfMonth} ${monthName(selectedLocalDate.monthNumber)} ${selectedLocalDate.year}"
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(999.dp))
+                                .background(colors.glassTint.copy(alpha = 0.65f))
+                                .border(1.dp, colors.glassBorder, RoundedCornerShape(999.dp))
+                                .clickable { showDatePicker = true }
+                                .padding(horizontal = 14.dp, vertical = 6.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            ) {
+                                Text(
+                                    text = "📅",
+                                    fontSize = 12.sp,
+                                )
+                                Text(
+                                    text = dateLabel,
+                                    style = typography.caption.copy(fontWeight = FontWeight.SemiBold),
+                                    color = if (!isToday) colors.accent else colors.textSecondary,
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.height(20.dp))
+
                         // Numeric input area
                         Row(
                             verticalAlignment = Alignment.Bottom,
@@ -210,7 +277,7 @@ fun EntrySheet(
                                 cursorBrush = SolidColor(colors.accent),
                                 modifier = Modifier
                                     .focusRequester(focusRequester)
-                                    .width(180.dp),
+                                    .width(IntrinsicSize.Min),
                                 decorationBox = { innerTextField ->
                                     Box(contentAlignment = Alignment.CenterEnd) {
                                         if (sheet.input.isEmpty()) {
@@ -278,6 +345,64 @@ fun EntrySheet(
                     Spacer(Modifier.height(16.dp))
                 }
             }
+        }
+    }
+
+    // Date Picker Dialog
+    if (showDatePicker) {
+        val nowMillis = remember { Clock.System.now().toEpochMilliseconds() }
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = sheet.selectedDateMillis ?: nowMillis,
+            selectableDates = remember {
+                object : SelectableDates {
+                    override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                        // Disallow future dates (allowing up to end of today UTC)
+                        return utcTimeMillis <= nowMillis + 86_400_000L
+                    }
+                }
+            },
+        )
+
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDateSelected(datePickerState.selectedDateMillis)
+                        showDatePicker = false
+                    },
+                ) {
+                    Text(
+                        text = stringResource(Res.string.date_picker_confirm),
+                        color = colors.accent,
+                        style = typography.headline,
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text(
+                        text = stringResource(Res.string.date_picker_cancel),
+                        color = colors.textSecondary,
+                        style = typography.body,
+                    )
+                }
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = colors.backgroundTop,
+            ),
+        ) {
+            DatePicker(
+                state = datePickerState,
+                title = {
+                    Text(
+                        text = stringResource(Res.string.date_picker_title),
+                        style = typography.headline,
+                        color = colors.textPrimary,
+                        modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 16.dp),
+                    )
+                },
+            )
         }
     }
 }

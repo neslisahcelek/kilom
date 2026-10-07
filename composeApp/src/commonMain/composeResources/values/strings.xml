@@ -25,4 +25,9 @@
     <string name="error_out_of_range">Enter a weight between 20 and 500 kg (44–1102 lb).</string>
     <string name="error_ocr_no_result">Couldn\'t read a weight from the photo. Try again or enter it manually.</string>
     <string name="error_ocr_failed">Something went wrong reading the photo. You can enter the weight manually.</string>
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
+    <string name="date_picker_confirm">Select</string>
+    <string name="date_picker_cancel">Cancel</string>
+    <string name="date_picker_title">Select date</string>
 </resources>
