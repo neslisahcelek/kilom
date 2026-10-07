@@ -81,6 +81,8 @@ import kilo.composeapp.generated.resources.sheet_title
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 
@@ -350,14 +352,16 @@ fun EntrySheet(
 
     // Date Picker Dialog
     if (showDatePicker) {
-        val nowMillis = remember { Clock.System.now().toEpochMilliseconds() }
+        val maxSelectableUtcMillis = remember(timeZone) {
+            val localToday = Clock.System.now().toLocalDateTime(timeZone).date
+            localToday.atTime(23, 59, 59).toInstant(TimeZone.UTC).toEpochMilliseconds()
+        }
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = sheet.selectedDateMillis ?: nowMillis,
-            selectableDates = remember {
+            initialSelectedDateMillis = sheet.selectedDateMillis ?: Clock.System.now().toEpochMilliseconds(),
+            selectableDates = remember(maxSelectableUtcMillis) {
                 object : SelectableDates {
                     override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                        // Disallow future dates (allowing up to end of today UTC)
-                        return utcTimeMillis <= nowMillis + 86_400_000L
+                        return utcTimeMillis <= maxSelectableUtcMillis
                     }
                 }
             },

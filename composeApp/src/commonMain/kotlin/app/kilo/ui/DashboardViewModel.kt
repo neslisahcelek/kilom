@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
@@ -189,9 +190,14 @@ class DashboardViewModel(
             is WeightInputResult.Valid -> {
                 val entryInstant = sheet.selectedDateMillis?.let { utcMillis ->
                     val tz = timeZone()
+                    val todayLocalDate = now().toLocalDateTime(tz).date
                     val selectedLocalDate = Instant.fromEpochMilliseconds(utcMillis).toLocalDateTime(TimeZone.UTC).date
-                    val currentTime = now().toLocalDateTime(tz).time
-                    selectedLocalDate.atTime(currentTime).toInstant(tz)
+                    val entryTime = if (selectedLocalDate == todayLocalDate) {
+                        now().toLocalDateTime(tz).time
+                    } else {
+                        LocalTime(8, 0, 0)
+                    }
+                    selectedLocalDate.atTime(entryTime).toInstant(tz)
                 } ?: now()
                 weights.add(WeightEntry.create(r.kg, entryInstant))
                 _state.update { it.copy(sheet = null) }

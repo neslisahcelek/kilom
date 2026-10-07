@@ -3,6 +3,7 @@ package app.kilo.ui.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.kilo.domain.WeightUnit
@@ -113,31 +115,22 @@ fun ActionBar(
             }
         }
 
-        // Unit segmented toggle (kg / lb)
+        // Unit selection (kg / lb buttons)
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            GlassCard(
-                hazeState = hazeState,
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                Row(
-                    modifier = Modifier.padding(3.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    UnitSegmentItem(
-                        title = stringResource(Res.string.unit_kg),
-                        selected = selectedUnit == WeightUnit.KG,
-                        onClick = { onUnitChange(WeightUnit.KG) },
-                    )
-                    UnitSegmentItem(
-                        title = stringResource(Res.string.unit_lb),
-                        selected = selectedUnit == WeightUnit.LB,
-                        onClick = { onUnitChange(WeightUnit.LB) },
-                    )
-                }
-            }
+            UnitButton(
+                title = stringResource(Res.string.unit_kg),
+                selected = selectedUnit == WeightUnit.KG,
+                onClick = { onUnitChange(WeightUnit.KG) },
+            )
+            UnitButton(
+                title = stringResource(Res.string.unit_lb),
+                selected = selectedUnit == WeightUnit.LB,
+                onClick = { onUnitChange(WeightUnit.LB) },
+            )
         }
     }
 }
@@ -186,7 +179,7 @@ private fun ActionButton(
 }
 
 @Composable
-private fun UnitSegmentItem(
+private fun UnitButton(
     title: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -195,25 +188,33 @@ private fun UnitSegmentItem(
     val typography = KiloTheme.type
 
     val bgColor by animateColorAsState(
-        if (selected) colors.accent else Color.Transparent,
-        label = "unit_segment_bg",
+        targetValue = if (selected) colors.accent else colors.glassTint,
+        label = "unit_button_bg",
     )
     val textColor by animateColorAsState(
-        if (selected) colors.onAccent else colors.textSecondary,
-        label = "unit_segment_text",
+        targetValue = if (selected) colors.onAccent else colors.textSecondary,
+        label = "unit_button_text",
+    )
+    val borderColor by animateColorAsState(
+        targetValue = if (selected) colors.accent else colors.glassBorder,
+        label = "unit_button_border",
     )
 
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(13.dp))
+            .width(84.dp)
+            .height(38.dp)
+            .clip(RoundedCornerShape(19.dp))
             .background(bgColor)
-            .clickable(role = Role.RadioButton, onClick = onClick)
-            .padding(horizontal = 18.dp, vertical = 6.dp),
+            .border(1.dp, borderColor, RoundedCornerShape(19.dp))
+            .clickable(role = Role.RadioButton, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = title,
-            style = typography.callout,
+            style = typography.callout.copy(
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+            ),
             color = textColor,
         )
     }
