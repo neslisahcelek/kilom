@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | Kilo – Minimal Weight Log</title>
+  <meta name="description" content="Privacy Policy for Kilo – Minimal Weight Log. 100% On-Device, Zero Data Collection, Privacy-First Architecture.">
+  <meta name="author" content="Neslişah Çelek">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0c10;
+      --bg-secondary: #12161f;
+      --bg-card: rgba(22, 27, 38, 0.75);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --text-primary: #f0f3f8;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-primary: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --accent-success: #34d399;
+      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      --card-radius: 16px;
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-primary: #f8fafc;
+        --bg-secondary: #ffffff;
+        --bg-card: rgba(255, 255, 255, 0.9);
+        --border-card: rgba(0, 0, 0, 0.08);
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #94a3b8;
+        --accent-primary: #0284c7;
+        --accent-glow: rgba(2, 132, 199, 0.15);
+        --accent-success: #059669;
+        --accent-gradient: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      padding: 0 1.25rem 4rem 1.25rem;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation / Header */
+    header {
+      padding: 2.5rem 0 1.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #ffffff;
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-card);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lang-btn.active {
+      background: var(--accent-primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    /* Hero / Title */
+    .hero {
+      margin-bottom: 2.5rem;
+    }
+
+    .badge-wrap {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-card);
+      color: var(--accent-primary);
+    }
+
+    .badge.verified {
+      color: var(--accent-success);
+      border-color: rgba(52, 211, 153, 0.25);
+      background: rgba(52, 211, 153, 0.08);
+    }
+
+    .hero-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 700px;
+    }
+
+    .meta-bar {
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Key Pillars Grid */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .pillar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--card-radius);
+      padding: 1.25rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .pillar-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .pillar-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .pillar-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Policy Content */
+    .policy-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--card-radius);
+      padding: 2.25rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .policy-section h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-card);
+      padding-bottom: 0.6rem;
+    }
+
+    .policy-section h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem 0;
+      color: var(--text-primary);
+    }
+
+    .policy-section p {
+      margin-bottom: 0.9rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .policy-section ul {
+      margin: 0.5rem 0 1rem 1.4rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .policy-section li {
+      margin-bottom: 0.4rem;
+    }
+
+    .policy-section strong {
+      color: var(--text-primary);
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-card);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent-primary);
+    }
+
+    /* Callout Box */
+    .callout {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 3px solid var(--accent-primary);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .callout p {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+
+    /* Store Table */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+    }
+
+    td {
+      color: var(--text-secondary);
+    }
+
+    /* Contact Card */
+    .contact-card {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      border-radius: var(--card-radius);
+      padding: 2rem;
+      margin-top: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      box-shadow: 0 12px 36px var(--accent-glow);
+    }
+
+    .contact-card h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+
+    .contact-card p {
+      font-size: 0.92rem;
+      opacity: 0.9;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      border-radius: 999px;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    footer {
+      margin-top: 3.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-card);
+      padding-top: 2rem;
+    }
+
+    footer a {
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toggle visibility */
+    .content-block {
+      display: none;
+    }
+
+    .content-block.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <a href="#" class="brand">
+        <div class="brand-icon">K</div>
+        <div class="brand-text">
+          <h1>Kilo</h1>
+          <p>Minimal Weight Log</p>
+        </div>
+      </a>
+
+      <div class="lang-switcher" role="tablist" aria-label="Language Selector">
+        <button id="btn-en" class="lang-btn active" onclick="switchLang('en')">🇬🇧 English</button>
+        <button id="btn-tr" class="lang-btn" onclick="switchLang('tr')">🇹🇷 Türkçe</button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="hero">
+      <div class="badge-wrap">
+        <span class="badge verified">✓ Apple App Store Compliant</span>
+        <span class="badge verified">✓ Google Play Data Safety Compliant</span>
+        <span class="badge">100% On-Device</span>
+      </div>
+      <h2 class="hero-title" id="page-title">Privacy Policy</h2>
+      <p class="hero-subtitle" id="page-subtitle">
+        Your health data belongs exclusively to you. Kilo is designed from the ground up to operate completely on your device without transmitting data over the internet.
+      </p>
+      <div class="meta-bar">
+        <span><strong>Last Updated:</strong> October 7, 2026</span>
+        <span><strong>Developer:</strong> Neslişah Çelek</span>
+        <span><strong>Status:</strong> Active</span>
+      </div>
+    </div>
+
+    <!-- Pillars Grid -->
+    <div class="pillars-grid" id="pillars-container">
+      <!-- Will be populated / updated per language -->
+      <div class="pillar-card">
+        <div class="pillar-icon">🔒</div>
+        <h3 id="pillar-1-title">Zero Data Collection</h3>
+        <p id="pillar-1-desc">No accounts, no server uploads, no cloud databases. All weight entries stay stored solely on your device.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">⚡</div>
+        <h3 id="pillar-2-title">On-Device OCR</h3>
+        <p id="pillar-2-desc">Camera and scale photos are analyzed locally in volatile memory via Apple Vision & Google ML Kit. Images are never uploaded.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🚫</div>
+        <h3 id="pillar-3-title">No Ads or Trackers</h3>
+        <p id="pillar-3-desc">Kilo is 100% tracker-free. Zero third-party telemetry, marketing pixels, or advertising SDKs.</p>
+      </div>
+    </div>
+
+    <!-- ENGLISH CONTENT -->
+    <main id="content-en" class="content-block active">
+      <section class="policy-section">
+        <h2>1. Introduction & Core Privacy Principles</h2>
+        <p>
+          Welcome to <strong>Kilo – Minimal Weight Log</strong> ("Kilo", "we", "us", or "our"). Kilo is built upon an uncompromising privacy-first philosophy.
+        </p>
+        <p>
+          We believe personal health metrics should remain strictly confidential. Kilo does not require registration, passwords, email addresses, or continuous cloud synchronization.
+        </p>
+        <div class="callout">
+          <p>📌 <strong>Summary:</strong> Kilo does not collect, sell, or transmit any of your personal data. All entries remain strictly on your physical device.</p>
+        </div>
+      </section>
+
+      <section class="policy-section">
+        <h2>2. Information We Do NOT Collect</h2>
+        <p>Kilo collects <strong>zero</strong> personally identifiable or sensitive health information:</p>
+        <ul>
+          <li><strong>No Personal Identifiers:</strong> We do not ask for or collect names, email addresses, phone numbers, or hardware identifiers (e.g., IDFA, AAID).</li>
+          <li><strong>No Health Data Off-Device:</strong> Your weight measurements, dates, notes, and targets remain in your local sandboxed database only.</li>
+          <li><strong>No Location Data:</strong> GPS or network-based geolocation is never accessed or requested.</li>
+          <li><strong>No Financial Data:</strong> Kilo does not process payments or collect payment credentials.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>3. Device Permissions & On-Device Processing</h2>
+        <p>Kilo requests limited runtime permissions solely for optical recognition of your scale display:</p>
+        
+        <h3>A. Camera Permission (<code>android.permission.CAMERA</code> / <code>NSCameraUsageDescription</code>)</h3>
+        <p>
+          Used only when you choose to scan your bathroom scale display using the in-app camera scanner.
+        </p>
+        <p>
+          <strong>iOS Purpose String:</strong> <em>"Kilo uses the camera to read your weight from a photo of the scale."</em>
+        </p>
+        <p>
+          Captured images are processed in volatile RAM and immediately discarded once the digits are recognized. Images are <strong>never</strong> transmitted to remote servers.
+        </p>
+
+        <h3>B. Photo Library / Gallery Permission (<code>NSPhotoLibraryUsageDescription</code>)</h3>
+        <p>
+          Used only if you manually select an existing photo of a scale display from your photo gallery.
+        </p>
+        <p>
+          <strong>iOS Purpose String:</strong> <em>"Kilo reads your weight from a scale photo you choose from your library."</em>
+        </p>
+        <p>
+          Only the specific picture selected is inspected locally. Your photo library is never indexed, uploaded, or shared.
+        </p>
+
+        <h3>C. On-Device OCR Technology</h3>
+        <ul>
+          <li><strong>iOS:</strong> Text recognition runs on-device using Apple's <code>Vision Framework</code> (<code>VNRecognizeTextRequest</code>).</li>
+          <li><strong>Android:</strong> Text recognition runs locally via <code>Google ML Kit Text Recognition</code>.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>4. Data Storage & Local Retention</h2>
+        <ul>
+          <li><strong>Local Database:</strong> All entries are stored on your device using a sandboxed local database (Room / SQLite).</li>
+          <li><strong>No Cloud Sync:</strong> We do not operate cloud servers to back up or synchronize your data.</li>
+          <li><strong>User Control:</strong> Deleting an entry in the app or uninstalling the app permanently erases the data from your device.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>5. Third-Party Services, SDKs & Analytics</h2>
+        <ul>
+          <li><strong>No Analytics SDKs:</strong> We do not embed Google Analytics, Firebase, Mixpanel, or telemetry frameworks.</li>
+          <li><strong>No Advertisements:</strong> Kilo does not display ads and does not integrate ad networks.</li>
+          <li><strong>No Third-Party Trackers:</strong> No tracking scripts, marketing pixels, or social media SDKs are included.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>6. Children's Privacy (COPPA & GDPR Compliant)</h2>
+        <p>
+          Kilo complies fully with the Children's Online Privacy Protection Act (<strong>COPPA</strong>) and the General Data Protection Regulation (<strong>GDPR</strong>). Because we do not collect personal data from any user, we do not knowingly or unknowingly collect personal data from children under 13 (or under 16 in certain EU jurisdictions).
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>7. Store Declarations Reference</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Requirement</th>
+                <th>Kilo Declaration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Apple App Store</strong></td>
+                <td>Privacy Nutrition Label</td>
+                <td><span class="badge verified">Data Not Collected</span></td>
+              </tr>
+              <tr>
+                <td><strong>Google Play</strong></td>
+                <td>Data Safety Section</td>
+                <td><span class="badge verified">No Data Collected / No Data Shared</span></td>
+              </tr>
+              <tr>
+                <td><strong>Camera / Gallery</strong></td>
+                <td>Runtime Access</td>
+                <td>On-device scale OCR only; zero remote storage</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="policy-section">
+        <h2>8. User Rights (GDPR / CCPA / KVKK)</h2>
+        <p>
+          You have full authority over your data at all times. Since your data is stored strictly on your own hardware, you can inspect it at any moment within the app, delete individual records, or wipe all records by uninstalling the app.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>9. Changes to This Privacy Policy</h2>
+        <p>
+          We may update this policy occasionally to reflect new features or legal requirements. Updates will be published on this page with a revised "Last Updated" date.
+        </p>
+      </section>
+    </main>
+
+    <!-- TURKISH CONTENT -->
+    <main id="content-tr" class="content-block">
+      <section class="policy-section">
+        <h2>1. Giriş ve Temel Gizlilik İlkesi</h2>
+        <p>
+          <strong>Kilo – Minimal Weight Log</strong> ("Kilo", "biz" veya "uygulama") uygulamasına hoş geldiniz. Kilo, ödünsüz bir <strong>cihaz üzerinde (on-device) ve gizlilik odaklı mimari</strong> ile geliştirilmiştir.
+        </p>
+        <p>
+          Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz. Kilo, hesap açmanıza, parola oluşturmanıza veya verilerinizi internet üzerinden iletmenize gerek kalmayacak şekilde tasarlanmıştır.
+        </p>
+        <div class="callout">
+          <p>📌 <strong>Özet:</strong> Kilo hiçbir kişisel verinizi toplamaz, satmaz veya üçüncü taraflarla paylaşmaz. Tüm veriler yalnızca fiziksel cihazınızda saklanır.</p>
+        </div>
+      </section>
+
+      <section class="policy-section">
+        <h2>2. Toplanmayan Veriler (Sıfır Veri Toplama)</h2>
+        <p>Kilo uygulamasını kullanırken hiçbir kişisel veya hassas veri toplanmaz:</p>
+        <ul>
+          <li><strong>Kişisel Kimlik Bilgileri Yok:</strong> Ad, e-posta adresi, telefon numarası veya donanım kimlikleri (IDFA, AAID) alınmaz.</li>
+          <li><strong>Sağlık Verileri Cihaz Dışına Çıkmaz:</strong> Kilo kayıtlarınız, tarihler ve geçmiş verileriniz yalnızca cihazınızın yerel hafızasında tutulur.</li>
+          <li><strong>Konum Bilgisi Yok:</strong> GPS veya baz istasyonu konumunuza asla erişilmez.</li>
+          <li><strong>Finansal Bilgi Yok:</strong> Ödeme bilgisi veya kart verisi toplanmaz.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>3. Cihaz İzinleri ve Cihaz Üzerinde İşleme (On-Device OCR)</h2>
+        <p>Kilo, yalnızca tartı ekranı tarama özelliğini sunabilmek için asgari düzeyde işletim sistemi izni ister:</p>
+        
+        <h3>A. Kamera İzni (<code>android.permission.CAMERA</code> / <code>NSCameraUsageDescription</code>)</h3>
+        <p>
+          Yalnızca uygulama içerisindeki tartı tarama özelliğini kullanarak tartı ekranının fotoğrafını çekmek istediğinizde kullanılır.
+        </p>
+        <p>
+          <strong>iOS Açıklama Metni:</strong> <em>"Kilo uses the camera to read your weight from a photo of the scale."</em> (Kilo, tartı fotoğrafınızdan kilonuzu okumak için kamerayı kullanır.)
+        </p>
+        <p>
+          Çekilen fotoğraf anlık bellekte (RAM) yerel metin okuma için işlenir ve hemen bellekten silinir. Görseller asla sunuculara iletilmez veya harici olarak depolanmaz.
+        </p>
+
+        <h3>B. Fotoğraf Galerisi İzni (<code>NSPhotoLibraryUsageDescription</code>)</h3>
+        <p>
+          Yalnızca galerinizden önceden çekilmiş bir tartı fotoğrafını seçerek kilonuzu otomatik okutmak istediğinizde devreye girer.
+        </p>
+        <p>
+          <strong>iOS Açıklama Metni:</strong> <em>"Kilo reads your weight from a scale photo you choose from your library."</em> (Kilo, galerinizden seçtiğiniz tartı fotoğrafından kilonuzu okur.)
+        </p>
+        <p>
+          Yalnızca seçtiğiniz tek fotoğraf yerel olarak taranır. Fotoğraf albümünüz indekslenmez veya dışa aktarılmaz.
+        </p>
+
+        <h3>C. Cihaz Üzerinde OCR Teknolojisi</h3>
+        <ul>
+          <li><strong>iOS:</strong> Optik karakter tanıma Apple'ın yerel <code>Vision Framework</code>'ü ile doğrudan cihazda çalıştırılır.</li>
+          <li><strong>Android:</strong> Metin tanıma <code>Google ML Kit Text Recognition</code> motorunun çevrimdışı (on-device) kütüphanesiyle cihazda gerçekleştirilir.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>4. Veri Depolama ve Yerel Saklama</h2>
+        <ul>
+          <li><strong>Yerel Veritabanı:</strong> Tüm kilo kayıtları cihazınızın güvenli yerel depolama alanında (Room / SQLite) saklanır.</li>
+          <li><strong>Bulut Senkronizasyonu Yok:</strong> Verileriniz herhangi bir uzak sunucuya yedeklenmez veya taşınmaz.</li>
+          <li><strong>Kullanıcı Kontrolü:</strong> Uygulamadan bir kaydı sildiğinizde veya uygulamayı cihazınızdan kaldırdığınızda veriler kalıcı olarak yok edilir.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>5. Üçüncü Taraf Servisler, Reklamlar ve Analitikler</h2>
+        <ul>
+          <li><strong>Analitik Kütüphanesi Yok:</strong> Google Analytics, Firebase, Mixpanel gibi telemetri araçları bulunmaz.</li>
+          <li><strong>Reklam Ağı Yok:</strong> Kilo %100 reklamsızdır; reklam kimlikleri izlenmez.</li>
+          <li><strong>İzleyici (Tracker) Yok:</strong> Facebook SDK veya pazarlama pikselleri projede kesinlikle yer almaz.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>6. Çocukların Gizliliği (KVKK & GDPR Uyumu)</h2>
+        <p>
+          Kilo, 6698 sayılı KVKK, AB Genel Veri Koruma Tüzüğü (GDPR) ve ABD COPPA kurallarına tam uyumludur. Hiçbir kullanıcıdan kişisel veri toplanmadığı için, 13 (veya 16) yaşından küçük çocuklara ait herhangi bir kişisel veri de toplanmamaktadır.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>7. Mağaza Beyanları Özeti</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Gereksinim</th>
+                <th>Kilo Beyanı</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Apple App Store</strong></td>
+                <td>App Privacy Nutrition Label</td>
+                <td><span class="badge verified">Veri Toplanmaz (Data Not Collected)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Google Play</strong></td>
+                <td>Veri Güvenliği (Data Safety)</td>
+                <td><span class="badge verified">Veri Toplanmaz / Veri Paylaşılmaz</span></td>
+              </tr>
+              <tr>
+                <td><strong>Kamera / Galeri</strong></td>
+                <td>Çalışma Zamanı Erişimi</td>
+                <td>Yalnızca cihaz üzerinde tartı OCR okuma; uzak sunucu aktarımı sıfır</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="policy-section">
+        <h2>8. Kullanıcı Hakları (KVKK / GDPR)</h2>
+        <p>
+          Verilerinizin tek ve mutlak sahibi sizsiniz. Verileriniz tamamen kendi donanımınızda tutulduğundan dilediğiniz zaman inceleyebilir, silebilir veya uygulamayı kaldırarak tüm geçmişi silebilirsiniz.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>9. Bu Politikadaki Değişiklikler</h2>
+        <p>
+          Geliştirmeler veya mevzuat değişiklikleri doğrultusunda bu politika güncellenebilir. Değişiklikler bu sayfada "Son Güncelleme" tarihiyle birlikte yayımlanır.
+        </p>
+      </section>
+    </main>
+
+    <!-- Contact Card -->
+    <div class="contact-card">
+      <div>
+        <h2 id="contact-heading">Questions & Support</h2>
+        <p id="contact-desc">Need assistance or have questions about Kilo's privacy practices?</p>
+      </div>
+      <a href="mailto:neslisah.celek@outlook.com" class="contact-btn">
+        ✉️ neslisah.celek@outlook.com
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2026 Kilo – Minimal Weight Log. Developed with privacy by <a href="https://github.com/neslisahcelek/KiloApp" target="_blank" rel="noopener">Neslişah Çelek</a>.</p>
+    </footer>
+  </div>
+
+  <script>
+    function switchLang(lang) {
+      const isTr = lang === 'tr';
+      
+      // Toggle button states
+      document.getElementById('btn-en').classList.toggle('active', !isTr);
+      document.getElementById('btn-tr').classList.toggle('active', isTr);
+      
+      // Toggle content visibility
+      document.getElementById('content-en').classList.toggle('active', !isTr);
+      document.getElementById('content-tr').classList.toggle('active', isTr);
+      
+      // Update HTML lang attribute
+      document.documentElement.lang = lang;
+
+      // Update hero & header texts
+      if (isTr) {
+        document.getElementById('page-title').innerText = "Gizlilik Politikası";
+        document.getElementById('page-subtitle').innerText = "Kişisel sağlık ve kilo verileriniz yalnızca size aittir. Kilo, internete hiçbir veri aktarmadan tamamen cihazınızda yerel çalışacak şekilde tasarlanmıştır.";
+        document.getElementById('pillar-1-title').innerText = "Sıfır Veri Toplama";
+        document.getElementById('pillar-1-desc').innerText = "Hesap yok, sunucu yüklemesi yok, bulut veritabanı yok. Tüm tartı kayıtları yalnızca cihazınızda saklanır.";
+        document.getElementById('pillar-2-title').innerText = "Cihaz Üzerinde OCR";
+        document.getElementById('pillar-2-desc').innerText = "Tartı fotoğrafları Apple Vision ve Google ML Kit ile yerel bellekte okunur. Görseller asla sunucuya gitmez.";
+        document.getElementById('pillar-3-title').innerText = "Reklam ve Takipçi Yok";
+        document.getElementById('pillar-3-desc').innerText = "Kilo %100 izleyicisizdir. Sıfır telemetri, sıfır pazarlama pikseli, sıfır reklam SDK'sı.";
+        document.getElementById('contact-heading').innerText = "Sorular ve Destek";
+        document.getElementById('contact-desc').innerText = "Gizlilik politikası veya Kilo uygulaması ile ilgili her türlü soru için iletişime geçin.";
+      } else {
+        document.getElementById('page-title').innerText = "Privacy Policy";
+        document.getElementById('page-subtitle').innerText = "Your health data belongs exclusively to you. Kilo is designed from the ground up to operate completely on your device without transmitting data over the internet.";
+        document.getElementById('pillar-1-title').innerText = "Zero Data Collection";
+        document.getElementById('pillar-1-desc').innerText = "No accounts, no server uploads, no cloud databases. All weight entries stay stored solely on your device.";
+        document.getElementById('pillar-2-title').innerText = "On-Device OCR";
+        document.getElementById('pillar-2-desc').innerText = "Camera and scale photos are analyzed locally in volatile memory via Apple Vision & Google ML Kit. Images are never uploaded.";
+        document.getElementById('pillar-3-title').innerText = "No Ads or Trackers";
+        document.getElementById('pillar-3-desc').innerText = "Kilo is 100% tracker-free. Zero third-party telemetry, marketing pixels, or advertising SDKs.";
+        document.getElementById('contact-heading').innerText = "Questions & Support";
+        document.getElementById('contact-desc').innerText = "Need assistance or have questions about Kilo's privacy practices?";
+      }
+
+      // Save preference to localStorage if available
+      try {
+        localStorage.setItem('kilo_policy_lang', lang);
+      } catch (e) {}
+    }
+
+    // Initialize from URL param (?lang=tr) or browser language
+    (function init() {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = params.get('lang');
+      const savedLang = localStorage.getItem('kilo_policy_lang');
+      const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+
+      if (urlLang === 'tr' || urlLang === 'en') {
+        switchLang(urlLang);
+      } else if (savedLang === 'tr' || savedLang === 'en') {
+        switchLang(savedLang);
+      } else if (browserLang.startsWith('tr')) {
+        switchLang('tr');
+      }
+    })();
+  </script>
+</body>
+</html>
