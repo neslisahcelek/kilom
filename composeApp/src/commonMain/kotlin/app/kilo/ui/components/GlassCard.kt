@@ -37,6 +37,7 @@ fun GlassCard(
             .then(
                 if (hazeState != null) Modifier.hazeEffect(state = hazeState) {
                     blurRadius = 28.dp
+                    backgroundColor = c.backgroundTop
                     tints = listOf(HazeTint(c.glassTint))
                 } else Modifier.background(c.glassTint)
             )
