@@ -1,3 +1,7 @@
 PRODUCT_NAME=Kilo
 PRODUCT_BUNDLE_IDENTIFIER=com.nesli.kilo
 TEAM_ID=
+EXCLUDED_ARCHS[sdk=iphonesimulator*]=x86_64
+IPHONEOS_DEPLOYMENT_TARGET=15.3
+// Skiko's prebuilt ICU data object requires iOS 18.5 for simulator linking.
+IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator*]=18.5
