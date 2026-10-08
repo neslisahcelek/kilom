@@ -13,8 +13,8 @@ object WeightParser {
     // Matches numbers with 1 or 2 decimals (e.g., 74.5 or 74.50)
     private val candidateRegex = Regex("(\\d{2,3})[.,](\\d{1,2})")
     private val labelRegex = Regex("(?i)(kg|lbs?)")
-    private val tokenRegex = Regex("^([0-9OoIl|.,]+)(.*)$")
-    private val penaltyRegex = Regex("(?i)(bmi|%|fat|water|muscle|bone|kcal|bmr)")
+    private val tokenRegex = Regex("^([0-9OoIlSsBbZzDU|!\\[\\].,]+)(.*)$")
+    private val penaltyRegex = Regex("(?i)(bmi|%|fat|water|muscle|bone|kcal|bmr|max\\.?|d\\s*=\\s*\\d|°c|°f|temp|celsius|batt|tare)")
 
     private data class Label(val start: Int, val end: Int, val unit: WeightUnit)
 
@@ -50,7 +50,7 @@ object WeightParser {
                         if (adj.isNotEmpty()) { score += 1; unit = adj.first().unit }
                     }
                 }
-                if (penaltyRegex.containsMatchIn(line)) score -= 2
+                if (penaltyRegex.containsMatchIn(line)) score -= 5.0
 
                 val kg = if (unit == WeightUnit.KG) value else value.lbToKg()
                 if (kg < MIN_KG || kg > MAX_KG) continue
@@ -71,20 +71,36 @@ object WeightParser {
         else Label(m.range.first, m.range.last + 1, if (m.value.startsWith("k", true)) WeightUnit.KG else WeightUnit.LB)
     }.toList()
 
-    /** Fixes O->0, l/I/|->1 inside numeric-looking token prefixes (e.g. "7O.5kg" -> "70.5kg"). */
+    /** Fixes 7-segment character misreads and cleans spaced decimals inside numeric tokens. */
     internal fun normalize(line: String): String {
+        // Strip leading minus, dash, tilde or tare symbols right before numeric tokens (e.g. "- 49.1" or "-49.1")
+        var cleaned = line.replace(Regex("(?:^|[\\s(\\[])[-~–—]+\\s*([0-9OoIlSsBbZzDU])"), " $1")
+        // Collapse spaces around decimal separators between digits/digit-substitutes (e.g. "49 . 1" -> "49.1", "50. 20" -> "50.20")
+        cleaned = Regex("([0-9OoIlSsBbZzDU]+)\\s*[.,]\\s*([0-9OoIlSsBbZzDU]+)").replace(cleaned) {
+            "${it.groupValues[1]}.${it.groupValues[2]}"
+        }
+
         val sb = StringBuilder()
         var i = 0
         // preserve original whitespace; process tokens
-        while (i < line.length) {
-            if (line[i].isWhitespace()) { sb.append(line[i]); i++; continue }
+        while (i < cleaned.length) {
+            if (cleaned[i].isWhitespace()) { sb.append(cleaned[i]); i++; continue }
             var j = i
-            while (j < line.length && !line[j].isWhitespace()) j++
-            val token = line.substring(i, j)
+            while (j < cleaned.length && !cleaned[j].isWhitespace()) j++
+            val token = cleaned.substring(i, j)
             val m = tokenRegex.find(token)
             if (m != null && m.groupValues[1].any { it.isDigit() }) {
                 val fixed = m.groupValues[1].map {
-                    when (it) { 'O', 'o' -> '0'; 'I', 'l', '|' -> '1'; else -> it }
+                    when (it) {
+                        'O', 'o', 'D', 'U' -> '0'
+                        'I', 'l', '|', '!', '[', ']' -> '1'
+                        'Z', 'z' -> '2'
+                        'S', 's' -> '5'
+                        'b' -> '6'
+                        'B' -> '8'
+                        'q' -> '9'
+                        else -> it
+                    }
                 }.joinToString("")
                 sb.append(fixed).append(m.groupValues[2])
             } else sb.append(token)

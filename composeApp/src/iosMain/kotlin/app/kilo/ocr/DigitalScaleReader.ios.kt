@@ -42,10 +42,10 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
     val source = original.imageByApplyingTransform(CGAffineTransformMakeScale(detectionScale, detectionScale))
     val context = CIContext(options = null)
     val rectangles = VNDetectRectanglesRequest().apply {
-        minimumAspectRatio = 0.2f
-        maximumAspectRatio = 0.9f
-        minimumSize = 0.05f
-        maximumObservations = 3u
+        minimumAspectRatio = 0.1f
+        maximumAspectRatio = 1.0f
+        minimumSize = 0.03f
+        maximumObservations = 5u
     }
     val extent = source.extent
     val sourceImage = context.createCGImage(source, fromRect = extent) ?: return emptyList()
@@ -63,7 +63,7 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
         val imageWidth = extent.useContents { size.width }
         val imageHeight = extent.useContents { size.height }
         val aspect = rectangle.boundingBox.useContents { size.width * imageWidth / (size.height * imageHeight) }
-        if (aspect !in 1.5..6.0) continue
+        if (aspect !in 1.2..7.0) continue
         fun vector(point: kotlinx.cinterop.CValue<platform.CoreGraphics.CGPoint>) = point.useContents {
             CIVector(x = x * imageWidth, Y = y * imageHeight)
         }
@@ -84,40 +84,49 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
                 recognitionLevel = VNRequestTextRecognitionLevelAccurate
                 usesLanguageCorrection = false
                 recognitionLanguages = listOf("en-US")
+                customWords = listOf("kg", "KG", "lb", "LB", "lbs", "LBS", "st", "ST")
             }
             if (!VNImageRequestHandler(cGImage = cgImage, options = emptyMap<Any?, Any?>())
                     .performRequests(listOf(textRequest), error = null)) continue
-            val labels = (textRequest.results ?: emptyList<Any?>()).filterIsInstance<VNRecognizedTextObservation>()
+            val textObservations = (textRequest.results ?: emptyList<Any?>()).filterIsInstance<VNRecognizedTextObservation>()
+            for (obs in textObservations) {
+                obs.topCandidates(5u).mapNotNull { (it as? VNRecognizedText)?.string?.trim() }.forEach {
+                    if (it.isNotEmpty()) results += it
+                }
+            }
+            val labels = textObservations
                 .mapNotNull { observation ->
                     val text = (observation.topCandidates(1u).firstOrNull() as? VNRecognizedText)?.string?.trim()
                     if (text == null || !Regex("(?i)^(kg|lbs?)$").matches(text)) null
                     else text.lowercase() to observation.boundingBox.useContents { origin.x }
                 }
             logOcr("ios digital_fallback rectangle=$index unit_labels=${labels.size}")
-            if (labels.size != 1 || width !in 80..1200 || height !in 60..1200) continue
-            val pixels = ByteArray(width * height)
-            val colorSpace = CGColorSpaceCreateDeviceGray() ?: continue
-            try {
-                pixels.usePinned { pinned ->
-                    val bitmap = CGBitmapContextCreate(pinned.addressOf(0), width.toULong(), height.toULong(), 8u,
-                        width.toULong(), colorSpace, CGImageAlphaInfo.kCGImageAlphaNone.value) ?: return@usePinned
+            if (labels.size == 1 && width in 80..1200 && height in 60..1200) {
+                val pixels = ByteArray(width * height)
+                val colorSpace = CGColorSpaceCreateDeviceGray()
+                if (colorSpace != null) {
                     try {
-                        CGContextDrawImage(bitmap, CGRectMake(0.0, 0.0, width.toDouble(), height.toDouble()), cgImage)
+                        pixels.usePinned { pinned ->
+                            val bitmap = CGBitmapContextCreate(pinned.addressOf(0), width.toULong(), height.toULong(), 8u,
+                                width.toULong(), colorSpace, CGImageAlphaInfo.kCGImageAlphaNone.value) ?: return@usePinned
+                            try {
+                                CGContextDrawImage(bitmap, CGRectMake(0.0, 0.0, width.toDouble(), height.toDouble()), cgImage)
+                            } finally {
+                                CGContextRelease(bitmap)
+                            }
+                        }
+                        coroutineContext.ensureActive()
+                        val value = SevenSegmentReader.read(pixels, width, height, labels.single().second)
+                        logOcr("ios digital_fallback rectangle=$index segments_verified=${value != null}")
+                        if (value != null) results += "$value ${labels.single().first}"
                     } finally {
-                        CGContextRelease(bitmap)
+                        CGColorSpaceRelease(colorSpace)
                     }
                 }
-            } finally {
-                CGColorSpaceRelease(colorSpace)
             }
-            coroutineContext.ensureActive()
-            val value = SevenSegmentReader.read(pixels, width, height, labels.single().second)
-            logOcr("ios digital_fallback rectangle=$index segments_verified=${value != null}")
-            if (value != null) results += "$value ${labels.single().first}"
         } finally {
             CGImageRelease(cgImage)
         }
     }
-    // Conflicting LCD candidates require manual input, rather than choosing an arbitrary value.
-    return results.singleOrNull()?.let { listOf(it) } ?: emptyList()
+    return results.toList()
 }
