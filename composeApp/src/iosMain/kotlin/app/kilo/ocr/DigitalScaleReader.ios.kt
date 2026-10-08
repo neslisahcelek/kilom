@@ -101,7 +101,7 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
                     else text.lowercase() to observation.boundingBox.useContents { origin.x }
                 }
             logOcr("ios digital_fallback rectangle=$index unit_labels=${labels.size}")
-            if (labels.size == 1 && width in 80..1200 && height in 60..1200) {
+            if ((labels.size <= 1) && width in 80..1200 && height in 60..1200) {
                 val pixels = ByteArray(width * height)
                 val colorSpace = CGColorSpaceCreateDeviceGray()
                 if (colorSpace != null) {
@@ -116,9 +116,11 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
                             }
                         }
                         coroutineContext.ensureActive()
-                        val value = SevenSegmentReader.read(pixels, width, height, labels.single().second)
+                        val unitLeft = if (labels.size == 1) labels.single().second else 0.95
+                        val unitSuffix = if (labels.size == 1) " ${labels.single().first}" else ""
+                        val value = SevenSegmentReader.read(pixels, width, height, unitLeft)
                         logOcr("ios digital_fallback rectangle=$index segments_verified=${value != null}")
-                        if (value != null) results += "$value ${labels.single().first}"
+                        if (value != null) results += "$value$unitSuffix"
                     } finally {
                         CGColorSpaceRelease(colorSpace)
                     }

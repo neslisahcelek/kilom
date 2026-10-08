@@ -76,12 +76,29 @@ actual class ScaleOcr {
             return@withContext invLines + t1Lines
         }
 
+        // 3A-2: High-contrast inverted (bridges gaps in glowing LED digits on black glass)
+        coroutineContext.ensureActive()
+        val ledThresholded = baseImage
+            .imageByApplyingFilter("CIColorControls", withInputParameters = mapOf("inputContrast" to 2.8, "inputBrightness" to -0.15, "inputSaturation" to 0.0))
+            .imageByApplyingFilter("CIColorInvert")
+        val ledLines = runVisionOnCiImage(ledThresholded)
+        if (hasValidWeight(ledLines)) {
+            logOcr("ios vision_success tier=3_led_contrast lines=${ledLines.size}")
+            return@withContext ledLines + t1Lines
+        }
+
         // Also test inverted upside-down (Foto 4 upside-down)
         val inv180 = inverted.imageByApplyingOrientation(3)
         val inv180Lines = runVisionOnCiImage(inv180)
         if (hasValidWeight(inv180Lines)) {
             logOcr("ios vision_success tier=3_invert_180 lines=${inv180Lines.size}")
             return@withContext inv180Lines + t1Lines
+        }
+
+        val led180Lines = runVisionOnCiImage(ledThresholded.imageByApplyingOrientation(3))
+        if (hasValidWeight(led180Lines)) {
+            logOcr("ios vision_success tier=3_led_180 lines=${led180Lines.size}")
+            return@withContext led180Lines + t1Lines
         }
 
         // 3B: High-contrast LCD + grayscale (for faint 7-segment LCD digits like Foto 1, 2, 3)

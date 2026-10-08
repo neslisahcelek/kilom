@@ -11,12 +11,12 @@ internal object SevenSegmentReader {
         val centerX get() = (left + right) / 2.0
     }
 
-    fun read(pixels: ByteArray, width: Int, height: Int, unitLeft: Double): String? {
+    fun read(pixels: ByteArray, width: Int, height: Int, unitLeft: Double = 0.95): String? {
         if (width !in 80..1200 || height !in 60..1200 || pixels.size != width * height) return null
-        // A unit on the right of the display separates the large weight from smaller readings.
-        if (unitLeft !in 0.55..0.95) return null
+        // A unit on the right of the display or right-aligned digits.
+        if (unitLeft !in 0.55..1.0) return null
         val left = (width * 0.07).toInt()
-        val right = (width * (unitLeft - 0.025)).toInt()
+        val right = (width * minOf(0.96, if (unitLeft >= 0.98) 0.96 else unitLeft - 0.025)).toInt()
         val top = (height * 0.06).toInt()
         val bottom = (height * 0.92).toInt()
         val histogram = IntArray(256)
@@ -37,9 +37,13 @@ internal object SevenSegmentReader {
             if (variance > bestVariance) { bestVariance = variance; threshold = value }
         }
         if (bestVariance == 0.0) return null
+
+        val isBrightOnDark = (histogram.indices.take(128).sumOf { histogram[it] }) > (total / 2)
+        val isDarkDigit = !isBrightOnDark
         val dark = BooleanArray(pixels.size)
         for (y in top until bottom) for (x in left until right) {
-            dark[y * width + x] = (pixels[y * width + x].toInt() and 255) <= threshold
+            val pixelVal = pixels[y * width + x].toInt() and 255
+            dark[y * width + x] = if (isDarkDigit) pixelVal <= threshold else pixelVal > threshold
         }
 
         // Find compact, round dots near the baseline and exclude them from digit columns.

@@ -30,4 +30,5 @@
     <string name="date_picker_confirm">Select</string>
     <string name="date_picker_cancel">Cancel</string>
     <string name="date_picker_title">Select date</string>
+    <string name="viewfinder_instruction">Align the scale display within the frame</string>
 </resources>

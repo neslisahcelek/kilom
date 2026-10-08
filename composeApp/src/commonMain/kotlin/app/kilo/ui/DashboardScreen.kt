@@ -48,6 +48,10 @@ import kilo.composeapp.generated.resources.history_title
 import kotlinx.datetime.TimeZone
 import org.jetbrains.compose.resources.stringResource
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import app.kilo.ui.components.CameraViewfinderScreen
+
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
@@ -58,6 +62,7 @@ fun DashboardScreen(
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
 
+    var isCameraOpen by remember { mutableStateOf(false) }
     val photoPicker = rememberPhotoPicker(onImage = viewModel::onImage)
 
     Box(
@@ -135,7 +140,13 @@ fun DashboardScreen(
                     ActionBar(
                         selectedUnit = state.unit,
                         onUnitChange = viewModel::setUnit,
-                        onCameraClick = { photoPicker.takePhoto() },
+                        onCameraClick = {
+                            if (app.kilo.platform.isCustomCameraSupported) {
+                                isCameraOpen = true
+                            } else {
+                                photoPicker.takePhoto()
+                            }
+                        },
                         onGalleryClick = { photoPicker.pickFromGallery() },
                         onManualClick = { viewModel.openManual() },
                         hazeState = hazeState,
@@ -201,6 +212,25 @@ fun DashboardScreen(
                 onSave = viewModel::save,
                 onDismiss = viewModel::dismissSheet,
                 hazeState = hazeState,
+            )
+        }
+
+        // In-App Live Camera Viewfinder Overlay
+        AnimatedVisibility(
+            visible = isCameraOpen,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+            CameraViewfinderScreen(
+                onDismiss = { isCameraOpen = false },
+                onImageCaptured = { bytes ->
+                    isCameraOpen = false
+                    viewModel.onImage(bytes)
+                },
+                onOpenGallery = {
+                    isCameraOpen = false
+                    photoPicker.pickFromGallery()
+                },
             )
         }
     }

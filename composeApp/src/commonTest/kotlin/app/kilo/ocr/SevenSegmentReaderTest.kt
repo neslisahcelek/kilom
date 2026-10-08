@@ -64,4 +64,9 @@ class SevenSegmentReaderTest {
     @Test fun refusesBlankScreen() = assertNull(SevenSegmentReader.read(ByteArray(width * height) { 200.toByte() }, width, height, .95))
 
     @Test fun refusesInvalidBuffer() = assertNull(SevenSegmentReader.read(byteArrayOf(), width, height, .95))
+
+    @Test fun recognizesBrightLedOnDarkBackground() {
+        val darkPixels = display(value = "50.75").map { (255 - (it.toInt() and 255)).toByte() }.toByteArray()
+        assertEquals("50.75", SevenSegmentReader.read(darkPixels, width, height, .95))
+    }
 }

@@ -30,4 +30,5 @@
     <string name="date_picker_confirm">Seç</string>
     <string name="date_picker_cancel">Vazgeç</string>
     <string name="date_picker_title">Tarih seç</string>
+    <string name="viewfinder_instruction">Tartı ekranını kutuya hizalayın</string>
 </resources>
