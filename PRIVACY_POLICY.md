@@ -39,7 +39,7 @@
 
 ## 1. Introduction & Core Privacy Principles
 
-Welcome to **Kilom** ("Kilom", "we", "us", or "our"). Kilom is designed with a **privacy-first, on-device architecture**.
+Welcome to **Kilom**. Kilom is designed with a **privacy-first, on-device architecture**.
 
 We believe that your personal health and weight tracking data belongs exclusively to you. Kilom does not require you to create an account, log in, or transmit any data across the internet.
 
@@ -154,7 +154,7 @@ If you have questions, feedback, or concerns regarding this Privacy Policy or Ki
 
 ## 1. Giriş ve Temel Gizlilik İlkesi
 
-**Kilom** ("Kilom", "biz" veya "uygulama") uygulamasına hoş geldiniz. Kilom, gizliliği merkeze alan ve tamamen cihaz üzerinde çalışan (on-device) bir mimariyle geliştirilmiştir.
+**Kilom** uygulamasına hoş geldiniz. Kilom, gizliliği merkeze alan ve tamamen cihaz üzerinde çalışan (on-device) bir mimariyle geliştirilmiştir.
 
 Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz. Kilom; hesap açmanıza, giriş yapmanıza veya internet üzerinden herhangi bir veri aktarmanıza gerek kalmayacak şekilde tasarlanmıştır.
 
