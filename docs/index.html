@@ -481,7 +481,7 @@
         <p>Kilom collects <strong>zero</strong> personally identifiable or sensitive health information:</p>
         <ul>
           <li><strong>No Personal Identifiers:</strong> We do not ask for or collect names, email addresses, phone numbers, or hardware identifiers (e.g., IDFA, AAID).</li>
-          <li><strong>No Health Data Off-Device:</strong> Your weight measurements, dates, notes, and targets remain in your local sandboxed database only.</li>
+          <li><strong>No Health Data Off-Device:</strong> Your weight measurements, dates, and progress differences remain in your local sandboxed storage only.</li>
           <li><strong>No Location Data:</strong> GPS or network-based geolocation is never accessed or requested.</li>
           <li><strong>No Financial Data:</strong> Kilom does not process payments or collect payment credentials.</li>
         </ul>
@@ -523,7 +523,7 @@
       <section class="policy-section">
         <h2>4. Data Storage & Local Retention</h2>
         <ul>
-          <li><strong>Local Database:</strong> All entries are stored on your device using a sandboxed local database (Room / SQLite).</li>
+          <li><strong>Local Storage:</strong> All entries are stored on your device using secure, sandboxed application storage.</li>
           <li><strong>No Cloud Sync:</strong> We do not operate cloud servers to back up or synchronize your data.</li>
           <li><strong>User Control:</strong> Deleting an entry in the app or uninstalling the app permanently erases the data from your device.</li>
         </ul>
@@ -541,7 +541,7 @@
       <section class="policy-section">
         <h2>6. Children's Privacy (COPPA & GDPR Compliant)</h2>
         <p>
-          Kilom complies fully with the Children's Online Privacy Protection Act (<strong>COPPA</strong>) and the General Data Protection Regulation (<strong>GDPR</strong>). Because we do not collect personal data from any user, we do not knowingly or unknowingly collect personal data from children under 13 (or under 16 in certain EU jurisdictions).
+          Kilom complies fully with the Children's Online Privacy Protection Act (<strong>COPPA</strong>) and the General Data Protection Regulation (<strong>GDPR</strong>). Because we do not collect personal data from any user, we do not knowingly collect personal data from children under 13 (or under 16 in certain EU jurisdictions).
         </p>
       </section>
 
@@ -597,13 +597,13 @@
       <section class="policy-section">
         <h2>1. Giriş ve Temel Gizlilik İlkesi</h2>
         <p>
-          <strong>Kilom</strong> ("Kilom", "biz" veya "uygulama") uygulamasına hoş geldiniz. Kilom, ödünsüz bir <strong>cihaz üzerinde (on-device) ve gizlilik odaklı mimari</strong> ile geliştirilmiştir.
+          <strong>Kilom</strong> ("Kilom", "biz" veya "uygulama") uygulamasına hoş geldiniz. Kilom, gizliliği merkeze alan ve tamamen <strong>cihaz üzerinde çalışan (on-device) bir mimariyle</strong> geliştirilmiştir.
         </p>
         <p>
-          Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz. Kilom, hesap açmanıza, parola oluşturmanıza veya verilerinizi internet üzerinden iletmenize gerek kalmayacak şekilde tasarlanmıştır.
+          Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz. Kilom; hesap açmanıza, parola oluşturmanıza veya verilerinizi internet üzerinden iletmenize gerek kalmayacak şekilde tasarlanmıştır.
         </p>
         <div class="callout">
-          <p>📌 <strong>Özet:</strong> Kilom hiçbir kişisel verinizi toplamaz, satmaz veya üçüncü taraflarla paylaşmaz. Tüm veriler yalnızca fiziksel cihazınızda saklanır.</p>
+          <p>📌 <strong>Özet:</strong> Kilom hiçbir kişisel verinizi toplamaz, satmaz veya üçüncü taraflarla paylaşmaz. Tüm veriler yalnızca kendi cihazınızda saklanır.</p>
         </div>
       </section>
 
@@ -611,10 +611,10 @@
         <h2>2. Toplanmayan Veriler (Sıfır Veri Toplama)</h2>
         <p>Kilom uygulamasını kullanırken hiçbir kişisel veya hassas veri toplanmaz:</p>
         <ul>
-          <li><strong>Kişisel Kimlik Bilgileri Yok:</strong> Ad, e-posta adresi, telefon numarası veya donanım kimlikleri (IDFA, AAID) alınmaz.</li>
-          <li><strong>Sağlık Verileri Cihaz Dışına Çıkmaz:</strong> Tartı ve kilo kayıtlarınız, tarihler ve geçmiş verileriniz yalnızca cihazınızın yerel hafızasında tutulur.</li>
-          <li><strong>Konum Bilgisi Yok:</strong> GPS veya baz istasyonu konumunuza asla erişilmez.</li>
-          <li><strong>Finansal Bilgi Yok:</strong> Ödeme bilgisi veya kart verisi toplanmaz.</li>
+          <li><strong>Kişisel Kimlik Bilgileri Toplanmaz:</strong> Ad, e-posta adresi, telefon numarası veya donanım kimlikleri (IDFA, AAID) alınmaz.</li>
+          <li><strong>Sağlık Verileri Cihaz Dışına Çıkmaz:</strong> Kilo kayıtlarınız, tarihler ve geçmiş ölçümleriniz yalnızca cihazınızın yerel hafızasında tutulur.</li>
+          <li><strong>Konum Bilgisi Alınmaz:</strong> GPS veya ağ tabanlı konumunuza asla erişilmez.</li>
+          <li><strong>Finansal Bilgi İstenmez:</strong> Ödeme bilgisi veya kart verisi toplanmaz.</li>
         </ul>
       </section>
 
@@ -630,7 +630,7 @@
           <strong>iOS Açıklama Metni:</strong> <em>"Kilom uses the camera to read your weight from a photo of the scale."</em> (Kilom, tartı fotoğrafınızdan kilonuzu okumak için kamerayı kullanır.)
         </p>
         <p>
-          Çekilen fotoğraf anlık bellekte (RAM) yerel metin okuma için işlenir ve hemen bellekten silinir. Görseller asla sunuculara iletilmez veya harici olarak depolanmaz.
+          Çekilen fotoğraf anlık bellekte (RAM) yerel metin okuma için işlenir ve işlem bittiğinde bellekten silinir. Görseller asla sunuculara iletilmez veya harici olarak saklanmaz.
         </p>
 
         <h3>B. Fotoğraf Galerisi İzni (<code>NSPhotoLibraryUsageDescription</code>)</h3>
@@ -641,7 +641,7 @@
           <strong>iOS Açıklama Metni:</strong> <em>"Kilom reads your weight from a scale photo you choose from your library."</em> (Kilom, galerinizden seçtiğiniz tartı fotoğrafından kilonuzu okur.)
         </p>
         <p>
-          Yalnızca seçtiğiniz tek fotoğraf yerel olarak taranır. Fotoğraf albümünüz indekslenmez veya dışa aktarılmaz.
+          Yalnızca seçtiğiniz görsel yerel olarak taranır. Fotoğraf albümünüz taranmaz, yedeklenmez ve dışa aktarılmaz.
         </p>
 
         <h3>C. Cihaz Üzerinde OCR Teknolojisi</h3>
@@ -654,9 +654,9 @@
       <section class="policy-section">
         <h2>4. Veri Depolama ve Yerel Saklama</h2>
         <ul>
-          <li><strong>Yerel Veritabanı:</strong> Tüm kilo kayıtları cihazınızın güvenli yerel depolama alanında (Room / SQLite) saklanır.</li>
+          <li><strong>Yerel Depolama:</strong> Tüm kilo kayıtları cihazınızın güvenli yerel depolama alanında saklanır.</li>
           <li><strong>Bulut Senkronizasyonu Yok:</strong> Verileriniz herhangi bir uzak sunucuya yedeklenmez veya taşınmaz.</li>
-          <li><strong>Kullanıcı Kontrolü:</strong> Uygulamadan bir kaydı sildiğinizde veya uygulamayı cihazınızdan kaldırdığınızda veriler kalıcı olarak yok edilir.</li>
+          <li><strong>Kullanıcı Kontrolü:</strong> Uygulamadan bir kaydı sildiğinizde veya uygulamayı cihazınızdan kaldırdığınızda veriler kalıcı olarak silinir.</li>
         </ul>
       </section>
 
@@ -711,7 +711,7 @@
       <section class="policy-section">
         <h2>8. Kullanıcı Hakları (KVKK / GDPR)</h2>
         <p>
-          Verilerinizin tek ve mutlak sahibi sizsiniz. Verileriniz tamamen kendi donanımınızda tutulduğundan dilediğiniz zaman inceleyebilir, silebilir veya uygulamayı kaldırarak tüm geçmişi silebilirsiniz.
+          Verilerinizin kontrolü tamamen sizdedir. Verileriniz yalnızca kendi cihazınızda tutulduğundan dilediğiniz zaman inceleyebilir, kayıt silebilir veya uygulamayı kaldırarak tüm verileri silebilirsiniz.
         </p>
       </section>
 

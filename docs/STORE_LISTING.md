@@ -75,7 +75,7 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
   • Hızlı Giriş: Dilerseniz tek ekranda saniyeler içinde elle yazın.
   • Anında Fark: Son tartıya göre kilo farkınızı ve geçen gün sayısını tek bakışta görün.
   • Gizli ve Çevrimdışı: Sıfır veri toplama. İnternet gerektirmez, verileriniz sadece telefonunuzda saklanır.
-  • Dikkatsiz ve Temiz: Reklam yok, üye girişi yok, bildirim kirliliği yok.
+  • Sade ve Odaklı: Reklam yok, üye girişi yok, bildirim kirliliği yok.
   • kg / lb desteği ve sola kaydırarak silme.
 
   Gizlilik Politikası: https://neslisahcelek.github.io/Kilom/

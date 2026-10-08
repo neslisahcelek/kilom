@@ -340,16 +340,20 @@ def create_master_icon(size=1024):
     final_icon = final_rgb.resize((size, size), Image.Resampling.LANCZOS)
     return final_icon
 
-def generate_all_icons():
+def generate_all_icons(from_master=False):
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     art_dir = os.path.join(root_dir, "art")
     os.makedirs(art_dir, exist_ok=True)
-
-    print("Rendering 1024x1024 Master Icon (icon_1024.png)...")
-    master_1024 = create_master_icon(1024)
     master_path = os.path.join(art_dir, "icon_1024.png")
-    master_1024.save(master_path, format="PNG", optimize=True)
-    print(f"Saved master icon: {master_path}")
+
+    if from_master and os.path.exists(master_path):
+        print(f"Loading existing Master Icon from {master_path}...")
+        master_1024 = Image.open(master_path).convert("RGB")
+    else:
+        print("Rendering 1024x1024 Master Icon (icon_1024.png)...")
+        master_1024 = create_master_icon(1024)
+        master_1024.save(master_path, format="PNG", optimize=True)
+        print(f"Saved master icon: {master_path}")
 
     # Google Play Store Icon (512x512, RGB PNG, opaque)
     print("Generating Google Play Store 512x512 Icon...")
@@ -417,7 +421,7 @@ def generate_all_icons():
         # 1. Standard ic_launcher
         launcher_img = master_1024.resize((dim, dim), Image.Resampling.LANCZOS)
         launcher_path = os.path.join(target_dir, "ic_launcher.png")
-        launcher_img.save(launcher_path, format="PNG")
+        launcher_img.save(launcher_path, format="PNG", optimize=True)
 
         # 2. Round ic_launcher_round
         mask = Image.new('L', (dim * 4, dim * 4), 0)
@@ -428,11 +432,13 @@ def generate_all_icons():
         round_img = launcher_img.convert("RGBA")
         round_img.putalpha(mask_smooth)
         round_path = os.path.join(target_dir, "ic_launcher_round.png")
-        round_img.save(round_path, format="PNG")
+        round_img.save(round_path, format="PNG", optimize=True)
 
         print(f"Generated Android {folder} ({dim}x{dim}): ic_launcher.png & ic_launcher_round.png")
 
     print("\nAll icon assets successfully created!")
 
 if __name__ == "__main__":
-    generate_all_icons()
+    import sys
+    from_master = "--from-master" in sys.argv
+    generate_all_icons(from_master=from_master)
