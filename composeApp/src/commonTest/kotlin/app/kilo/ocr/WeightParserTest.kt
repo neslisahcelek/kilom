@@ -75,4 +75,42 @@ class WeightParserTest {
     }
 
     @Test fun firstWinsOnTie() = assertEquals(ParsedWeight(70.1, WeightUnit.KG), pick("70.1", "69.9"))
+
+    @Test fun spacedDecimalAndLeadingMinus() {
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("- 49. 1 kg"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("-49. 1 kg"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("-49.1 kg"))
+        assertEquals(ParsedWeight(50.2, WeightUnit.KG), pick("50 . 20"))
+    }
+
+    @Test fun sevenSegmentSubstitutions() {
+        assertEquals(ParsedWeight(50.2, WeightUnit.KG), pick("S0.20 kg"))
+        assertEquals(ParsedWeight(51.0, WeightUnit.KG), pick("S1.00"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("49.I kg"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("49. l kg"))
+        assertEquals(ParsedWeight(82.5, WeightUnit.KG), pick("B2.5 kg"))
+    }
+
+    @Test fun realScaleImagesWithPeripherals() {
+        // Foto 1: Techfit 51.00 with temp and capacity
+        assertEquals(
+            ParsedWeight(51.0, WeightUnit.KG),
+            pick("Techfit", "51.00", "KG", "16°C", "Max. 180kg d=100g")
+        )
+        // Foto 2: 50.20 with temp and capacity
+        assertEquals(
+            ParsedWeight(50.2, WeightUnit.KG),
+            pick("50.20", "19°C", "Max. 180kg d=100g")
+        )
+        // Foto 4: 47.7 kg
+        assertEquals(
+            ParsedWeight(47.7, WeightUnit.KG),
+            pick("47.7 kg")
+        )
+        // Foto 5: 71.20 KG with temp and capacity
+        assertEquals(
+            ParsedWeight(71.2, WeightUnit.KG),
+            pick("71.20 KG", "19°C", "Max. 180kg d=100g")
+        )
+    }
 }
