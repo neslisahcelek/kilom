@@ -3,7 +3,7 @@
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-blue.svg)](https://github.com/neslisahcelek/Kilom)
 [![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin-Multiplatform-7F52FF.svg)](https://kotlinlang.org/)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-4285F4.svg)](https://www.jetbrains.com/lp/compose-multiplatform/)
-[![Privacy](https://img.shields.io/badge/Privacy-100%25%20On--Device-success.svg)](https://neslisahcelek.github.io/Kilom/)
+[![Privacy](https://img.shields.io/badge/Privacy-100%25%20On--Device-success.svg)](https://neslisahcelek.github.io/kilom/)
 
 A minimal, distraction-free weight tracker for iOS and Android. Step on your scale, snap a photo or type your weight, and get on with your day.
 
@@ -31,7 +31,7 @@ A minimal, distraction-free weight tracker for iOS and Android. Step on your sca
 ## 📄 Privacy Policy
 
 Kilom collects zero personal data. Read the full policy:
-👉 [https://neslisahcelek.github.io/Kilom/](https://neslisahcelek.github.io/Kilom/)
+👉 [https://neslisahcelek.github.io/kilom/](https://neslisahcelek.github.io/kilom/)
 
 ---
 

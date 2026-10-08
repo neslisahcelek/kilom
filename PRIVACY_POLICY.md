@@ -4,7 +4,7 @@
 **Application / Uygulama:** Kilom  
 **Developer / Geliştirici:** Neslişah Çelek  
 **Contact / İletişim:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)  
-**Live Policy URL / Canlı Web Bağlantısı:** [https://neslisahcelek.github.io/Kilom/](https://neslisahcelek.github.io/Kilom/)
+**Live Policy URL / Canlı Web Bağlantısı:** [https://neslisahcelek.github.io/kilom/](https://neslisahcelek.github.io/kilom/)
 
 ---
 
