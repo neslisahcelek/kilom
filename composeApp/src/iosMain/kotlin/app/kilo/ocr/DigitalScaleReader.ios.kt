@@ -32,23 +32,25 @@ import platform.Vision.VNRecognizedTextObservation
 import platform.Vision.VNRequestTextRecognitionLevelAccurate
 import kotlin.coroutines.coroutineContext
 
-/** Bounded, local LCD fallback. Unit recognition and an explicit decimal are both required. */
+/** Bounded, local LCD fallback. Rectifies screen perspective and runs Vision & SevenSegmentReader. */
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
-internal suspend fun readDigitalScale(data: NSData): List<String> {
-    val original = CIImage.imageWithData(data, options = mapOf(kCIImageApplyOrientationProperty to true)) ?: return emptyList()
-    val largestDimension = original.extent.useContents { maxOf(size.width, size.height) }
+internal suspend fun readDigitalScale(source: CIImage, context: CIContext): List<String> {
+    val largestDimension = source.extent.useContents { maxOf(size.width, size.height) }
     if (largestDimension <= 0.0) return emptyList()
-    val detectionScale = minOf(1.0, 2000.0 / largestDimension)
-    val source = original.imageByApplyingTransform(CGAffineTransformMakeScale(detectionScale, detectionScale))
-    val context = CIContext(options = null)
+    val detectionScale = minOf(1.0, 1500.0 / largestDimension)
+    val detectionImage = if (detectionScale < 1.0) {
+        source.imageByApplyingTransform(CGAffineTransformMakeScale(detectionScale, detectionScale))
+    } else {
+        source
+    }
     val rectangles = VNDetectRectanglesRequest().apply {
         minimumAspectRatio = 0.1f
         maximumAspectRatio = 1.0f
-        minimumSize = 0.03f
-        maximumObservations = 5u
+        minimumSize = 0.02f
+        maximumObservations = 10u
     }
-    val extent = source.extent
-    val sourceImage = context.createCGImage(source, fromRect = extent) ?: return emptyList()
+    val extent = detectionImage.extent
+    val sourceImage = context.createCGImage(detectionImage, fromRect = extent) ?: return emptyList()
     try {
         if (!VNImageRequestHandler(cGImage = sourceImage, options = emptyMap<Any?, Any?>())
                 .performRequests(listOf(rectangles), error = null)) return emptyList()
@@ -67,7 +69,7 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
         fun vector(point: kotlinx.cinterop.CValue<platform.CoreGraphics.CGPoint>) = point.useContents {
             CIVector(x = x * imageWidth, Y = y * imageHeight)
         }
-        val corrected = source.imageByApplyingFilter("CIPerspectiveCorrection", withInputParameters = mapOf(
+        val corrected = detectionImage.imageByApplyingFilter("CIPerspectiveCorrection", withInputParameters = mapOf(
             "inputTopLeft" to vector(rectangle.topLeft), "inputTopRight" to vector(rectangle.topRight),
             "inputBottomLeft" to vector(rectangle.bottomLeft), "inputBottomRight" to vector(rectangle.bottomRight),
         ))
@@ -76,32 +78,60 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
         if (correctedWidth <= 0.0 || correctedHeight <= 0.0) continue
         val scale = minOf(1.0, 1000.0 / maxOf(correctedWidth, correctedHeight))
         val screen = corrected.imageByApplyingTransform(CGAffineTransformMakeScale(scale, scale))
+
+        // 1. Run Vision text recognition on screen (both raw and contrast-enhanced)
+        val textRequest = VNRecognizeTextRequest().apply {
+            recognitionLevel = VNRequestTextRecognitionLevelAccurate
+            usesLanguageCorrection = false
+            recognitionLanguages = listOf("en-US")
+            minimumTextHeight = 0.01f
+        }
+
         val cgImage = context.createCGImage(screen, fromRect = screen.extent) ?: continue
         try {
             val width = CGImageGetWidth(cgImage).toInt()
             val height = CGImageGetHeight(cgImage).toInt()
-            val textRequest = VNRecognizeTextRequest().apply {
-                recognitionLevel = VNRequestTextRecognitionLevelAccurate
-                usesLanguageCorrection = false
-                recognitionLanguages = listOf("en-US")
-                customWords = listOf("kg", "KG", "lb", "LB", "lbs", "LBS", "st", "ST")
-            }
-            if (!VNImageRequestHandler(cGImage = cgImage, options = emptyMap<Any?, Any?>())
-                    .performRequests(listOf(textRequest), error = null)) continue
-            val textObservations = (textRequest.results ?: emptyList<Any?>()).filterIsInstance<VNRecognizedTextObservation>()
-            for (obs in textObservations) {
-                obs.topCandidates(5u).mapNotNull { (it as? VNRecognizedText)?.string?.trim() }.forEach {
-                    if (it.isNotEmpty()) results += it
+
+            if (VNImageRequestHandler(cGImage = cgImage, options = emptyMap<Any?, Any?>())
+                    .performRequests(listOf(textRequest), error = null)) {
+                val obs = (textRequest.results ?: emptyList<Any?>()).filterIsInstance<VNRecognizedTextObservation>()
+                for (o in obs) {
+                    o.topCandidates(5u).mapNotNull { (it as? VNRecognizedText)?.string?.trim() }.forEach {
+                        if (it.isNotEmpty()) results += it
+                    }
                 }
             }
-            val labels = textObservations
-                .mapNotNull { observation ->
-                    val text = (observation.topCandidates(1u).firstOrNull() as? VNRecognizedText)?.string?.trim()
-                    if (text == null || !Regex("(?i)^(kg|lbs?)$").matches(text)) null
-                    else text.lowercase() to observation.boundingBox.useContents { origin.x }
+
+            // Also test contrast-boosted LCD screen with Vision
+            val enhancedScreen = screen.imageByApplyingFilter(
+                "CIColorControls",
+                withInputParameters = mapOf("inputContrast" to 2.4, "inputSaturation" to 0.0)
+            )
+            val enhancedCg = context.createCGImage(enhancedScreen, fromRect = enhancedScreen.extent)
+            if (enhancedCg != null) {
+                try {
+                    val enhancedReq = VNRecognizeTextRequest().apply {
+                        recognitionLevel = VNRequestTextRecognitionLevelAccurate
+                        usesLanguageCorrection = false
+                        recognitionLanguages = listOf("en-US")
+                        minimumTextHeight = 0.01f
+                    }
+                    if (VNImageRequestHandler(cGImage = enhancedCg, options = emptyMap<Any?, Any?>())
+                            .performRequests(listOf(enhancedReq), error = null)) {
+                        val obs = (enhancedReq.results ?: emptyList<Any?>()).filterIsInstance<VNRecognizedTextObservation>()
+                        for (o in obs) {
+                            o.topCandidates(5u).mapNotNull { (it as? VNRecognizedText)?.string?.trim() }.forEach {
+                                if (it.isNotEmpty()) results += it
+                            }
+                        }
+                    }
+                } finally {
+                    CGImageRelease(enhancedCg)
                 }
-            logOcr("ios digital_fallback rectangle=$index unit_labels=${labels.size}")
-            if ((labels.size <= 1) && width in 80..1200 && height in 60..1200) {
+            }
+
+            // 2. Run SevenSegmentReader fallback on rectified grayscale pixels (unit-label agnostic)
+            if (width in 80..1200 && height in 60..1200) {
                 val pixels = ByteArray(width * height)
                 val colorSpace = CGColorSpaceCreateDeviceGray()
                 if (colorSpace != null) {
@@ -116,11 +146,9 @@ internal suspend fun readDigitalScale(data: NSData): List<String> {
                             }
                         }
                         coroutineContext.ensureActive()
-                        val unitLeft = if (labels.size == 1) labels.single().second else 0.95
-                        val unitSuffix = if (labels.size == 1) " ${labels.single().first}" else ""
-                        val value = SevenSegmentReader.read(pixels, width, height, unitLeft)
+                        val value = SevenSegmentReader.read(pixels, width, height, 0.95)
                         logOcr("ios digital_fallback rectangle=$index segments_verified=${value != null}")
-                        if (value != null) results += "$value$unitSuffix"
+                        if (value != null) results += value
                     } finally {
                         CGColorSpaceRelease(colorSpace)
                     }

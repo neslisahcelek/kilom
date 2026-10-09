@@ -12,19 +12,17 @@ data class ParsedWeight(val value: Double, val unit: WeightUnit)
 object WeightParser {
     // Matches numbers with 1 or 2 decimals (e.g., 74.5 or 74.50)
     private val candidateRegex = Regex("(\\d{2,3})[.,](\\d{1,2})")
-    private val labelRegex = Regex("(?i)(kg|lbs?)")
     private val tokenRegex = Regex("^([0-9OoIlSsBbZzDU|!\\[\\].,]+)(.*)$")
     private val penaltyRegex = Regex("(?i)(bmi|%|fat|water|muscle|bone|kcal|bmr|max\\.?|d\\s*=\\s*\\d|°c|°f|temp|celsius|batt|tare)")
-
-    private data class Label(val start: Int, val end: Int, val unit: WeightUnit)
 
     /**
      * Picks the most likely weight from OCR [lines]. Unlabeled values are assumed to be
      * in [preferred]. Returns null if no plausible (20–500 kg) candidate exists.
+     * Scale unit labels (kg/lb) are not used to override [preferred] as the user selects
+     * the unit prior to scanning.
      */
     fun pick(lines: List<String>, preferred: WeightUnit): ParsedWeight? {
         val norm = lines.map { normalize(it) }
-        val labels = norm.map { findLabels(it) }
         var best: ParsedWeight? = null
         var bestScore = Double.NEGATIVE_INFINITY
 
@@ -38,38 +36,20 @@ object WeightParser {
                 val rawValue = (m.groupValues[1] + "." + m.groupValues[2]).toDouble()
                 val value = rawValue.round2()
                 var score = 1.0
-                var unit = preferred
 
-                val here = labels[i]
-                val following = here.firstOrNull { it.start >= m.range.last + 1 && line.substring(m.range.last + 1, it.start).isBlank() }
-                when {
-                    following != null -> { score += 3; unit = following.unit }
-                    here.isNotEmpty() -> { score += 2; unit = here.minBy { kotlin.math.abs(it.start - m.range.first) }.unit }
-                    else -> {
-                        val adj = listOfNotNull(labels.getOrNull(i - 1), labels.getOrNull(i + 1)).flatten()
-                        if (adj.isNotEmpty()) { score += 1; unit = adj.first().unit }
-                    }
-                }
                 if (penaltyRegex.containsMatchIn(line)) score -= 5.0
 
-                val kg = if (unit == WeightUnit.KG) value else value.lbToKg()
+                val kg = if (preferred == WeightUnit.KG) value else value.lbToKg()
                 if (kg < MIN_KG || kg > MAX_KG) continue
 
                 if (score > bestScore) {
                     bestScore = score
-                    best = ParsedWeight(value, unit)
+                    best = ParsedWeight(value, preferred)
                 }
             }
         }
         return best
     }
-
-    private fun findLabels(line: String): List<Label> = labelRegex.findAll(line).mapNotNull { m ->
-        val b = line.getOrNull(m.range.first - 1)
-        val a = line.getOrNull(m.range.last + 1)
-        if ((b != null && b.isLetter()) || (a != null && a.isLetter())) null
-        else Label(m.range.first, m.range.last + 1, if (m.value.startsWith("k", true)) WeightUnit.KG else WeightUnit.LB)
-    }.toList()
 
     /** Fixes 7-segment character misreads and cleans spaced decimals inside numeric tokens. */
     internal fun normalize(line: String): String {

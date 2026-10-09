@@ -29,6 +29,8 @@ import platform.AVFoundation.AVCaptureTorchModeOn
 import platform.AVFoundation.AVCaptureVideoPreviewLayer
 import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
+import platform.AVFoundation.AVCaptureFocusModeContinuousAutoFocus
+import platform.AVFoundation.AVCaptureExposureModeContinuousAutoExposure
 import platform.AVFoundation.fileDataRepresentation
 import platform.AVFoundation.hasTorch
 import platform.AVFoundation.torchMode
@@ -44,6 +46,7 @@ import platform.UIKit.UIImage
 import platform.UIKit.UIImageJPEGRepresentation
 import platform.UIKit.UIView
 import platform.darwin.NSObject
+import app.kilo.ocr.logOcr
 import kotlin.coroutines.resume
 
 actual val isCustomCameraSupported: Boolean = true
@@ -69,6 +72,19 @@ actual class CameraController {
             val input = AVCaptureDeviceInput.deviceInputWithDevice(device, error = null)
             if (input != null && session.canAddInput(input)) {
                 session.addInput(input)
+            }
+            try {
+                if (device.lockForConfiguration(null)) {
+                    if (device.isFocusModeSupported(AVCaptureFocusModeContinuousAutoFocus)) {
+                        device.focusMode = AVCaptureFocusModeContinuousAutoFocus
+                    }
+                    if (device.isExposureModeSupported(AVCaptureExposureModeContinuousAutoExposure)) {
+                        device.exposureMode = AVCaptureExposureModeContinuousAutoExposure
+                    }
+                    device.unlockForConfiguration()
+                }
+            } catch (e: Exception) {
+                logOcr("ios camera_config_failed exception=${e::class.simpleName}")
             }
         }
         if (session.canAddOutput(photoOutput)) {
@@ -102,11 +118,13 @@ actual class CameraController {
                     error: NSError?
                 ) {
                     if (error != null) {
+                        logOcr("ios capture_failed domain=${error.domain} code=${error.code}")
                         continuation.resume(null)
                         return
                     }
                     val data = didFinishProcessingPhoto.fileDataRepresentation()
                     if (data == null) {
+                        logOcr("ios capture_null_data")
                         continuation.resume(null)
                         return
                     }
@@ -127,19 +145,40 @@ actual class CameraController {
         val imgH = extent.useContents { size.height }
         if (imgW <= 0.0 || imgH <= 0.0) return null
 
-        // Add 8% padding around viewfinder so digits aren't clipped on edges
-        val padX = (vf.right - vf.left) * 0.08f
-        val padY = (vf.bottom - vf.top) * 0.08f
-        val left = (vf.left - padX).coerceIn(0f, 1f)
-        val right = (vf.right + padX).coerceIn(0f, 1f)
-        val top = (vf.top - padY).coerceIn(0f, 1f)
-        val bottom = (vf.bottom + padY).coerceIn(0f, 1f)
+        // Calculate aspect-fill transformation between image and viewfinder screen
+        val layerBounds = previewLayer?.bounds
+        val screenW = layerBounds?.useContents { size.width } ?: 0.0
+        val screenH = layerBounds?.useContents { size.height } ?: 0.0
+
+        val (rawImgX1, rawImgY1, rawImgX2, rawImgY2) = if (screenW > 0.0 && screenH > 0.0) {
+            val scale = maxOf(screenW / imgW, screenH / imgH)
+            val scaledW = imgW * scale
+            val scaledH = imgH * scale
+            val offsetX = (scaledW - screenW) / 2.0
+            val offsetY = (scaledH - screenH) / 2.0
+
+            val imgX1 = (vf.left * screenW + offsetX) / scale
+            val imgY1 = (vf.top * screenH + offsetY) / scale
+            val imgX2 = (vf.right * screenW + offsetX) / scale
+            val imgY2 = (vf.bottom * screenH + offsetY) / scale
+            listOf(imgX1, imgY1, imgX2, imgY2)
+        } else {
+            listOf(vf.left.toDouble() * imgW, vf.top.toDouble() * imgH, vf.right.toDouble() * imgW, vf.bottom.toDouble() * imgH)
+        }
+
+        // Add 15% padding so digits aren't clipped on edges
+        val padX = (rawImgX2 - rawImgX1) * 0.15
+        val padY = (rawImgY2 - rawImgY1) * 0.15
+        val left = (rawImgX1 - padX).coerceIn(0.0, imgW)
+        val right = (rawImgX2 + padX).coerceIn(0.0, imgW)
+        val top = (rawImgY1 - padY).coerceIn(0.0, imgH)
+        val bottom = (rawImgY2 + padY).coerceIn(0.0, imgH)
 
         // CoreImage coordinate system has origin at bottom-left
-        val cropX = left * imgW
-        val cropY = (1.0 - bottom) * imgH
-        val cropW = (right - left) * imgW
-        val cropH = (bottom - top) * imgH
+        val cropX = left
+        val cropY = imgH - bottom
+        val cropW = right - left
+        val cropH = bottom - top
 
         val croppedCi = ci.imageByCroppingToRect(CGRectMake(cropX, cropY, cropW, cropH))
         val cg = ciContext.createCGImage(croppedCi, fromRect = croppedCi.extent) ?: return null

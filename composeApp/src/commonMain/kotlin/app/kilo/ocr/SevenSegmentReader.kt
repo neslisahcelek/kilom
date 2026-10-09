@@ -100,14 +100,31 @@ internal object SevenSegmentReader {
             // shorter than other digits; dropping it can turn 170.75 into 70.75.
             if (box.height > height * 0.15) digits += box
         }
-        if (digits.size !in 3..5) return null
-        val referenceHeight = digits.maxOf { it.height }
-        val baseline = digits.maxOf { it.bottom }
+        val referenceHeight = digits.maxOfOrNull { it.height } ?: return null
+        val baseline = digits.maxOfOrNull { it.bottom } ?: return null
         if (referenceHeight <= height * 0.65) return null
-        val dot = dots.single()
+
+        // If the first detected element is a horizontal minus/tare indicator well above the baseline,
+        // safely discard it so values like "- 49.1" are recognized without dropping damaged digits.
+        if (digits.isNotEmpty() && isLeadingMinus(digits.first(), referenceHeight, baseline)) {
+            digits.removeAt(0)
+        }
+        if (digits.size !in 3..5) return null
+
+        val dot = when {
+            dots.size == 1 -> dots.single()
+            dots.size > 1 -> {
+                val minX = digits.first().centerX
+                val maxX = digits.last().centerX
+                dots.filter { it.centerX in minX..maxX }
+                    .minByOrNull { kotlin.math.abs(it.bottom - baseline) }
+            }
+            else -> null
+        } ?: return null
+
         val decimalAfter = digits.indexOfLast { it.centerX < dot.centerX } + 1
         if (decimalAfter !in 2..3 || digits.size - decimalAfter !in 1..2) return null
-        if (dot.centerX >= digits[decimalAfter].centerX || dot.top < digits.maxOf { it.bottom } - height * 0.15) return null
+        if (dot.centerX >= digits[decimalAfter].centerX || dot.top < baseline - height * 0.15) return null
         val result = StringBuilder()
         for ((index, box) in digits.withIndex()) {
             val digit = decode(dark, width, box, referenceHeight, baseline) ?: return null
@@ -115,6 +132,13 @@ internal object SevenSegmentReader {
             result.append(digit)
         }
         return result.toString()
+    }
+
+    private fun isLeadingMinus(box: Box, referenceHeight: Int, baseline: Int): Boolean {
+        // A minus sign is a short horizontal stroke at mid-height, well above the digit baseline
+        return box.height < referenceHeight * 0.35 &&
+            box.width > box.height * 1.2 &&
+            (baseline - box.bottom) > referenceHeight * 0.25
     }
 
     private fun decode(dark: BooleanArray, stride: Int, box: Box, referenceHeight: Int, baseline: Int): Char? {

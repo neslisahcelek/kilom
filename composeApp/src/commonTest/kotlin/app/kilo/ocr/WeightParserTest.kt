@@ -24,18 +24,18 @@ class WeightParserTest {
 
     @Test fun upperCaseLabel() = assertEquals(ParsedWeight(70.5, WeightUnit.KG), pick("70.5 KG"))
 
-    @Test fun poundsLabelOverridesPreferred() =
-        assertEquals(ParsedWeight(154.3, WeightUnit.LB), pick("154.3 lb", unit = WeightUnit.KG))
+    @Test fun preferredUnitAlwaysUsedRegardlessOfLabel() =
+        assertEquals(ParsedWeight(154.3, WeightUnit.KG), pick("154.3 lb", unit = WeightUnit.KG))
 
-    @Test fun lbsLabel() = assertEquals(ParsedWeight(154.3, WeightUnit.LB), pick("154.3 lbs"))
+    @Test fun lbsLabelWithPreferredLb() = assertEquals(ParsedWeight(154.3, WeightUnit.LB), pick("154.3 lbs", unit = WeightUnit.LB))
 
     @Test fun labelOnNextLine() = assertEquals(ParsedWeight(70.5, WeightUnit.KG), pick("70.5", "kg"))
 
-    @Test fun lbLabelOnNextLine() = assertEquals(ParsedWeight(165.2, WeightUnit.LB), pick("165.2", "lb"))
+    @Test fun lbLabelOnNextLine() = assertEquals(ParsedWeight(165.2, WeightUnit.LB), pick("165.2", "lb", unit = WeightUnit.LB))
 
     @Test fun letterOFixedToZero() = assertEquals(ParsedWeight(70.5, WeightUnit.KG), pick("7O.5", "kg"))
 
-    @Test fun lowerLFixedToOne() = assertEquals(ParsedWeight(165.2, WeightUnit.LB), pick("l65.2", "lb"))
+    @Test fun lowerLFixedToOne() = assertEquals(ParsedWeight(165.2, WeightUnit.LB), pick("l65.2", "lb", unit = WeightUnit.LB))
 
     @Test fun letterOAndLWithAttachedLabel() = assertEquals(ParsedWeight(101.0, WeightUnit.KG), pick("lO1.0kg"))
 
@@ -51,18 +51,18 @@ class WeightParserTest {
         )
     }
 
-    @Test fun labeledBeatsUnlabeled() =
-        assertEquals(ParsedWeight(70.2, WeightUnit.KG), pick("88.8", "70.2 kg"))
+    @Test fun penalizedLineAvoided() =
+        assertEquals(ParsedWeight(70.2, WeightUnit.KG), pick("BMI 88.8", "70.2 kg"))
 
     @Test fun outOfRangeKgDiscarded() {
         assertNull(pick("15.5 kg"))
         assertNull(pick("888.8"))
     }
 
-    @Test fun outOfRangeLbDiscarded() = assertNull(pick("30.0 lb"))
+    @Test fun outOfRangeLbDiscarded() = assertNull(pick("30.0 lb", unit = WeightUnit.LB))
 
-    @Test fun validLbWouldBeInvalidKgIsKeptWithLbLabel() =
-        assertEquals(ParsedWeight(300.5, WeightUnit.LB), pick("300.5 lb"))
+    @Test fun validLbWithPreferredLb() =
+        assertEquals(ParsedWeight(300.5, WeightUnit.LB), pick("300.5 lb", unit = WeightUnit.LB))
 
     @Test fun tooManyDigitsRejected() = assertNull(pick("1234.5"))
 
@@ -80,6 +80,8 @@ class WeightParserTest {
         assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("- 49. 1 kg"))
         assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("-49. 1 kg"))
         assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("-49.1 kg"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("- 49.1"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("49.1"))
         assertEquals(ParsedWeight(50.2, WeightUnit.KG), pick("50 . 20"))
     }
 

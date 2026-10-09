@@ -69,4 +69,21 @@ class SevenSegmentReaderTest {
         val darkPixels = display(value = "50.75").map { (255 - (it.toInt() and 255)).toByte() }.toByteArray()
         assertEquals("50.75", SevenSegmentReader.read(darkPixels, width, height, .95))
     }
+
+    @Test fun recognizesThreeDigitsValue() =
+        assertEquals("49.1", SevenSegmentReader.read(display(value = "49.1"), width, height, .95))
+
+    @Test fun recognizesValueWithLeadingMinusDash() {
+        val pixels = display(value = "49.1")
+        // Draw a mid-height horizontal dash before the digits (x=15..32, y=90..98)
+        for (y in 90..98) for (x in 15..32) pixels[y * width + x] = 35
+        assertEquals("49.1", SevenSegmentReader.read(pixels, width, height, .95))
+    }
+
+    @Test fun recognizesValueWithSpuriousNoiseDot() {
+        val pixels = display(value = "49.1")
+        // Add a small noise dot near the top (y=20..27, x=300..307)
+        for (y in 20..27) for (x in 300..307) pixels[y * width + x] = 35
+        assertEquals("49.1", SevenSegmentReader.read(pixels, width, height, .95))
+    }
 }
