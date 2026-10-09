@@ -73,20 +73,33 @@ class SettingsWeightRepository(
 interface PrefsRepository {
     val unit: StateFlow<WeightUnit>
     fun setUnit(unit: WeightUnit)
+    val healthSyncEnabled: StateFlow<Boolean>
+    fun setHealthSyncEnabled(enabled: Boolean)
 }
 
 class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository {
     private val _unit = MutableStateFlow(
-        settings.getStringOrNull(KEY)?.let { s -> WeightUnit.entries.firstOrNull { it.name == s } } ?: WeightUnit.KG
+        settings.getStringOrNull(KEY_UNIT)?.let { s -> WeightUnit.entries.firstOrNull { it.name == s } } ?: WeightUnit.KG
     )
     override val unit: StateFlow<WeightUnit> = _unit.asStateFlow()
 
     override fun setUnit(unit: WeightUnit) {
-        settings.putString(KEY, unit.name)
+        settings.putString(KEY_UNIT, unit.name)
         _unit.value = unit
     }
 
+    private val _healthSyncEnabled = MutableStateFlow(
+        settings.getBoolean(KEY_HEALTH_SYNC, defaultValue = false)
+    )
+    override val healthSyncEnabled: StateFlow<Boolean> = _healthSyncEnabled.asStateFlow()
+
+    override fun setHealthSyncEnabled(enabled: Boolean) {
+        settings.putBoolean(KEY_HEALTH_SYNC, enabled)
+        _healthSyncEnabled.value = enabled
+    }
+
     private companion object {
-        const val KEY = "weight_unit"
+        const val KEY_UNIT = "weight_unit"
+        const val KEY_HEALTH_SYNC = "health_sync_enabled"
     }
 }

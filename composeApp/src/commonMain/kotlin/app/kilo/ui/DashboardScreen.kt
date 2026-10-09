@@ -276,10 +276,16 @@ fun DashboardScreen(
             )
         }
 
-        // Data Backup & Export/Import Sheet
+        // Data Backup & Export/Import & Health Sync Sheet
         BackupSheet(
             isOpen = state.isBackupSheetOpen,
             notice = state.backupNotice,
+            isHealthSyncSupported = state.isHealthSyncSupported,
+            healthSyncEnabled = state.healthSyncEnabled,
+            isSyncingHealth = state.isSyncingHealth,
+            healthSyncNotice = state.healthSyncNotice,
+            onToggleHealthSync = viewModel::setHealthSyncEnabled,
+            onSyncAllToHealth = viewModel::syncAllToHealth,
             onExportCsv = viewModel::exportCsv,
             onExportJson = viewModel::exportJson,
             onImport = { viewModel.importData(it) },

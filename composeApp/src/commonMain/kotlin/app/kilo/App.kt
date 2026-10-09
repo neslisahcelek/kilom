@@ -28,8 +28,9 @@ fun App(container: AppContainer = remember { AppContainer() }) {
     KiloTheme {
         val haptics = rememberHaptics()
         val scaleOcr = rememberScaleOcr()
+        val healthSync = app.kilo.platform.rememberHealthSync()
 
-        val viewModel = remember(container, haptics, scaleOcr) {
+        val viewModel = remember(container, haptics, scaleOcr, healthSync) {
             DashboardViewModel(
                 weights = container.weights,
                 prefs = container.prefs,
@@ -38,6 +39,7 @@ fun App(container: AppContainer = remember { AppContainer() }) {
                     override fun success() = haptics.success()
                     override fun scanComplete() = haptics.scanComplete()
                 },
+                healthSync = healthSync,
             )
         }
 

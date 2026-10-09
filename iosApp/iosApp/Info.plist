@@ -28,6 +28,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Kilom uses the camera to read your weight from a photo of the scale.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Kilom can read your weight from Apple Health.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Kilom saves your weight entries directly to Apple Health.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Kilom reads your weight from a scale photo you choose from your library.</string>
 	<key>UILaunchScreen</key>

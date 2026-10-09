@@ -58,4 +58,11 @@
     <string name="backup_import_success">%1$d kayıt başarıyla içe aktarıldı.</string>
     <string name="backup_import_empty">Dosyada geçerli tartı kaydı bulunamadı.</string>
     <string name="backup_close">Kapat</string>
+    <string name="health_section_title">Apple Sağlık / Health Connect</string>
+    <string name="health_auto_sync_title">Yeni tartımları otomatik aktar</string>
+    <string name="health_auto_sync_subtitle">Ölçümleri doğrudan Sağlık uygulamasına kaydeder</string>
+    <string name="health_sync_all_button">Tüm geçmişi Sağlık'a aktar</string>
+    <string name="health_sync_all_loading">Sağlık uygulamasına aktarılıyor...</string>
+    <string name="health_sync_success">%1$d kayıt Sağlık uygulamasına aktarıldı.</string>
+    <string name="health_sync_denied">Sağlık uygulamasında gerekli izin verilmedi.</string>
 </resources>

@@ -13,6 +13,8 @@ import app.kilo.domain.buildHistory
 import app.kilo.domain.formatWeight
 import app.kilo.domain.lbToKg
 import app.kilo.domain.parseWeightInput
+import app.kilo.platform.HealthSync
+import app.kilo.platform.NoOpHealthSync
 import app.kilo.ocr.WeightParser
 import app.kilo.ocr.logOcr
 import app.kilo.ocr.logOcrLines
@@ -70,6 +72,8 @@ data class SheetState(
 
 data class BackupNotice(val count: Int, val isSuccess: Boolean)
 
+data class HealthSyncNotice(val count: Int, val isSuccess: Boolean)
+
 data class UiState(
     val unit: WeightUnit = WeightUnit.KG,
     val history: List<HistoryItem> = emptyList(),
@@ -77,6 +81,10 @@ data class UiState(
     val sheet: SheetState? = null,
     val isBackupSheetOpen: Boolean = false,
     val backupNotice: BackupNotice? = null,
+    val isHealthSyncSupported: Boolean = false,
+    val healthSyncEnabled: Boolean = false,
+    val isSyncingHealth: Boolean = false,
+    val healthSyncNotice: HealthSyncNotice? = null,
 )
 
 class DashboardViewModel(
@@ -84,6 +92,7 @@ class DashboardViewModel(
     private val prefs: PrefsRepository,
     private val readText: suspend (ByteArray) -> List<String>,
     private val feedback: DashboardFeedback,
+    private val healthSync: HealthSync = NoOpHealthSync,
     private val now: () -> Instant = {
         Clock.System.now().let { Instant.fromEpochSeconds(it.epochSeconds, it.nanosecondsOfSecond) }
     },
@@ -98,17 +107,26 @@ class DashboardViewModel(
 
     init {
         viewModelScope.launch {
-            combine(weights.entries, prefs.unit) { entries, unit -> entries to unit }
-                .collect { (entries, unit) ->
-                    val tz = timeZone()
-                    val history = buildHistory(entries, tz)
-                    val hero = history.firstOrNull()?.let {
-                        val today = now().toLocalDateTime(tz).date
-                        val last = it.entry.at.toLocalDateTime(tz).date
-                        HeroState(it, last.daysUntil(today).coerceAtLeast(0))
-                    }
-                    _state.update { it.copy(unit = unit, history = history, hero = hero) }
+            combine(weights.entries, prefs.unit, prefs.healthSyncEnabled) { entries, unit, healthEnabled ->
+                Triple(entries, unit, healthEnabled)
+            }.collect { (entries, unit, healthEnabled) ->
+                val tz = timeZone()
+                val history = buildHistory(entries, tz)
+                val hero = history.firstOrNull()?.let {
+                    val today = now().toLocalDateTime(tz).date
+                    val last = it.entry.at.toLocalDateTime(tz).date
+                    HeroState(it, last.daysUntil(today).coerceAtLeast(0))
                 }
+                _state.update {
+                    it.copy(
+                        unit = unit,
+                        history = history,
+                        hero = hero,
+                        isHealthSyncSupported = healthSync.isSupported,
+                        healthSyncEnabled = healthEnabled,
+                    )
+                }
+            }
         }
     }
 
@@ -260,7 +278,7 @@ class DashboardViewModel(
                     existing?.at ?: now()
                 }
 
-                if (sheet.editingEntryId != null) {
+                val savedEntry = if (sheet.editingEntryId != null) {
                     val updatedEntry = WeightEntry(
                         id = sheet.editingEntryId,
                         kg = r.kg,
@@ -268,11 +286,19 @@ class DashboardViewModel(
                         tag = sheet.selectedTag?.id,
                     )
                     weights.add(updatedEntry)
+                    updatedEntry
                 } else {
-                    weights.add(WeightEntry.create(r.kg, entryInstant, tag = sheet.selectedTag?.id))
+                    val newEntry = WeightEntry.create(r.kg, entryInstant, tag = sheet.selectedTag?.id)
+                    weights.add(newEntry)
+                    newEntry
                 }
                 _state.update { it.copy(sheet = null) }
                 feedback.success()
+                if (_state.value.healthSyncEnabled) {
+                    viewModelScope.launch {
+                        healthSync.writeWeight(savedEntry.kg, savedEntry.at)
+                    }
+                }
             }
         }
     }
@@ -282,7 +308,7 @@ class DashboardViewModel(
     }
 
     fun openBackup() {
-        _state.update { it.copy(isBackupSheetOpen = true, backupNotice = null) }
+        _state.update { it.copy(isBackupSheetOpen = true, backupNotice = null, healthSyncNotice = null) }
     }
 
     fun dismissBackup() {
@@ -291,6 +317,48 @@ class DashboardViewModel(
 
     fun clearBackupNotice() {
         _state.update { it.copy(backupNotice = null) }
+    }
+
+    fun setHealthSyncEnabled(enabled: Boolean) {
+        if (!enabled) {
+            prefs.setHealthSyncEnabled(false)
+            return
+        }
+        viewModelScope.launch {
+            val granted = healthSync.requestAuthorization()
+            if (granted) {
+                prefs.setHealthSyncEnabled(true)
+                feedback.success()
+            } else {
+                prefs.setHealthSyncEnabled(false)
+                _state.update { it.copy(healthSyncNotice = HealthSyncNotice(count = 0, isSuccess = false)) }
+            }
+        }
+    }
+
+    fun syncAllToHealth() {
+        if (_state.value.isSyncingHealth) return
+        viewModelScope.launch {
+            _state.update { it.copy(isSyncingHealth = true, healthSyncNotice = null) }
+            val auth = healthSync.requestAuthorization()
+            if (!auth) {
+                _state.update { it.copy(isSyncingHealth = false, healthSyncNotice = HealthSyncNotice(count = 0, isSuccess = false)) }
+                return@launch
+            }
+            val entries = weights.entries.value
+            val count = healthSync.writeWeights(entries)
+            _state.update {
+                it.copy(
+                    isSyncingHealth = false,
+                    healthSyncNotice = HealthSyncNotice(count = count, isSuccess = count > 0 || entries.isEmpty()),
+                )
+            }
+            if (count > 0) feedback.success()
+        }
+    }
+
+    fun clearHealthSyncNotice() {
+        _state.update { it.copy(healthSyncNotice = null) }
     }
 
     fun exportCsv(): String = exportToCsv(_state.value.history.map { it.entry }, timeZone())

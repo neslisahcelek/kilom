@@ -46,6 +46,9 @@ import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFileSaverLauncher
 import io.github.vinceglb.filekit.readString
 import io.github.vinceglb.filekit.writeString
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import app.kilo.ui.HealthSyncNotice
 import kilo.composeapp.generated.resources.Res
 import kilo.composeapp.generated.resources.backup_close
 import kilo.composeapp.generated.resources.backup_export_csv
@@ -55,6 +58,13 @@ import kilo.composeapp.generated.resources.backup_import_empty
 import kilo.composeapp.generated.resources.backup_import_success
 import kilo.composeapp.generated.resources.backup_subtitle
 import kilo.composeapp.generated.resources.backup_title
+import kilo.composeapp.generated.resources.health_auto_sync_subtitle
+import kilo.composeapp.generated.resources.health_auto_sync_title
+import kilo.composeapp.generated.resources.health_section_title
+import kilo.composeapp.generated.resources.health_sync_all_button
+import kilo.composeapp.generated.resources.health_sync_all_loading
+import kilo.composeapp.generated.resources.health_sync_denied
+import kilo.composeapp.generated.resources.health_sync_success
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -62,6 +72,12 @@ import org.jetbrains.compose.resources.stringResource
 fun BackupSheet(
     isOpen: Boolean,
     notice: BackupNotice?,
+    isHealthSyncSupported: Boolean = false,
+    healthSyncEnabled: Boolean = false,
+    isSyncingHealth: Boolean = false,
+    healthSyncNotice: HealthSyncNotice? = null,
+    onToggleHealthSync: (Boolean) -> Unit = {},
+    onSyncAllToHealth: () -> Unit = {},
     onExportCsv: () -> String,
     onExportJson: () -> String,
     onImport: (String) -> Unit,
@@ -232,6 +248,89 @@ fun BackupSheet(
                                 filePicker.launch()
                             },
                         )
+
+                        // Optional Health Sync Section (Apple Health / Health Connect)
+                        if (isHealthSyncSupported) {
+                            Spacer(Modifier.height(16.dp))
+
+                            // Health Sync Notice Banner
+                            if (healthSyncNotice != null) {
+                                val isSuccess = healthSyncNotice.isSuccess
+                                val hBg = if (isSuccess) colors.negative.copy(alpha = 0.15f) else colors.positive.copy(alpha = 0.15f)
+                                val hBorder = if (isSuccess) colors.negative else colors.positive
+                                val hText = if (isSuccess) {
+                                    stringResource(Res.string.health_sync_success, healthSyncNotice.count)
+                                } else {
+                                    stringResource(Res.string.health_sync_denied)
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(hBg)
+                                        .border(1.dp, hBorder.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = hText,
+                                        style = typography.subhead.copy(fontWeight = FontWeight.Medium),
+                                        color = hBorder,
+                                        textAlign = TextAlign.Center,
+                                    )
+                                }
+                                Spacer(Modifier.height(10.dp))
+                            }
+
+                            // Health Auto-Sync Toggle Card
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(colors.glassTint)
+                                    .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                ) {
+                                    Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                                        Text(
+                                            text = stringResource(Res.string.health_auto_sync_title),
+                                            style = typography.body.copy(fontWeight = FontWeight.SemiBold),
+                                            color = colors.textPrimary,
+                                        )
+                                        Spacer(Modifier.height(2.dp))
+                                        Text(
+                                            text = stringResource(Res.string.health_auto_sync_subtitle),
+                                            style = typography.caption,
+                                            color = colors.textSecondary,
+                                        )
+                                    }
+                                        Switch(
+                                            checked = healthSyncEnabled,
+                                            onCheckedChange = onToggleHealthSync,
+                                            colors = SwitchDefaults.colors(
+                                                checkedThumbColor = colors.onAccent,
+                                                checkedTrackColor = colors.accent,
+                                                uncheckedThumbColor = colors.textSecondary,
+                                                uncheckedTrackColor = colors.glassTint,
+                                            ),
+                                        )
+                                }
+                            }
+
+                            Spacer(Modifier.height(10.dp))
+
+                            // Sync All to Health Button
+                            BackupActionButton(
+                                title = if (isSyncingHealth) stringResource(Res.string.health_sync_all_loading) else stringResource(Res.string.health_sync_all_button),
+                                iconLabel = "♥",
+                                onClick = onSyncAllToHealth,
+                            )
+                        }
 
                         Spacer(Modifier.height(20.dp))
 

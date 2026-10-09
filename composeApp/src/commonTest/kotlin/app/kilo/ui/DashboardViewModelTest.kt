@@ -36,6 +36,30 @@ class DashboardViewModelTest {
         override fun scanComplete() { scanCount++ }
     }
 
+    private class FakeHealthSync(
+        override val isSupported: Boolean = true,
+        var authResult: Boolean = true,
+    ) : app.kilo.platform.HealthSync {
+        var requestedAuth = false
+        val writtenSamples = mutableListOf<Pair<Double, Instant>>()
+        val writtenBatches = mutableListOf<List<app.kilo.domain.WeightEntry>>()
+
+        override suspend fun requestAuthorization(): Boolean {
+            requestedAuth = true
+            return authResult
+        }
+
+        override suspend fun writeWeight(kg: Double, timestamp: Instant): Boolean {
+            writtenSamples.add(kg to timestamp)
+            return true
+        }
+
+        override suspend fun writeWeights(entries: List<app.kilo.domain.WeightEntry>): Int {
+            writtenBatches.add(entries)
+            return entries.size
+        }
+    }
+
     @BeforeTest
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
@@ -49,11 +73,13 @@ class DashboardViewModelTest {
     private fun createViewModel(
         weights: SettingsWeightRepository = SettingsWeightRepository(MapSettings()),
         prefs: SettingsPrefsRepository = SettingsPrefsRepository(MapSettings()),
+        healthSync: app.kilo.platform.HealthSync = app.kilo.platform.NoOpHealthSync,
     ): DashboardViewModel = DashboardViewModel(
         weights = weights,
         prefs = prefs,
         readText = { emptyList() },
         feedback = FakeFeedback(),
+        healthSync = healthSync,
         now = { fixedNow },
         timeZone = { utc },
     )
@@ -282,5 +308,74 @@ class DashboardViewModelTest {
 
         vm.dismissBackup()
         assertEquals(false, vm.state.value.isBackupSheetOpen)
+    }
+
+    @Test
+    fun healthSyncDisabledByDefault() = runTest(testDispatcher) {
+        val fakeHealth = FakeHealthSync(isSupported = true)
+        val vm = createViewModel(healthSync = fakeHealth)
+        advanceUntilIdle()
+
+        assertEquals(true, vm.state.value.isHealthSyncSupported)
+        assertEquals(false, vm.state.value.healthSyncEnabled)
+    }
+
+    @Test
+    fun enableHealthSyncRequestsAuthAndEnablesState() = runTest(testDispatcher) {
+        val fakeHealth = FakeHealthSync(isSupported = true, authResult = true)
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val vm = createViewModel(prefs = prefs, healthSync = fakeHealth)
+        advanceUntilIdle()
+
+        vm.setHealthSyncEnabled(true)
+        advanceUntilIdle()
+
+        assertEquals(true, fakeHealth.requestedAuth)
+        assertEquals(true, vm.state.value.healthSyncEnabled)
+        assertEquals(true, prefs.healthSyncEnabled.value)
+
+        vm.setHealthSyncEnabled(false)
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.healthSyncEnabled)
+        assertEquals(false, prefs.healthSyncEnabled.value)
+    }
+
+    @Test
+    fun saveWritesToHealthSyncWhenEnabled() = runTest(testDispatcher) {
+        val fakeHealth = FakeHealthSync(isSupported = true, authResult = true)
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val vm = createViewModel(prefs = prefs, healthSync = fakeHealth)
+        advanceUntilIdle()
+
+        vm.setHealthSyncEnabled(true)
+        advanceUntilIdle()
+
+        vm.openManual()
+        vm.onInputChange("72.5")
+        vm.save()
+        advanceUntilIdle()
+
+        assertEquals(1, fakeHealth.writtenSamples.size)
+        assertEquals(72.5, fakeHealth.writtenSamples[0].first)
+    }
+
+    @Test
+    fun syncAllToHealthWritesExistingEntries() = runTest(testDispatcher) {
+        val fakeHealth = FakeHealthSync(isSupported = true, authResult = true)
+        val weights = SettingsWeightRepository(MapSettings())
+        weights.add(app.kilo.domain.WeightEntry.create(70.0, fixedNow))
+        weights.add(app.kilo.domain.WeightEntry.create(71.0, fixedNow))
+
+        val vm = createViewModel(weights = weights, healthSync = fakeHealth)
+        advanceUntilIdle()
+
+        vm.syncAllToHealth()
+        advanceUntilIdle()
+
+        assertEquals(1, fakeHealth.writtenBatches.size)
+        assertEquals(2, fakeHealth.writtenBatches[0].size)
+        assertEquals(2, vm.state.value.healthSyncNotice?.count)
+        assertEquals(true, vm.state.value.healthSyncNotice?.isSuccess)
     }
 }

@@ -58,4 +58,11 @@
     <string name="backup_import_success">Imported %1$d entries successfully.</string>
     <string name="backup_import_empty">No valid entries found in file.</string>
     <string name="backup_close">Close</string>
+    <string name="health_section_title">Apple Health / Health Connect</string>
+    <string name="health_auto_sync_title">Auto-sync new weigh-ins</string>
+    <string name="health_auto_sync_subtitle">Automatically saves measurements to Health</string>
+    <string name="health_sync_all_button">Export all entries to Health</string>
+    <string name="health_sync_all_loading">Syncing to Health...</string>
+    <string name="health_sync_success">Exported %1$d entries to Health successfully.</string>
+    <string name="health_sync_denied">Permission was not granted in Health settings.</string>
 </resources>
