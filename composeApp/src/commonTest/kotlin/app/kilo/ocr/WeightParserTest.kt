@@ -115,4 +115,43 @@ class WeightParserTest {
             pick("71.20 KG", "19°C", "Max. 180kg d=100g")
         )
     }
+
+    @Test fun implicitDecimalRecoveryWhenDotIsDropped() {
+        // 3-digit dropped dots
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("491"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("491 kg"))
+        assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("689"))
+        assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("689 kg"))
+        assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("b89 kg"))
+
+        // 4-digit dropped dots (20..99 kg range)
+        assertEquals(ParsedWeight(50.75, WeightUnit.KG), pick("5075"))
+        assertEquals(ParsedWeight(50.75, WeightUnit.KG), pick("5075 kg"))
+        assertEquals(ParsedWeight(51.0, WeightUnit.KG), pick("5100"))
+        assertEquals(ParsedWeight(51.0, WeightUnit.KG), pick("5100 kg"))
+        assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("7250"))
+
+        // 4-digit dropped dots (100..199 kg range)
+        assertEquals(ParsedWeight(120.5, WeightUnit.KG), pick("1205"))
+        assertEquals(ParsedWeight(145.2, WeightUnit.KG), pick("1452"))
+    }
+
+    @Test fun userScalePhotosScenariosBothWithAndWithoutDot() {
+        // Photo 1: Techfit 50.75 with ambient temp 15°C
+        assertEquals(ParsedWeight(50.75, WeightUnit.KG), pick("Techfit", "50.75 15°C", "Max.180kg d=100g"))
+        assertEquals(ParsedWeight(50.75, WeightUnit.KG), pick("Techfit", "5075 15°C", "Max.180kg d=100g"))
+
+        // Photo 2: 51.00 angled with ambient temp 16°C
+        assertEquals(ParsedWeight(51.0, WeightUnit.KG), pick("51.00 16°C"))
+        assertEquals(ParsedWeight(51.0, WeightUnit.KG), pick("5100 16°C"))
+
+        // Photo 3: Pink scale - 49.1 kg
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("- 49.1 kg"))
+        assertEquals(ParsedWeight(49.1, WeightUnit.KG), pick("- 491 kg"))
+
+        // Photo 4: Blue LED 68.9 kg
+        assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("68.9 kg"))
+        assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("689 kg"))
+        assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("689"))
+    }
 }

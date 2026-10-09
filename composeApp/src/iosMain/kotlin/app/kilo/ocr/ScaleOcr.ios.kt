@@ -99,12 +99,32 @@ actual class ScaleOcr {
             return@withContext it + t1Lines
         }
 
-        // 2C: High-contrast inverted (bridges gaps in glowing LED digits on black glass)
+        // 2C: High-contrast inverted
         val ledThresholded = baseImage
             .imageByApplyingFilter("CIColorControls", withInputParameters = mapOf("inputContrast" to 2.8, "inputBrightness" to -0.15, "inputSaturation" to 0.0))
             .imageByApplyingFilter("CIColorInvert")
         tryPass("tier2_led_contrast") { runVisionOnCiImage(ledThresholded) }?.let {
             logOcr("ios vision_completed tier=tier2_led_contrast total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
+            return@withContext it + t1Lines
+        }
+
+        // 2D: Morphological dilation for glowing LED digits with gaps (bridges disjointed bars like Photo 4)
+        val ledMorphed = baseImage
+            .imageByApplyingFilter("CIColorControls", withInputParameters = mapOf("inputContrast" to 2.8, "inputBrightness" to -0.1, "inputSaturation" to 0.0))
+            .imageByApplyingFilter("CIMorphologyMaximum", withInputParameters = mapOf("inputRadius" to 3.0))
+            .imageByApplyingFilter("CIColorInvert")
+        tryPass("tier2_led_morphology") { runVisionOnCiImage(ledMorphed) }?.let {
+            logOcr("ios vision_completed tier=tier2_led_morphology total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
+            return@withContext it + t1Lines
+        }
+
+        // 2E: Morphological closing for dark LCD digits (bridges faint gaps in LCD 7-segment)
+        val lcdMorphed = enhancedLcd
+            .imageByApplyingFilter("CIColorInvert")
+            .imageByApplyingFilter("CIMorphologyMaximum", withInputParameters = mapOf("inputRadius" to 2.0))
+            .imageByApplyingFilter("CIColorInvert")
+        tryPass("tier2_lcd_morphology") { runVisionOnCiImage(lcdMorphed) }?.let {
+            logOcr("ios vision_completed tier=tier2_lcd_morphology total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
             return@withContext it + t1Lines
         }
 
@@ -129,6 +149,10 @@ actual class ScaleOcr {
                 }
                 tryPass("tier4_invert_180") { runVisionOnCiImage(inverted.imageByApplyingOrientation(3)) }?.let {
                     logOcr("ios vision_completed tier=tier4_invert_180 total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
+                    return@withContext it + t1Lines
+                }
+                tryPass("tier4_led_morph_180") { runVisionOnCiImage(ledMorphed.imageByApplyingOrientation(3)) }?.let {
+                    logOcr("ios vision_completed tier=tier4_led_morph_180 total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
                     return@withContext it + t1Lines
                 }
             }
@@ -177,6 +201,7 @@ actual class ScaleOcr {
         request.usesLanguageCorrection = false
         request.recognitionLanguages = listOf("en-US")
         request.minimumTextHeight = 0.01f
+        request.revision = 3u
         return request
     }
 

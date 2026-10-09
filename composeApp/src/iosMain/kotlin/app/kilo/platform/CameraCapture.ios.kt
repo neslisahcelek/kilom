@@ -29,12 +29,6 @@ import platform.AVFoundation.AVCaptureTorchModeOn
 import platform.AVFoundation.AVCaptureVideoPreviewLayer
 import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
-import platform.AVFoundation.AVCaptureFocusModeContinuousAutoFocus
-import platform.AVFoundation.AVCaptureExposureModeContinuousAutoExposure
-import platform.AVFoundation.exposureMode
-import platform.AVFoundation.focusMode
-import platform.AVFoundation.isExposureModeSupported
-import platform.AVFoundation.isFocusModeSupported
 import platform.AVFoundation.fileDataRepresentation
 import platform.AVFoundation.hasTorch
 import platform.AVFoundation.torchMode
@@ -76,19 +70,6 @@ actual class CameraController {
             val input = AVCaptureDeviceInput.deviceInputWithDevice(device, error = null)
             if (input != null && session.canAddInput(input)) {
                 session.addInput(input)
-            }
-            try {
-                if (device.lockForConfiguration(null)) {
-                    if (device.isFocusModeSupported(AVCaptureFocusModeContinuousAutoFocus)) {
-                        device.focusMode = AVCaptureFocusModeContinuousAutoFocus
-                    }
-                    if (device.isExposureModeSupported(AVCaptureExposureModeContinuousAutoExposure)) {
-                        device.exposureMode = AVCaptureExposureModeContinuousAutoExposure
-                    }
-                    device.unlockForConfiguration()
-                }
-            } catch (e: Exception) {
-                logOcr("ios camera_config_failed exception=${e::class.simpleName}")
             }
         }
         if (session.canAddOutput(photoOutput)) {

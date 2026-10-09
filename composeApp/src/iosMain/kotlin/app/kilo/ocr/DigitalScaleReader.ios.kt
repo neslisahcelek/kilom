@@ -85,6 +85,7 @@ internal suspend fun readDigitalScale(source: CIImage, context: CIContext): List
             usesLanguageCorrection = false
             recognitionLanguages = listOf("en-US")
             minimumTextHeight = 0.01f
+            revision = 3u
         }
 
         val cgImage = context.createCGImage(screen, fromRect = screen.extent) ?: continue
@@ -115,6 +116,7 @@ internal suspend fun readDigitalScale(source: CIImage, context: CIContext): List
                         usesLanguageCorrection = false
                         recognitionLanguages = listOf("en-US")
                         minimumTextHeight = 0.01f
+                        revision = 3u
                     }
                     if (VNImageRequestHandler(cGImage = enhancedCg, options = emptyMap<Any?, Any?>())
                             .performRequests(listOf(enhancedReq), error = null)) {
