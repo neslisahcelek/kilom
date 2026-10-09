@@ -1,6 +1,7 @@
 package app.kilo.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -8,11 +9,13 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -56,6 +59,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.kilo.domain.WeightTag
 import app.kilo.domain.WeightUnit
 import app.kilo.domain.label
 import app.kilo.ui.SheetState
@@ -74,11 +78,13 @@ import kilo.composeapp.generated.resources.error_ocr_failed
 import kilo.composeapp.generated.resources.error_ocr_no_result
 import kilo.composeapp.generated.resources.error_out_of_range
 import kilo.composeapp.generated.resources.sheet_cancel
+import kilo.composeapp.generated.resources.sheet_edit_title
 import kilo.composeapp.generated.resources.sheet_ocr_prefilled
 import kilo.composeapp.generated.resources.sheet_placeholder
 import kilo.composeapp.generated.resources.sheet_save
 import kilo.composeapp.generated.resources.sheet_scanning
 import kilo.composeapp.generated.resources.sheet_title
+import kilo.composeapp.generated.resources.tag_section_title
 import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -99,6 +105,8 @@ fun EntrySheet(
     hazeState: HazeState?,
     modifier: Modifier = Modifier,
     timeZone: TimeZone = TimeZone.currentSystemDefault(),
+    selectedTag: WeightTag? = sheet.selectedTag,
+    onTagSelected: (WeightTag?) -> Unit = {},
 ) {
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
@@ -174,7 +182,7 @@ fun EntrySheet(
                         )
 
                         Text(
-                            text = stringResource(Res.string.sheet_title),
+                            text = stringResource(if (sheet.isEditing) Res.string.sheet_edit_title else Res.string.sheet_title),
                             style = typography.headline,
                             color = colors.textPrimary,
                         )
@@ -254,7 +262,63 @@ fun EntrySheet(
                             }
                         }
 
-                        Spacer(Modifier.height(20.dp))
+                        Spacer(Modifier.height(14.dp))
+
+                        // Tags section
+                        Text(
+                            text = stringResource(Res.string.tag_section_title),
+                            style = typography.caption,
+                            color = colors.textSecondary.copy(alpha = 0.8f),
+                        )
+
+                        Spacer(Modifier.height(8.dp))
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            WeightTag.entries.forEach { tag ->
+                                val isSelected = selectedTag == tag
+                                val chipBgColor by animateColorAsState(
+                                    targetValue = if (isSelected) colors.accent else colors.glassTint.copy(alpha = 0.65f),
+                                    label = "tag_chip_bg",
+                                )
+                                val chipTextColor by animateColorAsState(
+                                    targetValue = if (isSelected) colors.onAccent else colors.textSecondary,
+                                    label = "tag_chip_text",
+                                )
+                                val chipBorderColor by animateColorAsState(
+                                    targetValue = if (isSelected) colors.accent else colors.glassBorder,
+                                    label = "tag_chip_border",
+                                )
+
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(999.dp))
+                                        .background(chipBgColor)
+                                        .border(1.dp, chipBorderColor, RoundedCornerShape(999.dp))
+                                        .clickable {
+                                            val nextTag = if (isSelected) null else tag
+                                            onTagSelected(nextTag)
+                                        }
+                                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = stringResource(tag.labelRes()),
+                                        style = typography.caption.copy(
+                                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                        ),
+                                        color = chipTextColor,
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(Modifier.height(18.dp))
 
                         // Numeric input area
                         Row(

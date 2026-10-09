@@ -30,6 +30,8 @@ import platform.AVFoundation.AVCaptureVideoPreviewLayer
 import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.fileDataRepresentation
+import platform.AVFoundation.hasTorch
+import platform.AVFoundation.torchMode
 import platform.CoreGraphics.CGRectMake
 import platform.CoreImage.CIContext
 import platform.CoreImage.CIImage

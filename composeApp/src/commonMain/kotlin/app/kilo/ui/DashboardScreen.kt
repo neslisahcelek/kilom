@@ -27,6 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
@@ -34,15 +36,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.kilo.platform.rememberPhotoPicker
 import app.kilo.ui.components.ActionBar
+import app.kilo.ui.components.BackupSheet
 import app.kilo.ui.components.EntrySheet
 import app.kilo.ui.components.GlassCard
 import app.kilo.ui.components.HeroCard
 import app.kilo.ui.components.HistoryRow
+import app.kilo.ui.components.TrendChart
 import app.kilo.ui.theme.KiloTheme
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import kilo.composeapp.generated.resources.Res
 import kilo.composeapp.generated.resources.app_name
+import kilo.composeapp.generated.resources.backup_title
 import kilo.composeapp.generated.resources.history_empty
 import kilo.composeapp.generated.resources.history_title
 import kotlinx.datetime.TimeZone
@@ -116,6 +124,29 @@ fun DashboardScreen(
                     style = typography.largeTitle,
                     color = colors.textPrimary,
                 )
+
+                // Backup & Export/Import Button
+                val backupDesc = stringResource(Res.string.backup_title)
+                Box(
+                    modifier = Modifier
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .background(colors.glassTint)
+                        .border(1.dp, colors.glassBorder, CircleShape)
+                        .clickable(
+                            role = Role.Button,
+                            onClickLabel = backupDesc,
+                            onClick = { viewModel.openBackup() },
+                        )
+                        .semantics { contentDescription = backupDesc },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "⇅",
+                        style = typography.title.copy(fontSize = 18.sp),
+                        color = colors.textSecondary,
+                    )
+                }
             }
 
             // Scrollable / structured dashboard items
@@ -130,6 +161,15 @@ fun DashboardScreen(
                 item(key = "hero_card") {
                     HeroCard(
                         hero = state.hero,
+                        unit = state.unit,
+                        hazeState = hazeState,
+                    )
+                }
+
+                // Trend Chart
+                item(key = "trend_chart") {
+                    TrendChart(
+                        entries = state.history.map { it.entry },
                         unit = state.unit,
                         hazeState = hazeState,
                     )
@@ -195,6 +235,7 @@ fun DashboardScreen(
                             unit = state.unit,
                             timeZone = TimeZone.currentSystemDefault(),
                             onDelete = viewModel::delete,
+                            onClick = { viewModel.openEdit(item.entry) },
                             hazeState = hazeState,
                         )
                     }
@@ -209,6 +250,7 @@ fun DashboardScreen(
                 unit = state.unit,
                 onInputChange = viewModel::onInputChange,
                 onDateSelected = viewModel::onDateSelected,
+                onTagSelected = viewModel::onTagSelected,
                 onSave = viewModel::save,
                 onDismiss = viewModel::dismissSheet,
                 hazeState = hazeState,
@@ -233,5 +275,16 @@ fun DashboardScreen(
                 },
             )
         }
+
+        // Data Backup & Export/Import Sheet
+        BackupSheet(
+            isOpen = state.isBackupSheetOpen,
+            notice = state.backupNotice,
+            onExportCsv = viewModel::exportCsv,
+            onExportJson = viewModel::exportJson,
+            onImport = { viewModel.importData(it) },
+            onDismiss = viewModel::dismissBackup,
+            hazeState = hazeState,
+        )
     }
 }

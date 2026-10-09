@@ -22,12 +22,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.kilo.domain.HistoryItem
+import app.kilo.domain.WeightTag
 import app.kilo.domain.WeightUnit
 import app.kilo.domain.format
 import app.kilo.domain.formatWeight
@@ -37,6 +40,7 @@ import app.kilo.ui.theme.KiloTheme
 import dev.chrisbanes.haze.HazeState
 import kilo.composeapp.generated.resources.Res
 import kilo.composeapp.generated.resources.history_delete
+import kilo.composeapp.generated.resources.history_tag_badge
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
@@ -50,6 +54,7 @@ fun HistoryRow(
     onDelete: (String) -> Unit,
     hazeState: HazeState?,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
@@ -104,7 +109,10 @@ fun HistoryRow(
             GlassCard(
                 hazeState = hazeState,
                 shape = RoundedCornerShape(18.dp),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .clickable(onClick = onClick),
             ) {
                 Row(
                     modifier = Modifier
@@ -119,6 +127,7 @@ fun HistoryRow(
                     val timeFormatted = "${ldt.hour.toString().padStart(2, '0')}:${ldt.minute.toString().padStart(2, '0')}"
 
                     Column(
+                        modifier = Modifier.weight(1f, fill = false),
                         verticalArrangement = Arrangement.spacedBy(3.dp),
                     ) {
                         Text(
@@ -126,11 +135,38 @@ fun HistoryRow(
                             style = typography.headline,
                             color = colors.textPrimary,
                         )
-                        Text(
-                            text = timeFormatted,
-                            style = typography.caption,
-                            color = colors.textSecondary,
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            Text(
+                                text = timeFormatted,
+                                style = typography.caption,
+                                color = colors.textSecondary,
+                            )
+
+                            val tag = WeightTag.fromId(item.entry.tag)
+                            val tagLabel = tag?.let { stringResource(it.labelRes()) } ?: item.entry.tag
+                            if (tagLabel != null) {
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(6.dp))
+                                        .background(colors.accent.copy(alpha = 0.12f))
+                                        .padding(horizontal = 6.dp, vertical = 2.dp),
+                                ) {
+                                    Text(
+                                        text = stringResource(Res.string.history_tag_badge, tagLabel),
+                                        style = typography.caption.copy(
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Medium,
+                                        ),
+                                        color = colors.accent,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     // Weight & Delta

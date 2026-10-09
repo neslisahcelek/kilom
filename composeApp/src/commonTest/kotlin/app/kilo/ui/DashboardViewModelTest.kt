@@ -2,6 +2,7 @@ package app.kilo.ui
 
 import app.kilo.data.SettingsPrefsRepository
 import app.kilo.data.SettingsWeightRepository
+import app.kilo.domain.WeightTag
 import app.kilo.domain.WeightUnit
 import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.Dispatchers
@@ -131,5 +132,155 @@ class DashboardViewModelTest {
         assertTrue(delta != null)
         assertEquals(-1.0, delta.kg)
         assertEquals(1, delta.days)
+    }
+
+    @Test
+    fun saveWithTagCreatesEntryWithTag() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        vm.openManual()
+        vm.onInputChange("80.5")
+        vm.onTagSelected(WeightTag.MORNING_FASTED)
+        vm.save()
+        advanceUntilIdle()
+
+        val entries = weights.entries.value
+        assertEquals(1, entries.size)
+        assertEquals(80.5, entries[0].kg)
+        assertEquals("morning_fasted", entries[0].tag)
+    }
+
+    @Test
+    fun editEntryUpdatesExistingEntryAndTag() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        // 1. Add entry
+        vm.openManual()
+        vm.onInputChange("72.0")
+        vm.onTagSelected(WeightTag.MORNING_FASTED)
+        vm.save()
+        advanceUntilIdle()
+
+        val originalEntry = weights.entries.value[0]
+        assertEquals("morning_fasted", originalEntry.tag)
+
+        // 2. Open edit
+        vm.openEdit(originalEntry)
+        assertEquals(originalEntry.id, vm.state.value.sheet?.editingEntryId)
+        assertEquals(WeightTag.MORNING_FASTED, vm.state.value.sheet?.selectedTag)
+        assertEquals("72.00", vm.state.value.sheet?.input)
+
+        // 3. Modify weight and tag
+        vm.onInputChange("71.5")
+        vm.onTagSelected(WeightTag.POST_WORKOUT)
+        vm.save()
+        advanceUntilIdle()
+
+        val updatedEntries = weights.entries.value
+        assertEquals(1, updatedEntries.size)
+        val updated = updatedEntries[0]
+        assertEquals(originalEntry.id, updated.id)
+        assertEquals(71.5, updated.kg)
+        assertEquals(originalEntry.at, updated.at)
+        assertEquals("post_workout", updated.tag)
+    }
+
+    @Test
+    fun editEntryCanClearTag() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        vm.openManual()
+        vm.onInputChange("68.0")
+        vm.onTagSelected(WeightTag.WATER_RETENTION)
+        vm.save()
+        advanceUntilIdle()
+
+        val entry = weights.entries.value[0]
+        assertEquals("water_retention", entry.tag)
+
+        vm.openEdit(entry)
+        vm.onTagSelected(null)
+        vm.save()
+        advanceUntilIdle()
+
+        val updated = weights.entries.value[0]
+        assertNull(updated.tag)
+    }
+
+    @Test
+    fun exportCsvAndJsonProducesNonEmptyContent() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        vm.openManual()
+        vm.onInputChange("75.0")
+        vm.onTagSelected(WeightTag.MORNING_FASTED)
+        vm.save()
+        advanceUntilIdle()
+
+        val csv = vm.exportCsv()
+        assertTrue(csv.contains("date,time,weight_kg,tag"))
+        assertTrue(csv.contains("75.00"))
+        assertTrue(csv.contains("morning_fasted"))
+
+        val json = vm.exportJson()
+        assertTrue(json.contains("\"kg\": 75.0"))
+        assertTrue(json.contains("\"tag\": \"morning_fasted\""))
+    }
+
+    @Test
+    fun importDataMergesEntriesAndSetsNotice() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        val csvData = """
+            date,time,weight_kg,tag
+            2026-10-01,08:00:00,74.20,morning_fasted
+            2026-10-02,08:30:00,73.80,post_workout
+        """.trimIndent()
+
+        val count = vm.importData(csvData)
+        advanceUntilIdle()
+
+        assertEquals(2, count)
+        assertEquals(2, weights.entries.value.size)
+        assertEquals(2, vm.state.value.history.size)
+        assertEquals(true, vm.state.value.backupNotice?.isSuccess)
+        assertEquals(2, vm.state.value.backupNotice?.count)
+    }
+
+    @Test
+    fun importInvalidDataSetsFailureNotice() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        val count = vm.importData("invalid csv without valid rows")
+        advanceUntilIdle()
+
+        assertEquals(0, count)
+        assertEquals(0, weights.entries.value.size)
+        assertEquals(false, vm.state.value.backupNotice?.isSuccess)
+        assertEquals(0, vm.state.value.backupNotice?.count)
+    }
+
+    @Test
+    fun backupSheetStateToggles() = runTest(testDispatcher) {
+        val vm = createViewModel()
+        assertEquals(false, vm.state.value.isBackupSheetOpen)
+
+        vm.openBackup()
+        assertEquals(true, vm.state.value.isBackupSheetOpen)
+
+        vm.dismissBackup()
+        assertEquals(false, vm.state.value.isBackupSheetOpen)
     }
 }

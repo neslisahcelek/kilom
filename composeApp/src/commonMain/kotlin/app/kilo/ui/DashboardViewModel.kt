@@ -7,6 +7,7 @@ import app.kilo.data.WeightRepository
 import app.kilo.domain.HistoryItem
 import app.kilo.domain.WeightEntry
 import app.kilo.domain.WeightInputResult
+import app.kilo.domain.WeightTag
 import app.kilo.domain.WeightUnit
 import app.kilo.domain.buildHistory
 import app.kilo.domain.formatWeight
@@ -33,6 +34,12 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
+import app.kilo.domain.exportToCsv
+import app.kilo.domain.exportToJson
+import app.kilo.domain.importFromCsv
+import app.kilo.domain.importFromJson
+import app.kilo.domain.mergeEntries
+
 /** Localizable error keys; the UI maps them to string resources (no raw exceptions reach the UI). */
 enum class UiError { EMPTY, NOT_A_NUMBER, OUT_OF_RANGE, OCR_NO_RESULT, OCR_FAILED }
 
@@ -51,17 +58,25 @@ data class HeroState(
 data class SheetState(
     val input: String = "",
     val selectedDateMillis: Long? = null,
+    val selectedTag: WeightTag? = null,
+    val editingEntryId: String? = null,
     val error: UiError? = null,
     val notice: UiError? = null,
     val scanning: Boolean = false,
     val isPrefilledFromOcr: Boolean = false,
-)
+) {
+    val isEditing: Boolean get() = editingEntryId != null
+}
+
+data class BackupNotice(val count: Int, val isSuccess: Boolean)
 
 data class UiState(
     val unit: WeightUnit = WeightUnit.KG,
     val history: List<HistoryItem> = emptyList(),
     val hero: HeroState? = null,
     val sheet: SheetState? = null,
+    val isBackupSheetOpen: Boolean = false,
+    val backupNotice: BackupNotice? = null,
 )
 
 class DashboardViewModel(
@@ -112,6 +127,29 @@ class DashboardViewModel(
     fun openManual() {
         scanJob?.cancel()
         _state.update { it.copy(sheet = SheetState(isPrefilledFromOcr = false)) }
+    }
+
+    fun openEdit(entry: WeightEntry) {
+        scanJob?.cancel()
+        val tz = timeZone()
+        val localDate = entry.at.toLocalDateTime(tz).date
+        val dateMillis = localDate.atTime(0, 0).toInstant(TimeZone.UTC).toEpochMilliseconds()
+        val initialTag = WeightTag.fromId(entry.tag)
+        _state.update {
+            it.copy(
+                sheet = SheetState(
+                    input = formatWeight(entry.kg, it.unit),
+                    selectedDateMillis = dateMillis,
+                    selectedTag = initialTag,
+                    editingEntryId = entry.id,
+                    isPrefilledFromOcr = false,
+                )
+            )
+        }
+    }
+
+    fun onTagSelected(tag: WeightTag?) {
+        _state.update { it.copy(sheet = it.sheet?.copy(selectedTag = tag)) }
     }
 
     fun onInputChange(text: String) {
@@ -201,18 +239,38 @@ class DashboardViewModel(
                 _state.update { it.copy(sheet = it.sheet?.copy(error = err)) }
             }
             is WeightInputResult.Valid -> {
-                val entryInstant = sheet.selectedDateMillis?.let { utcMillis ->
+                val existing = sheet.editingEntryId?.let { id ->
+                    s.history.firstOrNull { it.entry.id == id }?.entry
+                }
+                val entryInstant = if (sheet.selectedDateMillis != null) {
                     val tz = timeZone()
-                    val todayLocalDate = now().toLocalDateTime(tz).date
-                    val selectedLocalDate = Instant.fromEpochMilliseconds(utcMillis).toLocalDateTime(TimeZone.UTC).date
-                    val entryTime = if (selectedLocalDate == todayLocalDate) {
-                        now().toLocalDateTime(tz).time
+                    val selectedLocalDate = Instant.fromEpochMilliseconds(sheet.selectedDateMillis).toLocalDateTime(TimeZone.UTC).date
+                    if (existing != null && selectedLocalDate == existing.at.toLocalDateTime(tz).date) {
+                        existing.at
                     } else {
-                        LocalTime(8, 0, 0)
+                        val todayLocalDate = now().toLocalDateTime(tz).date
+                        val entryTime = if (selectedLocalDate == todayLocalDate) {
+                            now().toLocalDateTime(tz).time
+                        } else {
+                            LocalTime(8, 0, 0)
+                        }
+                        selectedLocalDate.atTime(entryTime).toInstant(tz)
                     }
-                    selectedLocalDate.atTime(entryTime).toInstant(tz)
-                } ?: now()
-                weights.add(WeightEntry.create(r.kg, entryInstant))
+                } else {
+                    existing?.at ?: now()
+                }
+
+                if (sheet.editingEntryId != null) {
+                    val updatedEntry = WeightEntry(
+                        id = sheet.editingEntryId,
+                        kg = r.kg,
+                        at = entryInstant,
+                        tag = sheet.selectedTag?.id,
+                    )
+                    weights.add(updatedEntry)
+                } else {
+                    weights.add(WeightEntry.create(r.kg, entryInstant, tag = sheet.selectedTag?.id))
+                }
                 _state.update { it.copy(sheet = null) }
                 feedback.success()
             }
@@ -221,5 +279,38 @@ class DashboardViewModel(
 
     fun delete(id: String) {
         weights.delete(id)
+    }
+
+    fun openBackup() {
+        _state.update { it.copy(isBackupSheetOpen = true, backupNotice = null) }
+    }
+
+    fun dismissBackup() {
+        _state.update { it.copy(isBackupSheetOpen = false) }
+    }
+
+    fun clearBackupNotice() {
+        _state.update { it.copy(backupNotice = null) }
+    }
+
+    fun exportCsv(): String = exportToCsv(_state.value.history.map { it.entry }, timeZone())
+
+    fun exportJson(): String = exportToJson(_state.value.history.map { it.entry })
+
+    fun importData(content: String): Int {
+        val tz = timeZone()
+        val trimmed = content.trimStart()
+        val isJson = trimmed.startsWith("{") || trimmed.startsWith("[")
+        val imported = if (isJson) importFromJson(content) else importFromCsv(content, tz)
+        if (imported.isEmpty()) {
+            _state.update { it.copy(backupNotice = BackupNotice(count = 0, isSuccess = false)) }
+            return 0
+        }
+        val current = _state.value.history.map { it.entry }
+        val merged = mergeEntries(current, imported)
+        weights.replaceEntries(merged)
+        feedback.success()
+        _state.update { it.copy(backupNotice = BackupNotice(count = imported.size, isSuccess = true)) }
+        return imported.size
     }
 }

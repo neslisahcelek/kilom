@@ -17,10 +17,12 @@ interface WeightRepository {
     /** Adds, or replaces an entry with the same id. */
     fun add(entry: WeightEntry)
     fun delete(id: String)
+    /** Replaces the entire entries set with [entries], sorting and persisting them. */
+    fun replaceEntries(entries: List<WeightEntry>)
 }
 
 @Serializable
-private data class StoredEntry(val id: String, val kg: Double, val atMillis: Long)
+private data class StoredEntry(val id: String, val kg: Double, val atMillis: Long, val tag: String? = null)
 
 class SettingsWeightRepository(
     private val settings: Settings,
@@ -39,9 +41,13 @@ class SettingsWeightRepository(
         update { list -> list.filterNot { it.id == id } }
     }
 
+    override fun replaceEntries(entries: List<WeightEntry>) {
+        update { entries }
+    }
+
     private fun update(transform: (List<WeightEntry>) -> List<WeightEntry>) {
         val next = sort(transform(_entries.value))
-        settings.putString(KEY, json.encodeToString(serializer, next.map { StoredEntry(it.id, it.kg, it.at.toEpochMilliseconds()) }))
+        settings.putString(KEY, json.encodeToString(serializer, next.map { StoredEntry(it.id, it.kg, it.at.toEpochMilliseconds(), it.tag) }))
         _entries.value = next
     }
 
@@ -49,7 +55,7 @@ class SettingsWeightRepository(
         val raw = settings.getStringOrNull(KEY) ?: return emptyList()
         return try {
             sort(json.decodeFromString(serializer, raw).map {
-                WeightEntry(it.id, it.kg, Instant.fromEpochMilliseconds(it.atMillis))
+                WeightEntry(it.id, it.kg, Instant.fromEpochMilliseconds(it.atMillis), it.tag)
             })
         } catch (e: Exception) {
             emptyList()

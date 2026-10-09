@@ -16,17 +16,30 @@ data class WeightEntry(
     val id: String,
     val kg: Double,
     val at: Instant,
+    val tag: String? = null,
 ) {
     companion object {
-        fun create(kg: Double, at: Instant, random: Random = Random.Default): WeightEntry {
+        fun create(kg: Double, at: Instant, tag: String? = null, random: Random = Random.Default): WeightEntry {
             val rand = random.nextLong().let { if (it == Long.MIN_VALUE) 0L else abs(it) }.toString(36)
             return WeightEntry(
                 id = "${at.toEpochMilliseconds()}_$rand",
                 // Input parsing sets display precision; preserve the exact kg conversion of lb input.
                 kg = kg,
                 at = at,
+                tag = tag,
             )
         }
+    }
+}
+
+enum class WeightTag(val id: String) {
+    MORNING_FASTED("morning_fasted"),
+    POST_WORKOUT("post_workout"),
+    HEAVY_MEAL("heavy_meal"),
+    WATER_RETENTION("water_retention");
+
+    companion object {
+        fun fromId(id: String?): WeightTag? = entries.firstOrNull { it.id == id }
     }
 }
 
