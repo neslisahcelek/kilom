@@ -31,6 +31,10 @@ import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.AVCaptureFocusModeContinuousAutoFocus
 import platform.AVFoundation.AVCaptureExposureModeContinuousAutoExposure
+import platform.AVFoundation.exposureMode
+import platform.AVFoundation.focusMode
+import platform.AVFoundation.isExposureModeSupported
+import platform.AVFoundation.isFocusModeSupported
 import platform.AVFoundation.fileDataRepresentation
 import platform.AVFoundation.hasTorch
 import platform.AVFoundation.torchMode
