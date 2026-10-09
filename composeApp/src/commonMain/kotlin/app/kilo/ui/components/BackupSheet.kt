@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -341,7 +342,7 @@ fun BackupSheet(
                             color = colors.textSecondary,
                             modifier = Modifier
                                 .clip(RoundedCornerShape(12.dp))
-                                .clickable(onClick = onDismiss)
+                                .clickable(role = Role.Button, onClick = onDismiss)
                                 .padding(horizontal = 24.dp, vertical = 10.dp),
                         )
                     }
@@ -372,7 +373,7 @@ private fun BackupActionButton(
             .clip(RoundedCornerShape(16.dp))
             .background(bg)
             .border(1.dp, border, RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
+            .clickable(role = Role.Button, onClick = onClick)
             .padding(horizontal = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
