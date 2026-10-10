@@ -33,14 +33,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -67,9 +60,7 @@ import app.kilo.ui.UiError
 import app.kilo.ui.theme.KiloTheme
 import dev.chrisbanes.haze.HazeState
 import kilo.composeapp.generated.resources.Res
-import kilo.composeapp.generated.resources.date_picker_cancel
-import kilo.composeapp.generated.resources.date_picker_confirm
-import kilo.composeapp.generated.resources.date_picker_title
+import kilo.composeapp.generated.resources.date_from_photo
 import kilo.composeapp.generated.resources.date_today
 import kilo.composeapp.generated.resources.date_yesterday
 import kilo.composeapp.generated.resources.error_empty
@@ -88,12 +79,9 @@ import kilo.composeapp.generated.resources.tag_section_title
 import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atTime
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntrySheet(
     sheet: SheetState,
@@ -231,17 +219,33 @@ fun EntrySheet(
                         val isToday = selectedLocalDate == null || selectedLocalDate.toEpochDays() == todayEpochDays
                         val isYesterday = selectedLocalDate != null && selectedLocalDate.toEpochDays() == todayEpochDays - 1
 
-                        val dateLabel = when {
+                        val formattedDate = when {
                             isToday -> stringResource(Res.string.date_today)
                             isYesterday -> stringResource(Res.string.date_yesterday)
-                            else -> "${selectedLocalDate.dayOfMonth} ${monthName(selectedLocalDate.monthNumber)} ${selectedLocalDate.year}"
+                            selectedLocalDate != null -> "${selectedLocalDate.dayOfMonth} ${localizedMonthShortName(selectedLocalDate.monthNumber)} ${selectedLocalDate.year}"
+                            else -> stringResource(Res.string.date_today)
+                        }
+
+                        val isAutoDetected = sheet.isDateAutoDetected
+                        val pillIcon = if (isAutoDetected) "📸" else "📅"
+                        val pillText = if (isAutoDetected) {
+                            "$formattedDate • ${stringResource(Res.string.date_from_photo)}"
+                        } else {
+                            formattedDate
                         }
 
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(999.dp))
-                                .background(colors.glassTint.copy(alpha = 0.65f))
-                                .border(1.dp, colors.glassBorder, RoundedCornerShape(999.dp))
+                                .background(
+                                    if (isAutoDetected) colors.accent.copy(alpha = 0.16f)
+                                    else colors.glassTint.copy(alpha = 0.65f)
+                                )
+                                .border(
+                                    1.dp,
+                                    if (isAutoDetected) colors.accent.copy(alpha = 0.5f) else colors.glassBorder,
+                                    RoundedCornerShape(999.dp)
+                                )
                                 .clickable { showDatePicker = true }
                                 .padding(horizontal = 14.dp, vertical = 6.dp),
                             contentAlignment = Alignment.Center,
@@ -251,13 +255,13 @@ fun EntrySheet(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                             ) {
                                 Text(
-                                    text = "📅",
+                                    text = pillIcon,
                                     fontSize = 12.sp,
                                 )
                                 Text(
-                                    text = dateLabel,
+                                    text = pillText,
                                     style = typography.caption.copy(fontWeight = FontWeight.SemiBold),
-                                    color = if (!isToday) colors.accent else colors.textSecondary,
+                                    color = if (isAutoDetected || !isToday) colors.accent else colors.textSecondary,
                                 )
                             }
                         }
@@ -414,65 +418,18 @@ fun EntrySheet(
                 }
             }
         }
-    }
 
-    // Date Picker Dialog
-    if (showDatePicker) {
-        // DatePicker represents calendar dates as UTC midnight, regardless of the device zone.
-        val todayUtcMillis = remember(timeZone) {
-            val localToday = Clock.System.now().toLocalDateTime(timeZone).date
-            localToday.atTime(0, 0).toInstant(TimeZone.UTC).toEpochMilliseconds()
-        }
-        val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = sheet.selectedDateMillis ?: todayUtcMillis,
-            selectableDates = remember(todayUtcMillis) {
-                object : SelectableDates {
-                    override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                        return utcTimeMillis <= todayUtcMillis
-                    }
-                }
-            },
-        )
-
-        DatePickerDialog(
-            onDismissRequest = { showDatePicker = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onDateSelected(datePickerState.selectedDateMillis)
-                        showDatePicker = false
-                    },
-                ) {
-                    Text(
-                        text = stringResource(Res.string.date_picker_confirm),
-                        color = colors.accent,
-                        style = typography.headline,
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) {
-                    Text(
-                        text = stringResource(Res.string.date_picker_cancel),
-                        color = colors.textSecondary,
-                        style = typography.body,
-                    )
-                }
-            },
-            colors = DatePickerDefaults.colors(
-                containerColor = colors.backgroundTop,
-            ),
-        ) {
-            DatePicker(
-                state = datePickerState,
-                title = {
-                    Text(
-                        text = stringResource(Res.string.date_picker_title),
-                        style = typography.headline,
-                        color = colors.textPrimary,
-                        modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 16.dp),
-                    )
+        // iOS Liquid Glass Date Picker
+        if (showDatePicker) {
+            IosDatePicker(
+                selectedDateMillis = sheet.selectedDateMillis,
+                onDateSelected = { millis ->
+                    onDateSelected(millis)
+                    showDatePicker = false
                 },
+                onDismiss = { showDatePicker = false },
+                hazeState = hazeState,
+                timeZone = timeZone,
             )
         }
     }

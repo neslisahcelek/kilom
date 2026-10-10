@@ -19,6 +19,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -74,12 +75,15 @@ class DashboardViewModelTest {
         weights: SettingsWeightRepository = SettingsWeightRepository(MapSettings()),
         prefs: SettingsPrefsRepository = SettingsPrefsRepository(MapSettings()),
         healthSync: app.kilo.platform.HealthSync = app.kilo.platform.NoOpHealthSync,
+        readText: suspend (ByteArray) -> List<String> = { emptyList() },
+        extractDate: (ByteArray) -> Instant? = { null },
     ): DashboardViewModel = DashboardViewModel(
         weights = weights,
         prefs = prefs,
-        readText = { emptyList() },
+        readText = readText,
         feedback = FakeFeedback(),
         healthSync = healthSync,
+        extractDate = extractDate,
         now = { fixedNow },
         timeZone = { utc },
     )
@@ -377,5 +381,58 @@ class DashboardViewModelTest {
         assertEquals(2, fakeHealth.writtenBatches[0].size)
         assertEquals(2, vm.state.value.healthSyncNotice?.count)
         assertEquals(true, vm.state.value.healthSyncNotice?.isSuccess)
+    }
+
+    @Test
+    fun onImageWithExifDateSetsAutoDetectDateAndPreservesInstantOnSave() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val photoCaptureInstant = Instant.parse("2026-10-05T08:15:30Z")
+        val vm = createViewModel(
+            weights = weights,
+            readText = { listOf("75.4 kg") },
+            extractDate = { photoCaptureInstant },
+        )
+        advanceUntilIdle()
+
+        vm.onImage(byteArrayOf(1, 2, 3))
+        advanceUntilIdle()
+
+        val sheet = vm.state.value.sheet
+        assertNotNull(sheet)
+        assertEquals(true, sheet.isDateAutoDetected)
+        assertEquals(photoCaptureInstant, sheet.capturedInstant)
+        assertEquals("75.40", sheet.input)
+
+        // Save
+        vm.save()
+        advanceUntilIdle()
+
+        val entries = weights.entries.value
+        assertEquals(1, entries.size)
+        assertEquals(75.4, entries[0].kg)
+        assertEquals(photoCaptureInstant, entries[0].at)
+    }
+
+    @Test
+    fun onDateSelectedOverridesAutoDetectedFlag() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val photoCaptureInstant = Instant.parse("2026-10-05T08:15:30Z")
+        val vm = createViewModel(
+            weights = weights,
+            readText = { listOf("75.4 kg") },
+            extractDate = { photoCaptureInstant },
+        )
+        advanceUntilIdle()
+
+        vm.onImage(byteArrayOf(1, 2, 3))
+        advanceUntilIdle()
+
+        assertEquals(true, vm.state.value.sheet?.isDateAutoDetected)
+
+        // User manually changes date
+        val newDateMillis = Instant.parse("2026-10-04T00:00:00Z").toEpochMilliseconds()
+        vm.onDateSelected(newDateMillis)
+
+        assertEquals(false, vm.state.value.sheet?.isDateAutoDetected)
     }
 }

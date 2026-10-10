@@ -15,6 +15,7 @@ import app.kilo.domain.lbToKg
 import app.kilo.domain.parseWeightInput
 import app.kilo.platform.HealthSync
 import app.kilo.platform.NoOpHealthSync
+import app.kilo.platform.extractImageCaptureDate
 import app.kilo.ocr.WeightParser
 import app.kilo.ocr.logOcr
 import app.kilo.ocr.logOcrLines
@@ -66,6 +67,8 @@ data class SheetState(
     val notice: UiError? = null,
     val scanning: Boolean = false,
     val isPrefilledFromOcr: Boolean = false,
+    val capturedInstant: Instant? = null,
+    val isDateAutoDetected: Boolean = false,
 ) {
     val isEditing: Boolean get() = editingEntryId != null
 }
@@ -93,6 +96,7 @@ class DashboardViewModel(
     private val readText: suspend (ByteArray) -> List<String>,
     private val feedback: DashboardFeedback,
     private val healthSync: HealthSync = NoOpHealthSync,
+    private val extractDate: (ByteArray) -> Instant? = { extractImageCaptureDate(it) },
     private val now: () -> Instant = {
         Clock.System.now().let { Instant.fromEpochSeconds(it.epochSeconds, it.nanosecondsOfSecond) }
     },
@@ -175,7 +179,7 @@ class DashboardViewModel(
     }
 
     fun onDateSelected(millis: Long?) {
-        _state.update { it.copy(sheet = it.sheet?.copy(selectedDateMillis = millis)) }
+        _state.update { it.copy(sheet = it.sheet?.copy(selectedDateMillis = millis, isDateAutoDetected = false)) }
     }
 
     fun dismissSheet() {
@@ -187,7 +191,22 @@ class DashboardViewModel(
         scanJob?.cancel()
         val currentScanId = ++scanCounter
         logOcr("scan=$currentScanId started bytes=${bytes.size}")
-        _state.update { it.copy(sheet = SheetState(scanning = true, isPrefilledFromOcr = false)) }
+        val captureInstant = extractDate(bytes)
+        val initialSheetState = if (captureInstant != null) {
+            val tz = timeZone()
+            val localDate = captureInstant.toLocalDateTime(tz).date
+            val dateMillis = localDate.atTime(0, 0).toInstant(TimeZone.UTC).toEpochMilliseconds()
+            SheetState(
+                scanning = true,
+                isPrefilledFromOcr = false,
+                selectedDateMillis = dateMillis,
+                capturedInstant = captureInstant,
+                isDateAutoDetected = true,
+            )
+        } else {
+            SheetState(scanning = true, isPrefilledFromOcr = false)
+        }
+        _state.update { it.copy(sheet = initialSheetState) }
         val job = viewModelScope.launch {
             val lines = try {
                 readText(bytes)
@@ -263,7 +282,11 @@ class DashboardViewModel(
                 val entryInstant = if (sheet.selectedDateMillis != null) {
                     val tz = timeZone()
                     val selectedLocalDate = Instant.fromEpochMilliseconds(sheet.selectedDateMillis).toLocalDateTime(TimeZone.UTC).date
-                    if (existing != null && selectedLocalDate == existing.at.toLocalDateTime(tz).date) {
+                    if (sheet.isDateAutoDetected && sheet.capturedInstant != null &&
+                        selectedLocalDate == sheet.capturedInstant.toLocalDateTime(tz).date
+                    ) {
+                        sheet.capturedInstant
+                    } else if (existing != null && selectedLocalDate == existing.at.toLocalDateTime(tz).date) {
                         existing.at
                     } else {
                         val todayLocalDate = now().toLocalDateTime(tz).date
@@ -274,6 +297,8 @@ class DashboardViewModel(
                         }
                         selectedLocalDate.atTime(entryTime).toInstant(tz)
                     }
+                } else if (sheet.isDateAutoDetected && sheet.capturedInstant != null) {
+                    sheet.capturedInstant
                 } else {
                     existing?.at ?: now()
                 }
