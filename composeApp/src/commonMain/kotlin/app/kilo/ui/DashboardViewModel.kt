@@ -321,7 +321,7 @@ class DashboardViewModel(
                 feedback.success()
                 if (_state.value.healthSyncEnabled) {
                     viewModelScope.launch {
-                        healthSync.writeWeight(savedEntry.kg, savedEntry.at)
+                        healthSync.writeWeight(savedEntry.kg, savedEntry.at, savedEntry.id)
                     }
                 }
             }

@@ -50,7 +50,7 @@ class DashboardViewModelTest {
             return authResult
         }
 
-        override suspend fun writeWeight(kg: Double, timestamp: Instant): Boolean {
+        override suspend fun writeWeight(kg: Double, timestamp: Instant, syncId: String?): Boolean {
             writtenSamples.add(kg to timestamp)
             return true
         }

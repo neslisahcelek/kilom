@@ -14,7 +14,7 @@ class AndroidHealthSync : HealthSync {
 
     override suspend fun requestAuthorization(): Boolean = false
 
-    override suspend fun writeWeight(kg: Double, timestamp: Instant): Boolean = false
+    override suspend fun writeWeight(kg: Double, timestamp: Instant, syncId: String?): Boolean = false
 
     override suspend fun writeWeights(entries: List<WeightEntry>): Int = 0
 }

@@ -46,6 +46,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -99,11 +101,20 @@ fun EntrySheet(
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     var showDatePicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(sheet.scanning) {
         if (!sheet.scanning) {
             focusRequester.requestFocus()
+        }
+    }
+
+    LaunchedEffect(showDatePicker) {
+        if (showDatePicker) {
+            focusManager.clearFocus(force = true)
+            keyboardController?.hide()
         }
     }
 
@@ -125,7 +136,10 @@ fun EntrySheet(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = { /* consume */ },
+                    onClick = {
+                        focusManager.clearFocus(force = true)
+                        keyboardController?.hide()
+                    },
                 )
                 .fillMaxWidth()
                 .navigationBarsPadding()
@@ -246,7 +260,11 @@ fun EntrySheet(
                                     if (isAutoDetected) colors.accent.copy(alpha = 0.5f) else colors.glassBorder,
                                     RoundedCornerShape(999.dp)
                                 )
-                                .clickable { showDatePicker = true }
+                                .clickable {
+                                    focusManager.clearFocus(force = true)
+                                    keyboardController?.hide()
+                                    showDatePicker = true
+                                }
                                 .padding(horizontal = 14.dp, vertical = 6.dp),
                             contentAlignment = Alignment.Center,
                         ) {

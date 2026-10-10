@@ -20,12 +20,14 @@ interface HealthSync {
 
     /**
      * Saves a single weight entry (in kg) to the platform health store.
+     * [syncId] is an optional unique identifier used for deduplication.
      * Returns true on success.
      */
-    suspend fun writeWeight(kg: Double, timestamp: Instant): Boolean
+    suspend fun writeWeight(kg: Double, timestamp: Instant, syncId: String? = null): Boolean
 
     /**
      * Batch writes weight entries to the platform health store.
+     * Automatically deduplicates samples.
      * Returns the count of successfully written entries.
      */
     suspend fun writeWeights(entries: List<WeightEntry>): Int
@@ -37,7 +39,7 @@ interface HealthSync {
 object NoOpHealthSync : HealthSync {
     override val isSupported: Boolean = false
     override suspend fun requestAuthorization(): Boolean = false
-    override suspend fun writeWeight(kg: Double, timestamp: Instant): Boolean = false
+    override suspend fun writeWeight(kg: Double, timestamp: Instant, syncId: String?): Boolean = false
     override suspend fun writeWeights(entries: List<WeightEntry>): Int = 0
 }
 
