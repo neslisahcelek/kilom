@@ -11,15 +11,26 @@ data class ViewfinderRect(
     val bottom: Float,
 )
 
+/** Camera permission and availability lifecycle status. */
+enum class CameraPermissionStatus {
+    CHECKING,
+    GRANTED,
+    DENIED,
+    NOT_SUPPORTED,
+}
+
 /** Whether the platform supports the in-app live viewfinder camera. */
 expect val isCustomCameraSupported: Boolean
 
 /** Platform camera controller for live viewfinder preview and ROI capture. */
 expect class CameraController {
+    val permissionStatus: CameraPermissionStatus
     val isTorchActive: Boolean
     fun toggleTorch()
     suspend fun capture(viewfinder: ViewfinderRect): ByteArray?
     fun release()
+    fun openSettings()
+    fun refreshPermission()
 }
 
 @Composable

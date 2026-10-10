@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 actual val isCustomCameraSupported: Boolean = false
 
 actual class CameraController {
+    actual val permissionStatus: CameraPermissionStatus = CameraPermissionStatus.NOT_SUPPORTED
+
     var isTorchActiveState by mutableStateOf(false)
         private set
 
@@ -29,6 +31,10 @@ actual class CameraController {
     }
 
     actual fun release() {}
+
+    actual fun openSettings() {}
+
+    actual fun refreshPermission() {}
 }
 
 @Composable

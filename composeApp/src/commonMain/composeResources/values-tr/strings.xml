@@ -65,4 +65,10 @@
     <string name="health_sync_all_loading">Sağlık uygulamasına aktarılıyor...</string>
     <string name="health_sync_success">%1$d kayıt Sağlık uygulamasına aktarıldı.</string>
     <string name="health_sync_denied">Sağlık uygulamasında gerekli izin verilmedi.</string>
+    <string name="camera_permission_denied_title">Kamera İzni Gerekiyor</string>
+    <string name="camera_permission_denied_desc">Kilom\'un tartınızı tarayabilmesi için lütfen Ayarlar\'dan kamera erişimine izin verin.</string>
+    <string name="camera_permission_open_settings">Ayarlar\'ı Aç</string>
+    <string name="camera_unavailable_title">Kamera Kullanılamıyor</string>
+    <string name="camera_unavailable_desc">Bu cihazda veya simülatörde kamera donanımı bulunamadı.</string>
+    <string name="camera_choose_gallery">Galeriden Seç</string>
 </resources>

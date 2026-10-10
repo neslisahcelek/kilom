@@ -65,4 +65,10 @@
     <string name="health_sync_all_loading">Syncing to Health...</string>
     <string name="health_sync_success">Exported %1$d entries to Health successfully.</string>
     <string name="health_sync_denied">Permission was not granted in Health settings.</string>
+    <string name="camera_permission_denied_title">Camera Permission Required</string>
+    <string name="camera_permission_denied_desc">Please allow camera access in Settings so Kilom can scan your scale.</string>
+    <string name="camera_permission_open_settings">Open Settings</string>
+    <string name="camera_unavailable_title">Camera Unavailable</string>
+    <string name="camera_unavailable_desc">No camera was found on this device or simulator.</string>
+    <string name="camera_choose_gallery">Choose from Gallery</string>
 </resources>
