@@ -66,7 +66,11 @@ import kilo.composeapp.generated.resources.cycle_source_sims_desc
 import kilo.composeapp.generated.resources.cycle_source_sims_title
 import kilo.composeapp.generated.resources.cycle_tab_body
 import kilo.composeapp.generated.resources.cycle_tab_nutrition
+import kilo.composeapp.generated.resources.cycle_tab_workout
 import kilo.composeapp.generated.resources.cycle_tab_sources
+import kilo.composeapp.generated.resources.cycle_workout_focus_section
+import kilo.composeapp.generated.resources.cycle_workout_physiology_section
+import kilo.composeapp.generated.resources.cycle_workout_strategy_title
 import kilo.composeapp.generated.resources.cycle_update_period_cta
 import kilo.composeapp.generated.resources.cycle_water_retention_alert
 import kotlinx.datetime.DateTimeUnit
@@ -189,7 +193,8 @@ fun CycleSheet(
                 when (tabIndex) {
                     0 -> BodyAndHormoneTab(info = activeDayInfo)
                     1 -> NutritionTab(info = activeDayInfo)
-                    2 -> SourcesTab()
+                    2 -> WorkoutTab(info = activeDayInfo)
+                    3 -> SourcesTab()
                 }
             }
 
@@ -338,6 +343,7 @@ private fun CycleTabSelector(
     val tabs = listOf(
         stringResource(Res.string.cycle_tab_body),
         stringResource(Res.string.cycle_tab_nutrition),
+        stringResource(Res.string.cycle_tab_workout),
         stringResource(Res.string.cycle_tab_sources),
     )
 
@@ -361,9 +367,10 @@ private fun CycleTabSelector(
             ) {
                 Text(
                     text = title,
-                    style = typography.caption,
+                    style = typography.caption.copy(fontSize = 11.5.sp),
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                     color = if (isSelected) colors.onAccent else colors.textSecondary,
+                    maxLines = 1,
                 )
             }
         }
@@ -528,6 +535,118 @@ private fun NutritionTab(info: CycleDayInfo) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun WorkoutTab(info: CycleDayInfo) {
+    val colors = KiloTheme.colors
+    val typography = KiloTheme.type
+    val advice = info.advice
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        // Intensity Banner
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(colors.accent.copy(alpha = 0.12f))
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = workoutIntensityEmoji(advice.workoutIntensity), fontSize = 22.sp)
+                Spacer(Modifier.width(10.dp))
+                Column {
+                    Text(
+                        text = workoutIntensityName(advice.workoutIntensity),
+                        style = typography.headline,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.textPrimary,
+                    )
+                    Text(
+                        text = stringResource(Res.string.cycle_workout_strategy_title),
+                        style = typography.caption,
+                        color = colors.accent,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+        }
+
+        // Workout Caution (if any)
+        advice.workoutCautionKey?.let { cautionKey ->
+            Spacer(Modifier.height(12.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(colors.danger.copy(alpha = 0.12f))
+                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text = "⚠️", fontSize = 16.sp)
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    text = resolveCycleString(cautionKey),
+                    style = typography.caption,
+                    fontWeight = FontWeight.Medium,
+                    color = colors.danger,
+                )
+            }
+        }
+
+        Spacer(Modifier.height(14.dp))
+
+        // Lifting Strategy Card
+        InfoCard(
+            title = stringResource(Res.string.cycle_workout_strategy_title),
+            headline = resolveCycleString(advice.workoutTitleKey),
+            body = resolveCycleString(advice.workoutDescKey),
+            emoji = "🏋️",
+        )
+
+        Spacer(Modifier.height(14.dp))
+
+        // Target Focus & Exercises
+        Text(
+            text = "🎯 ${stringResource(Res.string.cycle_workout_focus_section)}",
+            style = typography.headline,
+            fontWeight = FontWeight.Bold,
+            color = colors.textPrimary,
+        )
+        Spacer(Modifier.height(8.dp))
+        advice.workoutFocusKeys.forEach { focusKey ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(colors.accent.copy(alpha = 0.08f))
+                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text = "⚡", fontSize = 13.sp)
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    text = resolveCycleString(focusKey),
+                    style = typography.subhead,
+                    fontWeight = FontWeight.Medium,
+                    color = colors.textPrimary,
+                )
+            }
+        }
+
+        Spacer(Modifier.height(14.dp))
+
+        // Biomechanics & Muscle Insight Card
+        InfoCard(
+            title = stringResource(Res.string.cycle_workout_physiology_section),
+            headline = null,
+            body = resolveCycleString(advice.hormoneInsightKey),
+            emoji = "🔬",
+        )
     }
 }
 

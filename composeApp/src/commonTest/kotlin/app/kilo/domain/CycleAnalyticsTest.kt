@@ -42,6 +42,8 @@ class CycleAnalyticsTest {
         assertTrue(info.isToday)
         assertFalse(info.advice.waterRetentionRisk)
         assertEquals(EnergyLevel.LOW_REST, info.advice.energyLevel)
+        assertEquals(WorkoutIntensity.REST_RECOVERY, info.advice.workoutIntensity)
+        assertEquals("workout_caution_pelvic_pressure", info.advice.workoutCautionKey)
     }
 
     @Test
@@ -55,6 +57,8 @@ class CycleAnalyticsTest {
         assertFalse(info.isPeriodDay)
         assertFalse(info.advice.waterRetentionRisk)
         assertEquals(EnergyLevel.RISING, info.advice.energyLevel)
+        assertEquals(WorkoutIntensity.HIGH_INTENSITY, info.advice.workoutIntensity)
+        assertNull(info.advice.workoutCautionKey)
     }
 
     @Test
@@ -67,6 +71,8 @@ class CycleAnalyticsTest {
         assertEquals(CyclePhase.OVULATION, info.phase)
         assertFalse(info.isPeriodDay)
         assertEquals(EnergyLevel.PEAK, info.advice.energyLevel)
+        assertEquals(WorkoutIntensity.PEAK_POWER, info.advice.workoutIntensity)
+        assertEquals("workout_caution_acl_ligament", info.advice.workoutCautionKey)
     }
 
     @Test
@@ -79,6 +85,8 @@ class CycleAnalyticsTest {
         assertEquals(CyclePhase.LUTEAL, info.phase)
         assertTrue(info.advice.waterRetentionRisk)
         assertTrue(state.isWaterRetentionActive)
+        assertEquals(WorkoutIntensity.MODERATE_STEADY, info.advice.workoutIntensity)
+        assertEquals("workout_caution_rpe_elevation", info.advice.workoutCautionKey)
     }
 
     @Test
@@ -91,6 +99,8 @@ class CycleAnalyticsTest {
         assertEquals(CyclePhase.LUTEAL, info.phase)
         assertTrue(info.advice.waterRetentionRisk)
         assertEquals(2, state.daysUntilNextPeriod)
+        assertEquals(WorkoutIntensity.REST_RECOVERY, info.advice.workoutIntensity)
+        assertEquals("workout_caution_catabolism_protein", info.advice.workoutCautionKey)
     }
 
     @Test

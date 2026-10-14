@@ -1,6 +1,7 @@
 package app.kilo.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -181,6 +182,31 @@ fun CycleCard(
                             color = colors.positive,
                         )
                     }
+                }
+
+                // Workout Intensity Pill
+                val workoutEmoji = workoutIntensityEmoji(advice.workoutIntensity)
+                val workoutName = workoutIntensityName(advice.workoutIntensity)
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(colors.accent.copy(alpha = 0.08f))
+                        .border(1.dp, colors.accent.copy(alpha = 0.22f), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 12.dp, vertical = 7.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(text = workoutEmoji, fontSize = 14.sp)
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "$workoutName • ${resolveCycleString(advice.workoutTitleKey)}",
+                        style = typography.caption.copy(fontSize = 11.5.sp),
+                        fontWeight = FontWeight.SemiBold,
+                        color = colors.accent,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
 
                 Spacer(Modifier.height(14.dp))

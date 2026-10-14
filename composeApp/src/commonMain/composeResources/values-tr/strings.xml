@@ -320,4 +320,76 @@
     <string name="cycle_source_sims_desc">Kadın infradian ritmi, luteal faz metabolik harcama artışı (+100–300 kcal/gün) ve aldosteron kaynaklı sodyum/sıvı tutulması araştırmaları.</string>
     <string name="cycle_source_pubmed_title">Hakemli Endokrin ve Klinik Beslenme Çalışmaları</string>
     <string name="cycle_source_pubmed_desc">PMS sıvı regülasyonunda magnezyum ve B6 takviyesi (Obstetrics &amp; Gynecology) ve turpgillerdeki glukosinolatlar ile östrojen detoksu üzerine klinik yayınlar.</string>
+
+    <!-- Cycle-Synced Strength & Weight Training -->
+    <string name="cycle_tab_workout">Ağırlık</string>
+    <string name="cycle_card_workout_badge">Antrenman</string>
+    <string name="cycle_workout_strategy_title">Günün Ağırlık Stratejisi</string>
+    <string name="cycle_workout_focus_section">Hedef Odak &amp; Hareketler</string>
+    <string name="cycle_workout_physiology_section">Biyomekanik &amp; Hormon Analizi</string>
+    <string name="cycle_workout_caution_section">Sakatlık Önleme &amp; Dikkat</string>
+
+    <!-- Workout Intensity Labels -->
+    <string name="workout_intensity_rest_recovery">Aktif İyileşme &amp; Mobilite</string>
+    <string name="workout_intensity_moderate_steady">Kontrollü Hacim &amp; Makineler</string>
+    <string name="workout_intensity_high_intensity">Yüksek Hacimli Hipertrofi</string>
+    <string name="workout_intensity_peak_power">Maksimum Güç &amp; PR Eşiği</string>
+
+    <!-- Strength Training Micro-Period Titles & Descriptions -->
+    <string name="workout_menstrual_early_title">Aktif İyileşme &amp; Hafif Üst Vücut</string>
+    <string name="workout_menstrual_early_desc">Karın içi yüksek basınç uterus kramplarını tetikleyebilir. Ağır squat veya deadlift yerine hafif dambıl, üst vücut formu ve pelvik mobilite tercih edin.</string>
+
+    <string name="workout_menstrual_late_title">Orta Ağırlık &amp; Kademeli Hacim</string>
+    <string name="workout_menstrual_late_desc">Hormonlar dip seviyedeyken kas toparlanma hızı yüksektir. Kontrollü 8–12 tekrar aralığında bileşik ağırlıklara başlayın.</string>
+
+    <string name="workout_follicular_early_title">Hipertrofi Hacmi &amp; Progressive Overload</string>
+    <string name="workout_follicular_early_desc">Yükselen östrojen insülin duyarlılığını ve kas protein sentezini zirveye taşır. Ağırlık ve set hacmini artırmak için en verimli evre!</string>
+
+    <string name="workout_follicular_late_title">Maksimum Güç &amp; 1RM / PR Eşiği</string>
+    <string name="workout_follicular_late_desc">Östrojen tepe noktada ve hafif testosteron piki mevcut. Squat, deadlift, hip thrust gibi ana hareketlerde kişisel rekor (PR) denemek için döngünün en güçlü dönemi.</string>
+
+    <string name="workout_ovulation_title">Patlayıcı Güç &amp; Eklem Koruma</string>
+    <string name="workout_ovulation_desc">Nöromüsküler patlayıcı güç döngünün zirvesindedir. Ancak östrojen zirvesi eklem bağ dokusunu gevşetir. Dizlerin içe çökmesini engelleyin ve kontrollü negatif yapın.</string>
+
+    <string name="workout_luteal_early_title">Sabit Hacim &amp; Süpersetler</string>
+    <string name="workout_luteal_early_desc">Progesteron yükselişi vücut sıcaklığını +0.3–0.5°C artırır. Çok ağır tek tekrarlar yerine orta ağırlıkta kontrollü süpersetler ve izolasyona odaklanın.</string>
+
+    <string name="workout_luteal_mid_title">Makine Odaklı Direnç &amp; Yüksek Tekrar</string>
+    <string name="workout_luteal_mid_desc">Sıvı tutumu eklemlerde şişkinlik yaratabilir ve kilolar daha ağır hissedilebilir (RPE artışı). Serbest bar yerine kablo ve makinelere geçerek eklem güvenliğini sağlayın.</string>
+
+    <string name="workout_luteal_late_title">Deload &amp; Kas Koruma Seansı</string>
+    <string name="workout_luteal_late_desc">Hormonların ani düşüşü merkezi sinir sistemini yorar ve kas yıkımını (katabolizma) tetikler. Ağırlıkları 40–50%% düşürün, seansı 40 dk altında tutun ve antrenman sonrası protein tüketin.</string>
+
+    <!-- Workout Focus Chips -->
+    <string name="workout_focus_light_upper">Hafif Dambıl / Üst Vücut</string>
+    <string name="workout_focus_mobility">Mobilite &amp; Esneme</string>
+    <string name="workout_focus_pelvic_warmup">Glute Aktivasyonu</string>
+    <string name="workout_focus_moderate_compound">Orta Ağırlık Bileşik Hareketler</string>
+    <string name="workout_focus_hypertrophy_8_12">Hipertrofi (8–12 Tekrar)</string>
+    <string name="workout_focus_dynamic_warmup">Dinamik Isınma</string>
+    <string name="workout_focus_progressive_overload">Ağırlık Artırma (Overload)</string>
+    <string name="workout_focus_volume_sets">Yüksek Set Hacmi (4–5 Set)</string>
+    <string name="workout_focus_drop_sets">Drop Setler</string>
+    <string name="workout_focus_heavy_compounds">Ağır Squat &amp; Deadlift</string>
+    <string name="workout_focus_pr_attempts">PR &amp; 1RM Denemeleri</string>
+    <string name="workout_focus_strength_3_5">Kuvvet (3–5 Tekrar)</string>
+    <string name="workout_focus_explosive_power">Patlayıcı Kuvvet</string>
+    <string name="workout_focus_hip_thrust">Ağır Hip Thrust</string>
+    <string name="workout_focus_controlled_eccentric">Kontrollü Negatif Tempo</string>
+    <string name="workout_focus_superset">Süpersetler &amp; İzolasyon</string>
+    <string name="workout_focus_isolation_exercises">Kontrollü Tempo (3-1-1)</string>
+    <string name="workout_focus_controlled_tempo">10–12 Tekrar Hacim</string>
+    <string name="workout_focus_machines_cables">Kablo &amp; Makine Egzersizleri</string>
+    <string name="workout_focus_high_reps_12_15">12–15 Tekrar Aralığı</string>
+    <string name="workout_focus_joint_friendly">Eklem Dostu Direnç</string>
+    <string name="workout_focus_deload_half_weight">Deload (Ağırlığı 40–50%% Düşür)</string>
+    <string name="workout_focus_form_refinement">Form &amp; Hız Tekrarı</string>
+    <string name="workout_focus_mobility_stretch">Bant Direnci &amp; Mobilite</string>
+
+    <!-- Workout Cautions -->
+    <string name="workout_caution_pelvic_pressure">Karın içi basıncı artıran ağır bacak egzersizlerinden kaçının.</string>
+    <string name="workout_caution_acl_ligament">⚠️ ACL Uyarısı: Östrojen pikinde diz bağları gevşer. Diz ve glute stabilizasyon ısınmasını en az 5–7 dk yapın.</string>
+    <string name="workout_caution_thermoregulation">Vücut ısısı yüksek (+0.5°C): Daha erken terleyebilirsiniz; bol soğuk su ve elektrolit tüketin.</string>
+    <string name="workout_caution_rpe_elevation">Aynı kilo daha ağır gelebilir; ağırlık yerine kasa odaklanın ve formunuzu koruyun.</string>
+    <string name="workout_caution_catabolism_protein">Katabolizma Uyarısı: Kas yıkımı yüksektir. Antrenmandan sonraki 30 dk içinde lösin ve protein tüketin.</string>
 </resources>

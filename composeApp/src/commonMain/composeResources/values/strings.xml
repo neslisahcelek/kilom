@@ -320,4 +320,76 @@
     <string name="cycle_source_sims_desc">Research on female infradian rhythm, luteal phase metabolic expenditure increase (+100–300 kcal/day), and aldosterone-mediated fluid retention.</string>
     <string name="cycle_source_pubmed_title">Peer-Reviewed Endocrine &amp; Nutritional Trials</string>
     <string name="cycle_source_pubmed_desc">Clinical studies on magnesium and B6 supplementation for PMS fluid regulation (Obstetrics &amp; Gynecology) and estrogen clearance through cruciferous glucosinolates.</string>
+
+    <!-- Cycle-Synced Strength & Weight Training -->
+    <string name="cycle_tab_workout">Strength</string>
+    <string name="cycle_card_workout_badge">Lifting</string>
+    <string name="cycle_workout_strategy_title">Today\'s Lifting Strategy</string>
+    <string name="cycle_workout_focus_section">Target Focus &amp; Exercises</string>
+    <string name="cycle_workout_physiology_section">Biomechanics &amp; Hormonal Insight</string>
+    <string name="cycle_workout_caution_section">Injury Prevention &amp; Safety</string>
+
+    <!-- Workout Intensity Labels -->
+    <string name="workout_intensity_rest_recovery">Active Recovery &amp; Mobility</string>
+    <string name="workout_intensity_moderate_steady">Controlled Volume &amp; Machines</string>
+    <string name="workout_intensity_high_intensity">High-Volume Hypertrophy</string>
+    <string name="workout_intensity_peak_power">Max Power &amp; PR Attempts</string>
+
+    <!-- Strength Training Micro-Period Titles & Descriptions -->
+    <string name="workout_menstrual_early_title">Active Recovery &amp; Light Upper Body</string>
+    <string name="workout_menstrual_early_desc">High intra-abdominal pressure can trigger uterine cramps. Swap heavy squats or deadlifts for light dumbbells, upper body form work, and pelvic mobility.</string>
+
+    <string name="workout_menstrual_late_title">Moderate Resistance &amp; Volume Rebuilding</string>
+    <string name="workout_menstrual_late_desc">With hormones at baseline low, muscle recovery kinetics are fast. Begin progressive compound loading with controlled 8–12 rep hypertrophy sets.</string>
+
+    <string name="workout_follicular_early_title">Hypertrophy Volume &amp; Progressive Overload</string>
+    <string name="workout_follicular_early_desc">Rising estradiol enhances insulin sensitivity and muscle protein synthesis. Optimal window to add weight to the bar and push training volume!</string>
+
+    <string name="workout_follicular_late_title">Maximum Strength &amp; 1RM / PR Window</string>
+    <string name="workout_follicular_late_desc">Peak estrogen coupled with a minor testosterone surge. Prime window for heavy compound lifts (Squat, Deadlift, Hip Thrust) in the 3–5 rep strength range.</string>
+
+    <string name="workout_ovulation_title">Explosive Power &amp; Joint Protection</string>
+    <string name="workout_ovulation_desc">Neuromuscular power peaks, but peak estrogen relaxes ligament collagen. Control eccentric lowering and avoid knee valgus (knee caving) on heavy lifts.</string>
+
+    <string name="workout_luteal_early_title">Steady Hypertrophy &amp; Supersets</string>
+    <string name="workout_luteal_early_desc">Progesterone elevates resting core temperature by +0.3–0.5°C. Focus on controlled tempo, supersets, and isolation exercises rather than max singles.</string>
+
+    <string name="workout_luteal_mid_title">Machine-Based Resistance &amp; Higher Reps</string>
+    <string name="workout_luteal_mid_desc">Fluid retention can create joint stiffness and increase perceived exertion (RPE). Transition to cable and machine exercises (Leg Press, Cable Rows) for joint safety.</string>
+
+    <string name="workout_luteal_late_title">Deload &amp; Muscle Preservation Session</string>
+    <string name="workout_luteal_late_desc">Hormone withdrawal accelerates muscle catabolism and strains CNS recovery. Drop working weights by 40–50%%, keep sessions under 40 mins, and consume protein with leucine immediately post-workout.</string>
+
+    <!-- Workout Focus Chips -->
+    <string name="workout_focus_light_upper">Light Dumbbells / Upper Body</string>
+    <string name="workout_focus_mobility">Mobility &amp; Hip Openers</string>
+    <string name="workout_focus_pelvic_warmup">Glute &amp; Core Activation</string>
+    <string name="workout_focus_moderate_compound">Moderate Compound Lifts</string>
+    <string name="workout_focus_hypertrophy_8_12">Hypertrophy (8–12 Reps)</string>
+    <string name="workout_focus_dynamic_warmup">Dynamic Joint Warmup</string>
+    <string name="workout_focus_progressive_overload">Progressive Overload</string>
+    <string name="workout_focus_volume_sets">High Set Volume (4–5 Sets)</string>
+    <string name="workout_focus_drop_sets">Drop Sets &amp; Intensity</string>
+    <string name="workout_focus_heavy_compounds">Heavy Squat &amp; Deadlift</string>
+    <string name="workout_focus_pr_attempts">PR &amp; 1RM Attempts</string>
+    <string name="workout_focus_strength_3_5">Max Strength (3–5 Reps)</string>
+    <string name="workout_focus_explosive_power">Explosive Neuromuscular Power</string>
+    <string name="workout_focus_hip_thrust">Heavy Hip Thrust</string>
+    <string name="workout_focus_controlled_eccentric">Controlled Eccentric Tempo</string>
+    <string name="workout_focus_superset">Supersets &amp; Isolation</string>
+    <string name="workout_focus_isolation_exercises">Controlled Tempo (3-1-1)</string>
+    <string name="workout_focus_controlled_tempo">10–12 Rep Hypertrophy</string>
+    <string name="workout_focus_machines_cables">Cables &amp; Machine Lifts</string>
+    <string name="workout_focus_high_reps_12_15">High Reps (12–15 Reps)</string>
+    <string name="workout_focus_joint_friendly">Joint-Friendly Resistance</string>
+    <string name="workout_focus_deload_half_weight">Deload (40–50%% Weight)</string>
+    <string name="workout_focus_form_refinement">Technique &amp; Speed Reps</string>
+    <string name="workout_focus_mobility_stretch">Resistance Bands &amp; Stretches</string>
+
+    <!-- Workout Cautions -->
+    <string name="workout_caution_pelvic_pressure">Avoid heavy intra-abdominal bracing (valsalva) that exacerbates cramps.</string>
+    <string name="workout_caution_acl_ligament">⚠️ ACL Caution: Estrogen surge relaxes ligaments. Spend 5–7 min on knee/glute stabilization warmup.</string>
+    <string name="workout_caution_thermoregulation">Core temperature is higher (+0.5°C). You sweat earlier; consume cold electrolyte water.</string>
+    <string name="workout_caution_rpe_elevation">Working weights may feel heavier due to fluid shifts. Prioritize muscle mind-connection over ego lifting.</string>
+    <string name="workout_caution_catabolism_protein">Catabolic Alert: Elevated protein breakdown. Consume 25–30g protein with leucine within 30 min post-workout.</string>
 </resources>

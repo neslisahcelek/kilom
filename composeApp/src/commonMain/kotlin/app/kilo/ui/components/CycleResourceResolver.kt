@@ -2,7 +2,57 @@ package app.kilo.ui.components
 
 import androidx.compose.runtime.Composable
 import app.kilo.domain.CyclePhase
+import app.kilo.domain.WorkoutIntensity
 import kilo.composeapp.generated.resources.Res
+import kilo.composeapp.generated.resources.workout_intensity_rest_recovery
+import kilo.composeapp.generated.resources.workout_intensity_moderate_steady
+import kilo.composeapp.generated.resources.workout_intensity_high_intensity
+import kilo.composeapp.generated.resources.workout_intensity_peak_power
+import kilo.composeapp.generated.resources.workout_menstrual_early_title
+import kilo.composeapp.generated.resources.workout_menstrual_early_desc
+import kilo.composeapp.generated.resources.workout_menstrual_late_title
+import kilo.composeapp.generated.resources.workout_menstrual_late_desc
+import kilo.composeapp.generated.resources.workout_follicular_early_title
+import kilo.composeapp.generated.resources.workout_follicular_early_desc
+import kilo.composeapp.generated.resources.workout_follicular_late_title
+import kilo.composeapp.generated.resources.workout_follicular_late_desc
+import kilo.composeapp.generated.resources.workout_ovulation_title
+import kilo.composeapp.generated.resources.workout_ovulation_desc
+import kilo.composeapp.generated.resources.workout_luteal_early_title
+import kilo.composeapp.generated.resources.workout_luteal_early_desc
+import kilo.composeapp.generated.resources.workout_luteal_mid_title
+import kilo.composeapp.generated.resources.workout_luteal_mid_desc
+import kilo.composeapp.generated.resources.workout_luteal_late_title
+import kilo.composeapp.generated.resources.workout_luteal_late_desc
+import kilo.composeapp.generated.resources.workout_focus_light_upper
+import kilo.composeapp.generated.resources.workout_focus_mobility
+import kilo.composeapp.generated.resources.workout_focus_pelvic_warmup
+import kilo.composeapp.generated.resources.workout_focus_moderate_compound
+import kilo.composeapp.generated.resources.workout_focus_hypertrophy_8_12
+import kilo.composeapp.generated.resources.workout_focus_dynamic_warmup
+import kilo.composeapp.generated.resources.workout_focus_progressive_overload
+import kilo.composeapp.generated.resources.workout_focus_volume_sets
+import kilo.composeapp.generated.resources.workout_focus_drop_sets
+import kilo.composeapp.generated.resources.workout_focus_heavy_compounds
+import kilo.composeapp.generated.resources.workout_focus_pr_attempts
+import kilo.composeapp.generated.resources.workout_focus_strength_3_5
+import kilo.composeapp.generated.resources.workout_focus_explosive_power
+import kilo.composeapp.generated.resources.workout_focus_hip_thrust
+import kilo.composeapp.generated.resources.workout_focus_controlled_eccentric
+import kilo.composeapp.generated.resources.workout_focus_superset
+import kilo.composeapp.generated.resources.workout_focus_isolation_exercises
+import kilo.composeapp.generated.resources.workout_focus_controlled_tempo
+import kilo.composeapp.generated.resources.workout_focus_machines_cables
+import kilo.composeapp.generated.resources.workout_focus_high_reps_12_15
+import kilo.composeapp.generated.resources.workout_focus_joint_friendly
+import kilo.composeapp.generated.resources.workout_focus_deload_half_weight
+import kilo.composeapp.generated.resources.workout_focus_form_refinement
+import kilo.composeapp.generated.resources.workout_focus_mobility_stretch
+import kilo.composeapp.generated.resources.workout_caution_pelvic_pressure
+import kilo.composeapp.generated.resources.workout_caution_acl_ligament
+import kilo.composeapp.generated.resources.workout_caution_thermoregulation
+import kilo.composeapp.generated.resources.workout_caution_rpe_elevation
+import kilo.composeapp.generated.resources.workout_caution_catabolism_protein
 import kilo.composeapp.generated.resources.cycle_avoid_artificial_sweeteners
 import kilo.composeapp.generated.resources.cycle_avoid_caffeine
 import kilo.composeapp.generated.resources.cycle_avoid_cold_heavy
@@ -95,6 +145,25 @@ internal fun cyclePhaseEmoji(phase: CyclePhase): String {
 }
 
 @Composable
+internal fun workoutIntensityName(intensity: WorkoutIntensity): String {
+    return when (intensity) {
+        WorkoutIntensity.REST_RECOVERY -> stringResource(Res.string.workout_intensity_rest_recovery)
+        WorkoutIntensity.MODERATE_STEADY -> stringResource(Res.string.workout_intensity_moderate_steady)
+        WorkoutIntensity.HIGH_INTENSITY -> stringResource(Res.string.workout_intensity_high_intensity)
+        WorkoutIntensity.PEAK_POWER -> stringResource(Res.string.workout_intensity_peak_power)
+    }
+}
+
+internal fun workoutIntensityEmoji(intensity: WorkoutIntensity): String {
+    return when (intensity) {
+        WorkoutIntensity.REST_RECOVERY -> "🧘"
+        WorkoutIntensity.MODERATE_STEADY -> "🏃"
+        WorkoutIntensity.HIGH_INTENSITY -> "🏋️"
+        WorkoutIntensity.PEAK_POWER -> "⚡"
+    }
+}
+
+@Composable
 internal fun resolveCycleString(key: String): String {
     return when (key) {
         // Micro-period titles
@@ -172,6 +241,59 @@ internal fun resolveCycleString(key: String): String {
         "cycle_avoid_excess_salt" -> stringResource(Res.string.cycle_avoid_excess_salt)
         "cycle_avoid_refined_sugar" -> stringResource(Res.string.cycle_avoid_refined_sugar)
         "cycle_avoid_late_coffee" -> stringResource(Res.string.cycle_avoid_late_coffee)
+
+        // Workout titles
+        "workout_menstrual_early_title" -> stringResource(Res.string.workout_menstrual_early_title)
+        "workout_menstrual_late_title" -> stringResource(Res.string.workout_menstrual_late_title)
+        "workout_follicular_early_title" -> stringResource(Res.string.workout_follicular_early_title)
+        "workout_follicular_late_title" -> stringResource(Res.string.workout_follicular_late_title)
+        "workout_ovulation_title" -> stringResource(Res.string.workout_ovulation_title)
+        "workout_luteal_early_title" -> stringResource(Res.string.workout_luteal_early_title)
+        "workout_luteal_mid_title" -> stringResource(Res.string.workout_luteal_mid_title)
+        "workout_luteal_late_title" -> stringResource(Res.string.workout_luteal_late_title)
+
+        // Workout descriptions
+        "workout_menstrual_early_desc" -> stringResource(Res.string.workout_menstrual_early_desc)
+        "workout_menstrual_late_desc" -> stringResource(Res.string.workout_menstrual_late_desc)
+        "workout_follicular_early_desc" -> stringResource(Res.string.workout_follicular_early_desc)
+        "workout_follicular_late_desc" -> stringResource(Res.string.workout_follicular_late_desc)
+        "workout_ovulation_desc" -> stringResource(Res.string.workout_ovulation_desc)
+        "workout_luteal_early_desc" -> stringResource(Res.string.workout_luteal_early_desc)
+        "workout_luteal_mid_desc" -> stringResource(Res.string.workout_luteal_mid_desc)
+        "workout_luteal_late_desc" -> stringResource(Res.string.workout_luteal_late_desc)
+
+        // Workout focus chips
+        "workout_focus_light_upper" -> stringResource(Res.string.workout_focus_light_upper)
+        "workout_focus_mobility" -> stringResource(Res.string.workout_focus_mobility)
+        "workout_focus_pelvic_warmup" -> stringResource(Res.string.workout_focus_pelvic_warmup)
+        "workout_focus_moderate_compound" -> stringResource(Res.string.workout_focus_moderate_compound)
+        "workout_focus_hypertrophy_8_12" -> stringResource(Res.string.workout_focus_hypertrophy_8_12)
+        "workout_focus_dynamic_warmup" -> stringResource(Res.string.workout_focus_dynamic_warmup)
+        "workout_focus_progressive_overload" -> stringResource(Res.string.workout_focus_progressive_overload)
+        "workout_focus_volume_sets" -> stringResource(Res.string.workout_focus_volume_sets)
+        "workout_focus_drop_sets" -> stringResource(Res.string.workout_focus_drop_sets)
+        "workout_focus_heavy_compounds" -> stringResource(Res.string.workout_focus_heavy_compounds)
+        "workout_focus_pr_attempts" -> stringResource(Res.string.workout_focus_pr_attempts)
+        "workout_focus_strength_3_5" -> stringResource(Res.string.workout_focus_strength_3_5)
+        "workout_focus_explosive_power" -> stringResource(Res.string.workout_focus_explosive_power)
+        "workout_focus_hip_thrust" -> stringResource(Res.string.workout_focus_hip_thrust)
+        "workout_focus_controlled_eccentric" -> stringResource(Res.string.workout_focus_controlled_eccentric)
+        "workout_focus_superset" -> stringResource(Res.string.workout_focus_superset)
+        "workout_focus_isolation_exercises" -> stringResource(Res.string.workout_focus_isolation_exercises)
+        "workout_focus_controlled_tempo" -> stringResource(Res.string.workout_focus_controlled_tempo)
+        "workout_focus_machines_cables" -> stringResource(Res.string.workout_focus_machines_cables)
+        "workout_focus_high_reps_12_15" -> stringResource(Res.string.workout_focus_high_reps_12_15)
+        "workout_focus_joint_friendly" -> stringResource(Res.string.workout_focus_joint_friendly)
+        "workout_focus_deload_half_weight" -> stringResource(Res.string.workout_focus_deload_half_weight)
+        "workout_focus_form_refinement" -> stringResource(Res.string.workout_focus_form_refinement)
+        "workout_focus_mobility_stretch" -> stringResource(Res.string.workout_focus_mobility_stretch)
+
+        // Workout cautions
+        "workout_caution_pelvic_pressure" -> stringResource(Res.string.workout_caution_pelvic_pressure)
+        "workout_caution_acl_ligament" -> stringResource(Res.string.workout_caution_acl_ligament)
+        "workout_caution_thermoregulation" -> stringResource(Res.string.workout_caution_thermoregulation)
+        "workout_caution_rpe_elevation" -> stringResource(Res.string.workout_caution_rpe_elevation)
+        "workout_caution_catabolism_protein" -> stringResource(Res.string.workout_caution_catabolism_protein)
 
         else -> key
     }

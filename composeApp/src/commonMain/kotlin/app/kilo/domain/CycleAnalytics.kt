@@ -24,6 +24,17 @@ enum class EnergyLevel {
     DECLINING,
 }
 
+/**
+ * Cycle-synced strength & weight training intensity.
+ * Based on Dr. Stacy Sims (ROAR) and sports endocrinology literature.
+ */
+enum class WorkoutIntensity {
+    REST_RECOVERY,   // Active recovery, mobility, low intra-abdominal pressure
+    MODERATE_STEADY, // Controlled volume, machines, 10-15 reps, tempo
+    HIGH_INTENSITY,  // Hypertrophy volume, progressive overload, 8-12 reps
+    PEAK_POWER,      // Maximum neuromuscular power, heavy compounds (Squat, Deadlift), 1-5 reps, PR attempts
+}
+
 /** Evidence-based nutritional and biological guidance for a specific cycle day. */
 data class CycleDayAdvice(
     val phase: CyclePhase,
@@ -34,6 +45,11 @@ data class CycleDayAdvice(
     val energyLevel: EnergyLevel,
     val eatKeys: List<String>,
     val avoidKeys: List<String>,
+    val workoutIntensity: WorkoutIntensity = WorkoutIntensity.MODERATE_STEADY,
+    val workoutTitleKey: String = "",
+    val workoutDescKey: String = "",
+    val workoutFocusKeys: List<String> = emptyList(),
+    val workoutCautionKey: String? = null,
 )
 
 /** Aggregated status of a specific calendar day in relation to the cycle. */
@@ -187,6 +203,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.LOW_REST,
             eatKeys = listOf("cycle_eat_iron_greens", "cycle_eat_bone_broth", "cycle_eat_ginger_tea"),
             avoidKeys = listOf("cycle_avoid_salt", "cycle_avoid_cold_heavy", "cycle_avoid_caffeine"),
+            workoutIntensity = WorkoutIntensity.REST_RECOVERY,
+            workoutTitleKey = "workout_menstrual_early_title",
+            workoutDescKey = "workout_menstrual_early_desc",
+            workoutFocusKeys = listOf("workout_focus_light_upper", "workout_focus_mobility", "workout_focus_pelvic_warmup"),
+            workoutCautionKey = "workout_caution_pelvic_pressure",
         )
 
         // Menstrual Phase: Days 3 to periodDuration (Cellular renewal, fluid shedding)
@@ -199,6 +220,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.RISING,
             eatKeys = listOf("cycle_eat_zinc_eggs", "cycle_eat_pumpkin_seeds", "cycle_eat_fermented"),
             avoidKeys = listOf("cycle_avoid_processed_meats", "cycle_avoid_excess_sugar"),
+            workoutIntensity = WorkoutIntensity.MODERATE_STEADY,
+            workoutTitleKey = "workout_menstrual_late_title",
+            workoutDescKey = "workout_menstrual_late_desc",
+            workoutFocusKeys = listOf("workout_focus_moderate_compound", "workout_focus_hypertrophy_8_12", "workout_focus_dynamic_warmup"),
+            workoutCautionKey = null,
         )
 
         // Follicular Phase: Early (Days 6-9 in standard cycle)
@@ -211,6 +237,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.RISING,
             eatKeys = listOf("cycle_eat_salmon_protein", "cycle_eat_berries_antioxidants", "cycle_eat_quinoa"),
             avoidKeys = listOf("cycle_avoid_heavy_dairy", "cycle_avoid_fried"),
+            workoutIntensity = WorkoutIntensity.HIGH_INTENSITY,
+            workoutTitleKey = "workout_follicular_early_title",
+            workoutDescKey = "workout_follicular_early_desc",
+            workoutFocusKeys = listOf("workout_focus_progressive_overload", "workout_focus_volume_sets", "workout_focus_drop_sets"),
+            workoutCautionKey = null,
         )
 
         // Follicular Phase: Late / Pre-Ovulation (Days 10-13)
@@ -223,6 +254,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.PEAK,
             eatKeys = listOf("cycle_eat_cruciferous_broccoli", "cycle_eat_avocado_fats", "cycle_eat_flaxseed"),
             avoidKeys = listOf("cycle_avoid_refined_carbs", "cycle_avoid_artificial_sweeteners"),
+            workoutIntensity = WorkoutIntensity.PEAK_POWER,
+            workoutTitleKey = "workout_follicular_late_title",
+            workoutDescKey = "workout_follicular_late_desc",
+            workoutFocusKeys = listOf("workout_focus_heavy_compounds", "workout_focus_pr_attempts", "workout_focus_strength_3_5"),
+            workoutCautionKey = null,
         )
 
         // Ovulation Phase (Days 14-16)
@@ -235,6 +271,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.PEAK,
             eatKeys = listOf("cycle_eat_leafy_greens", "cycle_eat_artichokes_liver", "cycle_eat_antioxidant_berries"),
             avoidKeys = listOf("cycle_avoid_excess_alcohol", "cycle_avoid_processed_snacks"),
+            workoutIntensity = WorkoutIntensity.PEAK_POWER,
+            workoutTitleKey = "workout_ovulation_title",
+            workoutDescKey = "workout_ovulation_desc",
+            workoutFocusKeys = listOf("workout_focus_explosive_power", "workout_focus_hip_thrust", "workout_focus_controlled_eccentric"),
+            workoutCautionKey = "workout_caution_acl_ligament",
         )
 
         // Luteal Phase: Early (Days 17-20, Progesterone rising, BMR +150 kcal)
@@ -247,6 +288,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.DECLINING,
             eatKeys = listOf("cycle_eat_sweet_potatoes", "cycle_eat_walnuts", "cycle_eat_chickpeas_b6"),
             avoidKeys = listOf("cycle_avoid_starvation_diets", "cycle_avoid_heavy_caffeine"),
+            workoutIntensity = WorkoutIntensity.MODERATE_STEADY,
+            workoutTitleKey = "workout_luteal_early_title",
+            workoutDescKey = "workout_luteal_early_desc",
+            workoutFocusKeys = listOf("workout_focus_superset", "workout_focus_isolation_exercises", "workout_focus_controlled_tempo"),
+            workoutCautionKey = "workout_caution_thermoregulation",
         )
 
         // Luteal Phase: Mid (Days 21-24, Aldosterone elevation, Fluid Retention starts)
@@ -259,6 +305,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.DECLINING,
             eatKeys = listOf("cycle_eat_dark_chocolate", "cycle_eat_pumpkin_seeds", "cycle_eat_spinach_magnesium"),
             avoidKeys = listOf("cycle_avoid_high_sodium", "cycle_avoid_salty_snacks", "cycle_avoid_sugar_spikes"),
+            workoutIntensity = WorkoutIntensity.MODERATE_STEADY,
+            workoutTitleKey = "workout_luteal_mid_title",
+            workoutDescKey = "workout_luteal_mid_desc",
+            workoutFocusKeys = listOf("workout_focus_machines_cables", "workout_focus_high_reps_12_15", "workout_focus_joint_friendly"),
+            workoutCautionKey = "workout_caution_rpe_elevation",
         )
 
         // Luteal Phase: Late PMS (Days 25-28, Maximum fluid retention +1.5-2.5 kg, Serotonin drop)
@@ -271,6 +322,11 @@ private fun resolveCycleAdvice(
             energyLevel = EnergyLevel.LOW_REST,
             eatKeys = listOf("cycle_eat_tryptophan_banana", "cycle_eat_dandelion_tea", "cycle_eat_warm_lemon_water"),
             avoidKeys = listOf("cycle_avoid_excess_salt", "cycle_avoid_refined_sugar", "cycle_avoid_late_coffee"),
+            workoutIntensity = WorkoutIntensity.REST_RECOVERY,
+            workoutTitleKey = "workout_luteal_late_title",
+            workoutDescKey = "workout_luteal_late_desc",
+            workoutFocusKeys = listOf("workout_focus_deload_half_weight", "workout_focus_form_refinement", "workout_focus_mobility_stretch"),
+            workoutCautionKey = "workout_caution_catabolism_protein",
         )
     }
 }
