@@ -1,6 +1,8 @@
 # Kilom – Mağaza Listeleme Metinleri
 
-Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, doğrudan sonuca odaklanan, **Apple ve modern minimalist estetiğe** uygun mağaza metinleri.
+Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın gerçek davranışıyla uyumludur: veriler cihazdan çıkmaz, analitik/reklam/hesap yoktur. Apple Sağlık (HealthKit) kullanımı Apple açıklamalarında açıkça belirtilir.
+
+> Karakter limitleri: Apple Subtitle 30, Promotional Text 170, Keywords 100; Google Play Kısa Açıklama 80.
 
 ---
 
@@ -13,40 +15,49 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
   Kilom
   ```
 
-- **Alt Başlık / Subtitle (Maks 30 karakter):**
+- **Alt Başlık / Subtitle (Maks 30 karakter — 27):**
   ```text
-  Tartı fotoğrafı ile hızlı takip
+  Kilo, hedef ve Apple Sağlık
   ```
 
 - **Promosyon Metni / Promotional Text (Maks 170 karakter):**
   ```text
-  Sadece kilonuz ve ilerlemeniz. Tartının fotoğrafını çekin veya saniyeler içinde yazın. Reklamsız, hesapsız, tamamen cihazınızda.
+  Tartı fotoğrafıyla saniyeler içinde kaydedin, Apple Sağlık ile eşitleyin, hedef kilonuzu ve tahmini tarihi görün. Hesapsız, reklamsız, tamamen cihazınızda.
   ```
 
-- **Anahtar Kelimeler / Keywords (Maks 100 karakter):**
+- **Anahtar Kelimeler / Keywords (Maks 100 karakter — 99):**
   ```text
-  kilom,kilo,kilo takibi,tartı,minimalist,kilo günlüğü,ağırlık,diyet,form,ocr,fotoğraf,kg,lb
+  kilom,kilo,kilo takibi,tartı,apple sağlık,hedef kilo,ocr,fotoğraf,kilo günlüğü,hatırlatıcı,diyet,kg
   ```
 
 - **Açıklama / Description:**
   ```text
-  Kilom, kilo takibini en saf ve en hızlı haline getirir.
+  Kilom, kilonuzu kaydetmeyi, takip etmeyi ve hedefinize ilerlemeyi kolaylaştıran gizlilik odaklı bir kilo takip uygulamasıdır. Verileriniz yalnızca cihazınızda kalır.
 
-  Karmaşık grafikler, doldurulması gereken formlar veya zorunlu üyelikler yok. Sadece tartıya çıkın, kilonuzu kaydedin ve gününüze devam edin.
+  Hızlı Kayıt:
+  • Tartı Fotoğrafı: Tartınızın ekranını çekin veya galeriden seçin; Kilom sayıları cihaz üzerinde okur. Sonucu siz onaylamadan hiçbir şey kaydedilmez. 7 segmentli LED/LCD ekranlar da desteklenir.
+  • Elle Giriş: Büyük sayısal klavyeyle saniyeler içinde yazın. kg ve lb arasında tek dokunuşla geçin.
 
-  İki Saniyede Kayıt:
-  • Fotoğrafını Çek: Tartınızın fotoğrafını çekin. Kilom ekrandaki sayıyı otomatik okur, tek dokunuşla onaylarsınız.
-  • Elle Yaz: Büyük ve hızlı sayısal klavye ile anında girin.
+  Apple Sağlık (HealthKit) Entegrasyonu:
+  • Kaydettiğiniz kiloları izninizle Apple Sağlık'a yazar.
+  • Apple Sağlık'taki geçmiş kilo kayıtlarınızı izninizle Kilom'a içe aktarabilirsiniz.
+  • Ana ekrandaki Apple Sağlık rozeti bağlantı durumunu gösterir; izni istediğiniz zaman iOS Ayarlar > Sağlık üzerinden değiştirebilirsiniz.
+  • Sağlık verileriniz reklam, analitik veya paylaşım amacıyla kullanılmaz ve cihazınızdan çıkmaz.
 
-  Net ve Sade Geri Bildirim:
-  • Kilo Değişimi: Son tartıya göre tam fark (+0.4 kg veya -0.7 kg).
-  • Zaman: En son ne zaman tartıldığınız ("Bugün", "3 gün önce").
+  İlerlemenizi Görün:
+  • Hedef Kilo: Hedefinizi belirleyin, ilerlemenizi ve tahmini ulaşma tarihini görün.
+  • Haftalık ve Aylık Özet: Dönem içindeki değişimi tek kartta görün.
+  • Trend Grafiği: Kilo geçmişinizin gidişatını net bir grafikte izleyin.
+  • Anlık Fark: Son tartıya göre değişim ve geçen gün sayısı.
 
-  Sadelik İlkemiz:
-  • Reklam yok, abonelik yok, hesap açmak yok.
-  • Fotoğraflarınız ve verileriniz asla cihazınızdan dışarı çıkmaz.
-  • Tek ekranda kg ve lb arasında anında geçiş.
-  • Yanlış kayıtları sola kaydırarak silme kolaylığı.
+  İsteğe Bağlı Günlük Hatırlatıcı:
+  • Seçtiğiniz saatte yerel bildirimle hatırlatma alın. Bildirimler cihazınızda oluşturulur, sunucu kullanılmaz; istediğiniz zaman kapatabilirsiniz.
+
+  Verileriniz Sizin:
+  • CSV / JSON olarak dışa aktarın ve yedekten geri yükleyin.
+  • Hesap yok, abonelik yok, reklam yok, analitik yok.
+  • Fotoğraflarınız ve kilo verileriniz cihazınızdan dışarı çıkmaz.
+  • Yanlış kayıtları sola kaydırarak silin.
 
   Gizlilik Politikası: https://neslisahcelek.github.io/kilom/
   İletişim: neslisah.celek@outlook.com
@@ -63,19 +74,23 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Kısa Açıklama (Maks 80 karakter):**
   ```text
-  Tartı fotoğrafı ile anında kilo takibi. Sade, reklamsız, hızlı.
+  Tartı fotoğrafıyla kilo takibi, hedef ve özet. Reklamsız, tamamen cihazınızda.
   ```
 
 - **Tam Açıklama:**
   ```text
-  Kilom, kilo ölçümünü ve takibini en zahmetsiz hale getiren minimalist bir uygulamadır.
+  Kilom, kilo kaydını ve takibini kolaylaştıran gizlilik odaklı bir uygulamadır.
 
   Özellikler:
-  • Tartı Fotoğrafı ile Algılama: Kamerayı tartınıza tutun; ekrandaki kilo otomatik algılansın.
-  • Hızlı Giriş: Dilerseniz tek ekranda saniyeler içinde elle yazın.
-  • Anında Fark: Son tartıya göre kilo farkınızı ve geçen gün sayısını tek bakışta görün.
-  • Gizli ve Çevrimdışı: Sıfır veri toplama. İnternet gerektirmez, verileriniz sadece telefonunuzda saklanır.
-  • Sade ve Odaklı: Reklam yok, üye girişi yok, bildirim kirliliği yok.
+  • Tartı Fotoğrafı ile Algılama: Tartı ekranının fotoğrafını çekin veya galeriden seçin; kilo cihaz üzerinde okunur, siz onaylayınca kaydedilir.
+  • Hızlı Giriş: Büyük sayısal klavyeyle saniyeler içinde elle yazın.
+  • Hedef Kilo: Hedefinizi belirleyin, ilerlemenizi ve tahmini ulaşma tarihini görün.
+  • Haftalık ve Aylık Özet: Dönem içindeki değişimi tek kartta görün.
+  • Trend Grafiği: Kilo geçmişinizin gidişatını izleyin.
+  • Anında Fark: Son tartıya göre kilo farkı ve geçen gün sayısı.
+  • İsteğe Bağlı Günlük Hatırlatıcı: Yerel bildirim; kapatması kolay.
+  • CSV / JSON dışa aktarma ve yedekten geri yükleme.
+  • Gizli ve Çevrimdışı: Hesap yok, reklam yok, analitik yok. Verileriniz yalnızca telefonunuzda saklanır.
   • kg / lb desteği ve sola kaydırarak silme.
 
   Gizlilik Politikası: https://neslisahcelek.github.io/kilom/
@@ -93,39 +108,48 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
   Kilom
   ```
 
-- **Subtitle (Max 30 chars):**
+- **Subtitle (Max 30 chars — 27):**
   ```text
-  Quick weigh-in & scale scan
+  Weight goals & Apple Health
   ```
 
 - **Promotional Text (Max 170 chars):**
   ```text
-  Pure, effortless weight logging. Snap a scale photo or type in seconds. No ads, no accounts, 100% on-device.
+  Log weight in seconds with a scale photo, sync with Apple Health, set a goal weight and see your ETA. Private, on-device, no ads, no account.
   ```
 
-- **Keywords (Max 100 chars):**
+- **Keywords (Max 100 chars — 92):**
   ```text
-  kilom,weight,tracker,scale,minimal,photo,ocr,scanner,log,weigh-in,body,fast,clean,diet
+  kilom,weight,tracker,scale,ocr,apple health,goal,weigh-in,log,trend,reminder,diet,body,kg,lb
   ```
 
 - **Description:**
   ```text
-  Kilom strips weight tracking down to what actually matters: speed, clarity, and simplicity.
-
-  No cluttered charts, no mandatory profiles, and no interruptions. Just step on the scale, log your weight, and move on with your day.
+  Kilom is a privacy-first weight tracker that makes it easy to log your weight, follow your trend and move toward your goal. Your data stays on your device.
 
   Log in Seconds:
-  • Snap a Photo: Take a picture of your scale. Kilom detects the digits instantly—just tap to confirm.
-  • Quick Entry: Clean, oversized keypad for effortless manual logging.
+  • Scale Photo: Snap your scale's display or pick a photo; Kilom reads the digits on-device. Nothing is saved until you confirm. Seven-segment LED/LCD displays are supported.
+  • Quick Entry: Type with an oversized keypad. Switch between kg and lb with one tap.
 
-  Instant Context:
-  • Delta Badge: See your exact change compared to your last weigh-in (+0.4 kg or -0.7 kg).
-  • Time Since: At-a-glance reminder of when you last weighed in ("Today", "3 days ago").
+  Apple Health (HealthKit) Integration:
+  • Saves the weight entries you log to Apple Health, with your permission.
+  • Imports your past weight entries from Apple Health, with your permission.
+  • The Apple Health badge on the main screen shows the connection status; you can change access anytime in iOS Settings > Health.
+  • Your health data is never used for advertising or analytics and never leaves your device.
 
-  Built on Simplicity:
-  • Zero ads, zero subscriptions, zero account logins.
-  • 100% private: Your scale photos and numbers never leave your device.
-  • Seamless 1-tap toggle between kg and lb.
+  See Your Progress:
+  • Goal Weight: Set a target and see your progress and estimated arrival date.
+  • Weekly & Monthly Summary: Your change over the period in a single card.
+  • Trend Chart: Follow the direction of your weight history at a glance.
+  • Instant Context: Change since your last weigh-in and days elapsed.
+
+  Optional Daily Reminder:
+  • Get a local notification at the time you choose. Notifications are scheduled on your device, with no server involved, and can be turned off anytime.
+
+  Your Data, Your Control:
+  • Export to CSV / JSON and restore from a backup.
+  • No accounts, no subscriptions, no ads, no analytics.
+  • Your scale photos and weight data never leave your device.
   • Swipe left to delete past entries.
 
   Privacy Policy: https://neslisahcelek.github.io/kilom/
@@ -143,20 +167,24 @@ Tıpkı uygulamanın kendisi gibi gereksiz süslemelerden arındırılmış, do�
 
 - **Short Description (Max 80 chars):**
   ```text
-  Instant weight logging with scale photo scan. Fast, minimal, ad-free.
+  Weight tracking with scale photo scan, goals and summaries. Private, ad-free.
   ```
 
 - **Full Description:**
   ```text
-  Kilom is the fastest, most distraction-free way to track your weight.
+  Kilom is a privacy-first weight tracker that makes logging and following your weight easy.
 
   Features:
-  • Scale Photo Scan: Snap your scale display. On-device vision reads the numbers instantly.
-  • Fast Manual Entry: Enter your weight in two seconds with an oversized keypad.
-  • Instant Context: Know your exact difference from the previous weigh-in and days elapsed.
-  • 100% On-Device Privacy: No cloud sync, no tracking, completely offline.
-  • Pure & Minimal: Zero ads, zero accounts, no clutter.
-  • Instant kg / lb conversion and swipe-to-delete history.
+  • Scale Photo Scan: Snap your scale display or pick a photo. On-device vision reads the numbers; you confirm before saving.
+  • Fast Manual Entry: Enter your weight in seconds with an oversized keypad.
+  • Goal Weight: Set a target and see your progress and estimated arrival date.
+  • Weekly & Monthly Summary: Your change over the period in a single card.
+  • Trend Chart: Follow the direction of your weight history.
+  • Instant Context: Your difference from the previous weigh-in and days elapsed.
+  • Optional Daily Reminder: A local notification you can turn off anytime.
+  • CSV / JSON export and backup restore.
+  • On-Device Privacy: No accounts, no ads, no analytics. Your data stays on your phone.
+  • kg / lb toggle and swipe-to-delete history.
 
   Privacy Policy: https://neslisahcelek.github.io/kilom/
   Contact: neslisah.celek@outlook.com

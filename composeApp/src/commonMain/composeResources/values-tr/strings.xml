@@ -106,4 +106,55 @@
     <string name="camera_unavailable_title">Kamera Kullanılamıyor</string>
     <string name="camera_unavailable_desc">Bu cihazda veya simülatörde kamera donanımı bulunamadı.</string>
     <string name="camera_choose_gallery">Galeriden Seç</string>
+
+    <!-- Health Visibility & Import -->
+    <string name="health_section_title_ios">Apple Sağlık</string>
+    <string name="health_section_title_android">Health Connect</string>
+    <string name="health_badge_title">Apple Sağlık</string>
+    <string name="health_badge_connected">Bağlı</string>
+    <string name="health_badge_not_connected">Bağlı Değil</string>
+    <string name="health_badge_sync_now">Eşitle</string>
+    <string name="health_onboarding_title">Apple Sağlık ile Eşitle</string>
+    <string name="health_onboarding_body">Kilom yeni tartımlarınızı otomatik olarak Apple Sağlık\'a yazabilir ve geçmiş ölçümlerinizi içe aktarabilir. Tüm verileriniz %%100 cihazınızda ve gizli kalır.</string>
+    <string name="health_onboarding_connect">Apple Sağlık\'ı Bağla</string>
+    <string name="health_onboarding_import_option">Geçmiş tartımları Sağlık\'tan içe aktar</string>
+    <string name="health_onboarding_later">Şimdi Değil</string>
+    <string name="health_import_button">Sağlık\'tan Geçmiş Tartımları İçe Aktar</string>
+    <string name="health_import_loading">Sağlık uygulamasından okunuyor...</string>
+    <string name="health_import_success">Sağlık uygulamasından %1$d yeni kayıt aktarıldı.</string>
+    <string name="health_import_empty">Sağlık uygulamasında yeni bir tartı kaydı bulunamadı.</string>
+    <string name="health_import_denied">Sağlık ayarlarında okuma izni verilmedi.</string>
+
+    <!-- Goal Weight -->
+    <string name="goal_title">Hedef Kilo</string>
+    <string name="goal_set_cta">Hedef Belirle</string>
+    <string name="goal_remaining">Hedefe %1$s kaldı</string>
+    <string name="goal_reached">Hedefe Ulaşıldı! 🎉</string>
+    <string name="goal_eta">Tahmini: %1$s</string>
+    <string name="goal_input_hint">Hedef kilo</string>
+    <string name="goal_clear">Hedefi Kaldır</string>
+    <string name="goal_save">Hedefi Kaydet</string>
+    <string name="goal_progress_title">Hedef İlerlemesi</string>
+    <string name="goal_starting">Başlangıç: %1$s</string>
+
+    <!-- Period Summary -->
+    <string name="summary_title">Dönem Özeti</string>
+    <string name="summary_week">7 Gün</string>
+    <string name="summary_month">30 Gün</string>
+    <string name="summary_average">Ortalama</string>
+    <string name="summary_range">Aralık</string>
+    <string name="summary_change">Net Değişim</string>
+    <string name="summary_vs_previous">önceki %1$s döneme göre</string>
+    <string name="summary_empty">Bu dönemde tartı kaydı yok</string>
+    <string name="summary_period_week">haftalık</string>
+    <string name="summary_period_month">aylık</string>
+
+    <!-- Daily Reminder -->
+    <string name="reminder_section_title">Günlük Tartılma Hatırlatıcısı</string>
+    <string name="reminder_enable_title">Günlük hatırlatıcı</string>
+    <string name="reminder_enable_subtitle">Her gün belirlediğiniz saatte hafif bir bildirim alın</string>
+    <string name="reminder_time_title">Hatırlatma Saati</string>
+    <string name="reminder_permission_denied">Ayarlar\'da bildirim izni verilmedi.</string>
+    <string name="reminder_notification_title">Kilom Tartı Vakti</string>
+    <string name="reminder_notification_body">Günlük tartılma vaktiniz geldi. Tartıya çıkıp kilonuzu kaydedin!</string>
 </resources>

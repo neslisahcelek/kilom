@@ -61,11 +61,19 @@ import kilo.composeapp.generated.resources.backup_subtitle
 import kilo.composeapp.generated.resources.backup_title
 import kilo.composeapp.generated.resources.health_auto_sync_subtitle
 import kilo.composeapp.generated.resources.health_auto_sync_title
+import kilo.composeapp.generated.resources.health_import_button
+import kilo.composeapp.generated.resources.health_import_loading
 import kilo.composeapp.generated.resources.health_section_title
+import kilo.composeapp.generated.resources.health_section_title_android
+import kilo.composeapp.generated.resources.health_section_title_ios
 import kilo.composeapp.generated.resources.health_sync_all_button
 import kilo.composeapp.generated.resources.health_sync_all_loading
 import kilo.composeapp.generated.resources.health_sync_denied
 import kilo.composeapp.generated.resources.health_sync_success
+import kilo.composeapp.generated.resources.reminder_enable_subtitle
+import kilo.composeapp.generated.resources.reminder_enable_title
+import kilo.composeapp.generated.resources.reminder_section_title
+import kilo.composeapp.generated.resources.reminder_time_title
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -74,11 +82,18 @@ fun BackupSheet(
     isOpen: Boolean,
     notice: BackupNotice?,
     isHealthSyncSupported: Boolean = false,
+    healthProvider: app.kilo.platform.HealthProvider = app.kilo.platform.HealthProvider.NONE,
     healthSyncEnabled: Boolean = false,
     isSyncingHealth: Boolean = false,
+    isImportingHealth: Boolean = false,
     healthSyncNotice: HealthSyncNotice? = null,
     onToggleHealthSync: (Boolean) -> Unit = {},
     onSyncAllToHealth: () -> Unit = {},
+    onImportFromHealth: () -> Unit = {},
+    reminderSupported: Boolean = false,
+    reminderEnabled: Boolean = false,
+    reminderMinutes: Int = 480,
+    onToggleReminder: (Boolean) -> Unit = {},
     onExportCsv: () -> String,
     onExportJson: () -> String,
     onImport: (String) -> Unit,
@@ -252,7 +267,20 @@ fun BackupSheet(
 
                         // Optional Health Sync Section (Apple Health / Health Connect)
                         if (isHealthSyncSupported) {
-                            Spacer(Modifier.height(16.dp))
+                            Spacer(Modifier.height(18.dp))
+
+                            val healthTitle = if (healthProvider == app.kilo.platform.HealthProvider.APPLE_HEALTH) {
+                                stringResource(Res.string.health_section_title_ios)
+                            } else {
+                                stringResource(Res.string.health_section_title_android)
+                            }
+
+                            Text(
+                                text = healthTitle,
+                                style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                                color = colors.textPrimary,
+                                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 8.dp),
+                            )
 
                             // Health Sync Notice Banner
                             if (healthSyncNotice != null) {
@@ -310,18 +338,27 @@ fun BackupSheet(
                                             color = colors.textSecondary,
                                         )
                                     }
-                                        Switch(
-                                            checked = healthSyncEnabled,
-                                            onCheckedChange = onToggleHealthSync,
-                                            colors = SwitchDefaults.colors(
-                                                checkedThumbColor = colors.onAccent,
-                                                checkedTrackColor = colors.accent,
-                                                uncheckedThumbColor = colors.textSecondary,
-                                                uncheckedTrackColor = colors.glassTint,
-                                            ),
-                                        )
+                                    Switch(
+                                        checked = healthSyncEnabled,
+                                        onCheckedChange = onToggleHealthSync,
+                                        colors = SwitchDefaults.colors(
+                                            checkedThumbColor = colors.onAccent,
+                                            checkedTrackColor = colors.accent,
+                                            uncheckedThumbColor = colors.textSecondary,
+                                            uncheckedTrackColor = colors.glassTint,
+                                        ),
+                                    )
                                 }
                             }
+
+                            Spacer(Modifier.height(10.dp))
+
+                            // Import from Health Button
+                            BackupActionButton(
+                                title = if (isImportingHealth) stringResource(Res.string.health_import_loading) else stringResource(Res.string.health_import_button),
+                                iconLabel = "📥",
+                                onClick = onImportFromHealth,
+                            )
 
                             Spacer(Modifier.height(10.dp))
 
@@ -331,6 +368,61 @@ fun BackupSheet(
                                 iconLabel = "♥",
                                 onClick = onSyncAllToHealth,
                             )
+                        }
+
+                        // Daily Reminder Section
+                        if (reminderSupported) {
+                            Spacer(Modifier.height(18.dp))
+
+                            Text(
+                                text = stringResource(Res.string.reminder_section_title),
+                                style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                                color = colors.textPrimary,
+                                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 8.dp),
+                            )
+
+                            // Reminder Toggle Card
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(colors.glassTint)
+                                    .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                ) {
+                                    Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                                        Text(
+                                            text = stringResource(Res.string.reminder_enable_title),
+                                            style = typography.body.copy(fontWeight = FontWeight.SemiBold),
+                                            color = colors.textPrimary,
+                                        )
+                                        Spacer(Modifier.height(2.dp))
+                                        val hour = reminderMinutes / 60
+                                        val min = reminderMinutes % 60
+                                        val timeStr = "${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}"
+                                        Text(
+                                            text = if (reminderEnabled) "${stringResource(Res.string.reminder_time_title)}: $timeStr" else stringResource(Res.string.reminder_enable_subtitle),
+                                            style = typography.caption,
+                                            color = colors.textSecondary,
+                                        )
+                                    }
+                                    Switch(
+                                        checked = reminderEnabled,
+                                        onCheckedChange = onToggleReminder,
+                                        colors = SwitchDefaults.colors(
+                                            checkedThumbColor = colors.onAccent,
+                                            checkedTrackColor = colors.accent,
+                                            uncheckedThumbColor = colors.textSecondary,
+                                            uncheckedTrackColor = colors.glassTint,
+                                        ),
+                                    )
+                                }
+                            }
                         }
 
                         Spacer(Modifier.height(20.dp))

@@ -14,6 +14,13 @@ import app.kilo.ui.DashboardViewModel
 import app.kilo.ui.theme.KiloTheme
 import com.russhwolf.settings.Settings
 
+import androidx.compose.runtime.LaunchedEffect
+import app.kilo.platform.rememberReminderScheduler
+import kilo.composeapp.generated.resources.Res
+import kilo.composeapp.generated.resources.reminder_notification_body
+import kilo.composeapp.generated.resources.reminder_notification_title
+import org.jetbrains.compose.resources.stringResource
+
 /**
  * Lightweight manual dependency container for Kilo.
  */
@@ -29,8 +36,9 @@ fun App(container: AppContainer = remember { AppContainer() }) {
         val haptics = rememberHaptics()
         val scaleOcr = rememberScaleOcr()
         val healthSync = app.kilo.platform.rememberHealthSync()
+        val reminderScheduler = rememberReminderScheduler()
 
-        val viewModel = remember(container, haptics, scaleOcr, healthSync) {
+        val viewModel = remember(container, haptics, scaleOcr, healthSync, reminderScheduler) {
             DashboardViewModel(
                 weights = container.weights,
                 prefs = container.prefs,
@@ -40,7 +48,14 @@ fun App(container: AppContainer = remember { AppContainer() }) {
                     override fun scanComplete() = haptics.scanComplete()
                 },
                 healthSync = healthSync,
+                reminderScheduler = reminderScheduler,
             )
+        }
+
+        val notifTitle = stringResource(Res.string.reminder_notification_title)
+        val notifBody = stringResource(Res.string.reminder_notification_body)
+        LaunchedEffect(Unit) {
+            viewModel.rescheduleReminderIfEnabled(notifTitle, notifBody)
         }
 
         DashboardScreen(viewModel = viewModel)

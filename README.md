@@ -16,6 +16,12 @@ A minimal, distraction-free weight tracker for iOS and Android. Step on your sca
 - 🔒 **100% On-Device Privacy:** Zero accounts, no tracking, no ads. All photos and data stay on your device and never touch a server.
 - 🔄 **Unit Toggle:** Seamlessly switch between `kg` and `lb` anytime.
 - 🗑️ **Simple Management:** Swipe left to remove past entries.
+- ❤️ **Apple Health (iOS):** Writes your entries to Apple Health and can import your past weight entries (read) — both only with your permission. A badge on the main screen shows the connection status.
+- 🎯 **Goal Weight & ETA:** Set a target, see your progress and an estimated arrival date.
+- 📊 **Weekly / Monthly Summary:** Your change over the period in a single card.
+- 📈 **Trend Chart:** Follow the direction of your weight history.
+- ⏰ **Optional Daily Reminder:** A local notification at the time you choose — no server, easy to turn off.
+- 💾 **CSV / JSON Backup:** Export and restore your data.
 
 ---
 

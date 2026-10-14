@@ -43,6 +43,17 @@ import app.kilo.domain.importFromCsv
 import app.kilo.domain.importFromJson
 import app.kilo.domain.mergeEntries
 
+import app.kilo.domain.GoalProgress
+import app.kilo.domain.PeriodSummary
+import app.kilo.domain.SummaryPeriod
+import app.kilo.domain.buildPeriodSummary
+import app.kilo.domain.computeGoalProgress
+import app.kilo.domain.mergeHealthSamples
+import app.kilo.platform.HealthProvider
+import app.kilo.platform.NoOpReminderScheduler
+import app.kilo.platform.ReminderScheduler
+import kotlinx.coroutines.flow.collect
+
 /** Localizable error keys; the UI maps them to string resources (no raw exceptions reach the UI). */
 enum class UiError { EMPTY, NOT_A_NUMBER, OUT_OF_RANGE, OCR_NO_RESULT, OCR_FAILED }
 
@@ -77,6 +88,14 @@ data class BackupNotice(val count: Int, val isSuccess: Boolean)
 
 data class HealthSyncNotice(val count: Int, val isSuccess: Boolean)
 
+private data class GoalPrefsData(
+    val entries: List<WeightEntry>,
+    val unit: WeightUnit,
+    val healthEnabled: Boolean,
+    val goalKg: Double?,
+    val goalStartKg: Double?,
+)
+
 data class UiState(
     val unit: WeightUnit = WeightUnit.KG,
     val history: List<HistoryItem> = emptyList(),
@@ -85,9 +104,21 @@ data class UiState(
     val isBackupSheetOpen: Boolean = false,
     val backupNotice: BackupNotice? = null,
     val isHealthSyncSupported: Boolean = false,
+    val healthProvider: HealthProvider = HealthProvider.NONE,
     val healthSyncEnabled: Boolean = false,
     val isSyncingHealth: Boolean = false,
+    val isImportingHealth: Boolean = false,
     val healthSyncNotice: HealthSyncNotice? = null,
+    val isHealthOnboardingOpen: Boolean = false,
+    val goal: GoalProgress? = null,
+    val isGoalSheetOpen: Boolean = false,
+    val goalInput: String = "",
+    val goalError: UiError? = null,
+    val summaryPeriod: SummaryPeriod = SummaryPeriod.WEEK,
+    val summary: PeriodSummary? = null,
+    val isReminderSupported: Boolean = false,
+    val reminderEnabled: Boolean = false,
+    val reminderMinutes: Int = 480,
 )
 
 class DashboardViewModel(
@@ -96,6 +127,7 @@ class DashboardViewModel(
     private val readText: suspend (ByteArray) -> List<String>,
     private val feedback: DashboardFeedback,
     private val healthSync: HealthSync = NoOpHealthSync,
+    private val reminderScheduler: ReminderScheduler = NoOpReminderScheduler,
     private val extractDate: (ByteArray) -> Instant? = { extractImageCaptureDate(it) },
     private val now: () -> Instant = {
         Clock.System.now().let { Instant.fromEpochSeconds(it.epochSeconds, it.nanosecondsOfSecond) }
@@ -103,7 +135,15 @@ class DashboardViewModel(
     private val timeZone: () -> TimeZone = { TimeZone.currentSystemDefault() },
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(UiState())
+    private val _summaryPeriod = MutableStateFlow(SummaryPeriod.WEEK)
+
+    private val _state = MutableStateFlow(
+        UiState(
+            isHealthSyncSupported = healthSync.isSupported,
+            healthProvider = healthSync.provider,
+            isReminderSupported = reminderScheduler.isSupported,
+        )
+    )
     val state: StateFlow<UiState> = _state.asStateFlow()
 
     private var scanJob: Job? = null
@@ -111,26 +151,52 @@ class DashboardViewModel(
 
     init {
         viewModelScope.launch {
-            combine(weights.entries, prefs.unit, prefs.healthSyncEnabled) { entries, unit, healthEnabled ->
-                Triple(entries, unit, healthEnabled)
-            }.collect { (entries, unit, healthEnabled) ->
+            val mainFlow = combine(
+                weights.entries,
+                prefs.unit,
+                prefs.healthSyncEnabled,
+                prefs.goalKg,
+                prefs.goalStartKg,
+            ) { entries, unit, healthEnabled, goalKg, goalStartKg ->
+                GoalPrefsData(entries, unit, healthEnabled, goalKg, goalStartKg)
+            }
+
+            val auxFlow = combine(
+                prefs.reminderEnabled,
+                prefs.reminderMinutes,
+                _summaryPeriod,
+            ) { reminderEnabled, reminderMinutes, summaryPeriod ->
+                Triple(reminderEnabled, reminderMinutes, summaryPeriod)
+            }
+
+            combine(mainFlow, auxFlow) { main, (reminderEnabled, reminderMinutes, summaryPeriod) ->
                 val tz = timeZone()
-                val history = buildHistory(entries, tz)
+                val history = buildHistory(main.entries, tz)
                 val hero = history.firstOrNull()?.let {
                     val today = now().toLocalDateTime(tz).date
                     val last = it.entry.at.toLocalDateTime(tz).date
                     HeroState(it, last.daysUntil(today).coerceAtLeast(0))
                 }
+                val goal = computeGoalProgress(main.goalKg, main.goalStartKg, main.entries, now(), tz)
+                val summary = buildPeriodSummary(main.entries, summaryPeriod, now(), tz)
+
                 _state.update {
                     it.copy(
-                        unit = unit,
+                        unit = main.unit,
                         history = history,
                         hero = hero,
                         isHealthSyncSupported = healthSync.isSupported,
-                        healthSyncEnabled = healthEnabled,
+                        healthProvider = healthSync.provider,
+                        healthSyncEnabled = main.healthEnabled,
+                        goal = goal,
+                        summaryPeriod = summaryPeriod,
+                        summary = summary,
+                        isReminderSupported = reminderScheduler.isSupported,
+                        reminderEnabled = reminderEnabled,
+                        reminderMinutes = reminderMinutes,
                     )
                 }
-            }
+            }.collect()
         }
     }
 
@@ -384,6 +450,153 @@ class DashboardViewModel(
 
     fun clearHealthSyncNotice() {
         _state.update { it.copy(healthSyncNotice = null) }
+    }
+
+    fun openHealthOnboarding() {
+        _state.update { it.copy(isHealthOnboardingOpen = true) }
+    }
+
+    fun dismissHealthOnboarding() {
+        prefs.setHealthOnboardingSeen(true)
+        _state.update { it.copy(isHealthOnboardingOpen = false) }
+    }
+
+    fun connectHealth(importAlso: Boolean) {
+        viewModelScope.launch {
+            val granted = healthSync.requestAuthorization()
+            if (granted) {
+                prefs.setHealthSyncEnabled(true)
+                prefs.setHealthOnboardingSeen(true)
+                _state.update { it.copy(isHealthOnboardingOpen = false) }
+                feedback.success()
+                if (importAlso) {
+                    importFromHealth()
+                }
+            } else {
+                prefs.setHealthSyncEnabled(false)
+                prefs.setHealthOnboardingSeen(true)
+                _state.update {
+                    it.copy(
+                        isHealthOnboardingOpen = false,
+                        healthSyncNotice = HealthSyncNotice(count = 0, isSuccess = false),
+                    )
+                }
+            }
+        }
+    }
+
+    fun importFromHealth() {
+        if (_state.value.isImportingHealth) return
+        viewModelScope.launch {
+            _state.update { it.copy(isImportingHealth = true, healthSyncNotice = null) }
+            val auth = healthSync.requestAuthorization()
+            if (!auth) {
+                _state.update { it.copy(isImportingHealth = false, healthSyncNotice = HealthSyncNotice(count = 0, isSuccess = false)) }
+                return@launch
+            }
+            val samples = healthSync.readWeights()
+            val current = weights.entries.value
+            val merged = mergeHealthSamples(current, samples)
+            val importedCount = merged.size - current.size
+            if (importedCount > 0) {
+                weights.replaceEntries(merged)
+                feedback.success()
+            }
+            _state.update {
+                it.copy(
+                    isImportingHealth = false,
+                    healthSyncNotice = HealthSyncNotice(count = importedCount, isSuccess = importedCount > 0 || samples.isEmpty()),
+                )
+            }
+        }
+    }
+
+    fun openGoalSheet() {
+        val currentGoal = _state.value.goal?.goalKg
+        val formatted = currentGoal?.let { formatWeight(it, _state.value.unit) } ?: ""
+        _state.update {
+            it.copy(
+                isGoalSheetOpen = true,
+                goalInput = formatted,
+                goalError = null,
+            )
+        }
+    }
+
+    fun dismissGoalSheet() {
+        _state.update { it.copy(isGoalSheetOpen = false, goalError = null) }
+    }
+
+    fun onGoalInputChange(text: String) {
+        _state.update { it.copy(goalInput = text, goalError = null) }
+    }
+
+    fun saveGoal() {
+        val s = _state.value
+        when (val r = parseWeightInput(s.goalInput, s.unit)) {
+            is WeightInputResult.Invalid -> {
+                val err = when (r.reason) {
+                    WeightInputResult.Reason.EMPTY -> UiError.EMPTY
+                    WeightInputResult.Reason.NOT_A_NUMBER -> UiError.NOT_A_NUMBER
+                    WeightInputResult.Reason.OUT_OF_RANGE -> UiError.OUT_OF_RANGE
+                }
+                _state.update { it.copy(goalError = err) }
+            }
+            is WeightInputResult.Valid -> {
+                prefs.setGoalKg(r.kg)
+                if (prefs.goalStartKg.value == null) {
+                    val currentWeight = s.history.firstOrNull()?.entry?.kg ?: r.kg
+                    prefs.setGoalStartKg(currentWeight)
+                }
+                _state.update { it.copy(isGoalSheetOpen = false, goalError = null) }
+                feedback.success()
+            }
+        }
+    }
+
+    fun clearGoal() {
+        prefs.setGoalKg(null)
+        prefs.setGoalStartKg(null)
+        _state.update { it.copy(isGoalSheetOpen = false, goalError = null) }
+        feedback.success()
+    }
+
+    fun setSummaryPeriod(period: SummaryPeriod) {
+        _summaryPeriod.value = period
+    }
+
+    fun setReminderEnabled(enabled: Boolean, title: String, body: String) {
+        if (!enabled) {
+            prefs.setReminderEnabled(false)
+            reminderScheduler.cancel()
+            return
+        }
+        viewModelScope.launch {
+            val granted = reminderScheduler.requestPermission()
+            if (granted) {
+                prefs.setReminderEnabled(true)
+                val mins = prefs.reminderMinutes.value
+                reminderScheduler.schedule(mins / 60, mins % 60, title, body)
+                feedback.success()
+            } else {
+                prefs.setReminderEnabled(false)
+            }
+        }
+    }
+
+    fun setReminderTime(hour: Int, minute: Int, title: String, body: String) {
+        val mins = hour * 60 + minute
+        prefs.setReminderMinutes(mins)
+        if (prefs.reminderEnabled.value) {
+            reminderScheduler.schedule(hour, minute, title, body)
+        }
+    }
+
+    fun rescheduleReminderIfEnabled(title: String, body: String) {
+        if (prefs.reminderEnabled.value) {
+            val mins = prefs.reminderMinutes.value
+            reminderScheduler.schedule(mins / 60, mins % 60, title, body)
+        }
     }
 
     fun exportCsv(): String = exportToCsv(_state.value.history.map { it.entry }, timeZone())

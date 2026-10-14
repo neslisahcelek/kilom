@@ -11,12 +11,15 @@ import kotlinx.datetime.Instant
  */
 class AndroidHealthSync : HealthSync {
     override val isSupported: Boolean = false
+    override val provider: HealthProvider get() = HealthProvider.HEALTH_CONNECT
 
     override suspend fun requestAuthorization(): Boolean = false
 
     override suspend fun writeWeight(kg: Double, timestamp: Instant, syncId: String?): Boolean = false
 
     override suspend fun writeWeights(entries: List<WeightEntry>): Int = 0
+
+    override suspend fun readWeights(since: Instant?): List<HealthWeightSample> = emptyList()
 }
 
 @Composable

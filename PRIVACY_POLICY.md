@@ -1,6 +1,6 @@
 # Privacy Policy / Gizlilik Politikası — Kilom
 
-**Last Updated / Son Güncelleme:** October 8, 2026 / 8 Ekim 2026  
+**Last Updated / Son Güncelleme:** October 14, 2026 / 14 Ekim 2026  
 **Application / Uygulama:** Kilom  
 **Developer / Geliştirici:** Neslişah Çelek  
 **Contact / İletişim:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)  
@@ -48,6 +48,8 @@ We believe that your personal health and weight tracking data belongs exclusivel
 - All weight entries, dates, and settings remain stored **only on your device**.
 - Photos taken or selected for scale reading are analyzed **100% locally on your device** and are never sent to external servers.
 - The app operates completely **offline** and contains **no tracking, no analytics, and no advertisements**.
+- Writing to and importing (reading) from Apple Health happens only with your permission and only on your device; your health data is never sent to any server.
+- Your goal weight and optional daily reminder are stored locally on your device, and reminder notifications are local.
 
 ---
 
@@ -81,6 +83,15 @@ Kilom requests limited runtime permissions solely to provide core on-device scan
 - On **Android**, text recognition is performed using **Google ML Kit Text Recognition** in on-device mode.
 - Neither framework transmits photos or OCR results to external servers.
 
+### D. Apple Health / HealthKit (iOS only — `NSHealthUpdateUsageDescription` / `NSHealthShareUsageDescription`)
+- **Purpose:** (1) **Write** the weight entries you log to Apple Health, and (2) **import (read)** your past weight entries from Apple Health into Kilom. Both work only with the permission you grant; you can change or revoke access anytime in iOS Settings > Health > Data Access & Devices > Kilom.
+- **Usage Descriptions (iOS):** *"Kilom reads your past weight entries from Apple Health so you can import them. Data stays on your device."* and *"Kilom saves your weight entries to Apple Health. Data stays on your device."*
+- **Privacy Assurance:** Health data moves only between Apple Health and Kilom on your device. It is never sent to any server, never used for advertising, marketing, analytics or data brokering, and never shared with third parties. The Apple Health connection status is shown by a badge on the app's main screen.
+
+### E. Notifications (Optional Daily Reminder)
+- **Purpose:** Used only if you turn on the daily reminder, to show a notification at the time you choose reminding you to weigh in.
+- **Privacy Assurance:** Notifications are scheduled and displayed **locally** on your device. No server or push notification service is used and no data is sent anywhere to deliver them. You can turn the reminder off anytime in the app or in your system notification settings.
+
 ---
 
 ## 4. Data Storage & Local Retention
@@ -88,6 +99,8 @@ Kilom requests limited runtime permissions solely to provide core on-device scan
 - **Local Storage:** All user data (weight entries, timestamps, and preferences) is stored locally on your device in secure, sandboxed application storage.
 - **No Cloud Synchronization:** Kilom does not synchronize your data with cloud servers or third-party storage providers.
 - **Backup:** Your data is backed up only according to your own operating system backup policies (e.g., encrypted local iTunes/Finder backup or standard Android backup).
+- **Goal Weight & Reminder Preferences:** Your goal weight, reminder time and summary preferences are stored locally on your device, just like your other data.
+- **Export:** CSV / JSON export happens only when you start it; Kilom does not send these files anywhere by itself.
 
 ---
 
@@ -163,6 +176,8 @@ Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz
 - Tüm kilo kayıtları, tarihler ve tercihler **yalnızca kendi cihazınızda** saklanır.
 - Tartı ekranından kilo okumak için çekilen veya seçilen fotoğraflar **%100 yerel olarak cihazınızda** işlenir; hiçbir sunucuya iletilmez.
 - Uygulama tamamen **çevrimdışı (offline)** çalışır; **reklam, analitik araç ve üçüncü taraf izleyici içermez**.
+- Apple Sağlık'a yazma ve Apple Sağlık'tan içe aktarma (okuma) yalnızca izninizle, cihazınızda gerçekleşir; sağlık verileriniz hiçbir sunucuya gönderilmez.
+- Hedef kilo ve günlük hatırlatıcı yalnızca cihazınızda yerel olarak saklanır; hatırlatıcı bildirimleri yereldir.
 
 ---
 
@@ -196,6 +211,15 @@ Kilom, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işlet
 - **Android'de:** Metin okuma işlemi doğrudan **Google ML Kit Text Recognition** motorunun cihaz içi (on-device) kütüphanesiyle çalışır.
 - Her iki sistemde de fotoğraflar internet bağlantısına ihtiyaç duymadan, sıfır veri transferi ile cihazın kendi işlemcisi üzerinde analiz edilir.
 
+### D. Apple Sağlık / HealthKit (yalnızca iOS — `NSHealthUpdateUsageDescription` / `NSHealthShareUsageDescription`)
+- **Kullanım Amacı:** (1) Kaydettiğiniz kilo kayıtlarını Apple Sağlık'a **yazmak** ve (2) Apple Sağlık'taki geçmiş kilo kayıtlarınızı Kilom'a **içe aktarmak (okumak)**. Her ikisi de yalnızca sizin verdiğiniz izinle çalışır; izni istediğiniz zaman iOS Ayarlar > Sağlık > Veri Erişimi ve Cihazlar > Kilom bölümünden değiştirebilir veya geri alabilirsiniz.
+- **iOS İzin Gerekçeleri:** *"Kilom reads your past weight entries from Apple Health so you can import them. Data stays on your device."* (Kilom, içe aktarabilmeniz için Apple Sağlık'taki geçmiş kilo kayıtlarınızı okur. Veriler cihazınızda kalır.) ve *"Kilom saves your weight entries to Apple Health. Data stays on your device."* (Kilom, kilo kayıtlarınızı Apple Sağlık'a kaydeder. Veriler cihazınızda kalır.)
+- **Gizlilik Güvencesi:** Sağlık verileriniz yalnızca cihazınızdaki Apple Sağlık ile Kilom arasında aktarılır. Hiçbir sunucuya gönderilmez; reklam, pazarlama, analitik veya veri aracılığı amacıyla kullanılmaz ve üçüncü taraflarla paylaşılmaz. Uygulamada Apple Sağlık bağlantı durumu ana ekrandaki rozetle gösterilir.
+
+### E. Bildirimler (İsteğe Bağlı Günlük Hatırlatıcı)
+- **Kullanım Amacı:** Yalnızca siz günlük hatırlatıcıyı açarsanız, seçtiğiniz saatte tartılmanızı hatırlatan bir bildirim göstermek için kullanılır.
+- **Gizlilik Güvencesi:** Bildirimler tamamen **yerel** olarak cihazınızda planlanır ve gösterilir. Sunucu veya anlık bildirim servisi (push) kullanılmaz, bildirim için herhangi bir veri dışarı gönderilmez. Hatırlatıcıyı uygulamadan veya iOS/Android bildirim ayarlarından istediğiniz zaman kapatabilirsiniz.
+
 ---
 
 ## 4. Veri Depolama ve Yerel Saklama
@@ -203,6 +227,8 @@ Kilom, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işlet
 - **Yerel Depolama:** Tüm tartı kayıtlarınız, tarih damgaları ve kullanıcı tercihleriniz cihazınızın güvenli yerel depolama alanında tutulur.
 - **Bulut Senkronizasyonu Yok:** Kilom, verilerinizi hiçbir bulut sunucusuna veya harici depolama sağlayıcısına aktarmaz.
 - **Yedekleme:** Verileriniz yalnızca cihazınızın kendi yerel işletim sistemi yedekleme politikalarına tabidir (örneğin yerel şifrelenmiş iTunes/Finder yedeği veya standart Android sistem yedeği).
+- **Hedef Kilo ve Hatırlatıcı Tercihleri:** Hedef kilonuz, hatırlatıcı saati ve özet tercihleriniz diğer verileriniz gibi yalnızca cihazınızda yerel olarak saklanır.
+- **Dışa Aktarma:** CSV / JSON dışa aktarma yalnızca siz başlattığınızda gerçekleşir; Kilom bu dosyaları kendisi hiçbir yere göndermez.
 
 ---
 

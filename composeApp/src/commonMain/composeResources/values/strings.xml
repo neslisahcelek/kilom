@@ -106,4 +106,55 @@
     <string name="camera_unavailable_title">Camera Unavailable</string>
     <string name="camera_unavailable_desc">No camera was found on this device or simulator.</string>
     <string name="camera_choose_gallery">Choose from Gallery</string>
+
+    <!-- Health Visibility & Import -->
+    <string name="health_section_title_ios">Apple Health</string>
+    <string name="health_section_title_android">Health Connect</string>
+    <string name="health_badge_title">Apple Health</string>
+    <string name="health_badge_connected">Connected</string>
+    <string name="health_badge_not_connected">Not Connected</string>
+    <string name="health_badge_sync_now">Sync</string>
+    <string name="health_onboarding_title">Sync with Apple Health</string>
+    <string name="health_onboarding_body">Kilom can automatically write your weigh-ins to Apple Health and import your previous measurements. All data stays 100%% private on your device.</string>
+    <string name="health_onboarding_connect">Connect Apple Health</string>
+    <string name="health_onboarding_import_option">Import past weigh-ins from Health</string>
+    <string name="health_onboarding_later">Not Now</string>
+    <string name="health_import_button">Import Past Weigh-Ins from Health</string>
+    <string name="health_import_loading">Reading from Health...</string>
+    <string name="health_import_success">Imported %1$d new entries from Health.</string>
+    <string name="health_import_empty">No new weight entries found in Health.</string>
+    <string name="health_import_denied">Read permission was not granted in Health settings.</string>
+
+    <!-- Goal Weight -->
+    <string name="goal_title">Goal Weight</string>
+    <string name="goal_set_cta">Set a Goal</string>
+    <string name="goal_remaining">%1$s to goal</string>
+    <string name="goal_reached">Goal Reached! 🎉</string>
+    <string name="goal_eta">Estimated: %1$s</string>
+    <string name="goal_input_hint">Target weight</string>
+    <string name="goal_clear">Remove Goal</string>
+    <string name="goal_save">Save Goal</string>
+    <string name="goal_progress_title">Goal Progress</string>
+    <string name="goal_starting">Start: %1$s</string>
+
+    <!-- Period Summary -->
+    <string name="summary_title">Period Summary</string>
+    <string name="summary_week">7 Days</string>
+    <string name="summary_month">30 Days</string>
+    <string name="summary_average">Average</string>
+    <string name="summary_range">Range</string>
+    <string name="summary_change">Net Change</string>
+    <string name="summary_vs_previous">vs prev %1$s</string>
+    <string name="summary_empty">No entries in this period</string>
+    <string name="summary_period_week">week</string>
+    <string name="summary_period_month">month</string>
+
+    <!-- Daily Reminder -->
+    <string name="reminder_section_title">Daily Reminder</string>
+    <string name="reminder_enable_title">Daily reminder</string>
+    <string name="reminder_enable_subtitle">Get a gentle local reminder each day</string>
+    <string name="reminder_time_title">Reminder Time</string>
+    <string name="reminder_permission_denied">Notification permission was not granted in Settings.</string>
+    <string name="reminder_notification_title">Kilom Weigh-in</string>
+    <string name="reminder_notification_body">Time for your daily weigh-in. Step on the scale!</string>
 </resources>

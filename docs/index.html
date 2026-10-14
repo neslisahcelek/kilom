@@ -435,7 +435,7 @@
         Your health data belongs exclusively to you. Kilom is designed from the ground up to operate completely on your device without transmitting data over the internet.
       </p>
       <div class="meta-bar">
-        <span><strong>Last Updated:</strong> October 7, 2026</span>
+        <span><strong>Last Updated:</strong> October 14, 2026</span>
         <span><strong>Developer:</strong> Neslişah Çelek</span>
         <span><strong>Status:</strong> Active</span>
       </div>
@@ -521,6 +521,25 @@
       </section>
 
       <section class="policy-section">
+        <h2>3b. Apple Health (HealthKit) &amp; Notifications</h2>
+        <h3>A. Apple Health (iOS only — <code>NSHealthUpdateUsageDescription</code> / <code>NSHealthShareUsageDescription</code>)</h3>
+        <p>
+          Kilom (1) <strong>writes</strong> the weight entries you log to Apple Health and (2) lets you <strong>import (read)</strong> your past weight entries from Apple Health. Both work only with the permission you grant; you can change access anytime in iOS Settings &gt; Health &gt; Data Access &amp; Devices &gt; Kilom.
+        </p>
+        <p>
+          <strong>iOS Purpose Strings:</strong> <em>"Kilom reads your past weight entries from Apple Health so you can import them. Data stays on your device."</em> and <em>"Kilom saves your weight entries to Apple Health. Data stays on your device."</em>
+        </p>
+        <div class="callout">
+          <p>🔒 Health data moves only between Apple Health and Kilom on your device. It is never sent to any server, never used for advertising, marketing, analytics or data brokering, and never shared with third parties. The connection status is shown by the Apple Health badge on the main screen.</p>
+        </div>
+
+        <h3>B. Notifications (Optional Daily Reminder)</h3>
+        <p>
+          Only if you turn on the daily reminder, a notification is shown at the time you choose. Notifications are scheduled <strong>locally</strong> on your device; no server or push service is used. Your goal weight and reminder preferences are also stored only on your device. You can turn the reminder off anytime.
+        </p>
+      </section>
+
+      <section class="policy-section">
         <h2>4. Data Storage & Local Retention</h2>
         <ul>
           <li><strong>Local Storage:</strong> All entries are stored on your device using secure, sandboxed application storage.</li>
@@ -571,6 +590,11 @@
                 <td><strong>Camera / Gallery</strong></td>
                 <td>Runtime Access</td>
                 <td>On-device scale OCR only; zero remote storage</td>
+              </tr>
+              <tr>
+                <td><strong>Apple Health / Notifications</strong></td>
+                <td>Runtime Access</td>
+                <td>Write and import only with your permission, on-device; reminder notifications are local</td>
               </tr>
             </tbody>
           </table>
@@ -652,6 +676,25 @@
       </section>
 
       <section class="policy-section">
+        <h2>3b. Apple Sağlık (HealthKit) ve Bildirimler</h2>
+        <h3>A. Apple Sağlık (yalnızca iOS — <code>NSHealthUpdateUsageDescription</code> / <code>NSHealthShareUsageDescription</code>)</h3>
+        <p>
+          Kilom, (1) kaydettiğiniz kilo kayıtlarını Apple Sağlık'a <strong>yazar</strong> ve (2) Apple Sağlık'taki geçmiş kilo kayıtlarınızı <strong>içe aktarmanıza (okumanıza)</strong> olanak tanır. İkisi de yalnızca sizin verdiğiniz izinle çalışır; izni istediğiniz zaman iOS Ayarlar &gt; Sağlık &gt; Veri Erişimi ve Cihazlar &gt; Kilom bölümünden değiştirebilirsiniz.
+        </p>
+        <p>
+          <strong>iOS Açıklama Metinleri:</strong> <em>"Kilom reads your past weight entries from Apple Health so you can import them. Data stays on your device."</em> ve <em>"Kilom saves your weight entries to Apple Health. Data stays on your device."</em>
+        </p>
+        <div class="callout">
+          <p>🔒 Sağlık verileriniz yalnızca cihazınızdaki Apple Sağlık ile Kilom arasında aktarılır. Hiçbir sunucuya gönderilmez; reklam, pazarlama, analitik veya veri aracılığı için kullanılmaz ve üçüncü taraflarla paylaşılmaz. Bağlantı durumu ana ekrandaki Apple Sağlık rozetinde görünür.</p>
+        </div>
+
+        <h3>B. Bildirimler (İsteğe Bağlı Günlük Hatırlatıcı)</h3>
+        <p>
+          Yalnızca günlük hatırlatıcıyı açarsanız, seçtiğiniz saatte bir bildirim gösterilir. Bildirimler tamamen <strong>yerel</strong> olarak cihazınızda planlanır; sunucu veya push servisi kullanılmaz. Hedef kilonuz ve hatırlatıcı tercihleriniz de yalnızca cihazınızda saklanır. Hatırlatıcıyı istediğiniz zaman kapatabilirsiniz.
+        </p>
+      </section>
+
+      <section class="policy-section">
         <h2>4. Veri Depolama ve Yerel Saklama</h2>
         <ul>
           <li><strong>Yerel Depolama:</strong> Tüm kilo kayıtları cihazınızın güvenli yerel depolama alanında saklanır.</li>
@@ -702,6 +745,11 @@
                 <td><strong>Kamera / Galeri</strong></td>
                 <td>Çalışma Zamanı Erişimi</td>
                 <td>Yalnızca cihaz üzerinde tartı OCR okuma; uzak sunucu aktarımı sıfır</td>
+              </tr>
+              <tr>
+                <td><strong>Apple Sağlık / Bildirimler</strong></td>
+                <td>Çalışma Zamanı Erişimi</td>
+                <td>Yazma ve içe aktarma yalnızca izninizle, cihazda; hatırlatıcı bildirimleri yerel</td>
               </tr>
             </tbody>
           </table>

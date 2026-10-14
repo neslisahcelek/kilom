@@ -55,9 +55,40 @@ class DashboardViewModelTest {
             return true
         }
 
+        var readSamples: List<app.kilo.platform.HealthWeightSample> = emptyList()
+
+        override suspend fun readWeights(since: Instant?): List<app.kilo.platform.HealthWeightSample> = readSamples
+
         override suspend fun writeWeights(entries: List<app.kilo.domain.WeightEntry>): Int {
             writtenBatches.add(entries)
             return entries.size
+        }
+    }
+
+    private class FakeReminderScheduler(
+        override val isSupported: Boolean = true,
+        var permissionResult: Boolean = true,
+    ) : app.kilo.platform.ReminderScheduler {
+        var requestedPermission = false
+        var scheduledTime: Pair<Int, Int>? = null
+        var scheduledTitle: String? = null
+        var scheduledBody: String? = null
+        var cancelled = false
+
+        override suspend fun requestPermission(): Boolean {
+            requestedPermission = true
+            return permissionResult
+        }
+
+        override fun schedule(hour: Int, minute: Int, title: String, body: String) {
+            scheduledTime = hour to minute
+            scheduledTitle = title
+            scheduledBody = body
+        }
+
+        override fun cancel() {
+            cancelled = true
+            scheduledTime = null
         }
     }
 
@@ -75,6 +106,7 @@ class DashboardViewModelTest {
         weights: SettingsWeightRepository = SettingsWeightRepository(MapSettings()),
         prefs: SettingsPrefsRepository = SettingsPrefsRepository(MapSettings()),
         healthSync: app.kilo.platform.HealthSync = app.kilo.platform.NoOpHealthSync,
+        reminderScheduler: app.kilo.platform.ReminderScheduler = app.kilo.platform.NoOpReminderScheduler,
         readText: suspend (ByteArray) -> List<String> = { emptyList() },
         extractDate: (ByteArray) -> Instant? = { null },
     ): DashboardViewModel = DashboardViewModel(
@@ -83,6 +115,7 @@ class DashboardViewModelTest {
         readText = readText,
         feedback = FakeFeedback(),
         healthSync = healthSync,
+        reminderScheduler = reminderScheduler,
         extractDate = extractDate,
         now = { fixedNow },
         timeZone = { utc },
@@ -434,5 +467,105 @@ class DashboardViewModelTest {
         vm.onDateSelected(newDateMillis)
 
         assertEquals(false, vm.state.value.sheet?.isDateAutoDetected)
+    }
+
+    @Test
+    fun healthOnboardingAndImportFlow() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val healthSync = FakeHealthSync(isSupported = true, authResult = true)
+        healthSync.readSamples = listOf(
+            app.kilo.platform.HealthWeightSample(72.0, Instant.parse("2026-10-06T09:00:00Z"), "external")
+        )
+        val vm = createViewModel(weights = weights, prefs = prefs, healthSync = healthSync)
+        advanceUntilIdle()
+
+        // Open onboarding
+        vm.openHealthOnboarding()
+        assertEquals(true, vm.state.value.isHealthOnboardingOpen)
+
+        // Connect and import past
+        vm.connectHealth(importAlso = true)
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.isHealthOnboardingOpen)
+        assertEquals(true, prefs.healthSyncEnabled.value)
+        assertEquals(true, prefs.healthOnboardingSeen.value)
+        assertEquals(1, weights.entries.value.size)
+        assertEquals(72.0, weights.entries.value.first().kg)
+    }
+
+    @Test
+    fun goalWeightFlow() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        weights.add(app.kilo.domain.WeightEntry.create(80.0, fixedNow))
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val vm = createViewModel(weights = weights, prefs = prefs)
+        advanceUntilIdle()
+
+        assertNull(vm.state.value.goal)
+
+        vm.openGoalSheet()
+        assertEquals(true, vm.state.value.isGoalSheetOpen)
+
+        vm.onGoalInputChange("75.0")
+        vm.saveGoal()
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.isGoalSheetOpen)
+        val goal = vm.state.value.goal
+        assertNotNull(goal)
+        assertEquals(75.0, goal.goalKg)
+        assertEquals(5.0, goal.remainingKg)
+        assertEquals(false, goal.reached)
+
+        // Clear goal
+        vm.clearGoal()
+        advanceUntilIdle()
+        assertNull(vm.state.value.goal)
+    }
+
+    @Test
+    fun periodSummaryFlow() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        weights.add(app.kilo.domain.WeightEntry.create(75.0, fixedNow))
+        weights.add(app.kilo.domain.WeightEntry.create(76.0, Instant.parse("2026-10-05T12:00:00Z")))
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        val summary = vm.state.value.summary
+        assertNotNull(summary)
+        assertEquals(2, summary.entryCount)
+        assertEquals(75.5, summary.averageKg)
+        assertEquals(75.0, summary.minKg)
+        assertEquals(76.0, summary.maxKg)
+
+        // Switch to Month
+        vm.setSummaryPeriod(app.kilo.domain.SummaryPeriod.MONTH)
+        advanceUntilIdle()
+        assertEquals(app.kilo.domain.SummaryPeriod.MONTH, vm.state.value.summaryPeriod)
+    }
+
+    @Test
+    fun reminderFlow() = runTest(testDispatcher) {
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val reminder = FakeReminderScheduler(isSupported = true, permissionResult = true)
+        val vm = createViewModel(prefs = prefs, reminderScheduler = reminder)
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.reminderEnabled)
+
+        vm.setReminderEnabled(true, "Weigh-in", "Check scale")
+        advanceUntilIdle()
+
+        assertEquals(true, prefs.reminderEnabled.value)
+        assertEquals(true, reminder.requestedPermission)
+        assertEquals(8 to 0, reminder.scheduledTime) // default 480 mins = 08:00
+
+        // Disable
+        vm.setReminderEnabled(false, "Weigh-in", "Check scale")
+        advanceUntilIdle()
+        assertEquals(false, prefs.reminderEnabled.value)
+        assertEquals(true, reminder.cancelled)
     }
 }
