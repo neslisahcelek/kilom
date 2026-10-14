@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.text.font.FontWeight
 import app.kilo.platform.rememberPhotoPicker
+import app.kilo.platform.rememberShareSheet
 import app.kilo.ui.components.ActionBar
 import app.kilo.ui.components.BackupSheet
 import app.kilo.ui.components.EntrySheet
@@ -46,6 +47,8 @@ import app.kilo.ui.components.GoalSheet
 import app.kilo.ui.components.HealthOnboardingSheet
 import app.kilo.ui.components.HeroCard
 import app.kilo.ui.components.HistoryRow
+import app.kilo.ui.components.ShareCardSheet
+import app.kilo.ui.components.StreakCard
 import app.kilo.ui.components.SummaryCard
 import app.kilo.ui.components.TrendChart
 import app.kilo.ui.theme.KiloTheme
@@ -86,6 +89,7 @@ fun DashboardScreen(
 
     var isCameraOpen by remember { mutableStateOf(false) }
     val photoPicker = rememberPhotoPicker(onImage = viewModel::onImage)
+    val shareSheet = rememberShareSheet()
 
     Box(
         modifier = modifier
@@ -248,6 +252,18 @@ fun DashboardScreen(
                         hazeState = hazeState,
                         onClick = viewModel::openGoalSheet,
                     )
+                }
+
+                // Streak & Consistency Matrix Card
+                val streak = state.streak
+                if (streak != null) {
+                    item(key = "streak_card") {
+                        StreakCard(
+                            streak = streak,
+                            hazeState = hazeState,
+                            onShareClick = viewModel::openShareSheet,
+                        )
+                    }
                 }
 
                 // Period Summary Card (Week / Month)
@@ -416,6 +432,19 @@ fun DashboardScreen(
             isOpen = state.isHealthOnboardingOpen,
             onConnect = { importAlso -> viewModel.connectHealth(importAlso) },
             onDismiss = viewModel::dismissHealthOnboarding,
+        )
+
+        // Milestone & Achievement Share Card Sheet
+        ShareCardSheet(
+            isOpen = state.isShareSheetOpen,
+            streak = state.streak,
+            latestKg = state.hero?.latest?.entry?.kg,
+            unit = state.unit,
+            onShare = { text ->
+                shareSheet.shareText(text)
+                viewModel.dismissShareSheet()
+            },
+            onDismiss = viewModel::dismissShareSheet,
         )
     }
 }

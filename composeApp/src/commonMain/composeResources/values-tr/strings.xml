@@ -157,4 +157,42 @@
     <string name="reminder_permission_denied">Ayarlar\'da bildirim izni verilmedi.</string>
     <string name="reminder_notification_title">Kilom Tartı Vakti</string>
     <string name="reminder_notification_body">Günlük tartılma vaktiniz geldi. Tartıya çıkıp kilonuzu kaydedin!</string>
+
+    <!-- Streak & Consistency Matrix -->
+    <string name="streak_title">İstikrar &amp; Tartı Serisi</string>
+    <string name="streak_current_days">%1$d Günlük Seri</string>
+    <string name="streak_best_days">En İyi: %1$d gün</string>
+    <string name="streak_risk_warning">Seriyi korumak için bugün tartılmayı unutma!</string>
+    <string name="streak_today_done">Bugün tartıldın</string>
+    <string name="streak_total_count">Toplam %1$d tartım</string>
+    <string name="streak_share_action">Paylaş</string>
+    <string name="streak_day_mon">P</string>
+    <string name="streak_day_tue">S</string>
+    <string name="streak_day_wed">Ç</string>
+    <string name="streak_day_thu">P</string>
+    <string name="streak_day_fri">C</string>
+    <string name="streak_day_sat">C</string>
+    <string name="streak_day_sun">P</string>
+
+    <!-- Milestone Share Card -->
+    <string name="share_sheet_title">Başarı &amp; İlerleme</string>
+    <string name="share_hide_weight_title">Net Kiloyu Gizle</string>
+    <string name="share_hide_weight_subtitle">Yalnızca seriyi, kilometre taşını ve disiplin durumunu paylaşır</string>
+    <string name="share_action_button">Başarı Kartını Paylaş</string>
+    <string name="share_text_with_weight">🎯 %1$s • Kilom ile %2$d günlük tartı serisi!</string>
+    <string name="share_text_private">🔥 Kilom ile %1$d günlük tartı serisi! İstikrar devam ediyor.</string>
+    <string name="share_card_subtitle">Kilom • %%100 Cihaz İçi Tartı ve Kilo Takibi</string>
+    <string name="share_card_badge_on_device">%%100 Cihaz İçi</string>
+    <string name="share_card_streak_badge">🔥 %1$d Günlük Tartı Serisi</string>
+
+    <!-- Milestone Titles -->
+    <string name="milestone_streak_3">3 Günlük Başlangıç</string>
+    <string name="milestone_streak_7">7 Günlük İstikrar</string>
+    <string name="milestone_streak_14">14 Günlük Disiplin</string>
+    <string name="milestone_streak_30">30 Günlük Alışkanlık Şampiyonu</string>
+    <string name="milestone_loss_1">-1 kg Başarısı</string>
+    <string name="milestone_loss_3">-3 kg Başarısı</string>
+    <string name="milestone_loss_5">-5 kg Başarısı</string>
+    <string name="milestone_loss_10">-10 kg Dönüşüm Başarısı</string>
+    <string name="milestone_goal_reached">Hedefe Ulaşıldı!</string>
 </resources>

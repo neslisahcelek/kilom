@@ -45,9 +45,11 @@ import app.kilo.domain.mergeEntries
 
 import app.kilo.domain.GoalProgress
 import app.kilo.domain.PeriodSummary
+import app.kilo.domain.StreakInfo
 import app.kilo.domain.SummaryPeriod
 import app.kilo.domain.buildPeriodSummary
 import app.kilo.domain.computeGoalProgress
+import app.kilo.domain.computeStreak
 import app.kilo.domain.mergeHealthSamples
 import app.kilo.platform.HealthProvider
 import app.kilo.platform.NoOpReminderScheduler
@@ -119,6 +121,8 @@ data class UiState(
     val isReminderSupported: Boolean = false,
     val reminderEnabled: Boolean = false,
     val reminderMinutes: Int = 480,
+    val streak: StreakInfo? = null,
+    val isShareSheetOpen: Boolean = false,
 )
 
 class DashboardViewModel(
@@ -179,6 +183,7 @@ class DashboardViewModel(
                 }
                 val goal = computeGoalProgress(main.goalKg, main.goalStartKg, main.entries, now(), tz)
                 val summary = buildPeriodSummary(main.entries, summaryPeriod, now(), tz)
+                val streak = computeStreak(main.entries, now(), tz, goal)
 
                 _state.update {
                     it.copy(
@@ -191,6 +196,7 @@ class DashboardViewModel(
                         goal = goal,
                         summaryPeriod = summaryPeriod,
                         summary = summary,
+                        streak = streak,
                         isReminderSupported = reminderScheduler.isSupported,
                         reminderEnabled = reminderEnabled,
                         reminderMinutes = reminderMinutes,
@@ -563,6 +569,14 @@ class DashboardViewModel(
 
     fun setSummaryPeriod(period: SummaryPeriod) {
         _summaryPeriod.value = period
+    }
+
+    fun openShareSheet() {
+        _state.update { it.copy(isShareSheetOpen = true) }
+    }
+
+    fun dismissShareSheet() {
+        _state.update { it.copy(isShareSheetOpen = false) }
     }
 
     fun setReminderEnabled(enabled: Boolean, title: String, body: String) {

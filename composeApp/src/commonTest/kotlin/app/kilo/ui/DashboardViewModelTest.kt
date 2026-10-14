@@ -568,4 +568,35 @@ class DashboardViewModelTest {
         assertEquals(false, prefs.reminderEnabled.value)
         assertEquals(true, reminder.cancelled)
     }
+
+    @Test
+    fun streakFlow() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        weights.add(app.kilo.domain.WeightEntry.create(75.0, fixedNow))
+        weights.add(app.kilo.domain.WeightEntry.create(75.5, Instant.parse("2026-10-06T12:00:00Z")))
+        val vm = createViewModel(weights = weights)
+        advanceUntilIdle()
+
+        val streak = vm.state.value.streak
+        assertNotNull(streak)
+        assertEquals(2, streak.currentStreak)
+        assertEquals(2, streak.bestStreak)
+        assertEquals(true, streak.isTodayLogged)
+        assertEquals(false, streak.isStreakAtRisk)
+        assertEquals(2, streak.totalWeighIns)
+    }
+
+    @Test
+    fun shareSheetOpenAndDismiss() = runTest(testDispatcher) {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.isShareSheetOpen)
+
+        vm.openShareSheet()
+        assertEquals(true, vm.state.value.isShareSheetOpen)
+
+        vm.dismissShareSheet()
+        assertEquals(false, vm.state.value.isShareSheetOpen)
+    }
 }

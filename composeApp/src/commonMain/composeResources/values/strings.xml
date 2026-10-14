@@ -157,4 +157,42 @@
     <string name="reminder_permission_denied">Notification permission was not granted in Settings.</string>
     <string name="reminder_notification_title">Kilom Weigh-in</string>
     <string name="reminder_notification_body">Time for your daily weigh-in. Step on the scale!</string>
+
+    <!-- Streak & Consistency Matrix -->
+    <string name="streak_title">Consistency &amp; Streak</string>
+    <string name="streak_current_days">%1$d Day Streak</string>
+    <string name="streak_best_days">Best: %1$d days</string>
+    <string name="streak_risk_warning">Weigh in today to keep your streak alive!</string>
+    <string name="streak_today_done">Logged today</string>
+    <string name="streak_total_count">%1$d total weigh-ins</string>
+    <string name="streak_share_action">Share</string>
+    <string name="streak_day_mon">M</string>
+    <string name="streak_day_tue">T</string>
+    <string name="streak_day_wed">W</string>
+    <string name="streak_day_thu">T</string>
+    <string name="streak_day_fri">F</string>
+    <string name="streak_day_sat">S</string>
+    <string name="streak_day_sun">S</string>
+
+    <!-- Milestone Share Card -->
+    <string name="share_sheet_title">Milestone &amp; Progress</string>
+    <string name="share_hide_weight_title">Hide Exact Weight</string>
+    <string name="share_hide_weight_subtitle">Only shares streak, milestone badge, and progress</string>
+    <string name="share_action_button">Share Progress Card</string>
+    <string name="share_text_with_weight">🎯 %1$s • %2$d day weigh-in streak on Kilom!</string>
+    <string name="share_text_private">🔥 %1$d day weigh-in streak on Kilom! Consistency is key.</string>
+    <string name="share_card_subtitle">Kilom • Pure On-Device Weigh-In Tracker</string>
+    <string name="share_card_badge_on_device">100% On-Device</string>
+    <string name="share_card_streak_badge">🔥 %1$d Day Weigh-In Streak</string>
+
+    <!-- Milestone Titles -->
+    <string name="milestone_streak_3">3-Day Habit Start</string>
+    <string name="milestone_streak_7">7-Day Consistency</string>
+    <string name="milestone_streak_14">14-Day Streak Master</string>
+    <string name="milestone_streak_30">30-Day Unstoppable</string>
+    <string name="milestone_loss_1">-1 kg Milestone</string>
+    <string name="milestone_loss_3">-3 kg Milestone</string>
+    <string name="milestone_loss_5">-5 kg Milestone</string>
+    <string name="milestone_loss_10">-10 kg Milestone</string>
+    <string name="milestone_goal_reached">Goal Reached!</string>
 </resources>
