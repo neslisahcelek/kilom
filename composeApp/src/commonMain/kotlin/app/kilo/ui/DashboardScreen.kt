@@ -40,6 +40,8 @@ import app.kilo.platform.rememberPhotoPicker
 import app.kilo.platform.rememberShareSheet
 import app.kilo.ui.components.ActionBar
 import app.kilo.ui.components.BackupSheet
+import app.kilo.ui.components.CycleCard
+import app.kilo.ui.components.CycleSheet
 import app.kilo.ui.components.EntrySheet
 import app.kilo.ui.components.GlassCard
 import app.kilo.ui.components.GoalCard
@@ -47,6 +49,9 @@ import app.kilo.ui.components.GoalSheet
 import app.kilo.ui.components.HealthOnboardingSheet
 import app.kilo.ui.components.HeroCard
 import app.kilo.ui.components.HistoryRow
+import app.kilo.ui.components.IosDatePicker
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toLocalDateTime
 import app.kilo.ui.components.ShareCardSheet
 import app.kilo.ui.components.StreakCard
 import app.kilo.ui.components.SummaryCard
@@ -254,6 +259,16 @@ fun DashboardScreen(
                     )
                 }
 
+                // Cycle & Nutrition Guide Card
+                item(key = "cycle_card") {
+                    CycleCard(
+                        state = state.cycle,
+                        hazeState = hazeState,
+                        onSetupClick = viewModel::openCycleSetup,
+                        onOpenSheet = viewModel::openCycleSheet,
+                    )
+                }
+
                 // Streak & Consistency Matrix Card
                 val streak = state.streak
                 if (streak != null) {
@@ -407,6 +422,9 @@ fun DashboardScreen(
             reminderEnabled = state.reminderEnabled,
             reminderMinutes = state.reminderMinutes,
             onToggleReminder = { enabled -> viewModel.setReminderEnabled(enabled, notifTitle, notifBody) },
+            cycleEnabled = state.cycle.isEnabled,
+            onToggleCycle = { if (!it) viewModel.disableCycleTracking() },
+            onOpenCycleSetup = viewModel::openCycleSetup,
             onExportCsv = viewModel::exportCsv,
             onExportJson = viewModel::exportJson,
             onImport = { viewModel.importData(it) },
@@ -446,5 +464,32 @@ fun DashboardScreen(
             },
             onDismiss = viewModel::dismissShareSheet,
         )
+
+        // Menstrual Cycle & Evidence-Based Nutrition Sheet
+        CycleSheet(
+            isOpen = state.isCycleSheetOpen,
+            state = state.cycle,
+            onUpdateLastPeriodDate = viewModel::updateCycleLastPeriodDate,
+            onDisableCycle = viewModel::disableCycleTracking,
+            onDismiss = viewModel::dismissCycleSheet,
+            hazeState = hazeState,
+        )
+
+        // Modal Date Picker for Initial Cycle Setup
+        if (state.isCycleSetupOpen) {
+            val nowMillis = remember {
+                kotlin.time.Clock.System.now().toEpochMilliseconds()
+            }
+            IosDatePicker(
+                selectedDateMillis = nowMillis,
+                onDateSelected = { millis ->
+                    val instant = Instant.fromEpochMilliseconds(millis)
+                    val date = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                    viewModel.enableCycleTracking(date)
+                },
+                onDismiss = viewModel::dismissCycleSetup,
+                hazeState = hazeState,
+            )
+        }
     }
 }

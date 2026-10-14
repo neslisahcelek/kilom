@@ -195,4 +195,129 @@
     <string name="milestone_loss_5">-5 kg Başarısı</string>
     <string name="milestone_loss_10">-10 kg Dönüşüm Başarısı</string>
     <string name="milestone_goal_reached">Hedefe Ulaşıldı!</string>
+
+    <!-- Cycle Tracking & Nutrition Guide -->
+    <string name="cycle_card_cta_title">Döngü &amp; Beden Rehberi</string>
+    <string name="cycle_card_cta_subtitle">Beslenmeni hormonal döngüne göre senkronize et, tartıdaki ödemleri anla.</string>
+    <string name="cycle_card_cta_button">Döngüyü Başlat</string>
+    <string name="cycle_day_counter">%1$d / %2$d. Gün</string>
+    <string name="cycle_water_retention_alert">Ödem Dönemi: Tartıdaki +1–2 kg geçici sudur, yağ DEĞİLDİR!</string>
+    <string name="cycle_water_retention_badge">Ödem &amp; Su Tutma Dönemi</string>
+    <string name="cycle_open_sheet">Günün Rehberi</string>
+    <string name="cycle_sources_title">Bilimsel Kaynaklar &amp; Literatür</string>
+    <string name="cycle_medical_disclaimer">Bu rehber, kadın fizyolojisi literatürüne (ACOG, Dr. Stacy Sims) dayalı bir yaşam tarzı kılavuzudur; tıbbi teşhis ve tedavi yerine geçmez.</string>
+    <string name="cycle_settings_title">Döngü ve Beslenme Rehberi</string>
+    <string name="cycle_settings_enable">Döngü Takibini Etkinleştir</string>
+    <string name="cycle_settings_enable_subtitle">Faza göre beslenme rehberi ve tartı ödem uyarıları</string>
+    <string name="cycle_last_period_date">Son Regl Başlangıç Tarihi</string>
+    <string name="cycle_length_title">Döngü Uzunluğu</string>
+    <string name="cycle_length_unit">%1$d gün</string>
+    <string name="cycle_period_duration_title">Regl Süresi</string>
+    <string name="cycle_period_duration_unit">%1$d gün</string>
+    <string name="cycle_sheet_title">Hormonal Ritim &amp; Beslenme</string>
+    <string name="cycle_sheet_subtitle">%1$d. Gün • %2$s</string>
+    <string name="cycle_tab_body">Beden &amp; Hormon</string>
+    <string name="cycle_tab_nutrition">Beslenme</string>
+    <string name="cycle_tab_sources">Kaynaklar</string>
+    <string name="cycle_section_eat">Bugün Ne Yemeli?</string>
+    <string name="cycle_section_avoid">Nelerden Kaçınmalı?</string>
+    <string name="cycle_section_hormones">Hormon Durumu</string>
+    <string name="cycle_section_body">Bedeninde Neler Oluyor?</string>
+    <string name="cycle_next_period_in">Sonraki regle %1$d gün</string>
+    <string name="cycle_water_retention_suggested">Döngü fazınıza göre su tutma etiketi önerildi.</string>
+    <string name="cycle_update_period_cta">Son Regl Tarihini Güncelle</string>
+    <string name="cycle_remove_cta">Döngü Rehberini Kapat</string>
+
+    <!-- Cycle Phases -->
+    <string name="cycle_phase_menstrual">Menstrüel Faz</string>
+    <string name="cycle_phase_follicular">Foliküler Faz</string>
+    <string name="cycle_phase_ovulation">Ovülasyon Fazı</string>
+    <string name="cycle_phase_luteal">Luteal Faz</string>
+
+    <!-- Nutrition Items (Eat) -->
+    <string name="cycle_eat_iron_greens">Demir zengini koyu yeşillikler, mercimek ve limon</string>
+    <string name="cycle_eat_bone_broth">Sıcak kemik suyu veya besleyici sebze çorbası</string>
+    <string name="cycle_eat_ginger_tea">Kramplar için zencefil veya papatya çayı</string>
+    <string name="cycle_eat_zinc_eggs">Çinko, organik yumurta ve hafif sebzeler</string>
+    <string name="cycle_eat_pumpkin_seeds">Kabak çekirdeği (çinko ve magnezyum kaynağı)</string>
+    <string name="cycle_eat_fermented">Bağırsak sağlığı için probiyotik kefir veya yoğurt</string>
+    <string name="cycle_eat_salmon_protein">Somon balığı veya temiz hafif proteinler</string>
+    <string name="cycle_eat_berries_antioxidants">Antioksidan yaban mersini, böğürtlen ve narenciye</string>
+    <string name="cycle_eat_quinoa">Kinoa, filizlendirilmiş tahıllar ve yulaf</string>
+    <string name="cycle_eat_cruciferous_broccoli">Turpgiller (brokoli, roka ile östrojen dengesi)</string>
+    <string name="cycle_eat_avocado_fats">Sağlıklı yağlar (avokado, soğuk sıkım zeytinyağı)</string>
+    <string name="cycle_eat_flaxseed">Öğütülmüş keten tohumu (tohum döngüsü desteği)</string>
+    <string name="cycle_eat_leafy_greens">Taze lifli salatalar ve zengin yeşillikler</string>
+    <string name="cycle_eat_artichokes_liver">Karaciğeri destekleyen enginar ve kuşkonmaz</string>
+    <string name="cycle_eat_antioxidant_berries">Yüksek su oranlı ferahlatıcı meyveler ve böğürtlenler</string>
+    <string name="cycle_eat_sweet_potatoes">Kompleks karbonhidratlar (tatlı patates, yulaf, esmer pirinç)</string>
+    <string name="cycle_eat_walnuts">Ceviz ve çiğ badem</string>
+    <string name="cycle_eat_chickpeas_b6">Nohut ve B6 vitamini zengini bakliyatlar</string>
+    <string name="cycle_eat_dark_chocolate">Bitter çikolata (%%70+) veya ham kakao</string>
+    <string name="cycle_eat_spinach_magnesium">Ispanak ve magnezyum zengini tohumlar</string>
+    <string name="cycle_eat_tryptophan_banana">Triptofan kaynakları (muz, hindi eti, yulaf)</string>
+    <string name="cycle_eat_dandelion_tea">Karahindiba veya maydanoz çayı (doğal ödem atıcı)</string>
+    <string name="cycle_eat_warm_lemon_water">Limonlu ılık su ve dengeli sıvı tüketimi</string>
+
+    <!-- Nutrition Items (Avoid) -->
+    <string name="cycle_avoid_salt">Aşırı sodyum (hücrelerde su hapsolmasını artırır)</string>
+    <string name="cycle_avoid_cold_heavy">Buzlu içecekler ve ağır kızartmalar</string>
+    <string name="cycle_avoid_caffeine">Aşırı kafein (damar büzülmesini ve krampları tetikler)</string>
+    <string name="cycle_avoid_processed_meats">İşlenmiş şarküteri ve salamura ürünleri</string>
+    <string name="cycle_avoid_excess_sugar">Rafine şekerli hazır tatlılar ve hamur işleri</string>
+    <string name="cycle_avoid_heavy_dairy">Hormonal akneye yatkınsanız ağır inek sütü ürünleri</string>
+    <string name="cycle_avoid_fried">Ağır yağlı kızartmalar</string>
+    <string name="cycle_avoid_refined_carbs">Beyaz un ve basit rafine karbonhidratlar</string>
+    <string name="cycle_avoid_artificial_sweeteners">Yapay tatlandırıcılar ve diyet gazlı içecekler</string>
+    <string name="cycle_avoid_excess_alcohol">Aşırı alkol (karaciğerin östrojen temizliğini zorlaştırır)</string>
+    <string name="cycle_avoid_processed_snacks">Paketli tuzlu atıştırmalıklar</string>
+    <string name="cycle_avoid_starvation_diets">Aşırı düşük kalorili şok diyetler (kortizolü fırlatır)</string>
+    <string name="cycle_avoid_heavy_caffeine">Yüksek miktarda kafein</string>
+    <string name="cycle_avoid_high_sodium">Yüksek sodyumlu gıdalar (cips, turşu, hazır soslar)</string>
+    <string name="cycle_avoid_salty_snacks">Tuzlu işlenmiş atıştırmalıklar</string>
+    <string name="cycle_avoid_sugar_spikes">Kan şekerini fırlatan tatlılar (PMS dalgalanmasını artırır)</string>
+    <string name="cycle_avoid_excess_salt">Aşırı sofra tuzu ve tuzlu gıdalar</string>
+    <string name="cycle_avoid_refined_sugar">Rafine şeker krizlerine teslim olmak</string>
+    <string name="cycle_avoid_late_coffee">Öğleden sonra kahve (uyku kalitesini ve GABA dengesini bozar)</string>
+
+    <!-- Micro-Period Titles, Bodies & Hormones -->
+    <string name="cycle_menstrual_early_title">Menstrüel Arınma &amp; Dinlenme</string>
+    <string name="cycle_menstrual_early_body">Prostaglandinler uterus kasılmasını tetikler. Enerji dinlenme seviyesindedir. Sıcak tutun, demir depolarını destekleyin ve bedeninize şefkat gösterin.</string>
+    <string name="cycle_menstrual_early_hormones">Östrojen ve progesteron en düşük taban seviyesindedir. Prostaglandin aktivitesi yüksektir.</string>
+
+    <string name="cycle_menstrual_late_title">Yenilenme &amp; Enerjinin Uyanışı</string>
+    <string name="cycle_menstrual_late_body">Kanama hafifler, hücre yenilenmesi başlar. Vücut önceki döngüden kalan ödemi doğal olarak boşaltır.</string>
+    <string name="cycle_menstrual_late_hormones">Östrojen yavaş ve kararlı yükselişine başlar. Progesteron henüz sakindir.</string>
+
+    <string name="cycle_follicular_early_title">Yükselen Güç &amp; Zihinsel Netlik</string>
+    <string name="cycle_follicular_early_body">İnsülin duyarlılığı zirvededir: kaslar karbonhidratları temiz yakıt olarak hızla çeker. Serotonin ve motivasyon yükselir.</string>
+    <string name="cycle_follicular_early_hormones">Yükselen östrojen folikül gelişimini ve zihinsel canlılığı destekler.</string>
+
+    <string name="cycle_follicular_late_title">Yumurtlama Öncesi Zirve</string>
+    <string name="cycle_follicular_late_body">Dayanıklılık, metabolik esneklik ve fiziksel güç döngünün en yüksek seviyesindedir. Hafif testosteron özgüveni artırır.</string>
+    <string name="cycle_follicular_late_hormones">Östrojen tepe noktasına ulaşır; ovülasyon öncesi hafif testosteron artışı eşlik eder.</string>
+
+    <string name="cycle_ovulation_title">Ovülasyon (Yumurtlama) Zirvesi</string>
+    <string name="cycle_ovulation_body">LH hormonu yumurta salınımını tetikler; vücut ısısı yaklaşık 0.3°C artar. Canlılık ve metabolizma en üst noktadadır.</string>
+    <string name="cycle_ovulation_hormones">LH dalgası, tepe östrojen ve progesteron üretimine geçiş.</string>
+
+    <string name="cycle_luteal_early_title">Metabolizma Hızlanması</string>
+    <string name="cycle_luteal_early_body">Progesteron liderliği devralır ve bazal metabolizma hızını günde 100–200 kcal artırır. İştahın hafif açılması biyolojik bir gerekliliktir.</string>
+    <string name="cycle_luteal_early_hormones">Progesteron baskındır, sakinleştirici GABA yollarını uyarır ve vücut ısısı yüksek kalır.</string>
+
+    <string name="cycle_luteal_mid_title">Progesteron Zirvesi &amp; Ödem Başlangıcı</string>
+    <string name="cycle_luteal_mid_body">Aldosteron hormonu böbreklerde tuz tutar: tartıdaki 0.8–1.5 kg artış tamamen sudur, ASLA yağ değildir! Magnezyum ödemi ve gerginliği yatıştırır.</string>
+    <string name="cycle_luteal_mid_hormones">Progesteron zirvesi; aldosteron artışı; insülin duyarlılığında hafif düşüş.</string>
+
+    <string name="cycle_luteal_late_title">PMS Eşiği &amp; Maksimum Ödem</string>
+    <string name="cycle_luteal_late_body">Hormonların ani düşüşü 2.5 kg\'a varan su tutulması ve tatlı isteği yaratabilir. Tartının moralinizi bozmasına izin vermeyin. Dinlenin ve tuzdan kaçının.</string>
+    <string name="cycle_luteal_late_hormones">Menstrüasyon öncesi östrojen ve progesteronun hızlı düşüşü.</string>
+
+    <!-- Scientific Sources Text -->
+    <string name="cycle_source_acog_title">ACOG (Amerikan Kadın Doğum ve Jinekoloji Koleji)</string>
+    <string name="cycle_source_acog_desc">Menstrüel fizyoloji, prostaglandin kaynaklı uterus kasılmaları ve C vitamini kofaktörleriyle demir replasman protokolleri klinik kılavuzları.</string>
+    <string name="cycle_source_sims_title">Dr. Stacy Sims, PhD (Stanford Egzersiz Fizyolojisi)</string>
+    <string name="cycle_source_sims_desc">Kadın infradian ritmi, luteal faz metabolik harcama artışı (+100–300 kcal/gün) ve aldosteron kaynaklı sodyum/sıvı tutulması araştırmaları.</string>
+    <string name="cycle_source_pubmed_title">Hakemli Endokrin ve Klinik Beslenme Çalışmaları</string>
+    <string name="cycle_source_pubmed_desc">PMS sıvı regülasyonunda magnezyum ve B6 takviyesi (Obstetrics &amp; Gynecology) ve turpgillerdeki glukosinolatlar ile östrojen detoksu üzerine klinik yayınlar.</string>
 </resources>

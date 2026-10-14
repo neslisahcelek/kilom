@@ -85,6 +85,14 @@ interface PrefsRepository {
     fun setReminderEnabled(enabled: Boolean)
     val reminderMinutes: StateFlow<Int>
     fun setReminderMinutes(minutes: Int)
+    val cycleEnabled: StateFlow<Boolean>
+    fun setCycleEnabled(enabled: Boolean)
+    val cycleLastPeriodDate: StateFlow<String?>
+    fun setCycleLastPeriodDate(isoDate: String?)
+    val cycleLength: StateFlow<Int>
+    fun setCycleLength(days: Int)
+    val cyclePeriodDuration: StateFlow<Int>
+    fun setCyclePeriodDuration(days: Int)
 }
 
 class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository {
@@ -166,6 +174,50 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         _reminderMinutes.value = minutes
     }
 
+    private val _cycleEnabled = MutableStateFlow(
+        settings.getBoolean(KEY_CYCLE_ENABLED, defaultValue = false)
+    )
+    override val cycleEnabled: StateFlow<Boolean> = _cycleEnabled.asStateFlow()
+
+    override fun setCycleEnabled(enabled: Boolean) {
+        settings.putBoolean(KEY_CYCLE_ENABLED, enabled)
+        _cycleEnabled.value = enabled
+    }
+
+    private val _cycleLastPeriodDate = MutableStateFlow(
+        settings.getStringOrNull(KEY_CYCLE_LAST_PERIOD_DATE)
+    )
+    override val cycleLastPeriodDate: StateFlow<String?> = _cycleLastPeriodDate.asStateFlow()
+
+    override fun setCycleLastPeriodDate(isoDate: String?) {
+        if (isoDate != null) {
+            settings.putString(KEY_CYCLE_LAST_PERIOD_DATE, isoDate)
+        } else {
+            settings.remove(KEY_CYCLE_LAST_PERIOD_DATE)
+        }
+        _cycleLastPeriodDate.value = isoDate
+    }
+
+    private val _cycleLength = MutableStateFlow(
+        settings.getInt(KEY_CYCLE_LENGTH, defaultValue = DEFAULT_CYCLE_LENGTH)
+    )
+    override val cycleLength: StateFlow<Int> = _cycleLength.asStateFlow()
+
+    override fun setCycleLength(days: Int) {
+        settings.putInt(KEY_CYCLE_LENGTH, days)
+        _cycleLength.value = days
+    }
+
+    private val _cyclePeriodDuration = MutableStateFlow(
+        settings.getInt(KEY_CYCLE_PERIOD_DURATION, defaultValue = DEFAULT_PERIOD_DURATION)
+    )
+    override val cyclePeriodDuration: StateFlow<Int> = _cyclePeriodDuration.asStateFlow()
+
+    override fun setCyclePeriodDuration(days: Int) {
+        settings.putInt(KEY_CYCLE_PERIOD_DURATION, days)
+        _cyclePeriodDuration.value = days
+    }
+
     private companion object {
         const val KEY_UNIT = "weight_unit"
         const val KEY_HEALTH_SYNC = "health_sync_enabled"
@@ -175,5 +227,11 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         const val KEY_REMINDER_ENABLED = "reminder_enabled"
         const val KEY_REMINDER_MINUTES = "reminder_minutes"
         const val DEFAULT_REMINDER_MINUTES = 480 // 08:00 AM
+        const val KEY_CYCLE_ENABLED = "cycle_enabled"
+        const val KEY_CYCLE_LAST_PERIOD_DATE = "cycle_last_period_date"
+        const val KEY_CYCLE_LENGTH = "cycle_length"
+        const val KEY_CYCLE_PERIOD_DURATION = "cycle_period_duration"
+        const val DEFAULT_CYCLE_LENGTH = 28
+        const val DEFAULT_PERIOD_DURATION = 5
     }
 }

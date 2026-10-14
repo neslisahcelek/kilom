@@ -13,6 +13,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.AfterTest
@@ -598,5 +599,69 @@ class DashboardViewModelTest {
 
         vm.dismissShareSheet()
         assertEquals(false, vm.state.value.isShareSheetOpen)
+    }
+
+    @Test
+    fun cycleTrackingFlow() = runTest(testDispatcher) {
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val vm = createViewModel(prefs = prefs)
+        advanceUntilIdle()
+
+        // Initially disabled
+        assertEquals(false, vm.state.value.cycle.isEnabled)
+        assertEquals(false, vm.state.value.isCycleSheetOpen)
+        assertEquals(false, vm.state.value.isCycleSetupOpen)
+
+        // Setup dialog
+        vm.openCycleSetup()
+        assertEquals(true, vm.state.value.isCycleSetupOpen)
+        vm.dismissCycleSetup()
+        assertEquals(false, vm.state.value.isCycleSetupOpen)
+
+        // Enable cycle tracking
+        vm.enableCycleTracking(LocalDate.parse("2026-09-25"))
+        advanceUntilIdle()
+
+        assertEquals(true, prefs.cycleEnabled.value)
+        assertEquals("2026-09-25", prefs.cycleLastPeriodDate.value)
+        val cycle = vm.state.value.cycle
+        assertEquals(true, cycle.isEnabled)
+        assertNotNull(cycle.currentDayInfo)
+        // Fixed now is 2026-10-07. Period was 2026-09-25 -> day 13
+        assertEquals(13, cycle.currentDayInfo.cycleDay)
+
+        // Open sheet
+        vm.openCycleSheet()
+        assertEquals(true, vm.state.value.isCycleSheetOpen)
+
+        vm.dismissCycleSheet()
+        assertEquals(false, vm.state.value.isCycleSheetOpen)
+
+        // Disable
+        vm.disableCycleTracking()
+        advanceUntilIdle()
+        assertEquals(false, prefs.cycleEnabled.value)
+        assertEquals(false, vm.state.value.cycle.isEnabled)
+    }
+
+    @Test
+    fun cycleWaterRetentionAutoSuggestsTag() = runTest(testDispatcher) {
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val vm = createViewModel(prefs = prefs)
+        advanceUntilIdle()
+
+        // Fixed now is 2026-10-07. Last period on 2026-09-14 -> day 24 (luteal mid/late, water retention active)
+        vm.enableCycleTracking(LocalDate.parse("2026-09-14"))
+        advanceUntilIdle()
+
+        val cycle = vm.state.value.cycle
+        assertEquals(true, cycle.isEnabled)
+        assertEquals(true, cycle.isWaterRetentionActive)
+
+        // When opening manual entry, WATER_RETENTION tag should be auto-suggested
+        vm.openManual()
+        val sheet = vm.state.value.sheet
+        assertNotNull(sheet)
+        assertEquals(WeightTag.WATER_RETENTION, sheet.selectedTag)
     }
 }

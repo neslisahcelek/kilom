@@ -51,6 +51,9 @@ import app.kilo.domain.buildPeriodSummary
 import app.kilo.domain.computeGoalProgress
 import app.kilo.domain.computeStreak
 import app.kilo.domain.mergeHealthSamples
+import app.kilo.domain.CycleState
+import app.kilo.domain.computeCycleState
+import kotlinx.datetime.LocalDate
 import app.kilo.platform.HealthProvider
 import app.kilo.platform.NoOpReminderScheduler
 import app.kilo.platform.ReminderScheduler
@@ -123,6 +126,9 @@ data class UiState(
     val reminderMinutes: Int = 480,
     val streak: StreakInfo? = null,
     val isShareSheetOpen: Boolean = false,
+    val cycle: CycleState = CycleState(isEnabled = false),
+    val isCycleSheetOpen: Boolean = false,
+    val isCycleSetupOpen: Boolean = false,
 )
 
 class DashboardViewModel(
@@ -173,7 +179,23 @@ class DashboardViewModel(
                 Triple(reminderEnabled, reminderMinutes, summaryPeriod)
             }
 
-            combine(mainFlow, auxFlow) { main, (reminderEnabled, reminderMinutes, summaryPeriod) ->
+            val cycleFlow = combine(
+                prefs.cycleEnabled,
+                prefs.cycleLastPeriodDate,
+                prefs.cycleLength,
+                prefs.cyclePeriodDuration,
+            ) { cycleEnabled, cycleLastPeriodDate, cycleLength, cyclePeriodDuration ->
+                computeCycleState(
+                    enabled = cycleEnabled,
+                    lastPeriodDateIso = cycleLastPeriodDate,
+                    cycleLength = cycleLength,
+                    periodDuration = cyclePeriodDuration,
+                    now = now(),
+                    tz = timeZone(),
+                )
+            }
+
+            combine(mainFlow, auxFlow, cycleFlow) { main, (reminderEnabled, reminderMinutes, summaryPeriod), cycle ->
                 val tz = timeZone()
                 val history = buildHistory(main.entries, tz)
                 val hero = history.firstOrNull()?.let {
@@ -200,6 +222,7 @@ class DashboardViewModel(
                         isReminderSupported = reminderScheduler.isSupported,
                         reminderEnabled = reminderEnabled,
                         reminderMinutes = reminderMinutes,
+                        cycle = cycle,
                     )
                 }
             }.collect()
@@ -220,7 +243,15 @@ class DashboardViewModel(
 
     fun openManual() {
         scanJob?.cancel()
-        _state.update { it.copy(sheet = SheetState(isPrefilledFromOcr = false)) }
+        val suggestedTag = if (_state.value.cycle.isWaterRetentionActive) WeightTag.WATER_RETENTION else null
+        _state.update {
+            it.copy(
+                sheet = SheetState(
+                    selectedTag = suggestedTag,
+                    isPrefilledFromOcr = false,
+                )
+            )
+        }
     }
 
     fun openEdit(entry: WeightEntry) {
@@ -264,6 +295,7 @@ class DashboardViewModel(
         val currentScanId = ++scanCounter
         logOcr("scan=$currentScanId started bytes=${bytes.size}")
         val captureInstant = extractDate(bytes)
+        val suggestedTag = if (_state.value.cycle.isWaterRetentionActive) WeightTag.WATER_RETENTION else null
         val initialSheetState = if (captureInstant != null) {
             val tz = timeZone()
             val localDate = captureInstant.toLocalDateTime(tz).date
@@ -274,9 +306,14 @@ class DashboardViewModel(
                 selectedDateMillis = dateMillis,
                 capturedInstant = captureInstant,
                 isDateAutoDetected = true,
+                selectedTag = suggestedTag,
             )
         } else {
-            SheetState(scanning = true, isPrefilledFromOcr = false)
+            SheetState(
+                scanning = true,
+                isPrefilledFromOcr = false,
+                selectedTag = suggestedTag,
+            )
         }
         _state.update { it.copy(sheet = initialSheetState) }
         val job = viewModelScope.launch {
@@ -611,6 +648,50 @@ class DashboardViewModel(
             val mins = prefs.reminderMinutes.value
             reminderScheduler.schedule(mins / 60, mins % 60, title, body)
         }
+    }
+
+    fun openCycleSheet() {
+        _state.update { it.copy(isCycleSheetOpen = true) }
+    }
+
+    fun dismissCycleSheet() {
+        _state.update { it.copy(isCycleSheetOpen = false) }
+    }
+
+    fun openCycleSetup() {
+        _state.update { it.copy(isCycleSetupOpen = true) }
+    }
+
+    fun dismissCycleSetup() {
+        _state.update { it.copy(isCycleSetupOpen = false) }
+    }
+
+    fun enableCycleTracking(lastPeriodDate: LocalDate? = null) {
+        val tz = timeZone()
+        val targetDate = lastPeriodDate ?: now().toLocalDateTime(tz).date
+        prefs.setCycleLastPeriodDate(targetDate.toString())
+        prefs.setCycleEnabled(true)
+        feedback.success()
+        _state.update { it.copy(isCycleSetupOpen = false) }
+    }
+
+    fun updateCycleLastPeriodDate(date: LocalDate) {
+        prefs.setCycleLastPeriodDate(date.toString())
+        feedback.success()
+    }
+
+    fun disableCycleTracking() {
+        prefs.setCycleEnabled(false)
+        _state.update { it.copy(isCycleSheetOpen = false, isCycleSetupOpen = false) }
+        feedback.success()
+    }
+
+    fun updateCycleLength(days: Int) {
+        prefs.setCycleLength(days)
+    }
+
+    fun updateCyclePeriodDuration(days: Int) {
+        prefs.setCyclePeriodDuration(days)
     }
 
     fun exportCsv(): String = exportToCsv(_state.value.history.map { it.entry }, timeZone())

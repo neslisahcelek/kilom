@@ -74,6 +74,9 @@ import kilo.composeapp.generated.resources.reminder_enable_subtitle
 import kilo.composeapp.generated.resources.reminder_enable_title
 import kilo.composeapp.generated.resources.reminder_section_title
 import kilo.composeapp.generated.resources.reminder_time_title
+import kilo.composeapp.generated.resources.cycle_settings_enable
+import kilo.composeapp.generated.resources.cycle_settings_enable_subtitle
+import kilo.composeapp.generated.resources.cycle_settings_title
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -94,6 +97,9 @@ fun BackupSheet(
     reminderEnabled: Boolean = false,
     reminderMinutes: Int = 480,
     onToggleReminder: (Boolean) -> Unit = {},
+    cycleEnabled: Boolean = false,
+    onToggleCycle: (Boolean) -> Unit = {},
+    onOpenCycleSetup: () -> Unit = {},
     onExportCsv: () -> String,
     onExportJson: () -> String,
     onImport: (String) -> Unit,
@@ -422,6 +428,62 @@ fun BackupSheet(
                                         ),
                                     )
                                 }
+                            }
+                        }
+
+                        // Cycle & Nutrition Guide Section
+                        Spacer(Modifier.height(18.dp))
+
+                        Text(
+                            text = stringResource(Res.string.cycle_settings_title),
+                            style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                            color = colors.textPrimary,
+                            modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 8.dp),
+                        )
+
+                        // Cycle Toggle Card
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(colors.glassTint)
+                                .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                            ) {
+                                Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                                    Text(
+                                        text = stringResource(Res.string.cycle_settings_enable),
+                                        style = typography.body.copy(fontWeight = FontWeight.SemiBold),
+                                        color = colors.textPrimary,
+                                    )
+                                    Spacer(Modifier.height(2.dp))
+                                    Text(
+                                        text = stringResource(Res.string.cycle_settings_enable_subtitle),
+                                        style = typography.caption,
+                                        color = colors.textSecondary,
+                                    )
+                                }
+                                Switch(
+                                    checked = cycleEnabled,
+                                    onCheckedChange = { checked ->
+                                        if (checked) {
+                                            onOpenCycleSetup()
+                                        } else {
+                                            onToggleCycle(false)
+                                        }
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = colors.onAccent,
+                                        checkedTrackColor = colors.accent,
+                                        uncheckedThumbColor = colors.textSecondary,
+                                        uncheckedTrackColor = colors.glassTint,
+                                    ),
+                                )
                             }
                         }
 

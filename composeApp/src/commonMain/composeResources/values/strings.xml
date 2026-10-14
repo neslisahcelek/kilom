@@ -195,4 +195,129 @@
     <string name="milestone_loss_5">-5 kg Milestone</string>
     <string name="milestone_loss_10">-10 kg Milestone</string>
     <string name="milestone_goal_reached">Goal Reached!</string>
+
+    <!-- Cycle Tracking & Nutrition Guide -->
+    <string name="cycle_card_cta_title">Cycle &amp; Body Wisdom</string>
+    <string name="cycle_card_cta_subtitle">Sync nutrition with your hormonal cycle &amp; decode scale water retention.</string>
+    <string name="cycle_card_cta_button">Set Up Cycle</string>
+    <string name="cycle_day_counter">Day %1$d of %2$d</string>
+    <string name="cycle_water_retention_alert">Water Retention Window: +1–2 kg on the scale is temporary fluid, not fat!</string>
+    <string name="cycle_water_retention_badge">Fluid Retention Window</string>
+    <string name="cycle_open_sheet">Daily Guide</string>
+    <string name="cycle_sources_title">Scientific Sources &amp; Literature</string>
+    <string name="cycle_medical_disclaimer">This guide is an educational lifestyle tool based on female physiology literature (ACOG, Dr. Stacy Sims). It is not medical advice, diagnosis, or treatment.</string>
+    <string name="cycle_settings_title">Cycle &amp; Nutrition Guide</string>
+    <string name="cycle_settings_enable">Enable Cycle Tracking</string>
+    <string name="cycle_settings_enable_subtitle">Phase-by-phase nutrition guidance &amp; fluid retention alerts</string>
+    <string name="cycle_last_period_date">Last Period Start Date</string>
+    <string name="cycle_length_title">Cycle Length</string>
+    <string name="cycle_length_unit">%1$d days</string>
+    <string name="cycle_period_duration_title">Period Duration</string>
+    <string name="cycle_period_duration_unit">%1$d days</string>
+    <string name="cycle_sheet_title">Hormonal Rhythm &amp; Nutrition</string>
+    <string name="cycle_sheet_subtitle">Day %1$d • %2$s</string>
+    <string name="cycle_tab_body">Body &amp; Hormones</string>
+    <string name="cycle_tab_nutrition">Nutrition</string>
+    <string name="cycle_tab_sources">Sources</string>
+    <string name="cycle_section_eat">Recommended Today</string>
+    <string name="cycle_section_avoid">Foods to Avoid</string>
+    <string name="cycle_section_hormones">Hormonal State</string>
+    <string name="cycle_section_body">What\'s Happening in Your Body</string>
+    <string name="cycle_next_period_in">Next period in %1$d days</string>
+    <string name="cycle_water_retention_suggested">Water retention tag suggested based on your cycle phase.</string>
+    <string name="cycle_update_period_cta">Update Last Period Date</string>
+    <string name="cycle_remove_cta">Turn Off Cycle Guide</string>
+
+    <!-- Cycle Phases -->
+    <string name="cycle_phase_menstrual">Menstrual Phase</string>
+    <string name="cycle_phase_follicular">Follicular Phase</string>
+    <string name="cycle_phase_ovulation">Ovulatory Phase</string>
+    <string name="cycle_phase_luteal">Luteal Phase</string>
+
+    <!-- Nutrition Items (Eat) -->
+    <string name="cycle_eat_iron_greens">Iron-rich dark greens, lentils &amp; citrus</string>
+    <string name="cycle_eat_bone_broth">Warm bone broth or comforting soup</string>
+    <string name="cycle_eat_ginger_tea">Ginger or chamomile tea for cramps</string>
+    <string name="cycle_eat_zinc_eggs">Zinc, eggs &amp; steamed light veggies</string>
+    <string name="cycle_eat_pumpkin_seeds">Pumpkin seeds (rich in zinc &amp; magnesium)</string>
+    <string name="cycle_eat_fermented">Fermented kefir or yogurt for gut health</string>
+    <string name="cycle_eat_salmon_protein">Wild salmon or clean lean proteins</string>
+    <string name="cycle_eat_berries_antioxidants">Antioxidant berries &amp; citrus fruits</string>
+    <string name="cycle_eat_quinoa">Quinoa, sprouted grains &amp; oats</string>
+    <string name="cycle_eat_cruciferous_broccoli">Cruciferous veggies (broccoli, arugula for estrogen clearance)</string>
+    <string name="cycle_eat_avocado_fats">Healthy fats (avocado, extra virgin olive oil)</string>
+    <string name="cycle_eat_flaxseed">Ground flaxseeds (seed cycling support)</string>
+    <string name="cycle_eat_leafy_greens">Fresh vibrant salads &amp; fiber-rich greens</string>
+    <string name="cycle_eat_artichokes_liver">Artichokes &amp; asparagus for liver support</string>
+    <string name="cycle_eat_antioxidant_berries">Hydrating fruits &amp; seasonal berries</string>
+    <string name="cycle_eat_sweet_potatoes">Complex carbs (sweet potatoes, oats, brown rice)</string>
+    <string name="cycle_eat_walnuts">Walnuts &amp; raw almonds</string>
+    <string name="cycle_eat_chickpeas_b6">Chickpeas &amp; foods rich in Vitamin B6</string>
+    <string name="cycle_eat_dark_chocolate">Dark chocolate (70%%+) or raw cacao</string>
+    <string name="cycle_eat_spinach_magnesium">Spinach &amp; magnesium-dense seeds</string>
+    <string name="cycle_eat_tryptophan_banana">Tryptophan sources (bananas, turkey, oats)</string>
+    <string name="cycle_eat_dandelion_tea">Dandelion or parsley tea (natural diuretic)</string>
+    <string name="cycle_eat_warm_lemon_water">Warm lemon water &amp; optimal hydration</string>
+
+    <!-- Nutrition Items (Avoid) -->
+    <string name="cycle_avoid_salt">Excess sodium (causes fluid entrapment)</string>
+    <string name="cycle_avoid_cold_heavy">Ice-cold drinks &amp; greasy fried foods</string>
+    <string name="cycle_avoid_caffeine">Excessive caffeine (worsens vasoconstriction)</string>
+    <string name="cycle_avoid_processed_meats">Ultra-processed cured meats</string>
+    <string name="cycle_avoid_excess_sugar">Refined sugary sweets &amp; pastries</string>
+    <string name="cycle_avoid_heavy_dairy">Heavy cow dairy if prone to hormonal breakouts</string>
+    <string name="cycle_avoid_fried">Greasy deep-fried food</string>
+    <string name="cycle_avoid_refined_carbs">Simple white flour &amp; refined carbs</string>
+    <string name="cycle_avoid_artificial_sweeteners">Artificial sweeteners &amp; diet sodas</string>
+    <string name="cycle_avoid_excess_alcohol">Excess alcohol (burdens liver estrogen detox)</string>
+    <string name="cycle_avoid_processed_snacks">Processed salty snacks</string>
+    <string name="cycle_avoid_starvation_diets">Extreme caloric restriction (spikes cortisol)</string>
+    <string name="cycle_avoid_heavy_caffeine">High caffeine intake</string>
+    <string name="cycle_avoid_high_sodium">High-sodium foods (chips, pickles, soy sauce)</string>
+    <string name="cycle_avoid_salty_snacks">Salty processed food</string>
+    <string name="cycle_avoid_sugar_spikes">Sugar spikes (worsens PMS mood swings)</string>
+    <string name="cycle_avoid_excess_salt">Excess table salt &amp; salty meals</string>
+    <string name="cycle_avoid_refined_sugar">Refined sugar cravings</string>
+    <string name="cycle_avoid_late_coffee">Late afternoon coffee (impairs sleep &amp; GABA)</string>
+
+    <!-- Micro-Period Titles, Bodies & Hormones -->
+    <string name="cycle_menstrual_early_title">Menstrual Release &amp; Rest</string>
+    <string name="cycle_menstrual_early_body">Uterine prostaglandins peak, signaling natural shedding. Energy is at resting baseline. Prioritize warmth, iron replenishment, and gentle pacing.</string>
+    <string name="cycle_menstrual_early_hormones">Estrogen and progesterone are at baseline low. Prostaglandin activity is high.</string>
+
+    <string name="cycle_menstrual_late_title">Renewal &amp; Energy Awakening</string>
+    <string name="cycle_menstrual_late_body">Bleeding subsides and the uterine lining begins rebuilding. Cellular repair is active. Your body naturally sheds cycle fluid.</string>
+    <string name="cycle_menstrual_late_hormones">Estrogen begins its gradual, steady ascent. Progesterone remains quiet.</string>
+
+    <string name="cycle_follicular_early_title">Rising Power &amp; Mental Sharpness</string>
+    <string name="cycle_follicular_early_body">Insulin sensitivity is peak: muscles absorb carbs effortlessly as clean fuel. Serotonin and motivation climb rapidly.</string>
+    <string name="cycle_follicular_early_hormones">Rising estradiol stimulates follicular development and neurochemical vitality.</string>
+
+    <string name="cycle_follicular_late_title">Pre-Ovulatory Radiance</string>
+    <string name="cycle_follicular_late_body">Stamina, metabolic flexibility, and physical strength are at their cycle highs. A small testosterone surge amplifies confidence.</string>
+    <string name="cycle_follicular_late_hormones">Estrogen peaks; mild testosterone surge occurs before the ovulatory trigger.</string>
+
+    <string name="cycle_ovulation_title">Ovulatory Peak &amp; Vitality</string>
+    <string name="cycle_ovulation_body">The LH surge triggers egg release; basal body temperature rises by ~0.3°C. Social energy and metabolic turnover are at their zenith.</string>
+    <string name="cycle_ovulation_hormones">LH surge, peak estrogen, and the transition into progesterone synthesis.</string>
+
+    <string name="cycle_luteal_early_title">Metabolic Acceleration</string>
+    <string name="cycle_luteal_early_body">Progesterone takes the lead, boosting your basal metabolic rate by +100 to 200 kcal/day. Moderate appetite increase is biologically necessary.</string>
+    <string name="cycle_luteal_early_hormones">Progesterone dominates, activating GABA calming pathways while body temperature stays elevated.</string>
+
+    <string name="cycle_luteal_mid_title">Progesterone Peak &amp; Fluid Shift</string>
+    <string name="cycle_luteal_mid_body">Aldosterone activates renal sodium retention: 0.8–1.5 kg scale weight increase is common fluid holding, NOT body fat! Magnesium soothes irritability.</string>
+    <string name="cycle_luteal_mid_hormones">Peak progesterone; aldosterone elevated; mild drop in insulin sensitivity.</string>
+
+    <string name="cycle_luteal_late_title">PMS Threshold &amp; Fluid Peak</string>
+    <string name="cycle_luteal_late_body">Hormone withdrawal can trigger fluid retention up to 2.5 kg and serotonin dips. Do not let the scale trick you. Rest, hydrate, and steer clear of excess salt.</string>
+    <string name="cycle_luteal_late_hormones">Rapid drop in estrogen and progesterone prior to menstruation.</string>
+
+    <!-- Scientific Sources Text -->
+    <string name="cycle_source_acog_title">ACOG (American College of Obstetricians and Gynecologists)</string>
+    <string name="cycle_source_acog_desc">Clinical guidelines on menstrual physiology, prostaglandin-induced uterine contractions, and iron-replacement protocols with Vitamin C co-factors.</string>
+    <string name="cycle_source_sims_title">Dr. Stacy Sims, PhD (Stanford Exercise Physiology)</string>
+    <string name="cycle_source_sims_desc">Research on female infradian rhythm, luteal phase metabolic expenditure increase (+100–300 kcal/day), and aldosterone-mediated fluid retention.</string>
+    <string name="cycle_source_pubmed_title">Peer-Reviewed Endocrine &amp; Nutritional Trials</string>
+    <string name="cycle_source_pubmed_desc">Clinical studies on magnesium and B6 supplementation for PMS fluid regulation (Obstetrics &amp; Gynecology) and estrogen clearance through cruciferous glucosinolates.</string>
 </resources>
