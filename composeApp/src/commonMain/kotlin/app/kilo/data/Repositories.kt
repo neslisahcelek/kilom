@@ -3,6 +3,7 @@ package app.kilo.data
 import app.kilo.domain.WeightEntry
 import app.kilo.domain.WeightUnit
 import com.russhwolf.settings.Settings
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -93,6 +94,12 @@ interface PrefsRepository {
     fun setCycleLength(days: Int)
     val cyclePeriodDuration: StateFlow<Int>
     fun setCyclePeriodDuration(days: Int)
+    val cycleLengthDays: Flow<Int>
+    suspend fun setCycleLengthDays(days: Int)
+    val aiCoachApiKey: Flow<String?>
+    suspend fun setAiCoachApiKey(key: String?)
+    val aiProvider: Flow<String>
+    suspend fun setAiProvider(provider: String)
 }
 
 class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository {
@@ -218,6 +225,39 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         _cyclePeriodDuration.value = days
     }
 
+    override val cycleLengthDays: Flow<Int> = _cycleLength.asStateFlow()
+
+    override suspend fun setCycleLengthDays(days: Int) {
+        val clamped = days.coerceIn(21, 45)
+        setCycleLength(clamped)
+    }
+
+    private val _aiCoachApiKey = MutableStateFlow(
+        settings.getStringOrNull(KEY_AI_COACH_API_KEY)
+    )
+    override val aiCoachApiKey: Flow<String?> = _aiCoachApiKey.asStateFlow()
+
+    override suspend fun setAiCoachApiKey(key: String?) {
+        val clean = key?.trim()?.takeIf { it.isNotEmpty() }
+        if (clean != null) {
+            settings.putString(KEY_AI_COACH_API_KEY, clean)
+        } else {
+            settings.remove(KEY_AI_COACH_API_KEY)
+        }
+        _aiCoachApiKey.value = clean
+    }
+
+    private val _aiProvider = MutableStateFlow(
+        settings.getString(KEY_AI_PROVIDER, defaultValue = DEFAULT_AI_PROVIDER)
+    )
+    override val aiProvider: Flow<String> = _aiProvider.asStateFlow()
+
+    override suspend fun setAiProvider(provider: String) {
+        val clean = provider.trim().ifBlank { DEFAULT_AI_PROVIDER }
+        settings.putString(KEY_AI_PROVIDER, clean)
+        _aiProvider.value = clean
+    }
+
     private companion object {
         const val KEY_UNIT = "weight_unit"
         const val KEY_HEALTH_SYNC = "health_sync_enabled"
@@ -233,5 +273,64 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         const val KEY_CYCLE_PERIOD_DURATION = "cycle_period_duration"
         const val DEFAULT_CYCLE_LENGTH = 28
         const val DEFAULT_PERIOD_DURATION = 5
+        const val KEY_AI_COACH_API_KEY = "ai_coach_api_key"
+        const val KEY_AI_PROVIDER = "ai_provider"
+        const val DEFAULT_AI_PROVIDER = "GEMINI"
     }
 }
+
+interface WorkoutRepository {
+    val workouts: Flow<List<HevyWorkoutSession>>
+    suspend fun saveWorkouts(workouts: List<HevyWorkoutSession>)
+    suspend fun clearWorkouts()
+}
+
+object NoOpWorkoutRepository : WorkoutRepository {
+    override val workouts: Flow<List<HevyWorkoutSession>> = MutableStateFlow(emptyList())
+    override suspend fun saveWorkouts(workouts: List<HevyWorkoutSession>) {}
+    override suspend fun clearWorkouts() {}
+}
+
+class WorkoutRepositorySettings(
+    private val settings: Settings,
+    private val json: Json = Json { ignoreUnknownKeys = true },
+) : WorkoutRepository {
+
+    private val serializer = ListSerializer(HevyWorkoutSession.serializer())
+    private val _workouts = MutableStateFlow(load())
+    override val workouts: StateFlow<List<HevyWorkoutSession>> = _workouts.asStateFlow()
+
+    override suspend fun saveWorkouts(workouts: List<HevyWorkoutSession>) {
+        val sorted = workouts.sortedWith(
+            compareByDescending<HevyWorkoutSession> { it.dateEpochDays }
+                .thenByDescending { it.startTimeEpochMs }
+        )
+        settings.putString(KEY_WORKOUTS, json.encodeToString(serializer, sorted))
+        _workouts.value = sorted
+    }
+
+    override suspend fun clearWorkouts() {
+        settings.remove(KEY_WORKOUTS)
+        _workouts.value = emptyList()
+    }
+
+    private fun load(): List<HevyWorkoutSession> {
+        val raw = settings.getStringOrNull(KEY_WORKOUTS) ?: return emptyList()
+        return try {
+            val list = json.decodeFromString(serializer, raw)
+            list.sortedWith(
+                compareByDescending<HevyWorkoutSession> { it.dateEpochDays }
+                    .thenByDescending { it.startTimeEpochMs }
+            )
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    private companion object {
+        const val KEY_WORKOUTS = "hevy_workouts_v1"
+    }
+}
+
+typealias SettingsWorkoutRepository = WorkoutRepositorySettings
+

@@ -42,10 +42,12 @@ import app.kilo.ui.components.ActionBar
 import app.kilo.ui.components.BackupSheet
 import app.kilo.ui.components.CycleCard
 import app.kilo.ui.components.CycleSheet
+import app.kilo.ui.components.DomsAlertBanner
 import app.kilo.ui.components.EntrySheet
 import app.kilo.ui.components.GlassCard
 import app.kilo.ui.components.GoalCard
 import app.kilo.ui.components.GoalSheet
+import app.kilo.ui.components.WorkoutCorrelationSheet
 import app.kilo.ui.components.HealthOnboardingSheet
 import app.kilo.ui.components.HeroCard
 import app.kilo.ui.components.HistoryRow
@@ -187,6 +189,18 @@ fun DashboardScreen(
                         unit = state.unit,
                         hazeState = hazeState,
                     )
+                }
+
+                // DOMS Fluid Retention Alert Banner
+                val doms = state.domsAssessment
+                if (doms != null && doms.hasTrauma && !state.isDomsAlertDismissed) {
+                    item(key = "doms_alert_banner") {
+                        DomsAlertBanner(
+                            assessment = doms,
+                            onDismiss = viewModel::dismissDomsAlert,
+                            hazeState = hazeState,
+                        )
+                    }
                 }
 
                 // Apple Health / Health Connect Badge (Guideline 2.5.1 Visibility)
@@ -425,6 +439,9 @@ fun DashboardScreen(
             cycleEnabled = state.cycle.isEnabled,
             onToggleCycle = { if (!it) viewModel.disableCycleTracking() },
             onOpenCycleSetup = viewModel::openCycleSetup,
+            workoutCount = state.workouts.size,
+            onImportHevyCsv = { viewModel.importHevyCsv(it) },
+            onClearWorkouts = viewModel::clearWorkouts,
             onExportCsv = viewModel::exportCsv,
             onExportJson = viewModel::exportJson,
             onImport = { viewModel.importData(it) },
@@ -469,9 +486,26 @@ fun DashboardScreen(
         CycleSheet(
             isOpen = state.isCycleSheetOpen,
             state = state.cycle,
+            hasWorkouts = state.workouts.isNotEmpty(),
+            onOpenCorrelation = viewModel::openCorrelationSheet,
+            onUpdateCycleLength = viewModel::setCycleLengthDays,
             onUpdateLastPeriodDate = viewModel::updateCycleLastPeriodDate,
             onDisableCycle = viewModel::disableCycleTracking,
             onDismiss = viewModel::dismissCycleSheet,
+            hazeState = hazeState,
+        )
+
+        // Workout & Menstrual Cycle Correlation Analytics Sheet
+        val cycleStartEpochDays = state.cycle.lastPeriodDate?.toEpochDays()?.toLong()
+        val currentWeightKg = state.hero?.latest?.entry?.kg ?: 0.0
+
+        WorkoutCorrelationSheet(
+            isOpen = state.isCorrelationSheetOpen,
+            workouts = state.workouts,
+            cycleStartEpochDays = cycleStartEpochDays,
+            cycleLength = state.cycle.cycleLength,
+            currentWeightKg = currentWeightKg,
+            onDismiss = viewModel::dismissCorrelationSheet,
             hazeState = hazeState,
         )
 

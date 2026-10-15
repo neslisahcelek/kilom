@@ -16,6 +16,13 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import app.kilo.data.HevyWorkoutSession
+import app.kilo.data.HevyExercise
+import app.kilo.data.HevySet
+import app.kilo.data.MuscleCategory
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -36,6 +43,19 @@ class DashboardViewModelTest {
         var scanCount = 0
         override fun success() { successCount++ }
         override fun scanComplete() { scanCount++ }
+    }
+
+    private class FakeWorkoutRepository : app.kilo.data.WorkoutRepository {
+        private val _workouts = MutableStateFlow<List<HevyWorkoutSession>>(emptyList())
+        override val workouts: StateFlow<List<HevyWorkoutSession>> = _workouts.asStateFlow()
+
+        override suspend fun saveWorkouts(workouts: List<HevyWorkoutSession>) {
+            _workouts.value = workouts
+        }
+
+        override suspend fun clearWorkouts() {
+            _workouts.value = emptyList()
+        }
     }
 
     private class FakeHealthSync(
@@ -106,6 +126,7 @@ class DashboardViewModelTest {
     private fun createViewModel(
         weights: SettingsWeightRepository = SettingsWeightRepository(MapSettings()),
         prefs: SettingsPrefsRepository = SettingsPrefsRepository(MapSettings()),
+        workoutRepository: app.kilo.data.WorkoutRepository = FakeWorkoutRepository(),
         healthSync: app.kilo.platform.HealthSync = app.kilo.platform.NoOpHealthSync,
         reminderScheduler: app.kilo.platform.ReminderScheduler = app.kilo.platform.NoOpReminderScheduler,
         readText: suspend (ByteArray) -> List<String> = { emptyList() },
@@ -113,6 +134,7 @@ class DashboardViewModelTest {
     ): DashboardViewModel = DashboardViewModel(
         weights = weights,
         prefs = prefs,
+        workoutRepository = workoutRepository,
         readText = readText,
         feedback = FakeFeedback(),
         healthSync = healthSync,
@@ -663,5 +685,137 @@ class DashboardViewModelTest {
         val sheet = vm.state.value.sheet
         assertNotNull(sheet)
         assertEquals(WeightTag.WATER_RETENTION, sheet.selectedTag)
+    }
+
+    @Test
+    fun cycleLengthAdjustmentAndClamping() = runTest(testDispatcher) {
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val vm = createViewModel(prefs = prefs)
+        advanceUntilIdle()
+
+        vm.enableCycleTracking(LocalDate.parse("2026-09-25"))
+        advanceUntilIdle()
+
+        assertEquals(28, vm.state.value.cycle.cycleLength)
+
+        // Adjust to 32 days
+        vm.setCycleLengthDays(32)
+        advanceUntilIdle()
+
+        assertEquals(32, vm.state.value.cycle.cycleLength)
+        assertEquals(32, prefs.cycleLength.value)
+
+        // Clamping lower bound (21)
+        vm.setCycleLengthDays(15)
+        advanceUntilIdle()
+        assertEquals(21, vm.state.value.cycle.cycleLength)
+
+        // Clamping upper bound (45)
+        vm.setCycleLengthDays(50)
+        advanceUntilIdle()
+        assertEquals(45, vm.state.value.cycle.cycleLength)
+    }
+
+    @Test
+    fun hevyCsvImportAndClear() = runTest(testDispatcher) {
+        val workoutRepo = FakeWorkoutRepository()
+        val vm = createViewModel(workoutRepository = workoutRepo)
+        advanceUntilIdle()
+
+        assertEquals(0, vm.workouts.value.size)
+        assertEquals(0, vm.state.value.workouts.size)
+
+        val csvSample = """
+            title,start_time,end_time,description,exercise_title,superset_id,exercise_notes,set_index,set_type,weight_kg,reps,distance_km,duration_seconds,rpe
+            "Leg Day","2026-10-06 10:00:00","2026-10-06 11:15:00","","Barbell Squat",,"",1,"normal",100,10,,,8.0
+            "Leg Day","2026-10-06 10:00:00","2026-10-06 11:15:00","","Barbell Squat",,"",2,"normal",100,10,,,8.5
+        """.trimIndent()
+
+        val count = vm.importHevyCsv(csvSample)
+        advanceUntilIdle()
+
+        assertEquals(1, count)
+        assertEquals(1, vm.workouts.value.size)
+        assertEquals(1, vm.state.value.workouts.size)
+        val session = vm.workouts.value.first()
+        assertEquals("Leg Day", session.title)
+        assertEquals(1, session.exercises.size)
+        assertEquals("Barbell Squat", session.exercises.first().title)
+        assertEquals(2000.0, session.totalVolumeKg)
+
+        // Clear workouts
+        vm.clearWorkouts()
+        advanceUntilIdle()
+
+        assertEquals(0, vm.workouts.value.size)
+        assertEquals(0, vm.state.value.workouts.size)
+    }
+
+    @Test
+    fun domsFluidRetentionEvaluationAndDismiss() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings())
+        val workoutRepo = FakeWorkoutRepository()
+        val vm = createViewModel(weights = weights, workoutRepository = workoutRepo)
+        advanceUntilIdle()
+
+        // 1. Log previous weigh-in (70.0 kg, 2 days ago)
+        val twoDaysAgo = Instant.parse("2026-10-05T08:00:00Z")
+        weights.add(app.kilo.domain.WeightEntry.create(70.0, twoDaysAgo))
+
+        // 2. Log current weigh-in today (71.2 kg, +1.2 kg)
+        weights.add(app.kilo.domain.WeightEntry.create(71.2, fixedNow))
+        advanceUntilIdle()
+
+        // Without a heavy workout, DOMS trauma is false
+        assertEquals(false, vm.domsAssessment.value?.hasTrauma)
+
+        // 3. Add heavy leg workout yesterday (2026-10-06, volume >= 8000 kg)
+        val yesterdayDate = LocalDate.parse("2026-10-06")
+        val heavyLegWorkout = HevyWorkoutSession(
+            id = "leg_session_1",
+            title = "Heavy Squats & Deadlifts",
+            dateEpochDays = yesterdayDate.toEpochDays().toLong(),
+            startTimeEpochMs = 1791280000000L,
+            endTimeEpochMs = 1791284000000L,
+            totalVolumeKg = 9500.0,
+            exercises = listOf(
+                HevyExercise(
+                    title = "Barbell Squat",
+                    category = MuscleCategory.LEGS_GLUTES,
+                    totalVolumeKg = 9500.0,
+                    sets = listOf(HevySet(1, "normal", 100.0, 10, 8.0)),
+                )
+            ),
+        )
+
+        workoutRepo.saveWorkouts(listOf(heavyLegWorkout))
+        advanceUntilIdle()
+
+        // DOMS assessment should confirm trauma!
+        val doms = vm.domsAssessment.value
+        assertNotNull(doms)
+        assertEquals(true, doms.hasTrauma)
+        assertEquals(true, vm.state.value.domsAssessment?.hasTrauma)
+        assertEquals(1.2, doms.expectedFluidWeightKg)
+        assertEquals(9500.0, doms.recentVolumeKg)
+        assertEquals(false, vm.state.value.isDomsAlertDismissed)
+
+        // Dismiss alert
+        vm.dismissDomsAlert()
+        assertEquals(true, vm.state.value.isDomsAlertDismissed)
+    }
+
+    @Test
+    fun correlationSheetOpenAndDismiss() = runTest(testDispatcher) {
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.isCorrelationSheetOpen)
+
+        vm.openCorrelationSheet()
+        assertEquals(true, vm.state.value.isCorrelationSheetOpen)
+
+        vm.dismissCorrelationSheet()
+        assertEquals(false, vm.state.value.isCorrelationSheetOpen)
     }
 }

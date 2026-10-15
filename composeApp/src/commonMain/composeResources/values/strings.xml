@@ -392,4 +392,51 @@
     <string name="workout_caution_thermoregulation">Core temperature is higher (+0.5°C). You sweat earlier; consume cold electrolyte water.</string>
     <string name="workout_caution_rpe_elevation">Working weights may feel heavier due to fluid shifts. Prioritize muscle mind-connection over ego lifting.</string>
     <string name="workout_caution_catabolism_protein">Catabolic Alert: Elevated protein breakdown. Consume 25–30g protein with leucine within 30 min post-workout.</string>
+
+    <!-- Cycle Length Adjustment -->
+    <string name="cycle_length_desc">Average days between periods (21–45 days)</string>
+    <string name="cycle_length_days_format">%1$d Days</string>
+    <string name="cycle_length_adjust">Adjust Cycle Length</string>
+
+    <!-- Hevy Workout Integration -->
+    <string name="hevy_section_title">Hevy Workout Data</string>
+    <string name="hevy_section_desc">Import Hevy workouts.csv to correlate training volume, PRs, and muscle recovery with your scale weight.</string>
+    <string name="hevy_import_button">Import Hevy CSV</string>
+    <string name="hevy_imported_count_format">%1$d workout sessions imported</string>
+    <string name="hevy_clear_button">Clear Workout Data</string>
+    <string name="hevy_no_workouts">No workout data imported yet</string>
+
+    <!-- DOMS Alert -->
+    <string name="doms_alert_title">Post-Workout Fluid Retention</string>
+    <string name="doms_alert_desc_format">Heavy lifting (%1$s, %2$s kg volume) causes micro-tears. The +%3$.1f kg scale elevation is temporary muscle repair fluid &amp; glycogen, not body fat!</string>
+    <string name="doms_alert_badge">DOMS / Muscle Recovery</string>
+    <string name="doms_alert_dismiss">Got it</string>
+    <string name="doms_default_muscle_group">Legs &amp; Back</string>
+
+    <!-- Correlation Sheet -->
+    <string name="correlation_title">Cycle &amp; Training Correlation</string>
+    <string name="correlation_subtitle">Analyze how hormonal phases influence your lifting volume, personal records, and perceived exertion.</string>
+    <string name="correlation_tab_volume">Volume Load</string>
+    <string name="correlation_tab_prs">PRs &amp; Records</string>
+    <string name="correlation_tab_strength">Relative Strength</string>
+    <string name="correlation_phase_format">%1$s: %2$s kg total (%3$d workouts)</string>
+    <string name="correlation_prs_format">%1$d PRs in %2$s</string>
+    <string name="correlation_rpe_insight_format">Luteal RPE is %1$+.1f higher due to elevated core temperature and progesterone, making the same weight feel heavier.</string>
+    <string name="correlation_open_button">View Cycle &amp; Workout Analytics</string>
+    <string name="correlation_relative_strength_title">Relative Strength (1RM / Body Weight)</string>
+    <string name="correlation_peak_volume_format">Peak Volume: %1$s</string>
+    <string name="correlation_no_data">No Hevy Workouts Found</string>
+    <string name="correlation_empty_desc">Import your Hevy workouts.csv in Settings to unlock hormonal strength &amp; volume correlation analytics.</string>
+    <string name="correlation_luteal_rpe_normal">Perceived exertion is consistent across cycle phases.</string>
+    <string name="correlation_luteal_rpe_higher">Elevated perceived exertion in Luteal phase</string>
+    <string name="correlation_workouts_count_format">%1$d workouts</string>
+    <string name="correlation_avg_volume_format">Avg: %1$s kg</string>
+    <string name="correlation_prs_card_title">⚡ Personal Records</string>
+    <string name="correlation_total_prs_format">%1$d PRs</string>
+    <string name="correlation_luteal_rpe_card_title">Luteal RPE &amp; Exertion</string>
+    <string name="correlation_no_rpe_hint">Log set RPE (Rate of Perceived Exertion) in Hevy to compare exertion across phases.</string>
+    <string name="correlation_no_compound_lifts">No compound lifts recorded in imported workouts.</string>
+    <string name="correlation_est_1rm_format">Est. 1RM: %1$.1f kg</string>
+    <string name="correlation_bw_ratio_format">%1$.2fx BW</string>
 </resources>
+

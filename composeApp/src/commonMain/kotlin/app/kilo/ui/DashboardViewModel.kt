@@ -57,6 +57,14 @@ import kotlinx.datetime.LocalDate
 import app.kilo.platform.HealthProvider
 import app.kilo.platform.NoOpReminderScheduler
 import app.kilo.platform.ReminderScheduler
+import app.kilo.data.HevyCsvParser
+import app.kilo.data.HevyWorkoutSession
+import app.kilo.data.MuscleCategory
+import app.kilo.data.NoOpWorkoutRepository
+import app.kilo.data.WorkoutRepository
+import app.kilo.domain.DomsAssessment
+import app.kilo.domain.WorkoutSessionSummary
+import app.kilo.domain.evaluateDomsRisk
 import kotlinx.coroutines.flow.collect
 
 /** Localizable error keys; the UI maps them to string resources (no raw exceptions reach the UI). */
@@ -129,11 +137,16 @@ data class UiState(
     val cycle: CycleState = CycleState(isEnabled = false),
     val isCycleSheetOpen: Boolean = false,
     val isCycleSetupOpen: Boolean = false,
+    val workouts: List<HevyWorkoutSession> = emptyList(),
+    val domsAssessment: DomsAssessment? = null,
+    val isDomsAlertDismissed: Boolean = false,
+    val isCorrelationSheetOpen: Boolean = false,
 )
 
 class DashboardViewModel(
     private val weights: WeightRepository,
     private val prefs: PrefsRepository,
+    private val workoutRepository: WorkoutRepository = NoOpWorkoutRepository,
     private val readText: suspend (ByteArray) -> List<String>,
     private val feedback: DashboardFeedback,
     private val healthSync: HealthSync = NoOpHealthSync,
@@ -146,6 +159,12 @@ class DashboardViewModel(
 ) : ViewModel() {
 
     private val _summaryPeriod = MutableStateFlow(SummaryPeriod.WEEK)
+
+    private val _workouts = MutableStateFlow<List<HevyWorkoutSession>>(emptyList())
+    val workouts: StateFlow<List<HevyWorkoutSession>> = _workouts.asStateFlow()
+
+    private val _domsAssessment = MutableStateFlow<DomsAssessment?>(null)
+    val domsAssessment: StateFlow<DomsAssessment?> = _domsAssessment.asStateFlow()
 
     private val _state = MutableStateFlow(
         UiState(
@@ -182,7 +201,7 @@ class DashboardViewModel(
             val cycleFlow = combine(
                 prefs.cycleEnabled,
                 prefs.cycleLastPeriodDate,
-                prefs.cycleLength,
+                prefs.cycleLengthDays,
                 prefs.cyclePeriodDuration,
             ) { cycleEnabled, cycleLastPeriodDate, cycleLength, cyclePeriodDuration ->
                 computeCycleState(
@@ -195,7 +214,7 @@ class DashboardViewModel(
                 )
             }
 
-            combine(mainFlow, auxFlow, cycleFlow) { main, (reminderEnabled, reminderMinutes, summaryPeriod), cycle ->
+            combine(mainFlow, auxFlow, cycleFlow, workoutRepository.workouts) { main, (reminderEnabled, reminderMinutes, summaryPeriod), cycle, workoutList ->
                 val tz = timeZone()
                 val history = buildHistory(main.entries, tz)
                 val hero = history.firstOrNull()?.let {
@@ -206,6 +225,38 @@ class DashboardViewModel(
                 val goal = computeGoalProgress(main.goalKg, main.goalStartKg, main.entries, now(), tz)
                 val summary = buildPeriodSummary(main.entries, summaryPeriod, now(), tz)
                 val streak = computeStreak(main.entries, now(), tz, goal)
+
+                val workoutSummaries = workoutList.map { session ->
+                    val allRpes = session.exercises.flatMap { it.sets }.mapNotNull { it.rpe }
+                    val avgRpe = if (allRpes.isNotEmpty()) allRpes.average() else null
+                    val isLegsOrBack = session.exercises.any {
+                        it.category == MuscleCategory.LEGS_GLUTES || it.category == MuscleCategory.BACK_PULL
+                    }
+                    WorkoutSessionSummary(
+                        id = session.id,
+                        title = session.title,
+                        dateEpochDays = session.dateEpochDays,
+                        totalVolumeKg = session.totalVolumeKg,
+                        isLegsOrBack = isLegsOrBack,
+                        exerciseNames = session.exercises.map { it.title },
+                        maxWeights = session.exercises.associate { it.title to it.maxWeightKg },
+                        avgRpe = avgRpe,
+                    )
+                }
+
+                val currentWeightKg = history.firstOrNull()?.entry?.kg ?: 0.0
+                val previousWeightKg = history.getOrNull(1)?.entry?.kg
+                val currentEpochDays = now().toLocalDateTime(tz).date.toEpochDays().toLong()
+
+                val doms = evaluateDomsRisk(
+                    workouts = workoutSummaries,
+                    previousWeightKg = previousWeightKg,
+                    currentWeightKg = currentWeightKg,
+                    currentEpochDays = currentEpochDays,
+                )
+
+                _workouts.value = workoutList
+                _domsAssessment.value = doms
 
                 _state.update {
                     it.copy(
@@ -223,6 +274,8 @@ class DashboardViewModel(
                         reminderEnabled = reminderEnabled,
                         reminderMinutes = reminderMinutes,
                         cycle = cycle,
+                        workouts = workoutList,
+                        domsAssessment = doms,
                     )
                 }
             }.collect()
@@ -686,12 +739,50 @@ class DashboardViewModel(
         feedback.success()
     }
 
+    fun setCycleLengthDays(days: Int) {
+        val clamped = days.coerceIn(21, 45)
+        prefs.setCycleLength(clamped)
+        viewModelScope.launch {
+            prefs.setCycleLengthDays(clamped)
+        }
+    }
+
     fun updateCycleLength(days: Int) {
-        prefs.setCycleLength(days)
+        setCycleLengthDays(days)
     }
 
     fun updateCyclePeriodDuration(days: Int) {
         prefs.setCyclePeriodDuration(days)
+    }
+
+    fun openCorrelationSheet() {
+        _state.update { it.copy(isCorrelationSheetOpen = true) }
+    }
+
+    fun dismissCorrelationSheet() {
+        _state.update { it.copy(isCorrelationSheetOpen = false) }
+    }
+
+    fun dismissDomsAlert() {
+        _state.update { it.copy(isDomsAlertDismissed = true) }
+    }
+
+    fun importHevyCsv(csvText: String): Int {
+        val parsed = HevyCsvParser.parse(csvText, timeZone())
+        if (parsed.isNotEmpty()) {
+            viewModelScope.launch {
+                workoutRepository.saveWorkouts(parsed)
+            }
+            feedback.success()
+        }
+        return parsed.size
+    }
+
+    fun clearWorkouts() {
+        viewModelScope.launch {
+            workoutRepository.clearWorkouts()
+        }
+        feedback.success()
     }
 
     fun exportCsv(): String = exportToCsv(_state.value.history.map { it.entry }, timeZone())

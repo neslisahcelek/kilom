@@ -77,8 +77,19 @@ import kilo.composeapp.generated.resources.reminder_time_title
 import kilo.composeapp.generated.resources.cycle_settings_enable
 import kilo.composeapp.generated.resources.cycle_settings_enable_subtitle
 import kilo.composeapp.generated.resources.cycle_settings_title
+import kilo.composeapp.generated.resources.hevy_clear_button
+import kilo.composeapp.generated.resources.hevy_import_button
+import kilo.composeapp.generated.resources.hevy_imported_count_format
+import kilo.composeapp.generated.resources.hevy_no_workouts
+import kilo.composeapp.generated.resources.hevy_section_desc
+import kilo.composeapp.generated.resources.hevy_section_title
+import io.github.vinceglb.filekit.dialogs.FileKitType
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+
+object PickerType {
+    fun File(extensions: List<String>) = FileKitType.File(extensions = extensions)
+}
 
 @Composable
 fun BackupSheet(
@@ -100,6 +111,9 @@ fun BackupSheet(
     cycleEnabled: Boolean = false,
     onToggleCycle: (Boolean) -> Unit = {},
     onOpenCycleSetup: () -> Unit = {},
+    workoutCount: Int = 0,
+    onImportHevyCsv: (String) -> Unit = {},
+    onClearWorkouts: () -> Unit = {},
     onExportCsv: () -> String,
     onExportJson: () -> String,
     onImport: (String) -> Unit,
@@ -133,6 +147,21 @@ fun BackupSheet(
                     val text = platformFile.readString()
                     if (text.isNotBlank()) {
                         onImport(text)
+                    }
+                } catch (_: Exception) {}
+            }
+        }
+    }
+
+    val hevyPicker = rememberFilePickerLauncher(
+        type = PickerType.File(extensions = listOf("csv")),
+    ) { platformFile: PlatformFile? ->
+        if (platformFile != null) {
+            scope.launch {
+                try {
+                    val text = platformFile.readString()
+                    if (text.isNotBlank()) {
+                        onImportHevyCsv(text)
                     }
                 } catch (_: Exception) {}
             }
@@ -270,6 +299,68 @@ fun BackupSheet(
                                 filePicker.launch()
                             },
                         )
+
+                        // Hevy Resistance Training Section
+                        Spacer(Modifier.height(18.dp))
+
+                        Text(
+                            text = stringResource(Res.string.hevy_section_title),
+                            style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                            color = colors.textPrimary,
+                            modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 2.dp),
+                        )
+
+                        Text(
+                            text = stringResource(Res.string.hevy_section_desc),
+                            style = typography.caption,
+                            color = colors.textSecondary,
+                            modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 10.dp),
+                        )
+
+                        // Action button: Import Hevy CSV
+                        BackupActionButton(
+                            title = stringResource(Res.string.hevy_import_button),
+                            iconLabel = "🏋️",
+                            isAccent = true,
+                            onClick = {
+                                hevyPicker.launch()
+                            },
+                        )
+
+                        if (workoutCount > 0) {
+                            Spacer(Modifier.height(8.dp))
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(14.dp))
+                                    .background(colors.glassTint)
+                                    .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
+                                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                ) {
+                                    Text(
+                                        text = stringResource(Res.string.hevy_imported_count_format, workoutCount),
+                                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold),
+                                        color = colors.accent,
+                                    )
+
+                                    Text(
+                                        text = stringResource(Res.string.hevy_clear_button),
+                                        style = typography.caption.copy(fontSize = 11.5.sp),
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = colors.danger,
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .clickable(role = Role.Button, onClick = onClearWorkouts)
+                                            .padding(horizontal = 8.dp, vertical = 4.dp),
+                                    )
+                                }
+                            }
+                        }
 
                         // Optional Health Sync Section (Apple Health / Health Connect)
                         if (isHealthSyncSupported) {

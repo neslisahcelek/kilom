@@ -6,6 +6,8 @@ import app.kilo.data.PrefsRepository
 import app.kilo.data.SettingsPrefsRepository
 import app.kilo.data.SettingsWeightRepository
 import app.kilo.data.WeightRepository
+import app.kilo.data.WorkoutRepository
+import app.kilo.data.WorkoutRepositorySettings
 import app.kilo.platform.rememberHaptics
 import app.kilo.platform.rememberScaleOcr
 import app.kilo.ui.DashboardFeedback
@@ -28,6 +30,7 @@ class AppContainer(
     val settings: Settings = Settings(),
     val weights: WeightRepository = SettingsWeightRepository(settings),
     val prefs: PrefsRepository = SettingsPrefsRepository(settings),
+    val workoutRepository: WorkoutRepository = WorkoutRepositorySettings(settings),
 )
 
 @Composable
@@ -42,6 +45,7 @@ fun App(container: AppContainer = remember { AppContainer() }) {
             DashboardViewModel(
                 weights = container.weights,
                 prefs = container.prefs,
+                workoutRepository = container.workoutRepository,
                 readText = { bytes -> scaleOcr.readText(bytes) },
                 feedback = object : DashboardFeedback {
                     override fun success() = haptics.success()

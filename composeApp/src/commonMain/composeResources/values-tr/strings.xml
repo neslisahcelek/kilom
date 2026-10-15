@@ -392,4 +392,51 @@
     <string name="workout_caution_thermoregulation">Vücut ısısı yüksek (+0.5°C): Daha erken terleyebilirsiniz; bol soğuk su ve elektrolit tüketin.</string>
     <string name="workout_caution_rpe_elevation">Aynı kilo daha ağır gelebilir; ağırlık yerine kasa odaklanın ve formunuzu koruyun.</string>
     <string name="workout_caution_catabolism_protein">Katabolizma Uyarısı: Kas yıkımı yüksektir. Antrenmandan sonraki 30 dk içinde lösin ve protein tüketin.</string>
+
+    <!-- Cycle Length Adjustment -->
+    <string name="cycle_length_desc">Döngüler arası ortalama gün (21–45 gün)</string>
+    <string name="cycle_length_days_format">%1$d Gün</string>
+    <string name="cycle_length_adjust">Döngü Süresini Ayarla</string>
+
+    <!-- Hevy Workout Integration -->
+    <string name="hevy_section_title">Hevy Antrenman Verisi</string>
+    <string name="hevy_section_desc">Tartı kilonuz ile antrenman hacmi, rekorlar ve kas toparlanmasını ilişkilendirmek için Hevy workouts.csv dosyasını içe aktarın.</string>
+    <string name="hevy_import_button">Hevy CSV İçe Aktar</string>
+    <string name="hevy_imported_count_format">%1$d antrenman seansı kaydedildi</string>
+    <string name="hevy_clear_button">Antrenman Verilerini Temizle</string>
+    <string name="hevy_no_workouts">Henüz antrenman verisi aktarılmadı</string>
+
+    <!-- DOMS Alert -->
+    <string name="doms_alert_title">Antrenman Sonrası Sıvı Tutulumu</string>
+    <string name="doms_alert_desc_format">Ağır direnç antrenmanı (%1$s, %2$s kg hacim) mikro yırtıklara yol açar. Tartıdaki +%3$.1f kg artış kas onarım sıvısı ve glikojen tutulumudur, yağ değildir!</string>
+    <string name="doms_alert_badge">DOMS / Kas Toparlanması</string>
+    <string name="doms_alert_dismiss">Anladım</string>
+    <string name="doms_default_muscle_group">Bacak ve Sırt</string>
+
+    <!-- Correlation Sheet -->
+    <string name="correlation_title">Döngü &amp; Antrenman Korelasyonu</string>
+    <string name="correlation_subtitle">Hormonal evrelerin kaldırdığınız hacim, kişisel rekorlar ve zorluk algısı (RPE) üzerindeki etkisini inceleyin.</string>
+    <string name="correlation_tab_volume">Antrenman Hacmi</string>
+    <string name="correlation_tab_prs">Kişisel Rekorlar</string>
+    <string name="correlation_tab_strength">Göreceli Kuvvet</string>
+    <string name="correlation_phase_format">%1$s: %2$s kg toplam (%3$d antrenman)</string>
+    <string name="correlation_prs_format">%2$s evresinde %1$d rekor</string>
+    <string name="correlation_rpe_insight_format">Progesteron ve artan vücut ısısı sebebiyle Luteal evrede algılanan zorluk (RPE) %1$+.1f daha yüksektir; kilolar daha ağır hissedilir.</string>
+    <string name="correlation_open_button">Döngü &amp; Antrenman Analizini Gör</string>
+    <string name="correlation_relative_strength_title">Göreceli Kuvvet (1RM / Vücut Ağırlığı)</string>
+    <string name="correlation_peak_volume_format">Zirve Hacim: %1$s</string>
+    <string name="correlation_no_data">Hevy Antrenmanı Bulunamadı</string>
+    <string name="correlation_empty_desc">Hormonal kuvvet ve hacim korelasyon analizlerini görmek için Ayarlar menüsünden Hevy workouts.csv dosyanızı yükleyin.</string>
+    <string name="correlation_luteal_rpe_normal">Algılanan zorluk seviyesi döngü evreleri arasında dengeli seyrediyor.</string>
+    <string name="correlation_luteal_rpe_higher">Luteal evrede artan algılanan zorluk seviyesi</string>
+    <string name="correlation_workouts_count_format">%1$d antrenman</string>
+    <string name="correlation_avg_volume_format">Ort: %1$s kg</string>
+    <string name="correlation_prs_card_title">⚡ Kişisel Rekorlar (PR)</string>
+    <string name="correlation_total_prs_format">%1$d PR</string>
+    <string name="correlation_luteal_rpe_card_title">Luteal RPE ve Algılanan Zorluk</string>
+    <string name="correlation_no_rpe_hint">Evreler arası zorluğu kıyaslamak için Hevy\'de set RPE (Zorluk Derecesi) kaydedin.</string>
+    <string name="correlation_no_compound_lifts">İçe aktarılan antrenmanlarda bileşik hareket bulunamadı.</string>
+    <string name="correlation_est_1rm_format">Tahmini 1RM: %1$.1f kg</string>
+    <string name="correlation_bw_ratio_format">%1$.2fx Kilo</string>
 </resources>
+

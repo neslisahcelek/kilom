@@ -73,6 +73,12 @@ import kilo.composeapp.generated.resources.cycle_workout_physiology_section
 import kilo.composeapp.generated.resources.cycle_workout_strategy_title
 import kilo.composeapp.generated.resources.cycle_update_period_cta
 import kilo.composeapp.generated.resources.cycle_water_retention_alert
+import kilo.composeapp.generated.resources.cycle_length_title
+import kilo.composeapp.generated.resources.cycle_length_desc
+import kilo.composeapp.generated.resources.cycle_length_days_format
+import kilo.composeapp.generated.resources.correlation_title
+import kilo.composeapp.generated.resources.correlation_open_button
+import androidx.compose.ui.semantics.Role
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -88,6 +94,9 @@ import org.jetbrains.compose.resources.stringResource
 fun CycleSheet(
     isOpen: Boolean,
     state: CycleState,
+    hasWorkouts: Boolean = false,
+    onOpenCorrelation: () -> Unit = {},
+    onUpdateCycleLength: (Int) -> Unit = {},
     onUpdateLastPeriodDate: (LocalDate) -> Unit,
     onDisableCycle: () -> Unit,
     onDismiss: () -> Unit,
@@ -113,7 +122,7 @@ fun CycleSheet(
     val periodDuration = state.periodDuration.coerceIn(2, 10)
 
     var selectedDayOffset by remember(state.currentDayInfo) {
-        mutableStateOf((state.currentDayInfo?.cycleDay ?: 1) - 1)
+        mutableStateOf(((state.currentDayInfo?.cycleDay ?: 1) - 1).coerceIn(0, cycleLength - 1))
     }
 
     val currentCycleDays = remember(lastPeriod, cycleLength, periodDuration, today) {
@@ -163,9 +172,76 @@ fun CycleSheet(
                 color = colors.textPrimary,
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(14.dp))
 
-            // 28-Day Cycle Strip Selector
+            // Cycle Length Selector Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(colors.glassTint)
+                    .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
+                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(Res.string.cycle_length_title),
+                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold),
+                        color = colors.textPrimary,
+                    )
+                    Text(
+                        text = stringResource(Res.string.cycle_length_desc),
+                        style = typography.caption.copy(fontSize = 10.5.sp),
+                        color = colors.textSecondary,
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clip(CircleShape)
+                            .background(colors.glassBorder.copy(alpha = 0.4f))
+                            .clickable(role = Role.Button) {
+                                val newLength = (cycleLength - 1).coerceIn(21, 45)
+                                onUpdateCycleLength(newLength)
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(text = "−", style = typography.subhead.copy(fontWeight = FontWeight.Bold), color = colors.textPrimary)
+                    }
+
+                    Spacer(Modifier.width(10.dp))
+
+                    Text(
+                        text = stringResource(Res.string.cycle_length_days_format, cycleLength),
+                        style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                        color = colors.accent,
+                    )
+
+                    Spacer(Modifier.width(10.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clip(CircleShape)
+                            .background(colors.glassBorder.copy(alpha = 0.4f))
+                            .clickable(role = Role.Button) {
+                                val newLength = (cycleLength + 1).coerceIn(21, 45)
+                                onUpdateCycleLength(newLength)
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(text = "+", style = typography.subhead.copy(fontWeight = FontWeight.Bold), color = colors.textPrimary)
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(14.dp))
+
+            // 28-Day (or cycleLength-day) Cycle Strip Selector
             CycleDaySelectorStrip(
                 days = currentCycleDays,
                 selectedOffset = selectedDayOffset,
@@ -193,7 +269,11 @@ fun CycleSheet(
                 when (tabIndex) {
                     0 -> BodyAndHormoneTab(info = activeDayInfo)
                     1 -> NutritionTab(info = activeDayInfo)
-                    2 -> WorkoutTab(info = activeDayInfo)
+                    2 -> WorkoutTab(
+                        info = activeDayInfo,
+                        hasWorkouts = hasWorkouts,
+                        onOpenCorrelation = onOpenCorrelation,
+                    )
                     3 -> SourcesTab()
                 }
             }
@@ -539,12 +619,65 @@ private fun NutritionTab(info: CycleDayInfo) {
 }
 
 @Composable
-private fun WorkoutTab(info: CycleDayInfo) {
+private fun WorkoutTab(
+    info: CycleDayInfo,
+    hasWorkouts: Boolean = false,
+    onOpenCorrelation: () -> Unit = {},
+) {
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
     val advice = info.advice
 
     Column(modifier = Modifier.fillMaxWidth()) {
+        // If Hevy workouts exist, show Cycle & Workout correlation button
+        if (hasWorkouts) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(colors.accent.copy(alpha = 0.15f))
+                    .border(1.dp, colors.accent.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
+                    .clickable(role = Role.Button, onClick = onOpenCorrelation)
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(text = "📊", fontSize = 20.sp)
+                        Spacer(Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                text = stringResource(Res.string.correlation_title),
+                                style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                                color = colors.textPrimary,
+                            )
+                            Spacer(Modifier.height(2.dp))
+                            Text(
+                                text = stringResource(Res.string.correlation_open_button),
+                                style = typography.caption.copy(fontSize = 11.5.sp),
+                                color = colors.accent,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = "›",
+                        style = typography.title.copy(fontWeight = FontWeight.Light),
+                        color = colors.accent,
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(14.dp))
+        }
+
         // Intensity Banner
         Row(
             modifier = Modifier

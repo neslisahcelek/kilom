@@ -79,18 +79,43 @@ data class CycleState(
  * Computes reactive [CycleState] based on stored settings, [now] and [tz].
  * Pure Kotlin, 100% on-device and deterministic.
  */
+/**
+ * Resolves the primary [CyclePhase] for a given [cycleDay] and [cycleLength].
+ * Pure Kotlin, 100% on-device and deterministic.
+ */
+fun cyclePhaseForDay(cycleDay: Int, cycleLength: Int = 28): CyclePhase {
+    val clampedLength = cycleLength.coerceIn(21, 45)
+    val dayInCycle = ((cycleDay - 1) % clampedLength + clampedLength) % clampedLength + 1
+    val ovulationDay = clampedLength - 14
+    val menstrualEnd = minOf(4, ovulationDay - 5)
+    val lateFollicularEnd = ovulationDay - 1
+    val ovulationEnd = minOf(clampedLength, ovulationDay + 1)
+
+    return when {
+        dayInCycle <= menstrualEnd -> CyclePhase.MENSTRUAL
+        dayInCycle <= lateFollicularEnd -> CyclePhase.FOLLICULAR
+        dayInCycle <= ovulationEnd -> CyclePhase.OVULATION
+        else -> CyclePhase.LUTEAL
+    }
+}
+
+/**
+ * Computes reactive [CycleState] based on stored settings, [now] and [tz].
+ * Pure Kotlin, 100% on-device and deterministic.
+ */
 fun computeCycleState(
     enabled: Boolean,
     lastPeriodDateIso: String?,
-    cycleLength: Int,
-    periodDuration: Int,
+    cycleLength: Int = 28,
+    periodDuration: Int = 5,
     now: Instant,
     tz: TimeZone,
 ): CycleState {
+    val clampedLength = cycleLength.coerceIn(21, 45)
     if (!enabled || lastPeriodDateIso.isNullOrBlank()) {
         return CycleState(
             isEnabled = false,
-            cycleLength = cycleLength,
+            cycleLength = clampedLength,
             periodDuration = periodDuration,
         )
     }
@@ -100,7 +125,7 @@ fun computeCycleState(
     } catch (_: Exception) {
         return CycleState(
             isEnabled = false,
-            cycleLength = cycleLength,
+            cycleLength = clampedLength,
             periodDuration = periodDuration,
         )
     }
@@ -109,18 +134,18 @@ fun computeCycleState(
     val todayInfo = computeCycleDayInfo(
         lastPeriodDate = lastPeriod,
         targetDate = today,
-        cycleLength = cycleLength,
+        cycleLength = clampedLength,
         periodDuration = periodDuration,
         today = today,
     )
 
     val currentCycleDay = todayInfo.cycleDay
-    val daysUntilNext = (cycleLength - currentCycleDay + 1).coerceAtLeast(0)
+    val daysUntilNext = (clampedLength - currentCycleDay + 1).coerceAtLeast(0)
 
     return CycleState(
         isEnabled = true,
         lastPeriodDate = lastPeriod,
-        cycleLength = cycleLength,
+        cycleLength = clampedLength,
         periodDuration = periodDuration,
         currentDayInfo = todayInfo,
         daysUntilNextPeriod = daysUntilNext,
@@ -130,48 +155,49 @@ fun computeCycleState(
 
 /**
  * Calculates cycle details for any [targetDate] relative to [lastPeriodDate].
+ * Uses Backward Luteal Mapping (ovulationDay = cycleLength - 14) for dynamic cycle lengths.
  */
 fun computeCycleDayInfo(
     lastPeriodDate: LocalDate,
     targetDate: LocalDate,
-    cycleLength: Int,
-    periodDuration: Int,
-    today: LocalDate,
+    cycleLength: Int = 28,
+    periodDuration: Int = 5,
+    today: LocalDate = targetDate,
 ): CycleDayInfo {
+    val clampedLength = cycleLength.coerceIn(21, 45)
     val daysDiff = lastPeriodDate.daysUntil(targetDate)
     // Handle past and future cycles using positive modulo
-    val dayInCycle = ((daysDiff % cycleLength) + cycleLength) % cycleLength + 1
+    val dayInCycle = ((daysDiff % clampedLength) + clampedLength) % clampedLength + 1
 
-    val ovulationDay = (cycleLength - 14).coerceAtLeast(periodDuration + 2)
-    val ovulationStart = (ovulationDay - 1).coerceAtLeast(periodDuration + 1)
-    val ovulationEnd = (ovulationDay + 1).coerceAtMost(cycleLength - 2)
+    val ovulationDay = clampedLength - 14
+    val menstrualEnd = minOf(4, ovulationDay - 5)
+    val lateFollicularEnd = ovulationDay - 1
+    val ovulationEnd = minOf(clampedLength, ovulationDay + 1)
 
     val (phase, phaseDay) = when {
-        dayInCycle <= periodDuration -> {
+        dayInCycle <= menstrualEnd -> {
             CyclePhase.MENSTRUAL to dayInCycle
         }
-        dayInCycle < ovulationStart -> {
-            CyclePhase.FOLLICULAR to (dayInCycle - periodDuration)
+        dayInCycle <= lateFollicularEnd -> {
+            CyclePhase.FOLLICULAR to (dayInCycle - menstrualEnd)
         }
         dayInCycle <= ovulationEnd -> {
-            CyclePhase.OVULATION to (dayInCycle - ovulationStart + 1)
+            CyclePhase.OVULATION to (dayInCycle - ovulationDay + 1)
         }
         else -> {
             CyclePhase.LUTEAL to (dayInCycle - ovulationEnd)
         }
     }
 
-    val advice = resolveCycleAdvice(
-        dayInCycle = dayInCycle,
-        cycleLength = cycleLength,
-        phase = phase,
-        periodDuration = periodDuration,
+    val advice = adviceForDay(
+        dayOfCycle = dayInCycle,
+        cycleLength = clampedLength,
     )
 
     return CycleDayInfo(
         date = targetDate,
         cycleDay = dayInCycle,
-        totalDays = cycleLength,
+        totalDays = clampedLength,
         phase = phase,
         phaseDay = phaseDay,
         isToday = (targetDate == today),
@@ -183,52 +209,73 @@ fun computeCycleDayInfo(
 /**
  * Maps day in cycle to clinical, functional-medicine nutrition and body insights.
  * Referencing ACOG, Dr. Stacy Sims (ROAR), and Cleveland Clinic literature.
+ * Supports dynamic cycle lengths (21..45 days) using Backward Luteal Mapping.
  */
-private fun resolveCycleAdvice(
-    dayInCycle: Int,
-    cycleLength: Int,
-    phase: CyclePhase,
-    periodDuration: Int,
+fun adviceForDay(
+    dayOfCycle: Int,
+    cycleLength: Int = 28,
 ): CycleDayAdvice {
-    val daysUntilEnd = cycleLength - dayInCycle
+    val clampedLength = cycleLength.coerceIn(21, 45)
+    val dayInCycle = ((dayOfCycle - 1) % clampedLength + clampedLength) % clampedLength + 1
+
+    val ovulationDay = clampedLength - 14
+    val menstrualEnd = minOf(4, ovulationDay - 5)
+    val earlyFollicularStart = menstrualEnd + 1
+    val earlyFollicularEnd = maxOf(earlyFollicularStart, ovulationDay - 3)
+    val lateFollicularStart = ovulationDay - 2
+    val lateFollicularEnd = ovulationDay - 1
+    val ovulationStart = ovulationDay
+    val ovulationEnd = minOf(clampedLength, ovulationDay + 1)
+    val earlyLutealStart = ovulationDay + 2
+    val earlyLutealEnd = clampedLength - 8
+    val midLutealStart = clampedLength - 7
+    val midLutealEnd = clampedLength - 4
+    val latePmsStart = clampedLength - 3
+    val latePmsEnd = clampedLength
 
     return when {
-        // Menstrual Phase: Days 1-2 (Cramps, Peak Bleeding, Low Energy)
-        phase == CyclePhase.MENSTRUAL && dayInCycle <= 2 -> CycleDayAdvice(
-            phase = CyclePhase.MENSTRUAL,
-            titleKey = "cycle_menstrual_early_title",
-            bodySummaryKey = "cycle_menstrual_early_body",
-            hormoneInsightKey = "cycle_menstrual_early_hormones",
-            waterRetentionRisk = false,
-            energyLevel = EnergyLevel.LOW_REST,
-            eatKeys = listOf("cycle_eat_iron_greens", "cycle_eat_bone_broth", "cycle_eat_ginger_tea"),
-            avoidKeys = listOf("cycle_avoid_salt", "cycle_avoid_cold_heavy", "cycle_avoid_caffeine"),
-            workoutIntensity = WorkoutIntensity.REST_RECOVERY,
-            workoutTitleKey = "workout_menstrual_early_title",
-            workoutDescKey = "workout_menstrual_early_desc",
-            workoutFocusKeys = listOf("workout_focus_light_upper", "workout_focus_mobility", "workout_focus_pelvic_warmup"),
-            workoutCautionKey = "workout_caution_pelvic_pressure",
-        )
+        // Menstrual Phase: Days 1..minOf(4, ovulationDay - 5)
+        dayInCycle <= menstrualEnd -> {
+            val isEarly = dayInCycle <= if (menstrualEnd > 2) 2 else 1
+            if (isEarly) {
+                // Menstrual Phase: Early (Cramps, Peak Bleeding, Low Energy)
+                CycleDayAdvice(
+                    phase = CyclePhase.MENSTRUAL,
+                    titleKey = "cycle_menstrual_early_title",
+                    bodySummaryKey = "cycle_menstrual_early_body",
+                    hormoneInsightKey = "cycle_menstrual_early_hormones",
+                    waterRetentionRisk = false,
+                    energyLevel = EnergyLevel.LOW_REST,
+                    eatKeys = listOf("cycle_eat_iron_greens", "cycle_eat_bone_broth", "cycle_eat_ginger_tea"),
+                    avoidKeys = listOf("cycle_avoid_salt", "cycle_avoid_cold_heavy", "cycle_avoid_caffeine"),
+                    workoutIntensity = WorkoutIntensity.REST_RECOVERY,
+                    workoutTitleKey = "workout_menstrual_early_title",
+                    workoutDescKey = "workout_menstrual_early_desc",
+                    workoutFocusKeys = listOf("workout_focus_light_upper", "workout_focus_mobility", "workout_focus_pelvic_warmup"),
+                    workoutCautionKey = "workout_caution_pelvic_pressure",
+                )
+            } else {
+                // Menstrual Phase: Late (Cellular renewal, fluid shedding)
+                CycleDayAdvice(
+                    phase = CyclePhase.MENSTRUAL,
+                    titleKey = "cycle_menstrual_late_title",
+                    bodySummaryKey = "cycle_menstrual_late_body",
+                    hormoneInsightKey = "cycle_menstrual_late_hormones",
+                    waterRetentionRisk = false,
+                    energyLevel = EnergyLevel.RISING,
+                    eatKeys = listOf("cycle_eat_zinc_eggs", "cycle_eat_pumpkin_seeds", "cycle_eat_fermented"),
+                    avoidKeys = listOf("cycle_avoid_processed_meats", "cycle_avoid_excess_sugar"),
+                    workoutIntensity = WorkoutIntensity.MODERATE_STEADY,
+                    workoutTitleKey = "workout_menstrual_late_title",
+                    workoutDescKey = "workout_menstrual_late_desc",
+                    workoutFocusKeys = listOf("workout_focus_moderate_compound", "workout_focus_hypertrophy_8_12", "workout_focus_dynamic_warmup"),
+                    workoutCautionKey = null,
+                )
+            }
+        }
 
-        // Menstrual Phase: Days 3 to periodDuration (Cellular renewal, fluid shedding)
-        phase == CyclePhase.MENSTRUAL -> CycleDayAdvice(
-            phase = CyclePhase.MENSTRUAL,
-            titleKey = "cycle_menstrual_late_title",
-            bodySummaryKey = "cycle_menstrual_late_body",
-            hormoneInsightKey = "cycle_menstrual_late_hormones",
-            waterRetentionRisk = false,
-            energyLevel = EnergyLevel.RISING,
-            eatKeys = listOf("cycle_eat_zinc_eggs", "cycle_eat_pumpkin_seeds", "cycle_eat_fermented"),
-            avoidKeys = listOf("cycle_avoid_processed_meats", "cycle_avoid_excess_sugar"),
-            workoutIntensity = WorkoutIntensity.MODERATE_STEADY,
-            workoutTitleKey = "workout_menstrual_late_title",
-            workoutDescKey = "workout_menstrual_late_desc",
-            workoutFocusKeys = listOf("workout_focus_moderate_compound", "workout_focus_hypertrophy_8_12", "workout_focus_dynamic_warmup"),
-            workoutCautionKey = null,
-        )
-
-        // Follicular Phase: Early (Days 6-9 in standard cycle)
-        phase == CyclePhase.FOLLICULAR && dayInCycle <= (periodDuration + 4) -> CycleDayAdvice(
+        // Early Follicular: next day .. maxOf(minOf(4, ovulationDay - 5) + 1, ovulationDay - 3)
+        dayInCycle <= earlyFollicularEnd -> CycleDayAdvice(
             phase = CyclePhase.FOLLICULAR,
             titleKey = "cycle_follicular_early_title",
             bodySummaryKey = "cycle_follicular_early_body",
@@ -244,8 +291,8 @@ private fun resolveCycleAdvice(
             workoutCautionKey = null,
         )
 
-        // Follicular Phase: Late / Pre-Ovulation (Days 10-13)
-        phase == CyclePhase.FOLLICULAR -> CycleDayAdvice(
+        // Late Follicular (Peak Power): (ovulationDay - 2) .. (ovulationDay - 1)
+        dayInCycle <= lateFollicularEnd -> CycleDayAdvice(
             phase = CyclePhase.FOLLICULAR,
             titleKey = "cycle_follicular_late_title",
             bodySummaryKey = "cycle_follicular_late_body",
@@ -261,8 +308,8 @@ private fun resolveCycleAdvice(
             workoutCautionKey = null,
         )
 
-        // Ovulation Phase (Days 14-16)
-        phase == CyclePhase.OVULATION -> CycleDayAdvice(
+        // Ovulation: ovulationDay .. minOf(cycleLength, ovulationDay + 1)
+        dayInCycle <= ovulationEnd -> CycleDayAdvice(
             phase = CyclePhase.OVULATION,
             titleKey = "cycle_ovulation_title",
             bodySummaryKey = "cycle_ovulation_body",
@@ -278,8 +325,8 @@ private fun resolveCycleAdvice(
             workoutCautionKey = "workout_caution_acl_ligament",
         )
 
-        // Luteal Phase: Early (Days 17-20, Progesterone rising, BMR +150 kcal)
-        phase == CyclePhase.LUTEAL && daysUntilEnd > 7 -> CycleDayAdvice(
+        // Early Luteal: (ovulationDay + 2) .. (cycleLength - 8)
+        dayInCycle <= earlyLutealEnd -> CycleDayAdvice(
             phase = CyclePhase.LUTEAL,
             titleKey = "cycle_luteal_early_title",
             bodySummaryKey = "cycle_luteal_early_body",
@@ -295,8 +342,8 @@ private fun resolveCycleAdvice(
             workoutCautionKey = "workout_caution_thermoregulation",
         )
 
-        // Luteal Phase: Mid (Days 21-24, Aldosterone elevation, Fluid Retention starts)
-        phase == CyclePhase.LUTEAL && daysUntilEnd > 3 -> CycleDayAdvice(
+        // Mid Luteal (Water Retention / Progesterone peak): (cycleLength - 7) .. (cycleLength - 4)
+        dayInCycle <= midLutealEnd -> CycleDayAdvice(
             phase = CyclePhase.LUTEAL,
             titleKey = "cycle_luteal_mid_title",
             bodySummaryKey = "cycle_luteal_mid_body",
@@ -312,7 +359,7 @@ private fun resolveCycleAdvice(
             workoutCautionKey = "workout_caution_rpe_elevation",
         )
 
-        // Luteal Phase: Late PMS (Days 25-28, Maximum fluid retention +1.5-2.5 kg, Serotonin drop)
+        // Late PMS (Deload / Catabolism caution): (cycleLength - 3) .. cycleLength
         else -> CycleDayAdvice(
             phase = CyclePhase.LUTEAL,
             titleKey = "cycle_luteal_late_title",
@@ -330,3 +377,13 @@ private fun resolveCycleAdvice(
         )
     }
 }
+
+/**
+ * Backward compatibility wrapper for [adviceForDay].
+ */
+fun resolveCycleAdvice(
+    dayInCycle: Int,
+    cycleLength: Int = 28,
+    phase: CyclePhase? = null,
+    periodDuration: Int = 5,
+): CycleDayAdvice = adviceForDay(dayOfCycle = dayInCycle, cycleLength = cycleLength)
