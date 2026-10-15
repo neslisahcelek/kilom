@@ -332,10 +332,10 @@ fun BackupSheet(
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clip(RoundedCornerShape(14.dp))
+                                    .clip(RoundedCornerShape(16.dp))
                                     .background(colors.glassTint)
-                                    .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
-                                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
                             ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
@@ -344,7 +344,7 @@ fun BackupSheet(
                                 ) {
                                     Text(
                                         text = stringResource(Res.string.hevy_imported_count_format, workoutCount),
-                                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold),
+                                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.sp),
                                         color = colors.accent,
                                     )
 
@@ -355,8 +355,10 @@ fun BackupSheet(
                                         color = colors.danger,
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(8.dp))
+                                            .background(colors.danger.copy(alpha = 0.10f))
+                                            .border(0.5.dp, colors.danger.copy(alpha = 0.25f), RoundedCornerShape(8.dp))
                                             .clickable(role = Role.Button, onClick = onClearWorkouts)
-                                            .padding(horizontal = 8.dp, vertical = 4.dp),
+                                            .padding(horizontal = 10.dp, vertical = 5.dp),
                                     )
                                 }
                             }
@@ -414,7 +416,7 @@ fun BackupSheet(
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(16.dp))
                                     .background(colors.glassTint)
-                                    .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
                                     .padding(horizontal = 16.dp, vertical = 12.dp),
                             ) {
                                 Row(
@@ -484,7 +486,7 @@ fun BackupSheet(
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(16.dp))
                                     .background(colors.glassTint)
-                                    .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
                                     .padding(horizontal = 16.dp, vertical = 12.dp),
                             ) {
                                 Row(
@@ -538,7 +540,7 @@ fun BackupSheet(
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(colors.glassTint)
-                                .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
                                 .padding(horizontal = 16.dp, vertical = 12.dp),
                         ) {
                             Row(
@@ -617,7 +619,7 @@ private fun BackupActionButton(
             .height(52.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(bg)
-            .border(1.dp, border, RoundedCornerShape(16.dp))
+            .border(0.5.dp, border, RoundedCornerShape(16.dp))
             .clickable(role = Role.Button, onClick = onClick)
             .padding(horizontal = 18.dp),
         verticalAlignment = Alignment.CenterVertically,

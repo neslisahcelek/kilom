@@ -72,24 +72,28 @@ fun DomsAlertBanner(
 
     GlassCard(
         hazeState = hazeState,
-        shape = RoundedCornerShape(20.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                brush = Brush.horizontalGradient(
-                    listOf(
-                        colors.accent.copy(alpha = 0.55f),
-                        colors.positive.copy(alpha = 0.35f),
+        shape = RoundedCornerShape(24.dp),
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        // Subtle accent specular glow
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            colors.accent.copy(alpha = 0.14f),
+                            androidx.compose.ui.graphics.Color.Transparent,
+                        )
                     )
                 ),
-                shape = RoundedCornerShape(20.dp),
-            ),
-    ) {
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(20.dp),
         ) {
             // Header: Badge + Dismiss
             Row(
@@ -100,17 +104,18 @@ fun DomsAlertBanner(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(28.dp)
+                            .size(36.dp)
                             .clip(CircleShape)
-                            .background(colors.accent.copy(alpha = 0.20f)),
+                            .background(colors.accent.copy(alpha = 0.15f))
+                            .border(0.5.dp, colors.accent.copy(alpha = 0.35f), CircleShape),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text(text = "⚡", fontSize = 14.sp)
+                        Text(text = "⚡", fontSize = 16.sp)
                     }
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.width(10.dp))
                     Text(
                         text = stringResource(Res.string.doms_alert_badge),
-                        style = typography.caption.copy(fontSize = 11.5.sp),
+                        style = typography.caption.copy(fontSize = 12.sp),
                         fontWeight = FontWeight.Bold,
                         color = colors.accent,
                     )
@@ -120,21 +125,22 @@ fun DomsAlertBanner(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
-                        .background(colors.glassTint)
+                        .background(colors.glassBorder.copy(alpha = 0.25f))
+                        .border(0.5.dp, colors.glassBorder, RoundedCornerShape(10.dp))
                         .clickable(role = Role.Button, onClick = onDismiss)
-                        .padding(horizontal = 10.dp, vertical = 4.dp),
+                        .padding(horizontal = 12.dp, vertical = 5.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = stringResource(Res.string.doms_alert_dismiss),
-                        style = typography.caption.copy(fontSize = 11.sp),
+                        style = typography.caption.copy(fontSize = 11.5.sp),
                         fontWeight = FontWeight.Medium,
                         color = colors.textSecondary,
                     )
                 }
             }
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(12.dp))
 
             // Title
             Text(
@@ -154,13 +160,13 @@ fun DomsAlertBanner(
                     volumeFormatted,
                     assessment.expectedFluidWeightKg,
                 ),
-                style = typography.caption.copy(fontSize = 12.5.sp, lineHeight = 17.sp),
+                style = typography.caption.copy(fontSize = 12.5.sp, lineHeight = 17.5.sp),
                 color = colors.textSecondary,
             )
 
             // Exercise chips if available
             if (assessment.exerciseNames.isNotEmpty()) {
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(12.dp))
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -170,11 +176,12 @@ fun DomsAlertBanner(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(colors.accent.copy(alpha = 0.10f))
-                                .padding(horizontal = 8.dp, vertical = 3.dp),
+                                .border(0.5.dp, colors.accent.copy(alpha = 0.25f), RoundedCornerShape(8.dp))
+                                .padding(horizontal = 10.dp, vertical = 4.dp),
                         ) {
                             Text(
                                 text = name,
-                                style = typography.caption.copy(fontSize = 10.5.sp),
+                                style = typography.caption.copy(fontSize = 11.sp),
                                 color = colors.accent,
                                 fontWeight = FontWeight.SemiBold,
                             )

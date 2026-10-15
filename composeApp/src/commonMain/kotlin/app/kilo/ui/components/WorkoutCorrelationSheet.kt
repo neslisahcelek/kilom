@@ -34,6 +34,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -190,15 +193,15 @@ fun WorkoutCorrelationSheet(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(18.dp))
+                        .clip(RoundedCornerShape(20.dp))
                         .background(colors.glassTint)
-                        .border(1.dp, colors.glassBorder, RoundedCornerShape(18.dp))
-                        .padding(24.dp),
+                        .border(0.5.dp, colors.glassBorder, RoundedCornerShape(20.dp))
+                        .padding(28.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(text = "🏋️", fontSize = 36.sp)
-                        Spacer(Modifier.height(10.dp))
+                        Spacer(Modifier.height(12.dp))
                         Text(
                             text = stringResource(Res.string.correlation_no_data),
                             style = typography.headline,
@@ -257,9 +260,9 @@ private fun CorrelationTabSelector(
 
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(colors.glassTint)
-            .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
+            .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
             .padding(4.dp),
     ) {
         tabs.forEachIndexed { index, title ->
@@ -267,15 +270,15 @@ private fun CorrelationTabSelector(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(if (isSelected) colors.accent else colors.glassTint.copy(alpha = 0f))
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(if (isSelected) colors.accent else Color.Transparent)
                     .clickable(role = Role.Tab) { onSelect(index) }
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 9.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = title,
-                    style = typography.caption.copy(fontSize = 11.5.sp),
+                    style = typography.caption.copy(fontSize = 12.sp),
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                     color = if (isSelected) colors.onAccent else colors.textSecondary,
                     maxLines = 1,
@@ -301,17 +304,25 @@ private fun VolumeTab(correlation: CycleWorkoutCorrelation?) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(16.dp))
                     .background(colors.accent.copy(alpha = 0.12f))
-                    .border(1.dp, colors.accent.copy(alpha = 0.3f), RoundedCornerShape(14.dp))
-                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                    .border(0.5.dp, colors.accent.copy(alpha = 0.35f), RoundedCornerShape(16.dp))
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = "🏆", fontSize = 16.sp)
-                Spacer(Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .size(30.dp)
+                        .clip(CircleShape)
+                        .background(colors.accent.copy(alpha = 0.18f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(text = "🏆", fontSize = 15.sp)
+                }
+                Spacer(Modifier.width(10.dp))
                 Text(
                     text = stringResource(Res.string.correlation_peak_volume_format, peakName),
-                    style = typography.caption.copy(fontWeight = FontWeight.SemiBold),
+                    style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.5.sp),
                     color = colors.accent,
                 )
             }
@@ -353,14 +364,14 @@ private fun PhaseVolumeRow(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(colors.glassTint)
             .border(
-                1.dp,
-                if (isPeak) colors.accent.copy(alpha = 0.4f) else colors.glassBorder,
-                RoundedCornerShape(14.dp),
+                0.5.dp,
+                if (isPeak) colors.accent.copy(alpha = 0.45f) else colors.glassBorder,
+                RoundedCornerShape(16.dp),
             )
-            .padding(14.dp),
+            .padding(16.dp),
     ) {
         Column {
             Row(
@@ -371,11 +382,11 @@ private fun PhaseVolumeRow(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(8.dp)
+                            .size(10.dp)
                             .clip(CircleShape)
                             .background(phaseColor),
                     )
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.width(10.dp))
                     Text(
                         text = phaseName,
                         style = typography.subhead.copy(fontWeight = FontWeight.SemiBold),
@@ -390,7 +401,7 @@ private fun PhaseVolumeRow(
                 )
             }
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(10.dp))
 
             // Visual Progress Bar
             Box(
@@ -398,18 +409,26 @@ private fun PhaseVolumeRow(
                     .fillMaxWidth()
                     .height(8.dp)
                     .clip(RoundedCornerShape(4.dp))
-                    .background(colors.glassBorder.copy(alpha = 0.3f)),
+                    .background(colors.glassBorder.copy(alpha = 0.35f)),
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(fraction)
                         .height(8.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(phaseColor),
+                        .background(
+                            if (isPeak) {
+                                Brush.horizontalGradient(
+                                    listOf(phaseColor, phaseColor.copy(alpha = 0.85f))
+                                )
+                            } else {
+                                SolidColor(phaseColor)
+                            }
+                        ),
                 )
             }
 
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -417,14 +436,14 @@ private fun PhaseVolumeRow(
             ) {
                 Text(
                     text = stringResource(Res.string.correlation_workouts_count_format, summary.workoutCount),
-                    style = typography.caption.copy(fontSize = 11.sp),
+                    style = typography.caption.copy(fontSize = 11.5.sp),
                     color = colors.textSecondary,
                 )
                 if (summary.workoutCount > 0) {
                     val avgVol = formatVolumeInt(summary.avgVolumePerWorkoutKg)
                     Text(
                         text = stringResource(Res.string.correlation_avg_volume_format, avgVol),
-                        style = typography.caption.copy(fontSize = 11.sp),
+                        style = typography.caption.copy(fontSize = 11.5.sp),
                         color = colors.textSecondary,
                     )
                 }
@@ -449,7 +468,7 @@ private fun PrsAndRpeTab(correlation: CycleWorkoutCorrelation?) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(colors.glassTint)
-                .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
                 .padding(16.dp),
         ) {
             Column {
@@ -496,7 +515,7 @@ private fun PrsAndRpeTab(correlation: CycleWorkoutCorrelation?) {
                                 .weight(1f)
                                 .height(6.dp)
                                 .clip(RoundedCornerShape(3.dp))
-                                .background(colors.glassBorder.copy(alpha = 0.3f)),
+                                .background(colors.glassBorder.copy(alpha = 0.35f)),
                         ) {
                             if (fraction > 0f) {
                                 Box(
@@ -530,13 +549,21 @@ private fun PrsAndRpeTab(correlation: CycleWorkoutCorrelation?) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(colors.glassTint)
-                .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
                 .padding(16.dp),
         ) {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "🔥", fontSize = 16.sp)
-                    Spacer(Modifier.width(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .size(28.dp)
+                            .clip(CircleShape)
+                            .background(colors.accent.copy(alpha = 0.15f)),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(text = "🔥", fontSize = 14.sp)
+                    }
+                    Spacer(Modifier.width(10.dp))
                     Text(
                         text = stringResource(Res.string.correlation_luteal_rpe_card_title),
                         style = typography.subhead.copy(fontWeight = FontWeight.Bold),
@@ -544,7 +571,7 @@ private fun PrsAndRpeTab(correlation: CycleWorkoutCorrelation?) {
                     )
                 }
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(10.dp))
 
                 val insightText = if (rpeDiff != null && rpeDiff > 0.0) {
                     stringResource(Res.string.correlation_rpe_insight_format, rpeDiff)
@@ -556,7 +583,7 @@ private fun PrsAndRpeTab(correlation: CycleWorkoutCorrelation?) {
 
                 Text(
                     text = insightText,
-                    style = typography.caption.copy(fontSize = 12.5.sp, lineHeight = 17.sp),
+                    style = typography.caption.copy(fontSize = 12.5.sp, lineHeight = 17.5.sp),
                     color = colors.textSecondary,
                 )
             }
@@ -579,16 +606,16 @@ private fun RelativeStrengthTab(
             color = colors.textPrimary,
         )
 
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(12.dp))
 
         if (topLifts.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(16.dp))
                     .background(colors.glassTint)
-                    .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
-                    .padding(16.dp),
+                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                    .padding(20.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -603,10 +630,10 @@ private fun RelativeStrengthTab(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .clip(RoundedCornerShape(16.dp))
                         .background(colors.glassTint)
-                        .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
-                        .padding(14.dp),
+                        .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                        .padding(16.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -634,6 +661,7 @@ private fun RelativeStrengthTab(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(10.dp))
                                     .background(colors.accent.copy(alpha = 0.15f))
+                                    .border(0.5.dp, colors.accent.copy(alpha = 0.35f), RoundedCornerShape(10.dp))
                                     .padding(horizontal = 10.dp, vertical = 6.dp),
                                 contentAlignment = Alignment.Center,
                             ) {

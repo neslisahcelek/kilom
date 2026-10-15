@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -178,32 +179,40 @@ fun CycleSheet(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(16.dp))
                     .background(colors.glassTint)
-                    .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
-                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Column(modifier = Modifier.weight(1f)) {
+                Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
                     Text(
                         text = stringResource(Res.string.cycle_length_title),
-                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold),
+                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.5.sp),
                         color = colors.textPrimary,
                     )
+                    Spacer(Modifier.height(2.dp))
                     Text(
                         text = stringResource(Res.string.cycle_length_desc),
-                        style = typography.caption.copy(fontSize = 10.5.sp),
+                        style = typography.caption.copy(fontSize = 11.sp),
                         color = colors.textSecondary,
                     )
                 }
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(colors.glassBorder.copy(alpha = 0.25f))
+                        .border(0.5.dp, colors.glassBorder, RoundedCornerShape(12.dp))
+                        .padding(3.dp),
+                ) {
                     Box(
                         modifier = Modifier
-                            .size(30.dp)
-                            .clip(CircleShape)
-                            .background(colors.glassBorder.copy(alpha = 0.4f))
+                            .size(32.dp)
+                            .clip(RoundedCornerShape(9.dp))
+                            .background(colors.glassTint)
                             .clickable(role = Role.Button) {
                                 val newLength = (cycleLength - 1).coerceIn(21, 45)
                                 onUpdateCycleLength(newLength)
@@ -213,21 +222,18 @@ fun CycleSheet(
                         Text(text = "−", style = typography.subhead.copy(fontWeight = FontWeight.Bold), color = colors.textPrimary)
                     }
 
-                    Spacer(Modifier.width(10.dp))
-
                     Text(
                         text = stringResource(Res.string.cycle_length_days_format, cycleLength),
-                        style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                        style = typography.caption.copy(fontWeight = FontWeight.Bold, fontSize = 12.5.sp),
                         color = colors.accent,
+                        modifier = Modifier.padding(horizontal = 12.dp),
                     )
-
-                    Spacer(Modifier.width(10.dp))
 
                     Box(
                         modifier = Modifier
-                            .size(30.dp)
-                            .clip(CircleShape)
-                            .background(colors.glassBorder.copy(alpha = 0.4f))
+                            .size(32.dp)
+                            .clip(RoundedCornerShape(9.dp))
+                            .background(colors.glassTint)
                             .clickable(role = Role.Button) {
                                 val newLength = (cycleLength + 1).coerceIn(21, 45)
                                 onUpdateCycleLength(newLength)
@@ -429,9 +435,9 @@ private fun CycleTabSelector(
 
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(colors.glassTint)
-            .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
+            .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
             .padding(4.dp),
     ) {
         tabs.forEachIndexed { index, title ->
@@ -439,10 +445,10 @@ private fun CycleTabSelector(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(if (isSelected) colors.accent else colors.glassTint.copy(alpha = 0f))
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(if (isSelected) colors.accent else Color.Transparent)
                     .clickable { onSelect(index) }
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 9.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -635,10 +641,10 @@ private fun WorkoutTab(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
-                    .background(colors.accent.copy(alpha = 0.15f))
-                    .border(1.dp, colors.accent.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
+                    .background(colors.accent.copy(alpha = 0.12f))
+                    .border(0.5.dp, colors.accent.copy(alpha = 0.35f), RoundedCornerShape(16.dp))
                     .clickable(role = Role.Button, onClick = onOpenCorrelation)
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -649,7 +655,15 @@ private fun WorkoutTab(
                         modifier = Modifier.weight(1f),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(text = "📊", fontSize = 20.sp)
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .background(colors.accent.copy(alpha = 0.18f)),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(text = "📊", fontSize = 16.sp)
+                        }
                         Spacer(Modifier.width(12.dp))
                         Column {
                             Text(
@@ -824,10 +838,10 @@ private fun SourceItem(title: String, desc: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(colors.glassTint)
-            .border(1.dp, colors.glassBorder, RoundedCornerShape(14.dp))
-            .padding(14.dp),
+            .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+            .padding(16.dp),
     ) {
         Column {
             Text(
@@ -856,7 +870,7 @@ private fun InfoCard(title: String, headline: String?, body: String, emoji: Stri
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(colors.glassTint)
-            .border(1.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+            .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
             .padding(16.dp),
     ) {
         Column {
