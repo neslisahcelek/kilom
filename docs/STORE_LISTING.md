@@ -1,6 +1,6 @@
 # Kilom – Mağaza Listeleme Metinleri
 
-Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın gerçek davranışıyla uyumludur: veriler cihazdan çıkmaz, analitik/reklam/hesap yoktur. Apple Sağlık (HealthKit) kullanımı Apple açıklamalarında açıkça belirtilir.
+Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın gerçek davranışıyla uyumludur: veriler cihazdan çıkmaz, analitik/reklam/hesap yoktur. Apple Sağlık (HealthKit) kullanımı, döngü takibi, kanıta dayalı beslenme ve ağırlık antrenmanı rehberi açıklamalarda şeffafça belirtilir.
 
 > Karakter limitleri: Apple Subtitle 30, Promotional Text 170, Keywords 100; Google Play Kısa Açıklama 80.
 
@@ -15,49 +15,67 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Kilom
   ```
 
-- **Alt Başlık / Subtitle (Maks 30 karakter — 27):**
+- **Alt Başlık / Subtitle (Maks 30 karakter — 24):**
   ```text
-  Kilo, hedef ve Apple Sağlık
+  Kilo, Döngü ve Antrenman
   ```
 
-- **Promosyon Metni / Promotional Text (Maks 170 karakter):**
+- **Promosyon Metni / Promotional Text (Maks 170 karakter — 162):**
   ```text
-  Tartı fotoğrafıyla saniyeler içinde kaydedin, Apple Sağlık ile eşitleyin, hedef kilonuzu ve tahmini tarihi görün. Hesapsız, reklamsız, tamamen cihazınızda.
+  Tartı fotoğrafıyla saniyeler içinde kaydedin. Döngünüze göre beslenme ve ağırlık antrenmanı önerileri alın, serinizi koruyun. Sıfır reklam, %100 cihazınızda.
   ```
 
-- **Anahtar Kelimeler / Keywords (Maks 100 karakter — 99):**
+- **Anahtar Kelimeler / Keywords (Maks 100 karakter — 98):**
   ```text
-  kilom,kilo,kilo takibi,tartı,apple sağlık,hedef kilo,ocr,fotoğraf,kilo günlüğü,hatırlatıcı,diyet,kg
+  kilom,kilo,tartı,döngü,regl,beslenme,ağırlık,fitness,apple sağlık,hedef,streak,seri,ödem,ocr,spor
   ```
 
 - **Açıklama / Description:**
   ```text
-  Kilom, kilonuzu kaydetmeyi, takip etmeyi ve hedefinize ilerlemeyi kolaylaştıran gizlilik odaklı bir kilo takip uygulamasıdır. Verileriniz yalnızca cihazınızda kalır.
+  Kilom; kilonuzu kaydetmeyi, tartılma alışkanlığı kazanmayı, biyolojik döngünüze göre beslenmeyi ve ağırlık antrenmanlarınızı optimize etmeyi sağlayan %100 gizlilik odaklı kişisel sağlık asistanınızdır.
 
-  Hızlı Kayıt:
-  • Tartı Fotoğrafı: Tartınızın ekranını çekin veya galeriden seçin; Kilom sayıları cihaz üzerinde okur. Sonucu siz onaylamadan hiçbir şey kaydedilmez. 7 segmentli LED/LCD ekranlar da desteklenir.
-  • Elle Giriş: Büyük sayısal klavyeyle saniyeler içinde yazın. kg ve lb arasında tek dokunuşla geçin.
+  Verileriniz asla sunuculara gitmez; yalnızca sizin cihazınızda kalır.
+
+  Hızlı ve Akıllı Tartı Kaydı:
+  • Tartı Fotoğrafı (Cihaz İçi OCR): Tartınızın ekranını kamerayla çekin veya galeriden seçin; Kilom sayıları tamamen telefonunuzda okur. 7 segmentli LED/LCD ekranları tanır. Siz onaylamadan hiçbir kayıt eklenmez.
+  • Hızlı Elle Giriş: Büyük sayısal klavyeyle saniyeler içinde kaydedin. kg ve lb arasında anında geçiş yapın.
+
+  Döngü ve Kanıta Dayalı Beslenme Rehberi:
+  • 28 Günlük İnfradiyen Analitik: Menstrüel döngünüzün 8 farklı mikro dönemine göre bedeninizin ne yaşadığını bilimsel olarak görün.
+  • Su Tutma & Ödem Tahmini: Luteal fazda yükselen progesteronun getirdiği doğal su tutulumunu (ödem) önceden haber verir; tartıda gördüğünüz geçici artışlarda motivasyonunuzu korur.
+  • Hormonal Dengeye Göre Beslenme: Foliküler ve luteal fazlarda insülin hassasiyetine uygun karbonhidrat dengesi, magnezyum, demir, çinko ve omega-3 gibi kritik mikrobesin tavsiyeleri (ACOG ve PubMed destekli).
+  • Bilimsel Kaynaklar: Önerilerin dayandığı hakemli tıbbi ve fizyolojik makaleleri doğrudan uygulama içindeki Kaynaklar sekmesinden inceleyin.
+
+  Döngüye Senkronize Ağırlık Antrenmanı:
+  • Güç ve PR Pencereleri: Östrojenin ve testosteronun tepe yaptığı foliküler dönemde maksimal kuvvet (Squat, Deadlift, Hip Thrust) ve rekor denemeleri için en verimli günleri yakalayın.
+  • Sakatlık Koruması & Biyomekanik Uyarılar: Yumurtlama öncesi yükselen östrojenin eklem bağlarını gevşetmesi nedeniyle ACL (ön çapraz bağ) uyarısı, luteal fazda vücut ısısı artışı için hidrasyon desteği.
+  • Deload & Kas Koruma: PMS döneminde merkezi sinir sistemi yorgunluğunu önleyen planlı hafifletme (deload) ve katabolizmaya karşı lösin zamanlaması stratejileri.
+
+  İstikrar Matrisi ve Başarı Paylaşımı:
+  • Tartı Serisi (Streak): Mevcut ve en uzun tartılma serinizi, toplam tartı günlerinizi ve aylık tutarlılık yüzdenizi takip edin.
+  • 14 Günlük Alışkanlık Isı Haritası: Tartılma düzeninizi görsel bir matriste izleyin.
+  • Sıvı Cam Paylaşım Kartı: Ulaştığınız kilometre taşlarını ve serilerinizi şık, estetik bir cam kart olarak yerel paylaşım sayfasıyla arkadaşlarınızla paylaşın.
 
   Apple Sağlık (HealthKit) Entegrasyonu:
-  • Kaydettiğiniz kiloları izninizle Apple Sağlık'a yazar.
-  • Apple Sağlık'taki geçmiş kilo kayıtlarınızı izninizle Kilom'a içe aktarabilirsiniz.
-  • Ana ekrandaki Apple Sağlık rozeti bağlantı durumunu gösterir; izni istediğiniz zaman iOS Ayarlar > Sağlık üzerinden değiştirebilirsiniz.
-  • Sağlık verileriniz reklam, analitik veya paylaşım amacıyla kullanılmaz ve cihazınızdan çıkmaz.
+  • Kilom'a kaydettiğiniz kiloları izninizle Apple Sağlık'a yazar.
+  • Apple Sağlık'taki geçmiş kilo kayıtlarınızı tek dokunuşla Kilom'a içe aktarabilirsiniz.
+  • Ana ekrandaki Apple Sağlık rozeti bağlantı durumunu şeffafça gösterir.
+  • Sağlık verileriniz reklam, analitik veya veri madenciliği amacıyla asla kullanılmaz ve cihazınızdan dışarı çıkmaz.
 
-  İlerlemenizi Görün:
-  • Hedef Kilo: Hedefinizi belirleyin, ilerlemenizi ve tahmini ulaşma tarihini görün.
-  • Haftalık ve Aylık Özet: Dönem içindeki değişimi tek kartta görün.
-  • Trend Grafiği: Kilo geçmişinizin gidişatını net bir grafikte izleyin.
-  • Anlık Fark: Son tartıya göre değişim ve geçen gün sayısı.
+  Hedef ve İlerleme Takibi:
+  • Hedef Kilo ve Tahmini Tarih: Hedefinizi belirleyin, gidişatınıza göre tahmini varış tarihini görün.
+  • Trend Grafiği: Günlük kilo dalgalanmalarını filtreleyen hareketli ortalama trend eğrisi.
+  • Haftalık ve Aylık Özet: Belirli dönemlerdeki net kilo değişimini tek bir kartta özetleyin.
+  • İsteğe Bağlı Günlük Hatırlatıcı: Seçtiğiniz saatte yerel bildirimle hatırlatma alın. Bildirimler yalnızca cihazınızda oluşturulur, sunucu kullanılmaz.
 
-  İsteğe Bağlı Günlük Hatırlatıcı:
-  • Seçtiğiniz saatte yerel bildirimle hatırlatma alın. Bildirimler cihazınızda oluşturulur, sunucu kullanılmaz; istediğiniz zaman kapatabilirsiniz.
+  %100 Cihaz İçi Gizlilik:
+  • Sıfır hesap, sıfır sunucu, sıfır bulut veritabanı.
+  • Reklam yok, analitik araç yok, üçüncü taraf izleyici yok.
+  • Fotoğraflarınız yalnızca OCR anında geçici bellekte tutulur, diske veya ağa aktarılmaz.
+  • CSV ve JSON formatında tam yedekleme ve geri yükleme.
+  • Yanlış kayıtları sola kaydırarak anında silme.
 
-  Verileriniz Sizin:
-  • CSV / JSON olarak dışa aktarın ve yedekten geri yükleyin.
-  • Hesap yok, abonelik yok, reklam yok, analitik yok.
-  • Fotoğraflarınız ve kilo verileriniz cihazınızdan dışarı çıkmaz.
-  • Yanlış kayıtları sola kaydırarak silin.
+  Yasal Uyarı: Kilom'daki beslenme ve antrenman rehberi yalnızca bilgilendirme ve farkındalık amaçlıdır; tıbbi teşhis veya tedavi tavsiyesi niteliği taşımaz.
 
   Gizlilik Politikası: https://neslisahcelek.github.io/kilom/
   İletişim: neslisah.celek@outlook.com
@@ -72,26 +90,32 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Kilom
   ```
 
-- **Kısa Açıklama (Maks 80 karakter):**
+- **Kısa Açıklama (Maks 80 karakter — 70):**
   ```text
-  Tartı fotoğrafıyla kilo takibi, hedef ve özet. Reklamsız, tamamen cihazınızda.
+  Tartı fotoğrafı, döngüye göre beslenme ve antrenman rehberi. %100 gizli.
   ```
 
 - **Tam Açıklama:**
   ```text
-  Kilom, kilo kaydını ve takibini kolaylaştıran gizlilik odaklı bir uygulamadır.
+  Kilom; kilonuzu kolayca kaydetmenizi, tartılma alışkanlığı kazanmanızı, biyolojik döngünüze göre beslenmenizi ve ağırlık antrenmanlarınızı planlamanızı sağlayan gizlilik odaklı bir kişisel sağlık uygulamasıdır.
 
-  Özellikler:
-  • Tartı Fotoğrafı ile Algılama: Tartı ekranının fotoğrafını çekin veya galeriden seçin; kilo cihaz üzerinde okunur, siz onaylayınca kaydedilir.
-  • Hızlı Giriş: Büyük sayısal klavyeyle saniyeler içinde elle yazın.
-  • Hedef Kilo: Hedefinizi belirleyin, ilerlemenizi ve tahmini ulaşma tarihini görün.
-  • Haftalık ve Aylık Özet: Dönem içindeki değişimi tek kartta görün.
-  • Trend Grafiği: Kilo geçmişinizin gidişatını izleyin.
-  • Anında Fark: Son tartıya göre kilo farkı ve geçen gün sayısı.
-  • İsteğe Bağlı Günlük Hatırlatıcı: Yerel bildirim; kapatması kolay.
-  • CSV / JSON dışa aktarma ve yedekten geri yükleme.
-  • Gizli ve Çevrimdışı: Hesap yok, reklam yok, analitik yok. Verileriniz yalnızca telefonunuzda saklanır.
-  • kg / lb desteği ve sola kaydırarak silme.
+  Öne Çıkan Özellikler:
+  • Tartı Ekranı Algılama (On-Device OCR): Tartınızın fotoğrafını çekin veya galeriden seçin; kilo değeri cihazınızda otomatik okunur. 7 segmentli ekranları destekler. Onayınız olmadan hiçbir veri kaydedilmez.
+  • Döngü ve Kanıta Dayalı Beslenme Rehberi: 28 günlük hormonal döngü fazları, luteal faz su tutma (ödem) uyarısı, demir, çinko, magnezyum ve mikrobesin önerileri (ACOG ve PubMed destekli).
+  • Döngüye Göre Ağırlık Antrenmanı: Tepe güç ve PR pencereleri, ACL bağ gevşekliği sakatlık uyarısı, deload stratejileri ve spor fizyolojisi tavsiyeleri.
+  • İstikrar Matrisi & Tartı Serisi (Streak): Mevcut seri, en uzun seri, aylık tutarlılık oranı ve 14 günlük görsel alışkanlık ısı haritası.
+  • Sıvı Cam Başarı Paylaşımı: Başarılarınızı ve serilerinizi estetik bir cam kart tasarımıyla kolayca paylaşın.
+  • Hedef Kilo ve Tahmini Tarih: Ulaşmak istediğiniz kiloyu belirleyin, ilerleme yüzdesi ve tahmini bitiş tarihini izleyin.
+  • Trend Grafiği & Özet Kartları: Kilonuzun genel yönünü gösteren trend çizgisi ve haftalık/aylık değişim özetleri.
+  • İsteğe Bağlı Günlük Hatırlatıcı: Seçtiğiniz saatte telefonunuzda yerel olarak tetiklenen tartı hatırlatıcısı.
+  • CSV ve JSON Yedekleme: Tüm verilerinizi tek dokunuşla dışa aktarın ve istediğiniz zaman geri yükleyin.
+
+  %100 Cihaz İçi Gizlilik:
+  • Hesap yok, kayıt yok, sunucu yok, reklam yok, analitik izleyici yok.
+  • Fotoğraflarınız ve kilo verileriniz asla telefonunuzdan dışarı çıkmaz.
+  • kg ve lb desteği, sola kaydırarak geçmiş kayıt silme.
+
+  Yasal Uyarı: Uygulama içindeki beslenme ve antrenman önerileri genel eğitim amaçlıdır; tıbbi tavsiye yerine geçmez.
 
   Gizlilik Politikası: https://neslisahcelek.github.io/kilom/
   İletişim: neslisah.celek@outlook.com
@@ -108,49 +132,66 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Kilom
   ```
 
-- **Subtitle (Max 30 chars — 27):**
+- **Subtitle (Max 30 chars — 24):**
   ```text
-  Weight goals & Apple Health
+  Weight, Cycle & Strength
   ```
 
-- **Promotional Text (Max 170 chars):**
+- **Promotional Text (Max 170 chars — 157):**
   ```text
-  Log weight in seconds with a scale photo, sync with Apple Health, set a goal weight and see your ETA. Private, on-device, no ads, no account.
+  Log weight in seconds with scale photos. Sync workouts and nutrition with your cycle, build weigh-in streaks, and reach your goals. 100% on-device & private.
   ```
 
-- **Keywords (Max 100 chars — 92):**
+- **Keywords (Max 100 chars — 99):**
   ```text
-  kilom,weight,tracker,scale,ocr,apple health,goal,weigh-in,log,trend,reminder,diet,body,kg,lb
+  kilom,weight,scale,cycle,period,nutrition,strength,lifting,apple health,streak,habit,pms,water weight
   ```
 
 - **Description:**
   ```text
-  Kilom is a privacy-first weight tracker that makes it easy to log your weight, follow your trend and move toward your goal. Your data stays on your device.
+  Kilom is a privacy-first personal wellness assistant that makes it effortless to log your weight, build consistent habits, and align your nutrition and strength training with your infradian cycle.
 
-  Log in Seconds:
-  • Scale Photo: Snap your scale's display or pick a photo; Kilom reads the digits on-device. Nothing is saved until you confirm. Seven-segment LED/LCD displays are supported.
-  • Quick Entry: Type with an oversized keypad. Switch between kg and lb with one tap.
+  Your data never leaves your device. Zero servers, zero ads, zero accounts.
+
+  Effortless Scale Logging:
+  • Scale Photo Scan (On-Device OCR): Snap a photo of your scale display or pick from your gallery. Kilom recognizes digits locally using Apple Vision—including seven-segment LED/LCD screens. Nothing is saved until you confirm.
+  • Quick Manual Entry: Type in seconds with an oversized numeric keypad. Switch between kg and lb with a single tap.
+
+  Cycle-Synced & Evidence-Based Nutrition:
+  • 28-Day Infradian Analytics: Understand what your body experiences across 8 micro-phases of your menstrual cycle.
+  • Water Retention & Bloat Forecast: Foresee natural progesterone-driven water retention in the luteal phase so temporary weight spikes never discourage you.
+  • Hormonally Aligned Nutrition: Evidence-based macronutrient balance and essential micronutrient recommendations (iron, zinc, magnesium, omega-3) backed by ACOG and PubMed literature.
+  • Peer-Reviewed Sources: Review scientific citations directly within the app’s Sources tab.
+
+  Cycle-Synced Strength Training:
+  • Peak Power & PR Windows: Exploit optimal estrogen and testosterone peaks during late follicular phase for maximal strength lifts (Squat, Deadlift, Hip Thrust).
+  • Biomechanical Injury Prevention: Protect your joints with ACL laxity warnings during ovulatory estrogen spikes, and hydration alerts for luteal thermoregulation (+0.5°C core temp).
+  • Deload & Anti-Catabolism: Strategic CNS recovery with planned deloads and leucine timing during late PMS.
+
+  Consistency Matrix & Milestone Sharing:
+  • Weigh-In Streak: Track current streak, best streak, total weigh-in days, and monthly consistency score.
+  • 14-Day Habit Heatmap: Visualize your weighing consistency at a glance.
+  • Liquid-Glass Share Card: Share your milestones and habits with friends via an aesthetic, privacy-preserving share card.
 
   Apple Health (HealthKit) Integration:
-  • Saves the weight entries you log to Apple Health, with your permission.
-  • Imports your past weight entries from Apple Health, with your permission.
-  • The Apple Health badge on the main screen shows the connection status; you can change access anytime in iOS Settings > Health.
-  • Your health data is never used for advertising or analytics and never leaves your device.
+  • Saves your logged weights to Apple Health, with your permission.
+  • Seamlessly imports past weight history from Apple Health into Kilom.
+  • The main-screen Apple Health badge displays real-time connection status.
+  • Your health data is never shared, never sold, and never leaves your device.
 
-  See Your Progress:
-  • Goal Weight: Set a target and see your progress and estimated arrival date.
-  • Weekly & Monthly Summary: Your change over the period in a single card.
-  • Trend Chart: Follow the direction of your weight history at a glance.
-  • Instant Context: Change since your last weigh-in and days elapsed.
+  Goal Weight & Progress Analytics:
+  • Target Weight & ETA: Set your goal, track milestone progress, and see an estimated arrival date.
+  • Moving Average Trend Line: Smooth out daily fluid fluctuations to reveal your true body mass trend.
+  • Weekly & Monthly Summaries: See exact period deltas in clean liquid-glass cards.
+  • Optional Daily Reminder: A local notification scheduled entirely on-device; no push servers.
 
-  Optional Daily Reminder:
-  • Get a local notification at the time you choose. Notifications are scheduled on your device, with no server involved, and can be turned off anytime.
+  Uncompromising Privacy:
+  • 100% on-device architecture: no account, no cloud database, no tracking, no third-party SDKs.
+  • Scale photos are analyzed in volatile RAM and immediately discarded; never stored on disk or sent over a network.
+  • Full data ownership: Export or restore anytime via CSV and JSON.
+  • Swipe left to delete erroneous entries.
 
-  Your Data, Your Control:
-  • Export to CSV / JSON and restore from a backup.
-  • No accounts, no subscriptions, no ads, no analytics.
-  • Your scale photos and weight data never leave your device.
-  • Swipe left to delete past entries.
+  Disclaimer: Kilom’s nutrition and strength guides are for educational and awareness purposes only and do not constitute medical diagnosis or treatment.
 
   Privacy Policy: https://neslisahcelek.github.io/kilom/
   Support: neslisah.celek@outlook.com
@@ -165,26 +206,32 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Kilom
   ```
 
-- **Short Description (Max 80 chars):**
+- **Short Description (Max 80 chars — 76):**
   ```text
-  Weight tracking with scale photo scan, goals and summaries. Private, ad-free.
+  Scale photo weight log with cycle-synced nutrition & strength. 100% private.
   ```
 
 - **Full Description:**
   ```text
-  Kilom is a privacy-first weight tracker that makes logging and following your weight easy.
+  Kilom is a privacy-first personal health companion that simplifies weight tracking, habit building, and cycle-synced nutrition and strength training.
 
-  Features:
-  • Scale Photo Scan: Snap your scale display or pick a photo. On-device vision reads the numbers; you confirm before saving.
-  • Fast Manual Entry: Enter your weight in seconds with an oversized keypad.
-  • Goal Weight: Set a target and see your progress and estimated arrival date.
-  • Weekly & Monthly Summary: Your change over the period in a single card.
-  • Trend Chart: Follow the direction of your weight history.
-  • Instant Context: Your difference from the previous weigh-in and days elapsed.
-  • Optional Daily Reminder: A local notification you can turn off anytime.
-  • CSV / JSON export and backup restore.
-  • On-Device Privacy: No accounts, no ads, no analytics. Your data stays on your phone.
+  Key Features:
+  • Scale Screen Recognition (On-Device OCR): Take a photo of your scale or choose from gallery. Numbers are parsed on your device (supports 7-segment displays). You confirm every entry before saving.
+  • Cycle & Evidence-Based Nutrition: 28-day infradian cycle insights, luteal water retention warnings, and micronutrient advice (iron, zinc, magnesium) backed by ACOG and PubMed literature.
+  • Cycle-Synced Strength Training: PR lifting windows, ACL injury risk warnings, luteal thermoregulation tips, and PMS deload strategies.
+  • Consistency Matrix & Weigh-In Streak: Current streak, longest streak, monthly consistency rate, and a 14-day visual habit heatmap.
+  • Liquid-Glass Milestone Sharing: Share your streaks and achievements using a sleek share card.
+  • Goal Weight with ETA: Set your target weight and view your progress and estimated arrival date.
+  • Trend Chart & Period Summaries: Follow your smoothed weight trajectory and review weekly/monthly changes.
+  • Optional Daily Reminder: Local on-device notification at your chosen hour.
+  • CSV / JSON Backup: Export and restore your data anytime.
+
+  100% On-Device Privacy:
+  • No account, no cloud servers, no ads, no trackers.
+  • Your photos and health metrics never leave your smartphone.
   • kg / lb toggle and swipe-to-delete history.
+
+  Disclaimer: Nutrition and exercise guidance in Kilom is intended for educational purposes only and does not replace professional medical advice.
 
   Privacy Policy: https://neslisahcelek.github.io/kilom/
   Contact: neslisah.celek@outlook.com

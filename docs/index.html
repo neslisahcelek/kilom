@@ -435,7 +435,7 @@
         Your health data belongs exclusively to you. Kilom is designed from the ground up to operate completely on your device without transmitting data over the internet.
       </p>
       <div class="meta-bar">
-        <span><strong>Last Updated:</strong> October 14, 2026</span>
+        <span><strong>Last Updated:</strong> October 15, 2026</span>
         <span><strong>Developer:</strong> Neslişah Çelek</span>
         <span><strong>Status:</strong> Active</span>
       </div>
@@ -481,7 +481,7 @@
         <p>Kilom collects <strong>zero</strong> personally identifiable or sensitive health information:</p>
         <ul>
           <li><strong>No Personal Identifiers:</strong> We do not ask for or collect names, email addresses, phone numbers, or hardware identifiers (e.g., IDFA, AAID).</li>
-          <li><strong>No Health Data Off-Device:</strong> Your weight measurements, dates, and progress differences remain in your local sandboxed storage only.</li>
+          <li><strong>No Health or Cycle Data Off-Device:</strong> Your weight measurements, menstrual cycle dates, cycle lengths, symptom correlations, and workout notes remain in your local sandboxed storage only.</li>
           <li><strong>No Location Data:</strong> GPS or network-based geolocation is never accessed or requested.</li>
           <li><strong>No Financial Data:</strong> Kilom does not process payments or collect payment credentials.</li>
         </ul>
@@ -521,7 +521,7 @@
       </section>
 
       <section class="policy-section">
-        <h2>3b. Apple Health (HealthKit) &amp; Notifications</h2>
+        <h2>3b. Apple Health, Cycle Guidance &amp; Notifications</h2>
         <h3>A. Apple Health (iOS only — <code>NSHealthUpdateUsageDescription</code> / <code>NSHealthShareUsageDescription</code>)</h3>
         <p>
           Kilom (1) <strong>writes</strong> the weight entries you log to Apple Health and (2) lets you <strong>import (read)</strong> your past weight entries from Apple Health. Both work only with the permission you grant; you can change access anytime in iOS Settings &gt; Health &gt; Data Access &amp; Devices &gt; Kilom.
@@ -533,7 +533,12 @@
           <p>🔒 Health data moves only between Apple Health and Kilom on your device. It is never sent to any server, never used for advertising, marketing, analytics or data brokering, and never shared with third parties. The connection status is shown by the Apple Health badge on the main screen.</p>
         </div>
 
-        <h3>B. Notifications (Optional Daily Reminder)</h3>
+        <h3>B. Infradian Cycle, Nutrition &amp; Strength Guidance (Zero Cloud AI)</h3>
+        <p>
+          Kilom calculates your 28-day cycle micro-periods, water retention predictions, macronutrient/micronutrient advice, and strength training recommendations. All calculations are performed <strong>100% locally</strong> using deterministic on-device Kotlin algorithms. No external cloud AI, large language models (LLMs), or third-party health APIs are used. Cycle tracking can be enabled or disabled at any time in the app settings.
+        </p>
+
+        <h3>C. Notifications (Optional Daily Reminder)</h3>
         <p>
           Only if you turn on the daily reminder, a notification is shown at the time you choose. Notifications are scheduled <strong>locally</strong> on your device; no server or push service is used. Your goal weight and reminder preferences are also stored only on your device. You can turn the reminder off anytime.
         </p>
@@ -596,6 +601,11 @@
                 <td>Runtime Access</td>
                 <td>Write and import only with your permission, on-device; reminder notifications are local</td>
               </tr>
+              <tr>
+                <td><strong>Cycle &amp; Strength Guide</strong></td>
+                <td>Health Analytics</td>
+                <td>100% on-device local algorithms; zero cloud AI / server transmission</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -636,7 +646,7 @@
         <p>Kilom uygulamasını kullanırken hiçbir kişisel veya hassas veri toplanmaz:</p>
         <ul>
           <li><strong>Kişisel Kimlik Bilgileri Toplanmaz:</strong> Ad, e-posta adresi, telefon numarası veya donanım kimlikleri (IDFA, AAID) alınmaz.</li>
-          <li><strong>Sağlık Verileri Cihaz Dışına Çıkmaz:</strong> Kilo kayıtlarınız, tarihler ve geçmiş ölçümleriniz yalnızca cihazınızın yerel hafızasında tutulur.</li>
+          <li><strong>Sağlık ve Döngü Verileri Cihaz Dışına Çıkmaz:</strong> Kilo kayıtlarınız, menstrüel döngü tarihleriniz, döngü uzunluğu, su tutma/ödem notlarınız ve antrenman tercihleriniz yalnızca cihazınızın yerel hafızasında tutulur.</li>
           <li><strong>Konum Bilgisi Alınmaz:</strong> GPS veya ağ tabanlı konumunuza asla erişilmez.</li>
           <li><strong>Finansal Bilgi İstenmez:</strong> Ödeme bilgisi veya kart verisi toplanmaz.</li>
         </ul>
@@ -676,7 +686,7 @@
       </section>
 
       <section class="policy-section">
-        <h2>3b. Apple Sağlık (HealthKit) ve Bildirimler</h2>
+        <h2>3b. Apple Sağlık, Döngü Rehberi ve Bildirimler</h2>
         <h3>A. Apple Sağlık (yalnızca iOS — <code>NSHealthUpdateUsageDescription</code> / <code>NSHealthShareUsageDescription</code>)</h3>
         <p>
           Kilom, (1) kaydettiğiniz kilo kayıtlarını Apple Sağlık'a <strong>yazar</strong> ve (2) Apple Sağlık'taki geçmiş kilo kayıtlarınızı <strong>içe aktarmanıza (okumanıza)</strong> olanak tanır. İkisi de yalnızca sizin verdiğiniz izinle çalışır; izni istediğiniz zaman iOS Ayarlar &gt; Sağlık &gt; Veri Erişimi ve Cihazlar &gt; Kilom bölümünden değiştirebilirsiniz.
@@ -688,7 +698,12 @@
           <p>🔒 Sağlık verileriniz yalnızca cihazınızdaki Apple Sağlık ile Kilom arasında aktarılır. Hiçbir sunucuya gönderilmez; reklam, pazarlama, analitik veya veri aracılığı için kullanılmaz ve üçüncü taraflarla paylaşılmaz. Bağlantı durumu ana ekrandaki Apple Sağlık rozetinde görünür.</p>
         </div>
 
-        <h3>B. Bildirimler (İsteğe Bağlı Günlük Hatırlatıcı)</h3>
+        <h3>B. Döngü, Beslenme ve Ağırlık Antrenmanı Rehberi (Bulutsuz / Yerel Algoritmalar)</h3>
+        <p>
+          Kilom, 28 günlük döngü mikro dönemlerini, luteal faz su tutma (ödem) tahminini, mikrobesin dengesi ve ağırlık antrenmanı tavsiyelerini tamamen yerel Kotlin algoritmalarıyla <strong>%100 cihaz üzerinde</strong> hesaplar. Hiçbir harici bulut yapay zeka servisi (LLM/API) veya sunucu ile iletişim kurulmaz. Döngü özelliği istendiğinde ayarlar menüsünden kapatılabilir.
+        </p>
+
+        <h3>C. Bildirimler (İsteğe Bağlı Günlük Hatırlatıcı)</h3>
         <p>
           Yalnızca günlük hatırlatıcıyı açarsanız, seçtiğiniz saatte bir bildirim gösterilir. Bildirimler tamamen <strong>yerel</strong> olarak cihazınızda planlanır; sunucu veya push servisi kullanılmaz. Hedef kilonuz ve hatırlatıcı tercihleriniz de yalnızca cihazınızda saklanır. Hatırlatıcıyı istediğiniz zaman kapatabilirsiniz.
         </p>
@@ -750,6 +765,11 @@
                 <td><strong>Apple Sağlık / Bildirimler</strong></td>
                 <td>Çalışma Zamanı Erişimi</td>
                 <td>Yazma ve içe aktarma yalnızca izninizle, cihazda; hatırlatıcı bildirimleri yerel</td>
+              </tr>
+              <tr>
+                <td><strong>Döngü ve Antrenman Rehberi</strong></td>
+                <td>Sağlık Analitiği</td>
+                <td>%100 yerel algoritmalar; sıfır bulut yapay zeka / sunucu aktarımı</td>
               </tr>
             </tbody>
           </table>

@@ -1,6 +1,6 @@
 # Privacy Policy / Gizlilik Politikası — Kilom
 
-**Last Updated / Son Güncelleme:** October 14, 2026 / 14 Ekim 2026  
+**Last Updated / Son Güncelleme:** October 15, 2026 / 15 Ekim 2026  
 **Application / Uygulama:** Kilom  
 **Developer / Geliştirici:** Neslişah Çelek  
 **Contact / İletişim:** [neslisah.celek@outlook.com](mailto:neslisah.celek@outlook.com)  
@@ -24,7 +24,7 @@
 2. [Türkçe Sürüm](#türkçe-sürüm)
    - [1. Giriş ve Temel Gizlilik İlkesi](#1-giriş-ve-temel-gizlilik-ilkesi)
    - [2. Toplanmayan Veriler (Sıfır Veri Toplama)](#2-toplanmayan-veriler-sıfır-veri-toplama)
-   - [3. Cihaz İzinleri ve Cihaz Üzerinde İşleme (On-Device OCR)](#3-cihaz-izinleri-ve-cihaz-üzerinde-işleme-on-device-ocr)
+   - [3. Cihaz İzinleri ve Cihaz Üzerinde İşleme (On-Device OCR & Döngü Analitiği)](#3-cihaz-izinleri-ve-cihaz-üzerinde-işleme-on-device-ocr--döngü-analitiği)
    - [4. Veri Depolama ve Yerel Saklama](#4-veri-depolama-ve-yerel-saklama)
    - [5. Üçüncü Taraf Servisler, Reklamlar ve Analitikler](#5-üçüncü-taraf-servisler-reklamlar-ve-analitikler)
    - [6. Çocukların Gizliliği](#6-çocukların-gizliliği)
@@ -39,17 +39,18 @@
 
 ## 1. Introduction & Core Privacy Principles
 
-Welcome to **Kilom**. Kilom is designed with a **privacy-first, on-device architecture**.
+Welcome to **Kilom**. Kilom is designed with an uncompromising **privacy-first, on-device architecture**.
 
-We believe that your personal health and weight tracking data belongs exclusively to you. Kilom does not require you to create an account, log in, or transmit any data across the internet.
+We believe that your personal health, weight tracking, and menstrual cycle data belongs exclusively to you. Kilom does not require you to create an account, log in, or transmit any data across the internet.
 
 **Summary of Our Privacy Guarantee:**
 - We do **not** collect, store, sell, or share any personal information.
-- All weight entries, dates, and settings remain stored **only on your device**.
+- All weight entries, dates, menstrual cycle dates, and settings remain stored **only on your physical device**.
 - Photos taken or selected for scale reading are analyzed **100% locally on your device** and are never sent to external servers.
-- The app operates completely **offline** and contains **no tracking, no analytics, and no advertisements**.
+- The app operates completely **offline** and contains **no tracking, no analytics, no cloud AI/LLM models, and no advertisements**.
 - Writing to and importing (reading) from Apple Health happens only with your permission and only on your device; your health data is never sent to any server.
-- Your goal weight and optional daily reminder are stored locally on your device, and reminder notifications are local.
+- Your goal weight, weigh-in streaks, cycle preferences, and optional daily reminders are stored locally on your device.
+- Milestone sharing uses your operating system’s native sharing sheet and contains no tracking pixels or telemetry.
 
 ---
 
@@ -57,7 +58,7 @@ We believe that your personal health and weight tracking data belongs exclusivel
 
 When you use Kilom:
 - **No Personal Identifiers:** We do not collect your name, email address, phone number, physical address, or device unique identifiers (IDFA, AAID).
-- **No Health Data Off-Device:** Your body weight measurements, dates, and progress differences are stored exclusively in your device's local storage.
+- **No Health or Cycle Data Off-Device:** Your body weight measurements, menstrual cycle start dates, cycle lengths, symptom correlations, and workout notes are stored exclusively in your device's local sandboxed storage.
 - **No Account Information:** Kilom has no user accounts, passwords, or cloud profiles.
 - **No Location Data:** We never request, access, or track your GPS or network location.
 - **No Financial Data:** Kilom does not process payments or collect payment credentials.
@@ -71,7 +72,7 @@ Kilom requests limited runtime permissions solely to provide core on-device scan
 ### A. Camera (`android.permission.CAMERA` / `NSCameraUsageDescription`)
 - **Purpose:** Used only when you choose to scan your bathroom scale display using the in-app camera scanner.
 - **Usage Description (iOS):** *"Kilom uses the camera to read your weight from a photo of the scale."*
-- **Privacy Assurance:** The camera stream and captured photos are processed in temporary memory using native on-device optical character recognition (OCR) and immediately discarded. Images are **never** transmitted over a network or stored on any server.
+- **Privacy Assurance:** The camera stream and captured photos are processed in temporary volatile memory using native on-device optical character recognition (OCR) and immediately discarded. Images are **never** transmitted over a network or stored on any server.
 
 ### B. Photo Library / Gallery (`NSPhotoLibraryUsageDescription`)
 - **Purpose:** Used only if you choose an existing photo of a scale display from your photo gallery.
@@ -88,7 +89,11 @@ Kilom requests limited runtime permissions solely to provide core on-device scan
 - **Usage Descriptions (iOS):** *"Kilom reads your past weight entries from Apple Health so you can import them. Data stays on your device."* and *"Kilom saves your weight entries to Apple Health. Data stays on your device."*
 - **Privacy Assurance:** Health data moves only between Apple Health and Kilom on your device. It is never sent to any server, never used for advertising, marketing, analytics or data brokering, and never shared with third parties. The Apple Health connection status is shown by a badge on the app's main screen.
 
-### E. Notifications (Optional Daily Reminder)
+### E. Infradian Cycle, Nutrition & Strength Guidance (Zero Cloud AI)
+- **Purpose:** Kilom calculates your 28-day cycle micro-periods, water retention predictions, macronutrient/micronutrient advice, and strength training recommendations.
+- **Privacy Assurance:** All calculations are performed **100% locally** using deterministic on-device Kotlin algorithms. No external cloud AI, large language models (LLMs), or third-party health APIs are used. Cycle tracking can be enabled or disabled at any time in the app settings.
+
+### F. Notifications (Optional Daily Reminder)
 - **Purpose:** Used only if you turn on the daily reminder, to show a notification at the time you choose reminding you to weigh in.
 - **Privacy Assurance:** Notifications are scheduled and displayed **locally** on your device. No server or push notification service is used and no data is sent anywhere to deliver them. You can turn the reminder off anytime in the app or in your system notification settings.
 
@@ -96,10 +101,10 @@ Kilom requests limited runtime permissions solely to provide core on-device scan
 
 ## 4. Data Storage & Local Retention
 
-- **Local Storage:** All user data (weight entries, timestamps, and preferences) is stored locally on your device in secure, sandboxed application storage.
+- **Local Storage:** All user data (weight entries, cycle dates, timestamps, and preferences) is stored locally on your device in secure, sandboxed application storage.
 - **No Cloud Synchronization:** Kilom does not synchronize your data with cloud servers or third-party storage providers.
 - **Backup:** Your data is backed up only according to your own operating system backup policies (e.g., encrypted local iTunes/Finder backup or standard Android backup).
-- **Goal Weight & Reminder Preferences:** Your goal weight, reminder time and summary preferences are stored locally on your device, just like your other data.
+- **Goal Weight & Reminder Preferences:** Your goal weight, reminder time, cycle settings, and summary preferences are stored locally on your device, just like your other data.
 - **Export:** CSV / JSON export happens only when you start it; Kilom does not send these files anywhere by itself.
 
 ---
@@ -124,7 +129,7 @@ Because Kilom does not collect, retain, or transmit personal information from an
 ## 7. User Rights and Data Deletion (GDPR / CCPA / KVKK)
 
 Under international data protection regulations (including GDPR, CCPA, and Turkish KVKK):
-- **Right to Access:** You can view all your stored weight entries directly inside the Kilom app at any time.
+- **Right to Access:** You can view all your stored weight entries and cycle logs directly inside the Kilom app at any time.
 - **Right to Erasure:** You can delete individual weight records inside the app. To delete all data, you can uninstall the app or clear app data in your device settings. Since no data is stored on remote servers, deleting the app permanently removes all associated data.
 - **Data Control:** Because all data is stored locally, you remain in complete control of your data at all times.
 
@@ -169,15 +174,16 @@ If you have questions, feedback, or concerns regarding this Privacy Policy or Ki
 
 **Kilom** uygulamasına hoş geldiniz. Kilom, gizliliği merkeze alan ve tamamen cihaz üzerinde çalışan (on-device) bir mimariyle geliştirilmiştir.
 
-Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz. Kilom; hesap açmanıza, giriş yapmanıza veya internet üzerinden herhangi bir veri aktarmanıza gerek kalmayacak şekilde tasarlanmıştır.
+Kişisel kilo, menstrüel döngü ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz. Kilom; hesap açmanıza, giriş yapmanıza veya internet üzerinden herhangi bir veri aktarmanıza gerek kalmayacak şekilde tasarlanmıştır.
 
 **Gizlilik Güvencemizin Özeti:**
 - Kişisel bilgilerinizi **toplamıyoruz, saklamıyoruz, satmıyoruz ve paylaşmıyoruz**.
-- Tüm kilo kayıtları, tarihler ve tercihler **yalnızca kendi cihazınızda** saklanır.
+- Tüm kilo kayıtları, tarihler, menstrüel döngü başlangıçları ve tercihler **yalnızca kendi cihazınızda** saklanır.
 - Tartı ekranından kilo okumak için çekilen veya seçilen fotoğraflar **%100 yerel olarak cihazınızda** işlenir; hiçbir sunucuya iletilmez.
-- Uygulama tamamen **çevrimdışı (offline)** çalışır; **reklam, analitik araç ve üçüncü taraf izleyici içermez**.
+- Uygulama tamamen **çevrimdışı (offline)** çalışır; **reklam, analitik araç, bulut yapay zeka servisi ve üçüncü taraf izleyici içermez**.
 - Apple Sağlık'a yazma ve Apple Sağlık'tan içe aktarma (okuma) yalnızca izninizle, cihazınızda gerçekleşir; sağlık verileriniz hiçbir sunucuya gönderilmez.
-- Hedef kilo ve günlük hatırlatıcı yalnızca cihazınızda yerel olarak saklanır; hatırlatıcı bildirimleri yereldir.
+- Hedef kilo, tartı serileri (streak), döngü ayarları ve günlük hatırlatıcı yalnızca cihazınızda yerel olarak saklanır.
+- Başarı kartı paylaşımı işletim sisteminin yerel paylaşım penceresini kullanır; hiçbir izleme kodu veya piksel içermez.
 
 ---
 
@@ -185,14 +191,14 @@ Kişisel kilo ve sağlık verilerinizin yalnızca size ait olduğuna inanıyoruz
 
 Kilom uygulamasını kullanırken:
 - **Kişisel Kimlik Bilgileri Toplanmaz:** Ad, soyad, e-posta adresi, telefon numarası, ev adresi veya cihaz kimlikleri (IDFA, AAID) alınmaz.
-- **Sağlık Verileri Cihaz Dışına Çıkmaz:** Vücut ağırlığı ölçümleriniz, kilo değişim farklarınız ve geçmiş kayıtlarınız yalnızca cihazınızın yerel hafızasında tutulur.
+- **Sağlık ve Döngü Verileri Cihaz Dışına Çıkmaz:** Vücut ağırlığı ölçümleriniz, menstrüel döngü tarihleriniz, döngü uzunluğunuz, su tutma/ödem notlarınız ve antrenman tercihleriniz yalnızca cihazınızın yerel hafızasında tutulur.
 - **Hesap Bilgisi Yoktur:** Kilom'da kullanıcı hesabı veya girişi bulunmaz. Parola, profil veya bulut hesabı yoktur.
 - **Konum Bilgisi Alınmaz:** GPS veya ağ tabanlı konumunuza hiçbir zaman erişilmez ve konum takibi yapılmaz.
 - **Finansal Bilgi İstenmez:** Uygulama ödeme bilgilerinizi veya kart verilerinizi toplamaz.
 
 ---
 
-## 3. Cihaz İzinleri ve Cihaz Üzerinde İşleme (On-Device OCR)
+## 3. Cihaz İzinleri ve Cihaz Üzerinde İşleme (On-Device OCR & Döngü Analitiği)
 
 Kilom, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işletim sisteminden asgari düzeyde izin talep eder:
 
@@ -216,7 +222,11 @@ Kilom, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işlet
 - **iOS İzin Gerekçeleri:** *"Kilom reads your past weight entries from Apple Health so you can import them. Data stays on your device."* (Kilom, içe aktarabilmeniz için Apple Sağlık'taki geçmiş kilo kayıtlarınızı okur. Veriler cihazınızda kalır.) ve *"Kilom saves your weight entries to Apple Health. Data stays on your device."* (Kilom, kilo kayıtlarınızı Apple Sağlık'a kaydeder. Veriler cihazınızda kalır.)
 - **Gizlilik Güvencesi:** Sağlık verileriniz yalnızca cihazınızdaki Apple Sağlık ile Kilom arasında aktarılır. Hiçbir sunucuya gönderilmez; reklam, pazarlama, analitik veya veri aracılığı amacıyla kullanılmaz ve üçüncü taraflarla paylaşılmaz. Uygulamada Apple Sağlık bağlantı durumu ana ekrandaki rozetle gösterilir.
 
-### E. Bildirimler (İsteğe Bağlı Günlük Hatırlatıcı)
+### E. Döngü, Beslenme ve Ağırlık Antrenmanı Rehberi (Bulut Yapay Zeka Yoktur)
+- **Kullanım Amacı:** 28 günlük döngü mikro dönemleri, luteal faz su tutma (ödem) tahmini, mikrobesin dengesi ve ağırlık antrenmanı tavsiyeleri sunmak için kullanılır.
+- **Gizlilik Güvencesi:** Tüm hesaplamalar tamamen yerel Kotlin algoritmalarıyla **%100 cihaz üzerinde** gerçekleştirilir. Hiçbir harici bulut yapay zeka servisi (LLM/API) veya sunucu ile iletişim kurulmaz. Döngü özelliği istendiğinde ayarlar menüsünden tek dokunuşla kapatılabilir.
+
+### F. Bildirimler (İsteğe Bağlı Günlük Hatırlatıcı)
 - **Kullanım Amacı:** Yalnızca siz günlük hatırlatıcıyı açarsanız, seçtiğiniz saatte tartılmanızı hatırlatan bir bildirim göstermek için kullanılır.
 - **Gizlilik Güvencesi:** Bildirimler tamamen **yerel** olarak cihazınızda planlanır ve gösterilir. Sunucu veya anlık bildirim servisi (push) kullanılmaz, bildirim için herhangi bir veri dışarı gönderilmez. Hatırlatıcıyı uygulamadan veya iOS/Android bildirim ayarlarından istediğiniz zaman kapatabilirsiniz.
 
@@ -224,10 +234,10 @@ Kilom, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işlet
 
 ## 4. Veri Depolama ve Yerel Saklama
 
-- **Yerel Depolama:** Tüm tartı kayıtlarınız, tarih damgaları ve kullanıcı tercihleriniz cihazınızın güvenli yerel depolama alanında tutulur.
+- **Yerel Depolama:** Tüm tartı kayıtlarınız, döngü tarihleriniz, tarih damgaları ve kullanıcı tercihleriniz cihazınızın güvenli yerel depolama alanında tutulur.
 - **Bulut Senkronizasyonu Yok:** Kilom, verilerinizi hiçbir bulut sunucusuna veya harici depolama sağlayıcısına aktarmaz.
 - **Yedekleme:** Verileriniz yalnızca cihazınızın kendi yerel işletim sistemi yedekleme politikalarına tabidir (örneğin yerel şifrelenmiş iTunes/Finder yedeği veya standart Android sistem yedeği).
-- **Hedef Kilo ve Hatırlatıcı Tercihleri:** Hedef kilonuz, hatırlatıcı saati ve özet tercihleriniz diğer verileriniz gibi yalnızca cihazınızda yerel olarak saklanır.
+- **Hedef Kilo, Döngü ve Hatırlatıcı Tercihleri:** Hedef kilonuz, döngü ayarlarınız, hatırlatıcı saati ve özet tercihleriniz diğer verileriniz gibi yalnızca cihazınızda yerel olarak saklanır.
 - **Dışa Aktarma:** CSV / JSON dışa aktarma yalnızca siz başlattığınızda gerçekleşir; Kilom bu dosyaları kendisi hiçbir yere göndermez.
 
 ---
@@ -252,8 +262,8 @@ Uygulama hiçbir kullanıcıdan kişisel veri toplamadığı için, 13 (veya ilg
 ## 7. Kullanıcı Hakları ve Veri Silme (KVKK / GDPR Uyumu)
 
 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Genel Veri Koruma Tüzüğü (GDPR) kapsamında:
-- **Verilere Erişim Hakkı:** Kaydettiğiniz tüm kilo verilerini uygulama içerisindeki geçmiş listesinden dilediğiniz an görebilirsiniz.
-- **Silme Hakkı:** İstediğiniz kilo kaydını uygulama içinden silebilirsiniz. Uygulamaya ait tüm verileri kalıcı olarak silmek için uygulamayı cihazınızdan kaldırmanız veya uygulama verilerini temizlemeniz yeterlidir. Sunucularda hiçbir veriniz tutulmadığından, uygulamayı sildiğinizde tüm veriler tamamen silinmiş olur.
+- **Verilere Erişim Hakkı:** Kaydettiğiniz tüm kilo ve döngü verilerini uygulama içerisindeki ekranlardan dilediğiniz an görebilirsiniz.
+- **Silme Hakkı:** İstediğiniz kilo kaydını uygulama içinden silebilirsiniz. Döngü takibini kapatabilir veya sıfırlayabilirsiniz. Uygulamaya ait tüm verileri kalıcı olarak silmek için uygulamayı cihazınızdan kaldırmanız veya uygulama verilerini temizlemeniz yeterlidir. Sunucularda hiçbir veriniz tutulmadığından, uygulamayı sildiğinizde tüm veriler tamamen silinmiş olur.
 - **Veri Kontrolü:** Verileriniz tamamen kendi cihazınızda kaldığı için verilerinizin kontrolü her zaman sizdedir.
 
 ---
