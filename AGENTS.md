@@ -37,11 +37,18 @@ Kaynak dizini: `composeApp/src/commonMain/kotlin/app/kilo/`
 app.kilo/
 ├── App.kt                  # Ana uygulama girişi, AppContainer ve Theme sarmalayıcı
 ├── data/
-│   └── Repositories.kt     # WeightRepository, PrefsRepository (Depolama & Serileştirme)
+│   ├── Repositories.kt     # WeightRepository, PrefsRepository, WorkoutRepository
+│   ├── HevyModels.kt       # HevyWorkoutSession, HevyExercise, HevySet, MuscleCategory
+│   └── HevyCsvParser.kt    # Hevy workouts.csv ayrıştırıcı (kas grupları, tonaj, 1RM)
 ├── domain/
 │   ├── Weight.kt           # WeightEntry, WeightUnit, WeightDelta modelleri ve hesaplamaları
 │   ├── WeightInput.kt      # Giriş doğrulama (20-500 kg aralığı, virgül/nokta toleransı)
 │   ├── TrendAnalytics.kt   # Ağırlık trend ve hareketli ortalama hesaplamaları
+│   ├── GoalProgress.kt     # Hedef kilo ilerlemesi ve tahmini varış süresi (ETA)
+│   ├── PeriodSummary.kt    # Haftalık ve aylık özet hesaplamaları
+│   ├── StreakAnalytics.kt  # İstikrar matrisi ve 14 günlük alışkanlık ısı haritası
+│   ├── CycleAnalytics.kt   # Dinamik döngü (21-45 gün), backward luteal mapping, 14 mikro-dönem tavsiyeleri
+│   ├── WorkoutCorrelationAnalytics.kt # DOMS inflamatuar ödem kalkanı, döngü-antrenman korelasyonu ve göreceli kuvvet
 │   └── WeightExportImport.kt # CSV / JSON dışa/içe aktarım
 ├── ocr/
 │   ├── ScaleOcr.kt         # expect ScaleOcr arayüzü
@@ -53,7 +60,9 @@ app.kilo/
 │   ├── PhotoPicker.kt      # FileKit sarmalayıcısı (galeri & kamera)
 │   ├── CameraCapture.kt    # expect kamera yakalama arayüzü
 │   ├── ExifDateParser.kt   # Fotoğraf çekim tarihini EXIF'ten okuma
-│   └── HealthSync.kt       # Apple Health / Health Connect senkronizasyonu
+│   ├── HealthSync.kt       # Apple Health / Health Connect çift yönlü senkronizasyonu
+│   ├── ReminderScheduler.kt# expect yerel bildirim planlayıcı (UNUserNotificationCenter / AlarmManager)
+│   └── ShareSheet.kt       # expect yerel paylaşım sayfası (UIActivityViewController / Intent)
 └── ui/
     ├── DashboardScreen.kt  # Ana ekran Composable'ı
     ├── DashboardViewModel.kt # Ana ekran iş mantığı ve StateFlow yönetimi
@@ -61,15 +70,24 @@ app.kilo/
     │   ├── Colors.kt       # Tema renkleri (Liquid glass paleti)
     │   └── Type.kt         # Tipografi
     └── components/
-        ├── ActionBar.kt    # Alt işlem çubuğu (Ekle, Fotoğraf, Kamera butonları)
+        ├── ActionBar.kt    # Birincil işlem çubuğu (Kamera, Galeri, Manuel, kg/lb)
         ├── GlassCard.kt    # Temel sıvı cam kart sarmalayıcısı
         ├── HeroCard.kt     # Güncel kilo, delta ve gün farkı kartı
+        ├── DomsAlertBanner.kt # Kas onarım ödemi ve glikojen tutulumu uyarı kalkanı
+        ├── GoalCard.kt     # Hedef kilo ve ilerleme kartı
+        ├── GoalSheet.kt    # Hedef kilo belirleme alt sayfası
+        ├── CycleCard.kt    # Menstrüel döngü & beslenme rehberi kartı
+        ├── CycleSheet.kt   # 4 sekmeli döngü, beslenme, antrenman ve kaynaklar sayfası
+        ├── WorkoutCorrelationSheet.kt # Hacim yükü, PR dağılımı ve göreceli kuvvet korelasyon sayfası
+        ├── StreakCard.kt   # İstikrar matrisi & 14 günlük alışkanlık ısı haritası kartı
+        ├── ShareCardSheet.kt # Başarı ve seri sıvı cam paylaşım kartı sayfası
+        ├── SummaryCard.kt  # Dönemsel özet kartı (Haftalık / Aylık)
+        ├── TrendChart.kt   # Trend grafik bileşeni
         ├── HistoryRow.kt   # Geçmiş kayıt satırı (sola kaydırarak silme)
         ├── EntrySheet.kt   # Manuel giriş ve OCR onay alt sayfası
-        ├── TrendChart.kt   # Trend grafik bileşeni
         ├── CameraViewfinderScreen.kt # Özel vizör ekranı
         ├── IosDatePicker.kt# Sıvı cam tarih seçici
-        └── BackupSheet.kt  # Yedekleme ve geri yükleme sayfası
+        └── BackupSheet.kt  # Yedekleme, Hevy CSV içe aktarma ve ayarlar sayfası
 ```
 
 ### Katman İlkeleri:

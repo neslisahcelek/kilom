@@ -90,12 +90,16 @@ Kilom requests limited runtime permissions solely to provide core on-device scan
 - **Privacy Assurance:** Health data moves only between Apple Health and Kilom on your device. It is never sent to any server, never used for advertising, marketing, analytics or data brokering, and never shared with third parties. The Apple Health connection status is shown by a badge on the app's main screen.
 
 ### E. Infradian Cycle, Nutrition & Strength Guidance (Zero Cloud AI)
-- **Purpose:** Kilom calculates your 28-day cycle micro-periods, water retention predictions, macronutrient/micronutrient advice, and strength training recommendations.
-- **Privacy Assurance:** All calculations are performed **100% locally** using deterministic on-device Kotlin algorithms. No external cloud AI, large language models (LLMs), or third-party health APIs are used. Cycle tracking can be enabled or disabled at any time in the app settings.
+- **Purpose:** Kilom calculates dynamic cycle micro-periods (customizable between 21 and 45 days with backward luteal mapping), water retention predictions, macronutrient/micronutrient advice, and strength training recommendations.
+- **Privacy Assurance:** All calculations are performed **100% locally** using deterministic on-device Kotlin algorithms. No external cloud AI, large language models (LLMs), or third-party health APIs are used. Cycle tracking can be enabled, adjusted, or disabled at any time in the app settings.
 
 ### F. Notifications (Optional Daily Reminder)
 - **Purpose:** Used only if you turn on the daily reminder, to show a notification at the time you choose reminding you to weigh in.
 - **Privacy Assurance:** Notifications are scheduled and displayed **locally** on your device. No server or push notification service is used and no data is sent anywhere to deliver them. You can turn the reminder off anytime in the app or in your system notification settings.
+
+### G. Resistance Training Data & Hevy CSV Import (`workouts.csv`)
+- **Purpose:** Used only if you choose to import your resistance training history from Hevy (`workouts.csv`) to correlate workout volume, personal records, and DOMS muscle repair fluid retention with your scale weight.
+- **Privacy Assurance:** Imported workout logs are parsed **100% locally on your device** using a sandboxed Kotlin parser. Your workout routines, exercise titles, weights lifted, volume metrics, and DOMS assessments remain strictly on your physical device. No workout data is ever uploaded to external servers, shared with Hevy or third parties, or used for profiling. You can delete all workout data with a single tap in the Backup sheet.
 
 ---
 
@@ -223,12 +227,16 @@ Kilom, yalnızca tartı ekranı okuma işlevini yerine getirebilmek için işlet
 - **Gizlilik Güvencesi:** Sağlık verileriniz yalnızca cihazınızdaki Apple Sağlık ile Kilom arasında aktarılır. Hiçbir sunucuya gönderilmez; reklam, pazarlama, analitik veya veri aracılığı amacıyla kullanılmaz ve üçüncü taraflarla paylaşılmaz. Uygulamada Apple Sağlık bağlantı durumu ana ekrandaki rozetle gösterilir.
 
 ### E. Döngü, Beslenme ve Ağırlık Antrenmanı Rehberi (Bulut Yapay Zeka Yoktur)
-- **Kullanım Amacı:** 28 günlük döngü mikro dönemleri, luteal faz su tutma (ödem) tahmini, mikrobesin dengesi ve ağırlık antrenmanı tavsiyeleri sunmak için kullanılır.
-- **Gizlilik Güvencesi:** Tüm hesaplamalar tamamen yerel Kotlin algoritmalarıyla **%100 cihaz üzerinde** gerçekleştirilir. Hiçbir harici bulut yapay zeka servisi (LLM/API) veya sunucu ile iletişim kurulmaz. Döngü özelliği istendiğinde ayarlar menüsünden tek dokunuşla kapatılabilir.
+- **Kullanım Amacı:** 21 ila 45 gün arasında dinamik olarak ayarlanabilen menstrüel döngü mikro dönemleri, luteal faz su tutma (ödem) tahmini, mikrobesin dengesi ve ağırlık antrenmanı tavsiyeleri sunmak için kullanılır.
+- **Gizlilik Güvencesi:** Tüm hesaplamalar tamamen yerel Kotlin algoritmalarıyla **%100 cihaz üzerinde** gerçekleştirilir. Hiçbir harici bulut yapay zeka servisi (LLM/API) veya sunucu ile iletişim kurulmaz. Döngü özelliği istendiğinde ayarlar menüsünden tek dokunuşla açılabilir, güncellenebilir veya kapatılabilir.
 
 ### F. Bildirimler (İsteğe Bağlı Günlük Hatırlatıcı)
 - **Kullanım Amacı:** Yalnızca siz günlük hatırlatıcıyı açarsanız, seçtiğiniz saatte tartılmanızı hatırlatan bir bildirim göstermek için kullanılır.
 - **Gizlilik Güvencesi:** Bildirimler tamamen **yerel** olarak cihazınızda planlanır ve gösterilir. Sunucu veya anlık bildirim servisi (push) kullanılmaz, bildirim için herhangi bir veri dışarı gönderilmez. Hatırlatıcıyı uygulamadan veya iOS/Android bildirim ayarlarından istediğiniz zaman kapatabilirsiniz.
+
+### G. Ağırlık Antrenmanı Verileri & Hevy CSV İçe Aktarımı (`workouts.csv`)
+- **Kullanım Amacı:** Yalnızca siz Hevy antrenman geçmişinizi (`workouts.csv`) içe aktarmayı tercih ederseniz, antrenman hacminizi, kişisel rekorlarınızı ve DOMS kas onarım ödemi artışını tartı kilonuzla ilişkilendirmek için kullanılır.
+- **Gizlilik Güvencesi:** İçe aktarılan antrenman dosyaları cihazınızda tamamen yerel bir Kotlin ayrıştırıcısı ile **%100 cihaz içinde** çözümlenir. Antrenman seansları, hareket isimleri, kaldırılan kilolar, hacim hesaplamaları ve DOMS değerlendirmeleri kesinlikle telefonunuzda yerel depolanır. Hiçbir antrenman verisi harici sunuculara yüklenmez, Hevy ile veya üçüncü taraflarla paylaşılmaz. İstediğiniz an Yedekleme menüsünden tüm antrenman verilerini tek dokunuşla silebilirsiniz.
 
 ---
 

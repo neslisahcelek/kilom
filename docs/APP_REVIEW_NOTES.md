@@ -26,13 +26,15 @@ Kilom provides a deep, comprehensive suite of health and wellness tools far beyo
 2. Two-Way Apple Health Sync: Writing new entries and importing historical data.
 3. Weigh-In Consistency Matrix: Tracks current/longest streak, monthly consistency percentage, and an interactive 14-day visual habit heatmap.
 4. Milestone Share Card: Generates an aesthetic, privacy-preserving liquid-glass summary card rendered natively via UIActivityViewController.
-5. Infradian Cycle Tracking: Deterministic 28-day cycle micro-period analytics that correlates hormonal shifts with natural water retention (preventing user discouragement).
+5. Dynamic Infradian Cycle Tracking: Deterministic cycle analytics (customizable 21–45 days with Backward Luteal Mapping) correlating hormonal shifts with natural water retention (preventing user discouragement).
 6. Evidence-Based Nutrition Guide: Micronutrient recommendations (iron, magnesium, zinc, omega-3) and macronutrient timing tailored to cycle phases (ACOG & PubMed literature).
 7. Cycle-Synced Strength Training Guide: 4-tier workout intensity mapping (Rest, Moderate, High, Peak Power) with PR lift windows (Squat/Deadlift), biomechanical injury prevention alerts (ACL ligament laxity during ovulatory estrogen peak), thermoregulation guidance, and PMS deload strategies (Dr. Stacy Sims principles).
-8. Goal Weight & Smart ETA: Dynamic progress percentage and arrival projections.
-9. Moving Average Trend Line & Period Summaries: Filters out fluid fluctuations to display true weight trajectory.
-10. Optional Daily Reminder: Scheduled locally on-device with zero push servers.
-11. Complete Data Ownership: Full export and restore via CSV and JSON.
+8. Hevy Resistance Training & DOMS Shield: 100% on-device CSV parser for Hevy workout logs (`workouts.csv`). Evaluates muscle repair inflammation and glycogen retention after heavy sessions to reassure users that post-workout weight spikes are not fat gain.
+9. Workout & Cycle Correlation Sheet: Visualizes 4-phase volume load, PR distribution heatmaps, luteal RPE shift, and relative strength ratios.
+10. Goal Weight & Smart ETA: Dynamic progress percentage and arrival projections.
+11. Moving Average Trend Line & Period Summaries: Filters out fluid fluctuations to display true weight trajectory.
+12. Optional Daily Reminder: Scheduled locally on-device with zero push servers.
+13. Complete Data Ownership: Full export and restore via CSV and JSON.
 
 PRIVACY & SENSITIVE HEALTH DATA (Guideline 5.1.1)
 - 100% on-device architecture: Zero servers, zero accounts, zero third-party SDKs, zero analytics, and zero advertising trackers.
@@ -80,9 +82,11 @@ Health data never leaves the device and is never used for advertising, marketing
 Kilom offers a rich, full-featured personal health suite with deep native functionality:
 - On-device optical character recognition (OCR) via Apple Vision for bathroom scales (including 7-segment digital screens).
 - Consistency Matrix & Habit Heatmap: Tracking weigh-in streaks, monthly consistency scores, and milestone sharing via native UIActivityViewController.
-- 28-Day Infradian Cycle Tracking & Water Retention Forecaster: Correlating hormonal shifts with weight fluctuations to prevent user discouragement.
+- Dynamic Infradian Cycle Tracking (21–45 Days) & Water Retention Forecaster: Correlating hormonal shifts with weight fluctuations to prevent user discouragement.
 - Evidence-Based Nutrition Guide: Phase-specific macronutrient balance and micronutrient recommendations (iron, zinc, magnesium) based on ACOG and PubMed literature.
 - Cycle-Synced Strength Training Guide: 4-tier workout intensity mapping (Rest to Peak Power), compound lift windows (Squat, Deadlift, Hip Thrust), biomechanical injury prevention alerts (ACL laxity risk during ovulatory estrogen peak), and PMS deload strategies based on Dr. Stacy Sims’ exercise endocrinology research.
+- Resistance Training & Hevy CSV Integration with DOMS Shield: 100% on-device CSV parser for Hevy workouts (`workouts.csv`), muscle category detection, volume & 1RM analytics, and DOMS muscle repair fluid retention alerts that prevent confusing temporary post-workout scale spikes with fat gain.
+- Workout & Cycle Correlation Sheet: Visualizing 4-phase volume load, PR heatmaps, and relative strength progress.
 - Goal weight tracking with dynamic arrival projections, moving average trend filtering, period summaries, local reminders, and CSV/JSON backup.
 
 3. Privacy & Sensitive Data (Guideline 5.1.1):
@@ -113,9 +117,11 @@ Sağlık verileri asla cihaz dışına çıkmaz; reklam veya analitik için kull
 Kilom, temel bir kilo formunun çok ötesinde zengin ve yerel bir sağlık deneyimi sunar:
 - Tartı ekranları (7 segmentli LED/LCD dijital göstergeler dahil) için Apple Vision ile cihaz içi OCR.
 - İstikrar Matrisi ve Alışkanlık Isı Haritası: Tartılma serileri (streak), aylık tutarlılık yüzdesi ve yerel UIActivityViewController ile estetik başarı paylaşım kartı.
-- 28 Günlük İnfradiyen Döngü Takibi ve Su Tutma (Ödem) Öngörüsü: Hormonal değişimleri kilo dalgalanmalarıyla ilişkilendirerek motivasyon kaybını önler.
+- Dinamik Menstrüel Döngü Takibi (21–45 Gün) ve Su Tutma (Ödem) Öngörüsü: Hormonal değişimleri kilo dalgalanmalarıyla ilişkilendirerek motivasyon kaybını önler.
 - Kanıta Dayalı Beslenme Rehberi: ACOG ve PubMed literatürüne dayalı evreye özel makro ve mikrobesin (demir, magnezyum, çinko) önerileri.
 - Döngüye Senkronize Ağırlık Antrenmanı Rehberi: 4 seviyeli yoğunluk eşlemesi (Dinlenme - Tepe Güç), rekor/maksimal kuvvet pencereleri (Squat, Deadlift, Hip Thrust), biyomekanik sakatlık önleme uyarıları (yumurtlama döneminde östrojen piki ve ACL bağ gevşekliği riski) ve Dr. Stacy Sims ekolüne dayalı PMS deload stratejileri.
+- Direnç Antrenmanı, Hevy CSV ve DOMS Ödem Kalkanı: Hevy antrenman kayıtları (`workouts.csv`) için %100 cihaz içi CSV ayrıştırıcı, kas grubu analizi, tonaj & 1RM hesaplamaları ve ağır antrenman sonrası tartı artışlarının yağ değil kas onarım ödemi olduğunu belirten kalkan banner'ı.
+- Döngü-Antrenman Korelasyon Sayfası: 4 döngü evresindeki tonaj yükü, PR dağılımı ve göreceli kuvvet analizleri.
 - Hedef kilo, dinamik bitiş tarihi tahmini, hareketli ortalama trend eğrisi, dönem özetleri, yerel hatırlatıcı ve CSV/JSON yedekleme.
 
 3. Gizlilik ve Hassas Sağlık Verileri (Guideline 5.1.1):

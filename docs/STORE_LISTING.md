@@ -41,8 +41,8 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   • Hızlı Elle Giriş: Büyük sayısal klavyeyle saniyeler içinde kaydedin. kg ve lb arasında anında geçiş yapın.
 
   Döngü ve Kanıta Dayalı Beslenme Rehberi:
-  • 28 Günlük İnfradiyen Analitik: Menstrüel döngünüzün 8 farklı mikro dönemine göre bedeninizin ne yaşadığını bilimsel olarak görün.
-  • Su Tutma & Ödem Tahmini: Luteal fazda yükselen progesteronun getirdiği doğal su tutulumunu (ödem) önceden haber verir; tartıda gördüğünüz geçici artışlarda motivasyonunuzu korur.
+  • Dinamik Döngü Uzunluğu (21–45 Gün): 21 ile 45 gün arasında ayarlanabilen, Luteal Sabiti (ovulasyon = döngü - 14) temelli biyolojik döngü haritası.
+  • Su Tutma & Ödem Tahmini: Luteal fazda yükselen progesteronun getirdiği doğal su tutulumunu (ödem) önceden haber verir; tartıda gördüğünüz geçici 0.8–2.5 kg artışlarda motivasyonunuzu korur.
   • Hormonal Dengeye Göre Beslenme: Foliküler ve luteal fazlarda insülin hassasiyetine uygun karbonhidrat dengesi, magnezyum, demir, çinko ve omega-3 gibi kritik mikrobesin tavsiyeleri (ACOG ve PubMed destekli).
   • Bilimsel Kaynaklar: Önerilerin dayandığı hakemli tıbbi ve fizyolojik makaleleri doğrudan uygulama içindeki Kaynaklar sekmesinden inceleyin.
 
@@ -50,6 +50,11 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   • Güç ve PR Pencereleri: Östrojenin ve testosteronun tepe yaptığı foliküler dönemde maksimal kuvvet (Squat, Deadlift, Hip Thrust) ve rekor denemeleri için en verimli günleri yakalayın.
   • Sakatlık Koruması & Biyomekanik Uyarılar: Yumurtlama öncesi yükselen östrojenin eklem bağlarını gevşetmesi nedeniyle ACL (ön çapraz bağ) uyarısı, luteal fazda vücut ısısı artışı için hidrasyon desteği.
   • Deload & Kas Koruma: PMS döneminde merkezi sinir sistemi yorgunluğunu önleyen planlı hafifletme (deload) ve katabolizmaya karşı lösin zamanlaması stratejileri.
+
+  Direnç Antrenmanı & Hevy Entegrasyonu (%100 Cihaz İçi):
+  • Hevy CSV İçe Aktarma: Hevy antrenman geçmişinizi (workouts.csv) sıfır veri sızıntısıyla doğrudan telefonunuzda içe aktarın.
+  • DOMS Kas Onarım Ödemi Kalkanı: Ağır bacak veya sırt antrenmanından sonra tartıda görülen geçici artışı otomatik tespit eder; bunun yağ değil kas onarım sıvısı ve glikojen tutulumu olduğunu belirterek moralinizi korur.
+  • Döngü-Antrenman Korelasyonu: 4 döngü evresindeki tonaj yükünüzü, PR dağılımınızı, luteal zorluk (RPE) artışını ve vücut ağırlığına oranla göreceli kuvvetinizi görselleştirin.
 
   İstikrar Matrisi ve Başarı Paylaşımı:
   • Tartı Serisi (Streak): Mevcut ve en uzun tartılma serinizi, toplam tartı günlerinizi ve aylık tutarlılık yüzdenizi takip edin.
@@ -158,8 +163,8 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   • Quick Manual Entry: Type in seconds with an oversized numeric keypad. Switch between kg and lb with a single tap.
 
   Cycle-Synced & Evidence-Based Nutrition:
-  • 28-Day Infradian Analytics: Understand what your body experiences across 8 micro-phases of your menstrual cycle.
-  • Water Retention & Bloat Forecast: Foresee natural progesterone-driven water retention in the luteal phase so temporary weight spikes never discourage you.
+  • Dynamic Cycle Length (21–45 Days): Adaptive cycle forecasting using Backward Luteal Mapping (ovulation = cycle length - 14) tailored to your personal biology.
+  • Water Retention & Bloat Forecast: Foresee natural progesterone-driven water retention (0.8–2.5 kg) in the luteal phase so temporary scale spikes never discourage you.
   • Hormonally Aligned Nutrition: Evidence-based macronutrient balance and essential micronutrient recommendations (iron, zinc, magnesium, omega-3) backed by ACOG and PubMed literature.
   • Peer-Reviewed Sources: Review scientific citations directly within the app’s Sources tab.
 
@@ -167,6 +172,11 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   • Peak Power & PR Windows: Exploit optimal estrogen and testosterone peaks during late follicular phase for maximal strength lifts (Squat, Deadlift, Hip Thrust).
   • Biomechanical Injury Prevention: Protect your joints with ACL laxity warnings during ovulatory estrogen spikes, and hydration alerts for luteal thermoregulation (+0.5°C core temp).
   • Deload & Anti-Catabolism: Strategic CNS recovery with planned deloads and leucine timing during late PMS.
+
+  Resistance Training & Hevy Integration (100% On-Device):
+  • Hevy CSV Import: Import your workout history (workouts.csv) completely on-device without any third-party APIs.
+  • DOMS Muscle Repair Fluid Retention Shield: Automatically detects heavy lifting sessions; reassures you that post-workout scale spikes are muscle repair fluid and glycogen, not body fat.
+  • Cycle-Workout Correlation Sheet: Visualize volume load across cycle phases, PR distribution heatmaps, luteal RPE shift, and relative strength ratios.
 
   Consistency Matrix & Milestone Sharing:
   • Weigh-In Streak: Track current streak, best streak, total weigh-in days, and monthly consistency score.
