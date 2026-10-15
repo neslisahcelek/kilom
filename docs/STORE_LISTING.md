@@ -132,9 +132,9 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
 
 ## 1. Apple App Store (English)
 
-- **App Name (Max 30 chars):**
+- **App Name (Max 30 chars — 22):**
   ```text
-  Kilom
+  Kilom - Weight & Cycle
   ```
 
 - **Subtitle (Max 30 chars — 24):**
@@ -147,16 +147,16 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Log weight in seconds with scale photos. Sync workouts and nutrition with your cycle, build weigh-in streaks, and reach your goals. 100% on-device & private.
   ```
 
-- **Keywords (Max 100 chars — 99):**
+- **Keywords (Max 100 chars — 95):**
   ```text
-  kilom,weight,scale,cycle,period,nutrition,strength,lifting,apple health,streak,habit,pms,water weight
+  kilom,weight,scale,cycle,period,nutrition,strength,lifting,health,streak,habit,pms,water weight
   ```
 
 - **Description:**
   ```text
-  Kilom is a privacy-first personal wellness assistant that makes it effortless to log your weight, build consistent habits, and align your nutrition and strength training with your infradian cycle.
+  The scale doesn't tell the whole story. Kilom logs your weight in seconds while uncovering the biological rhythms behind water retention, hormonal cycles, and workout-induced fluid shifts.
 
-  Your data never leaves your device. Zero servers, zero ads, zero accounts.
+  100% on-device & private: Your data never leaves your phone. Zero servers, zero accounts, zero ads.
 
   Effortless Scale Logging:
   • Scale Photo Scan (On-Device OCR): Snap a photo of your scale display or pick from your gallery. Kilom recognizes digits locally using Apple Vision—including seven-segment LED/LCD screens. Nothing is saved until you confirm.

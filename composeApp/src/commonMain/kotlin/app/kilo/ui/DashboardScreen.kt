@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,6 @@ import app.kilo.ui.components.ActionBar
 import app.kilo.ui.components.BackupSheet
 import app.kilo.ui.components.CycleCard
 import app.kilo.ui.components.CycleScreen
-import app.kilo.ui.components.CycleSheet
 import app.kilo.ui.components.DomsAlertBanner
 import app.kilo.ui.components.EntrySheet
 import app.kilo.ui.components.GlassCard
@@ -240,43 +240,49 @@ fun DashboardScreen(
                         } else {
                             stringResource(Res.string.health_badge_not_connected)
                         }
-                        GlassCard(
-                            hazeState = hazeState,
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(18.dp))
-                                .clickable {
-                                    if (!isConnected) viewModel.openHealthOnboarding() else viewModel.openBackup()
-                                },
-                            shape = RoundedCornerShape(18.dp),
+                                .padding(vertical = 4.dp),
+                            contentAlignment = Alignment.Center,
                         ) {
-                            Row(
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween,
+                                    .defaultMinSize(minHeight = 44.dp)
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(colors.glassTint)
+                                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                    .clickable(
+                                        role = Role.Button,
+                                        onClick = {
+                                            if (!isConnected) viewModel.openHealthOnboarding() else viewModel.openBackup()
+                                        },
+                                    )
+                                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                                contentAlignment = Alignment.Center,
                             ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(text = "❤️", fontSize = 16.sp)
-                                    Spacer(Modifier.width(10.dp))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                ) {
+                                    Text(text = "❤️", fontSize = 12.sp)
+                                    Spacer(Modifier.width(6.dp))
                                     Text(
                                         text = title,
-                                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 13.sp),
+                                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.sp),
                                         color = colors.textPrimary,
                                     )
-                                }
-                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Spacer(Modifier.width(8.dp))
                                     Box(
                                         modifier = Modifier
-                                            .size(7.dp)
+                                            .size(5.dp)
                                             .clip(CircleShape)
                                             .background(if (isConnected) colors.negative else colors.textSecondary.copy(alpha = 0.5f))
                                     )
-                                    Spacer(Modifier.width(6.dp))
+                                    Spacer(Modifier.width(5.dp))
                                     Text(
                                         text = statusText,
-                                        style = typography.caption,
+                                        style = typography.caption.copy(fontSize = 11.5.sp),
                                         color = if (isConnected) colors.negative else colors.textSecondary,
                                         fontWeight = FontWeight.Medium,
                                     )

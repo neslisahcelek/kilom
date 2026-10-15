@@ -202,8 +202,8 @@
     <string name="cycle_card_cta_button">Döngüyü Başlat</string>
     <string name="cycle_card_dismiss">Gizle</string>
     <string name="cycle_card_dismiss_desc">Döngü takip kartını gizle</string>
-    <string name="cycle_gender_female_btn">👩 Kadın • Döngüyü Takip Et</string>
-    <string name="cycle_gender_male_btn">👨 Erkek • Kartı Gizle</string>
+    <string name="cycle_gender_female_btn">👩 Döngüyü Başlat</string>
+    <string name="cycle_gender_male_btn">👨 Kartı Gizle</string>
     <string name="cycle_active_hide">Gizle</string>
     <string name="cycle_show_card_title">Döngü Rehberini Ana Sayfada Göster</string>
     <string name="cycle_show_card_subtitle">Hormonal ritim ve su tutulumu kartını görüntüle</string>

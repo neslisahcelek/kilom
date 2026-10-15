@@ -202,8 +202,8 @@
     <string name="cycle_card_cta_button">Set Up Cycle</string>
     <string name="cycle_card_dismiss">Hide</string>
     <string name="cycle_card_dismiss_desc">Hide cycle tracking card</string>
-    <string name="cycle_gender_female_btn">👩 Female • Track Cycle</string>
-    <string name="cycle_gender_male_btn">👨 Male • Hide Card</string>
+    <string name="cycle_gender_female_btn">👩 Track Cycle</string>
+    <string name="cycle_gender_male_btn">👨 Hide Card</string>
     <string name="cycle_active_hide">Hide</string>
     <string name="cycle_show_card_title">Show Cycle Guide on Dashboard</string>
     <string name="cycle_show_card_subtitle">Display hormonal rhythm &amp; water retention card</string>

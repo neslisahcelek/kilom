@@ -32,10 +32,8 @@ import app.kilo.domain.CycleState
 import app.kilo.ui.theme.KiloTheme
 import dev.chrisbanes.haze.HazeState
 import kilo.composeapp.generated.resources.Res
-import kilo.composeapp.generated.resources.cycle_card_cta_button
 import kilo.composeapp.generated.resources.cycle_card_cta_subtitle
 import kilo.composeapp.generated.resources.cycle_card_cta_title
-import kilo.composeapp.generated.resources.cycle_card_dismiss
 import kilo.composeapp.generated.resources.cycle_card_dismiss_desc
 import kilo.composeapp.generated.resources.cycle_day_counter
 import kilo.composeapp.generated.resources.cycle_gender_female_btn
