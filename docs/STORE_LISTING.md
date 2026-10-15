@@ -15,9 +15,9 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Kilom
   ```
 
-- **Alt Başlık / Subtitle (Maks 30 karakter — 24):**
+- **Alt Başlık / Subtitle (Maks 30 karakter — 30):**
   ```text
-  Kilo, Döngü ve Antrenman
+  Kilo, Antrenman & Döngü Takibi
   ```
 
 - **Promosyon Metni / Promotional Text (Maks 170 karakter — 162):**
@@ -32,9 +32,9 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
 
 - **Açıklama / Description:**
   ```text
-  Kilom; kilonuzu kaydetmeyi, tartılma alışkanlığı kazanmayı, biyolojik döngünüze göre beslenmeyi ve ağırlık antrenmanlarınızı optimize etmeyi sağlayan %100 gizlilik odaklı kişisel sağlık asistanınızdır.
+  Tartıdaki sayılar tek başına gerçeği söylemez. Kilom; kilonuzu saniyeler içinde kaydederken su tutulumu, hormonal döngü ve antrenman ödeminin arkasındaki fizyolojiyi çözmenizi sağlayan %100 gizlilik odaklı kişisel sağlık asistanınızdır.
 
-  Verileriniz asla sunuculara gitmez; yalnızca sizin cihazınızda kalır.
+  Verileriniz asla sunuculara gitmez; %100 telefonunuzda kalır.
 
   Hızlı ve Akıllı Tartı Kaydı:
   • Tartı Fotoğrafı (Cihaz İçi OCR): Tartınızın ekranını kamerayla çekin veya galeriden seçin; Kilom sayıları tamamen telefonunuzda okur. 7 segmentli LED/LCD ekranları tanır. Siz onaylamadan hiçbir kayıt eklenmez.

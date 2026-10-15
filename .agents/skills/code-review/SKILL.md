@@ -67,11 +67,12 @@ Stage edilmiş diff yoksa aynı kontrolü incelemenin diff kapsamına göre stag
 - Çalışmayan/çalıştırılmayan komutları ve kısıtları açıkça yaz (ör. Windows'ta iOS derlenemez). Komutu çalıştırmadıysan başarılı gibi gösterme.
 - Domain/parser mantığı değiştiyse ilgili `commonTest` testlerinin güncellenip güncellenmediğini incele; eksik test için bulgu yaz.
 
-## Rapor
+## Rapor ve Karar Kapısı
 
 Raporu kısa ve net tut; uzun özet, gereksiz kapsam açıklaması veya alan tekrarları yazma.
 
+- **Sıfır Tolerans:** Ciddiyet seviyesi ne olursa olsun (`Kritik`, `Yüksek`, `Orta`, `Düşük`), çalışma ağacında düzeltilecek tek bir bulgu dahi varsa karar **`CHANGES_REQUIRED`** olmalıdır. "Önerilerle onaylandı" (`APPROVED with suggestions`) veya bulgulu onay KESİNLİKLE YASAKTIR.
 - **Bulgu varsa:** Yalnızca düzeltilmesi gereken bulguları önem sırasıyla yaz:
   `[Kritik|Yüksek|Orta|Düşük] dosya:satır — Sorun, gerçekleşme koşulu/etkisi ve uygulanabilir düzeltme.`
-- **Bulgu yoksa:** Yalnızca `"Bulgu yok."` yaz (commit/push da istenmişse commit hash ve push durumunu tek satırda ekle).
-- Kritik/Yüksek bulgu varken commit atma.
+  Karar: `CHANGES_REQUIRED` (Tüm bulgular ana ajan tarafından giderilene kadar commit/push yapılamaz).
+- **Bulgu yoksa:** Yalnızca `"Bulgu yok. Karar: APPROVED"` yaz (commit/push da istenmişse commit hash ve push durumunu tek satırda ekle).
