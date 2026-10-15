@@ -96,10 +96,20 @@ interface PrefsRepository {
     fun setCyclePeriodDuration(days: Int)
     val cycleLengthDays: Flow<Int>
     suspend fun setCycleLengthDays(days: Int)
+    val userGender: StateFlow<UserGender>
+    fun setUserGender(gender: UserGender)
+    val cycleDismissed: StateFlow<Boolean>
+    fun setCycleDismissed(dismissed: Boolean)
     val aiCoachApiKey: Flow<String?>
     suspend fun setAiCoachApiKey(key: String?)
     val aiProvider: Flow<String>
     suspend fun setAiProvider(provider: String)
+}
+
+enum class UserGender {
+    UNSPECIFIED,
+    FEMALE,
+    MALE,
 }
 
 class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository {
@@ -232,6 +242,28 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         setCycleLength(clamped)
     }
 
+    private val _userGender = MutableStateFlow(
+        settings.getStringOrNull(KEY_USER_GENDER)?.let { s ->
+            try { UserGender.valueOf(s) } catch (_: Exception) { UserGender.UNSPECIFIED }
+        } ?: UserGender.UNSPECIFIED
+    )
+    override val userGender: StateFlow<UserGender> = _userGender.asStateFlow()
+
+    override fun setUserGender(gender: UserGender) {
+        settings.putString(KEY_USER_GENDER, gender.name)
+        _userGender.value = gender
+    }
+
+    private val _cycleDismissed = MutableStateFlow(
+        settings.getBoolean(KEY_CYCLE_DISMISSED, defaultValue = false)
+    )
+    override val cycleDismissed: StateFlow<Boolean> = _cycleDismissed.asStateFlow()
+
+    override fun setCycleDismissed(dismissed: Boolean) {
+        settings.putBoolean(KEY_CYCLE_DISMISSED, dismissed)
+        _cycleDismissed.value = dismissed
+    }
+
     private val _aiCoachApiKey = MutableStateFlow(
         settings.getStringOrNull(KEY_AI_COACH_API_KEY)
     )
@@ -271,6 +303,8 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         const val KEY_CYCLE_LAST_PERIOD_DATE = "cycle_last_period_date"
         const val KEY_CYCLE_LENGTH = "cycle_length"
         const val KEY_CYCLE_PERIOD_DURATION = "cycle_period_duration"
+        const val KEY_USER_GENDER = "user_gender_v1"
+        const val KEY_CYCLE_DISMISSED = "cycle_dismissed_v1"
         const val DEFAULT_CYCLE_LENGTH = 28
         const val DEFAULT_PERIOD_DURATION = 5
         const val KEY_AI_COACH_API_KEY = "ai_coach_api_key"

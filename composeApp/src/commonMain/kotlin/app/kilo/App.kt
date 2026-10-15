@@ -50,6 +50,7 @@ fun App(container: AppContainer = remember { AppContainer() }) {
                 feedback = object : DashboardFeedback {
                     override fun success() = haptics.success()
                     override fun scanComplete() = haptics.scanComplete()
+                    override fun light() = haptics.light()
                 },
                 healthSync = healthSync,
                 reminderScheduler = reminderScheduler,

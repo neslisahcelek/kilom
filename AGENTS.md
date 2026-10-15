@@ -38,8 +38,8 @@ app.kilo/
 ├── App.kt                  # Ana uygulama girişi, AppContainer ve Theme sarmalayıcı
 ├── data/
 │   ├── Repositories.kt     # WeightRepository, PrefsRepository, WorkoutRepository
-│   ├── HevyModels.kt       # HevyWorkoutSession, HevyExercise, HevySet, MuscleCategory
-│   └── HevyCsvParser.kt    # Hevy workouts.csv ayrıştırıcı (kas grupları, tonaj, 1RM)
+│   ├── HevyModels.kt       # WorkoutSession, Exercise, Set, MuscleCategory (workouts.csv modelleri)
+│   └── HevyCsvParser.kt    # Standart workouts.csv ayrıştırıcı (kas grupları, tonaj, 1RM)
 ├── domain/
 │   ├── Weight.kt           # WeightEntry, WeightUnit, WeightDelta modelleri ve hesaplamaları
 │   ├── WeightInput.kt      # Giriş doğrulama (20-500 kg aralığı, virgül/nokta toleransı)
@@ -87,7 +87,7 @@ app.kilo/
         ├── EntrySheet.kt   # Manuel giriş ve OCR onay alt sayfası
         ├── CameraViewfinderScreen.kt # Özel vizör ekranı
         ├── IosDatePicker.kt# Sıvı cam tarih seçici
-        └── BackupSheet.kt  # Yedekleme, Hevy CSV içe aktarma ve ayarlar sayfası
+        └── BackupSheet.kt  # Yedekleme, Antrenman CSV içe aktarma ve ayarlar sayfası
 ```
 
 ### Katman İlkeleri:
@@ -186,7 +186,9 @@ Projede `.agents/skills/` altında özel yetenekler tanımlanmıştır:
 | Beceri | Yol | Kullanım Amacı |
 | :--- | :--- | :--- |
 | **kilo-architecture** | `.agents/skills/kilo-architecture` | KMP, Compose Multiplatform ve katman kurallarını uygulama |
-| **architect** | `.agents/skills/architect` | Yeni özellik veya büyük refactor öncesi yapısal planlama |
+| **architect** | `.agents/skills/architect` | Apple (2026) seviyesi UI/UX ürün tasarımı ve KMP yapısal mimari planlama |
+| **design** | `.agents/skills/design` | Apple (2026) seviyesi Liquid Glass UI/UX tasarım sistemi ve bileşen tanımlama |
 | **code-review** | `.agents/skills/code-review` | Gizlilik, KMP sınırları, doğruluk ve güvenlik kod incelemesi |
 | **kilo-media** | `.agents/skills/kilo-media` | Kamera, galeri, EXIF ve OCR entegrasyonu |
 | **kilo-store-checklist** | `.agents/skills/kilo-store-checklist` | App Store ve Play Store mağaza yayın kontrol listesi |
+| **store-compliance** | `.agents/agents/store-compliance.md` | Apple App Store & Google Play Store inceleme uyumluluğu ve ret önleme ajanı |

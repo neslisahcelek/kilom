@@ -200,6 +200,16 @@
     <string name="cycle_card_cta_title">Cycle &amp; Body Wisdom</string>
     <string name="cycle_card_cta_subtitle">Sync nutrition with your hormonal cycle &amp; decode scale water retention.</string>
     <string name="cycle_card_cta_button">Set Up Cycle</string>
+    <string name="cycle_card_dismiss">Hide</string>
+    <string name="cycle_card_dismiss_desc">Hide cycle tracking card</string>
+    <string name="cycle_gender_female_btn">👩 Female • Track Cycle</string>
+    <string name="cycle_gender_male_btn">👨 Male • Hide Card</string>
+    <string name="cycle_active_hide">Hide</string>
+    <string name="cycle_show_card_title">Show Cycle Guide on Dashboard</string>
+    <string name="cycle_show_card_subtitle">Display hormonal rhythm &amp; water retention card</string>
+    <string name="gender_title">Cycle &amp; Body Profile</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_male">Male (Hide Cycle)</string>
     <string name="cycle_day_counter">Day %1$d of %2$d</string>
     <string name="cycle_water_retention_alert">Water Retention Window: +1–2 kg on the scale is temporary fluid, not fat!</string>
     <string name="cycle_water_retention_badge">Fluid Retention Window</string>
@@ -217,7 +227,8 @@
     <string name="cycle_period_duration_unit">%1$d days</string>
     <string name="cycle_sheet_title">Hormonal Rhythm &amp; Nutrition</string>
     <string name="cycle_sheet_subtitle">Day %1$d • %2$s</string>
-    <string name="cycle_tab_body">Body &amp; Hormones</string>
+    <string name="cycle_back_action">Back</string>
+    <string name="cycle_tab_body">Body</string>
     <string name="cycle_tab_nutrition">Nutrition</string>
     <string name="cycle_tab_sources">Sources</string>
     <string name="cycle_section_eat">Recommended Today</string>
@@ -399,10 +410,10 @@
     <string name="cycle_length_days_format">%1$d Days</string>
     <string name="cycle_length_adjust">Adjust Cycle Length</string>
 
-    <!-- Hevy Workout Integration -->
-    <string name="hevy_section_title">Hevy Workout Data</string>
-    <string name="hevy_section_desc">Import Hevy workouts.csv to correlate training volume, PRs, and muscle recovery with your scale weight.</string>
-    <string name="hevy_import_button">Import Hevy CSV</string>
+    <!-- Workout CSV Integration -->
+    <string name="hevy_section_title">Workout Log Data</string>
+    <string name="hevy_section_desc">Import your workouts.csv to correlate training volume, PRs, and muscle recovery with your scale weight.</string>
+    <string name="hevy_import_button">Import Workout CSV</string>
     <string name="hevy_imported_count_format">%1$d workout sessions imported</string>
     <string name="hevy_clear_button">Clear Workout Data</string>
     <string name="hevy_no_workouts">No workout data imported yet</string>
@@ -426,8 +437,8 @@
     <string name="correlation_open_button">View Cycle &amp; Workout Analytics</string>
     <string name="correlation_relative_strength_title">Relative Strength (1RM / Body Weight)</string>
     <string name="correlation_peak_volume_format">Peak Volume: %1$s</string>
-    <string name="correlation_no_data">No Hevy Workouts Found</string>
-    <string name="correlation_empty_desc">Import your Hevy workouts.csv in Settings to unlock hormonal strength &amp; volume correlation analytics.</string>
+    <string name="correlation_no_data">No Workouts Found</string>
+    <string name="correlation_empty_desc">Import your workouts.csv in Settings to unlock hormonal strength &amp; volume correlation analytics.</string>
     <string name="correlation_luteal_rpe_normal">Perceived exertion is consistent across cycle phases.</string>
     <string name="correlation_luteal_rpe_higher">Elevated perceived exertion in Luteal phase</string>
     <string name="correlation_workouts_count_format">%1$d workouts</string>
@@ -435,7 +446,7 @@
     <string name="correlation_prs_card_title">⚡ Personal Records</string>
     <string name="correlation_total_prs_format">%1$d PRs</string>
     <string name="correlation_luteal_rpe_card_title">Luteal RPE &amp; Exertion</string>
-    <string name="correlation_no_rpe_hint">Log set RPE (Rate of Perceived Exertion) in Hevy to compare exertion across phases.</string>
+    <string name="correlation_no_rpe_hint">Log set RPE (Rate of Perceived Exertion) in your workout tracker to compare exertion across phases.</string>
     <string name="correlation_no_compound_lifts">No compound lifts recorded in imported workouts.</string>
     <string name="correlation_est_1rm_format">Est. 1RM: %1$.1f kg</string>
     <string name="correlation_bw_ratio_format">%1$.2fx BW</string>

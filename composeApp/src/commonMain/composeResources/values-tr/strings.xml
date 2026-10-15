@@ -86,7 +86,7 @@
     <string name="trend_max">Maks</string>
     <string name="trend_avg">Ort</string>
     <string name="backup_title">Yedekleme ve Dışa Aktar</string>
-    <string name="backup_subtitle">%100 cihazda ve gizli. Verileriniz hiçbir sunucuya gitmez.</string>
+    <string name="backup_subtitle">%%100 cihazda ve gizli. Verileriniz hiçbir sunucuya gitmez.</string>
     <string name="backup_export_csv">CSV Olarak Dışa Aktar</string>
     <string name="backup_export_json">JSON Olarak Dışa Aktar</string>
     <string name="backup_import">Dosyadan İçe Aktar</string>
@@ -200,6 +200,16 @@
     <string name="cycle_card_cta_title">Döngü &amp; Beden Rehberi</string>
     <string name="cycle_card_cta_subtitle">Beslenmeni hormonal döngüne göre senkronize et, tartıdaki ödemleri anla.</string>
     <string name="cycle_card_cta_button">Döngüyü Başlat</string>
+    <string name="cycle_card_dismiss">Gizle</string>
+    <string name="cycle_card_dismiss_desc">Döngü takip kartını gizle</string>
+    <string name="cycle_gender_female_btn">👩 Kadın • Döngüyü Takip Et</string>
+    <string name="cycle_gender_male_btn">👨 Erkek • Kartı Gizle</string>
+    <string name="cycle_active_hide">Gizle</string>
+    <string name="cycle_show_card_title">Döngü Rehberini Ana Sayfada Göster</string>
+    <string name="cycle_show_card_subtitle">Hormonal ritim ve su tutulumu kartını görüntüle</string>
+    <string name="gender_title">Döngü ve Beden Profili</string>
+    <string name="gender_female">Kadın</string>
+    <string name="gender_male">Erkek (Döngüyü Gizle)</string>
     <string name="cycle_day_counter">%1$d / %2$d. Gün</string>
     <string name="cycle_water_retention_alert">Ödem Dönemi: Tartıdaki +1–2 kg geçici sudur, yağ DEĞİLDİR!</string>
     <string name="cycle_water_retention_badge">Ödem &amp; Su Tutma Dönemi</string>
@@ -217,7 +227,8 @@
     <string name="cycle_period_duration_unit">%1$d gün</string>
     <string name="cycle_sheet_title">Hormonal Ritim &amp; Beslenme</string>
     <string name="cycle_sheet_subtitle">%1$d. Gün • %2$s</string>
-    <string name="cycle_tab_body">Beden &amp; Hormon</string>
+    <string name="cycle_back_action">Geri</string>
+    <string name="cycle_tab_body">Beden</string>
     <string name="cycle_tab_nutrition">Beslenme</string>
     <string name="cycle_tab_sources">Kaynaklar</string>
     <string name="cycle_section_eat">Bugün Ne Yemeli?</string>
@@ -399,10 +410,10 @@
     <string name="cycle_length_days_format">%1$d Gün</string>
     <string name="cycle_length_adjust">Döngü Süresini Ayarla</string>
 
-    <!-- Hevy Workout Integration -->
-    <string name="hevy_section_title">Hevy Antrenman Verisi</string>
-    <string name="hevy_section_desc">Tartı kilonuz ile antrenman hacmi, rekorlar ve kas toparlanmasını ilişkilendirmek için Hevy workouts.csv dosyasını içe aktarın.</string>
-    <string name="hevy_import_button">Hevy CSV İçe Aktar</string>
+    <!-- Workout CSV Integration -->
+    <string name="hevy_section_title">Antrenman Geçmişi Verisi</string>
+    <string name="hevy_section_desc">Tartı kilonuz ile antrenman hacmi, rekorlar ve kas toparlanmasını ilişkilendirmek için workouts.csv dosyasını içe aktarın.</string>
+    <string name="hevy_import_button">Antrenman CSV İçe Aktar</string>
     <string name="hevy_imported_count_format">%1$d antrenman seansı kaydedildi</string>
     <string name="hevy_clear_button">Antrenman Verilerini Temizle</string>
     <string name="hevy_no_workouts">Henüz antrenman verisi aktarılmadı</string>
@@ -426,8 +437,8 @@
     <string name="correlation_open_button">Döngü &amp; Antrenman Analizini Gör</string>
     <string name="correlation_relative_strength_title">Göreceli Kuvvet (1RM / Vücut Ağırlığı)</string>
     <string name="correlation_peak_volume_format">Zirve Hacim: %1$s</string>
-    <string name="correlation_no_data">Hevy Antrenmanı Bulunamadı</string>
-    <string name="correlation_empty_desc">Hormonal kuvvet ve hacim korelasyon analizlerini görmek için Ayarlar menüsünden Hevy workouts.csv dosyanızı yükleyin.</string>
+    <string name="correlation_no_data">Kayıtlı Antrenman Bulunamadı</string>
+    <string name="correlation_empty_desc">Hormonal kuvvet ve hacim korelasyon analizlerini görmek için Ayarlar menüsünden workouts.csv dosyanızı yükleyin.</string>
     <string name="correlation_luteal_rpe_normal">Algılanan zorluk seviyesi döngü evreleri arasında dengeli seyrediyor.</string>
     <string name="correlation_luteal_rpe_higher">Luteal evrede artan algılanan zorluk seviyesi</string>
     <string name="correlation_workouts_count_format">%1$d antrenman</string>
@@ -435,7 +446,7 @@
     <string name="correlation_prs_card_title">⚡ Kişisel Rekorlar (PR)</string>
     <string name="correlation_total_prs_format">%1$d PR</string>
     <string name="correlation_luteal_rpe_card_title">Luteal RPE ve Algılanan Zorluk</string>
-    <string name="correlation_no_rpe_hint">Evreler arası zorluğu kıyaslamak için Hevy'de set RPE (Zorluk Derecesi) kaydedin.</string>
+    <string name="correlation_no_rpe_hint">Evreler arası zorluğu kıyaslamak için antrenman uygulamanızda set RPE (Zorluk Derecesi) kaydedin.</string>
     <string name="correlation_no_compound_lifts">İçe aktarılan antrenmanlarda bileşik hareket bulunamadı.</string>
     <string name="correlation_est_1rm_format">Tahmini 1RM: %1$.1f kg</string>
     <string name="correlation_bw_ratio_format">%1$.2fx Kilo</string>

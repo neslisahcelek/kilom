@@ -80,6 +80,8 @@ import kilo.composeapp.generated.resources.reminder_time_title
 import kilo.composeapp.generated.resources.cycle_settings_enable
 import kilo.composeapp.generated.resources.cycle_settings_enable_subtitle
 import kilo.composeapp.generated.resources.cycle_settings_title
+import kilo.composeapp.generated.resources.cycle_show_card_subtitle
+import kilo.composeapp.generated.resources.cycle_show_card_title
 import kilo.composeapp.generated.resources.hevy_clear_button
 import kilo.composeapp.generated.resources.hevy_import_button
 import kilo.composeapp.generated.resources.hevy_imported_count_format
@@ -112,7 +114,11 @@ fun BackupSheet(
     reminderMinutes: Int = 480,
     onToggleReminder: (Boolean) -> Unit = {},
     cycleEnabled: Boolean = false,
+    isCycleCardVisible: Boolean = true,
+    userGender: app.kilo.data.UserGender = app.kilo.data.UserGender.UNSPECIFIED,
     onToggleCycle: (Boolean) -> Unit = {},
+    onToggleCycleCardVisible: (Boolean) -> Unit = {},
+    onSelectUserGender: (app.kilo.data.UserGender) -> Unit = {},
     onOpenCycleSetup: () -> Unit = {},
     workoutCount: Int = 0,
     onImportHevyCsv: (String) -> Unit = {},
@@ -541,7 +547,7 @@ fun BackupSheet(
                             modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 8.dp),
                         )
 
-                        // Cycle Toggle Card
+                        // Show/Hide Cycle Card on Dashboard Toggle
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -557,26 +563,20 @@ fun BackupSheet(
                             ) {
                                 Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
                                     Text(
-                                        text = stringResource(Res.string.cycle_settings_enable),
+                                        text = stringResource(Res.string.cycle_show_card_title),
                                         style = typography.body.copy(fontWeight = FontWeight.SemiBold),
                                         color = colors.textPrimary,
                                     )
                                     Spacer(Modifier.height(2.dp))
                                     Text(
-                                        text = stringResource(Res.string.cycle_settings_enable_subtitle),
+                                        text = stringResource(Res.string.cycle_show_card_subtitle),
                                         style = typography.caption,
                                         color = colors.textSecondary,
                                     )
                                 }
                                 Switch(
-                                    checked = cycleEnabled,
-                                    onCheckedChange = { checked ->
-                                        if (checked) {
-                                            onOpenCycleSetup()
-                                        } else {
-                                            onToggleCycle(false)
-                                        }
-                                    },
+                                    checked = isCycleCardVisible,
+                                    onCheckedChange = onToggleCycleCardVisible,
                                     colors = SwitchDefaults.colors(
                                         checkedThumbColor = colors.onAccent,
                                         checkedTrackColor = colors.accent,
@@ -584,6 +584,56 @@ fun BackupSheet(
                                         uncheckedTrackColor = colors.glassTint,
                                     ),
                                 )
+                            }
+                        }
+
+                        if (isCycleCardVisible) {
+                            Spacer(Modifier.height(10.dp))
+
+                            // Cycle Toggle Card
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(colors.glassTint)
+                                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                ) {
+                                    Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                                        Text(
+                                            text = stringResource(Res.string.cycle_settings_enable),
+                                            style = typography.body.copy(fontWeight = FontWeight.SemiBold),
+                                            color = colors.textPrimary,
+                                        )
+                                        Spacer(Modifier.height(2.dp))
+                                        Text(
+                                            text = stringResource(Res.string.cycle_settings_enable_subtitle),
+                                            style = typography.caption,
+                                            color = colors.textSecondary,
+                                        )
+                                    }
+                                    Switch(
+                                        checked = cycleEnabled,
+                                        onCheckedChange = { checked ->
+                                            if (checked) {
+                                                onOpenCycleSetup()
+                                            } else {
+                                                onToggleCycle(false)
+                                            }
+                                        },
+                                        colors = SwitchDefaults.colors(
+                                            checkedThumbColor = colors.onAccent,
+                                            checkedTrackColor = colors.accent,
+                                            uncheckedThumbColor = colors.textSecondary,
+                                            uncheckedTrackColor = colors.glassTint,
+                                        ),
+                                    )
+                                }
                             }
                         }
 

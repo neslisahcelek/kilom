@@ -29,8 +29,8 @@ A minimal, distraction-free, liquid-glass weight tracker and hormonal & fitness 
 - **Cycle-Synced Strength Training:** 4-tier workout intensity mapping (Rest, Moderate, High, Peak Power), PR lift windows (Squat, Deadlift, Hip Thrust), ACL ligament laxity precautions during ovulatory estrogen peaks, and PMS deload strategies (based on Dr. Stacy Sims' research).
 - **In-App Scientific Sources:** Direct medical citations and peer-reviewed studies available in the Sources tab.
 
-### 🏋️‍♂️ Resistance Training & Hevy Integration
-- **100% On-Device Hevy Parser:** Import your Hevy workout history (`workouts.csv`) without third-party APIs or cloud sync.
+### 🏋️‍♂️ Resistance Training & Workout CSV Integration
+- **100% On-Device Workout Parser:** Import your resistance training history (`workouts.csv`) without third-party APIs or cloud sync.
 - **Automatic Muscle Grouping:** Automatically classifies exercises into Legs/Glutes, Back/Pull, Chest/Push, Shoulders/Arms, and Core.
 - **Volume & 1RM Calculations:** Calculates total session tonnage and estimated 1RM using the validated Epley formula.
 - **DOMS Muscle Repair Fluid Retention Alert:** Automatically detects heavy leg/back sessions (>8,000 kg volume or high intensity in the last 48 hours). If your scale increases, Kilom reassuringly alerts you that it is temporary muscle inflammation fluid and glycogen retention, not body fat!
@@ -82,8 +82,8 @@ composeApp/src/commonMain/kotlin/app/kilo/
 ├── App.kt                          # Root entry, AppContainer DI, theme wrapper
 ├── data/
 │   ├── Repositories.kt             # WeightRepository, PrefsRepository, WorkoutRepository
-│   ├── HevyModels.kt               # HevyWorkoutSession, HevyExercise, MuscleCategory
-│   └── HevyCsvParser.kt            # On-device Hevy workouts.csv parser
+│   ├── HevyModels.kt               # WorkoutSession, Exercise, Set, MuscleCategory
+│   └── HevyCsvParser.kt            # On-device workouts.csv parser
 ├── domain/
 │   ├── Weight.kt                   # WeightEntry, WeightUnit, WeightDelta
 │   ├── WeightInput.kt              # Input validation (20–500 kg range)
@@ -126,7 +126,7 @@ composeApp/src/commonMain/kotlin/app/kilo/
         ├── TrendChart.kt           # Interactive moving average weight trend chart
         ├── HistoryRow.kt           # Swipe-to-delete weight history item
         ├── EntrySheet.kt           # Manual entry & OCR verification modal
-        ├── BackupSheet.kt          # Backup, export/import, Hevy CSV, and settings sheet
+        ├── BackupSheet.kt          # Backup, export/import, Workout CSV, and settings sheet
         └── IosDatePicker.kt        # Liquid-glass calendar date picker
 ```
 

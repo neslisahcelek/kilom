@@ -41,8 +41,10 @@ class DashboardViewModelTest {
     private class FakeFeedback : DashboardFeedback {
         var successCount = 0
         var scanCount = 0
+        var lightCount = 0
         override fun success() { successCount++ }
         override fun scanComplete() { scanCount++ }
+        override fun light() { lightCount++ }
     }
 
     private class FakeWorkoutRepository : app.kilo.data.WorkoutRepository {
@@ -714,6 +716,48 @@ class DashboardViewModelTest {
         vm.setCycleLengthDays(50)
         advanceUntilIdle()
         assertEquals(45, vm.state.value.cycle.cycleLength)
+    }
+
+    @Test
+    fun cycleCardDismissalAndVisibility() = runTest(testDispatcher) {
+        val prefs = SettingsPrefsRepository(MapSettings())
+        val vm = createViewModel(prefs = prefs)
+        advanceUntilIdle()
+
+        // 1. Initial state: Visible by default for unspecified users
+        assertEquals(true, vm.state.value.isCycleCardVisible)
+        assertEquals(app.kilo.data.UserGender.UNSPECIFIED, vm.state.value.userGender)
+
+        // 2. Dismiss card (e.g. user taps "✕" or "Gizle")
+        vm.dismissCycleCard()
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.isCycleCardVisible)
+        assertEquals(app.kilo.data.UserGender.MALE, vm.state.value.userGender)
+        assertEquals(true, prefs.cycleDismissed.value)
+
+        // 3. Re-enable visibility from settings
+        vm.setCycleCardVisible(true)
+        advanceUntilIdle()
+
+        assertEquals(true, vm.state.value.isCycleCardVisible)
+        assertEquals(app.kilo.data.UserGender.FEMALE, vm.state.value.userGender)
+        assertEquals(false, prefs.cycleDismissed.value)
+
+        // 4. Select male gender -> automatically hides card
+        vm.setUserGender(app.kilo.data.UserGender.MALE)
+        advanceUntilIdle()
+
+        assertEquals(false, vm.state.value.isCycleCardVisible)
+        assertEquals(true, prefs.cycleDismissed.value)
+
+        // 5. Setup cycle tracking -> confirms female and reveals card
+        vm.enableCycleTracking(LocalDate.parse("2026-09-25"))
+        advanceUntilIdle()
+
+        assertEquals(true, vm.state.value.isCycleCardVisible)
+        assertEquals(app.kilo.data.UserGender.FEMALE, vm.state.value.userGender)
+        assertEquals(false, prefs.cycleDismissed.value)
     }
 
     @Test

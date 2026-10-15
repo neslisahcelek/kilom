@@ -3,6 +3,7 @@ package app.kilo.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.kilo.data.PrefsRepository
+import app.kilo.data.UserGender
 import app.kilo.data.WeightRepository
 import app.kilo.domain.HistoryItem
 import app.kilo.domain.WeightEntry
@@ -74,6 +75,7 @@ enum class UiError { EMPTY, NOT_A_NUMBER, OUT_OF_RANGE, OCR_NO_RESULT, OCR_FAILE
 interface DashboardFeedback {
     fun success()
     fun scanComplete()
+    fun light()
 }
 
 data class HeroState(
@@ -109,6 +111,12 @@ private data class GoalPrefsData(
     val goalStartKg: Double?,
 )
 
+private data class CyclePrefsData(
+    val cycle: CycleState,
+    val userGender: UserGender,
+    val cycleDismissed: Boolean,
+)
+
 data class UiState(
     val unit: WeightUnit = WeightUnit.KG,
     val history: List<HistoryItem> = emptyList(),
@@ -135,6 +143,8 @@ data class UiState(
     val streak: StreakInfo? = null,
     val isShareSheetOpen: Boolean = false,
     val cycle: CycleState = CycleState(isEnabled = false),
+    val userGender: UserGender = UserGender.UNSPECIFIED,
+    val isCycleCardVisible: Boolean = true,
     val isCycleSheetOpen: Boolean = false,
     val isCycleSetupOpen: Boolean = false,
     val workouts: List<HevyWorkoutSession> = emptyList(),
@@ -198,7 +208,7 @@ class DashboardViewModel(
                 Triple(reminderEnabled, reminderMinutes, summaryPeriod)
             }
 
-            val cycleFlow = combine(
+            val cycleCoreFlow = combine(
                 prefs.cycleEnabled,
                 prefs.cycleLastPeriodDate,
                 prefs.cycleLengthDays,
@@ -214,7 +224,15 @@ class DashboardViewModel(
                 )
             }
 
-            combine(mainFlow, auxFlow, cycleFlow, workoutRepository.workouts) { main, (reminderEnabled, reminderMinutes, summaryPeriod), cycle, workoutList ->
+            val cycleFlow = combine(
+                cycleCoreFlow,
+                prefs.userGender,
+                prefs.cycleDismissed,
+            ) { cycleState, userGender, cycleDismissed ->
+                CyclePrefsData(cycleState, userGender, cycleDismissed)
+            }
+
+            combine(mainFlow, auxFlow, cycleFlow, workoutRepository.workouts) { main, (reminderEnabled, reminderMinutes, summaryPeriod), cycleData, workoutList ->
                 val tz = timeZone()
                 val history = buildHistory(main.entries, tz)
                 val hero = history.firstOrNull()?.let {
@@ -255,6 +273,13 @@ class DashboardViewModel(
                     currentEpochDays = currentEpochDays,
                 )
 
+                val isCycleCardVisible = when {
+                    cycleData.userGender == UserGender.MALE -> false
+                    cycleData.cycleDismissed -> false
+                    cycleData.cycle.isEnabled -> true
+                    else -> true
+                }
+
                 _workouts.value = workoutList
                 _domsAssessment.value = doms
 
@@ -273,7 +298,9 @@ class DashboardViewModel(
                         isReminderSupported = reminderScheduler.isSupported,
                         reminderEnabled = reminderEnabled,
                         reminderMinutes = reminderMinutes,
-                        cycle = cycle,
+                        cycle = cycleData.cycle,
+                        userGender = cycleData.userGender,
+                        isCycleCardVisible = isCycleCardVisible,
                         workouts = workoutList,
                         domsAssessment = doms,
                     )
@@ -722,10 +749,40 @@ class DashboardViewModel(
     fun enableCycleTracking(lastPeriodDate: LocalDate? = null) {
         val tz = timeZone()
         val targetDate = lastPeriodDate ?: now().toLocalDateTime(tz).date
+        prefs.setUserGender(UserGender.FEMALE)
+        prefs.setCycleDismissed(false)
         prefs.setCycleLastPeriodDate(targetDate.toString())
         prefs.setCycleEnabled(true)
         feedback.success()
         _state.update { it.copy(isCycleSetupOpen = false) }
+    }
+
+    fun dismissCycleCard() {
+        prefs.setCycleDismissed(true)
+        prefs.setUserGender(UserGender.MALE)
+        feedback.light()
+    }
+
+    fun setCycleCardVisible(visible: Boolean) {
+        prefs.setCycleDismissed(!visible)
+        if (!visible) {
+            prefs.setUserGender(UserGender.MALE)
+        } else {
+            if (prefs.userGender.value == UserGender.MALE) {
+                prefs.setUserGender(UserGender.FEMALE)
+            }
+        }
+        feedback.light()
+    }
+
+    fun setUserGender(gender: UserGender) {
+        prefs.setUserGender(gender)
+        if (gender == UserGender.MALE) {
+            prefs.setCycleDismissed(true)
+        } else if (gender == UserGender.FEMALE) {
+            prefs.setCycleDismissed(false)
+        }
+        feedback.light()
     }
 
     fun updateCycleLastPeriodDate(date: LocalDate) {

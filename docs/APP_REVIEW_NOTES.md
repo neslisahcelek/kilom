@@ -29,7 +29,7 @@ Kilom provides a deep, comprehensive suite of health and wellness tools far beyo
 5. Dynamic Infradian Cycle Tracking: Deterministic cycle analytics (customizable 21–45 days with Backward Luteal Mapping) correlating hormonal shifts with natural water retention (preventing user discouragement).
 6. Evidence-Based Nutrition Guide: Micronutrient recommendations (iron, magnesium, zinc, omega-3) and macronutrient timing tailored to cycle phases (ACOG & PubMed literature).
 7. Cycle-Synced Strength Training Guide: 4-tier workout intensity mapping (Rest, Moderate, High, Peak Power) with PR lift windows (Squat/Deadlift), biomechanical injury prevention alerts (ACL ligament laxity during ovulatory estrogen peak), thermoregulation guidance, and PMS deload strategies (Dr. Stacy Sims principles).
-8. Hevy Resistance Training & DOMS Shield: 100% on-device CSV parser for Hevy workout logs (`workouts.csv`). Evaluates muscle repair inflammation and glycogen retention after heavy sessions to reassure users that post-workout weight spikes are not fat gain.
+8. Resistance Training & DOMS Shield: 100% on-device CSV parser for workout logs (`workouts.csv`). Evaluates muscle repair inflammation and glycogen retention after heavy sessions to reassure users that post-workout weight spikes are not fat gain.
 9. Workout & Cycle Correlation Sheet: Visualizes 4-phase volume load, PR distribution heatmaps, luteal RPE shift, and relative strength ratios.
 10. Goal Weight & Smart ETA: Dynamic progress percentage and arrival projections.
 11. Moving Average Trend Line & Period Summaries: Filters out fluid fluctuations to display true weight trajectory.
@@ -85,7 +85,7 @@ Kilom offers a rich, full-featured personal health suite with deep native functi
 - Dynamic Infradian Cycle Tracking (21–45 Days) & Water Retention Forecaster: Correlating hormonal shifts with weight fluctuations to prevent user discouragement.
 - Evidence-Based Nutrition Guide: Phase-specific macronutrient balance and micronutrient recommendations (iron, zinc, magnesium) based on ACOG and PubMed literature.
 - Cycle-Synced Strength Training Guide: 4-tier workout intensity mapping (Rest to Peak Power), compound lift windows (Squat, Deadlift, Hip Thrust), biomechanical injury prevention alerts (ACL laxity risk during ovulatory estrogen peak), and PMS deload strategies based on Dr. Stacy Sims’ exercise endocrinology research.
-- Resistance Training & Hevy CSV Integration with DOMS Shield: 100% on-device CSV parser for Hevy workouts (`workouts.csv`), muscle category detection, volume & 1RM analytics, and DOMS muscle repair fluid retention alerts that prevent confusing temporary post-workout scale spikes with fat gain.
+- Resistance Training & Workout CSV Integration with DOMS Shield: 100% on-device CSV parser for workout logs (`workouts.csv`), muscle category detection, volume & 1RM analytics, and DOMS muscle repair fluid retention alerts that prevent confusing temporary post-workout scale spikes with fat gain.
 - Workout & Cycle Correlation Sheet: Visualizing 4-phase volume load, PR heatmaps, and relative strength progress.
 - Goal weight tracking with dynamic arrival projections, moving average trend filtering, period summaries, local reminders, and CSV/JSON backup.
 
@@ -120,7 +120,7 @@ Kilom, temel bir kilo formunun çok ötesinde zengin ve yerel bir sağlık deney
 - Dinamik Menstrüel Döngü Takibi (21–45 Gün) ve Su Tutma (Ödem) Öngörüsü: Hormonal değişimleri kilo dalgalanmalarıyla ilişkilendirerek motivasyon kaybını önler.
 - Kanıta Dayalı Beslenme Rehberi: ACOG ve PubMed literatürüne dayalı evreye özel makro ve mikrobesin (demir, magnezyum, çinko) önerileri.
 - Döngüye Senkronize Ağırlık Antrenmanı Rehberi: 4 seviyeli yoğunluk eşlemesi (Dinlenme - Tepe Güç), rekor/maksimal kuvvet pencereleri (Squat, Deadlift, Hip Thrust), biyomekanik sakatlık önleme uyarıları (yumurtlama döneminde östrojen piki ve ACL bağ gevşekliği riski) ve Dr. Stacy Sims ekolüne dayalı PMS deload stratejileri.
-- Direnç Antrenmanı, Hevy CSV ve DOMS Ödem Kalkanı: Hevy antrenman kayıtları (`workouts.csv`) için %100 cihaz içi CSV ayrıştırıcı, kas grubu analizi, tonaj & 1RM hesaplamaları ve ağır antrenman sonrası tartı artışlarının yağ değil kas onarım ödemi olduğunu belirten kalkan banner'ı.
+- Direnç Antrenmanı, Antrenman CSV İçe Aktarma ve DOMS Ödem Kalkanı: Standart antrenman kayıtları (`workouts.csv`) için %100 cihaz içi CSV ayrıştırıcı, kas grubu analizi, tonaj & 1RM hesaplamaları ve ağır antrenman sonrası tartı artışlarının yağ değil kas onarım ödemi olduğunu belirten kalkan banner'ı.
 - Döngü-Antrenman Korelasyon Sayfası: 4 döngü evresindeki tonaj yükü, PR dağılımı ve göreceli kuvvet analizleri.
 - Hedef kilo, dinamik bitiş tarihi tahmini, hareketli ortalama trend eğrisi, dönem özetleri, yerel hatırlatıcı ve CSV/JSON yedekleme.
 

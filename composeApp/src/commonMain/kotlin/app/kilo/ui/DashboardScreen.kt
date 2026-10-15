@@ -3,6 +3,8 @@ package app.kilo.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +43,7 @@ import app.kilo.platform.rememberShareSheet
 import app.kilo.ui.components.ActionBar
 import app.kilo.ui.components.BackupSheet
 import app.kilo.ui.components.CycleCard
+import app.kilo.ui.components.CycleScreen
 import app.kilo.ui.components.CycleSheet
 import app.kilo.ui.components.DomsAlertBanner
 import app.kilo.ui.components.EntrySheet
@@ -294,13 +297,19 @@ fun DashboardScreen(
                 }
 
                 // Cycle & Nutrition Guide Card
-                item(key = "cycle_card") {
-                    CycleCard(
-                        state = state.cycle,
-                        hazeState = hazeState,
-                        onSetupClick = viewModel::openCycleSetup,
-                        onOpenSheet = viewModel::openCycleSheet,
-                    )
+                if (state.isCycleCardVisible) {
+                    item(key = "cycle_card") {
+                        CycleCard(
+                            state = state.cycle,
+                            hazeState = hazeState,
+                            onSetupClick = {
+                                viewModel.setUserGender(app.kilo.data.UserGender.FEMALE)
+                                viewModel.openCycleSetup()
+                            },
+                            onOpenSheet = viewModel::openCycleSheet,
+                            onDismiss = viewModel::dismissCycleCard,
+                        )
+                    }
                 }
 
                 // Streak & Consistency Matrix Card
@@ -439,7 +448,11 @@ fun DashboardScreen(
             reminderMinutes = state.reminderMinutes,
             onToggleReminder = { enabled -> viewModel.setReminderEnabled(enabled, notifTitle, notifBody) },
             cycleEnabled = state.cycle.isEnabled,
+            isCycleCardVisible = state.isCycleCardVisible,
+            userGender = state.userGender,
             onToggleCycle = { if (!it) viewModel.disableCycleTracking() },
+            onToggleCycleCardVisible = viewModel::setCycleCardVisible,
+            onSelectUserGender = viewModel::setUserGender,
             onOpenCycleSetup = viewModel::openCycleSetup,
             workoutCount = state.workouts.size,
             onImportHevyCsv = { viewModel.importHevyCsv(it) },
@@ -484,18 +497,23 @@ fun DashboardScreen(
             onDismiss = viewModel::dismissShareSheet,
         )
 
-        // Menstrual Cycle & Evidence-Based Nutrition Sheet
-        CycleSheet(
-            isOpen = state.isCycleSheetOpen,
-            state = state.cycle,
-            hasWorkouts = state.workouts.isNotEmpty(),
-            onOpenCorrelation = viewModel::openCorrelationSheet,
-            onUpdateCycleLength = viewModel::setCycleLengthDays,
-            onUpdateLastPeriodDate = viewModel::updateCycleLastPeriodDate,
-            onDisableCycle = viewModel::disableCycleTracking,
-            onDismiss = viewModel::dismissCycleSheet,
-            hazeState = hazeState,
-        )
+        // Menstrual Cycle & Evidence-Based Nutrition Full Screen
+        AnimatedVisibility(
+            visible = state.isCycleSheetOpen,
+            enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+            exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
+        ) {
+            CycleScreen(
+                state = state.cycle,
+                hasWorkouts = state.workouts.isNotEmpty(),
+                onOpenCorrelation = viewModel::openCorrelationSheet,
+                onUpdateCycleLength = viewModel::setCycleLengthDays,
+                onUpdateLastPeriodDate = viewModel::updateCycleLastPeriodDate,
+                onDisableCycle = viewModel::disableCycleTracking,
+                onDismiss = viewModel::dismissCycleSheet,
+                hazeState = hazeState,
+            )
+        }
 
         // Workout & Menstrual Cycle Correlation Analytics Sheet
         val cycleStartEpochDays = state.cycle.lastPeriodDate?.toEpochDays()?.toLong()

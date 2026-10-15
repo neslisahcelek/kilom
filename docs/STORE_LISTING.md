@@ -51,8 +51,8 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   • Sakatlık Koruması & Biyomekanik Uyarılar: Yumurtlama öncesi yükselen östrojenin eklem bağlarını gevşetmesi nedeniyle ACL (ön çapraz bağ) uyarısı, luteal fazda vücut ısısı artışı için hidrasyon desteği.
   • Deload & Kas Koruma: PMS döneminde merkezi sinir sistemi yorgunluğunu önleyen planlı hafifletme (deload) ve katabolizmaya karşı lösin zamanlaması stratejileri.
 
-  Direnç Antrenmanı & Hevy Entegrasyonu (%100 Cihaz İçi):
-  • Hevy CSV İçe Aktarma: Hevy antrenman geçmişinizi (workouts.csv) sıfır veri sızıntısıyla doğrudan telefonunuzda içe aktarın.
+  Direnç Antrenmanı & Egzersiz CSV İçe Aktarma (%100 Cihaz İçi):
+  • Antrenman CSV İçe Aktarma: Standart antrenman geçmişinizi (workouts.csv) sıfır veri sızıntısıyla doğrudan telefonunuzda içe aktarın.
   • DOMS Kas Onarım Ödemi Kalkanı: Ağır bacak veya sırt antrenmanından sonra tartıda görülen geçici artışı otomatik tespit eder; bunun yağ değil kas onarım sıvısı ve glikojen tutulumu olduğunu belirterek moralinizi korur.
   • Döngü-Antrenman Korelasyonu: 4 döngü evresindeki tonaj yükünüzü, PR dağılımınızı, luteal zorluk (RPE) artışını ve vücut ağırlığına oranla göreceli kuvvetinizi görselleştirin.
 
@@ -173,8 +173,8 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   • Biomechanical Injury Prevention: Protect your joints with ACL laxity warnings during ovulatory estrogen spikes, and hydration alerts for luteal thermoregulation (+0.5°C core temp).
   • Deload & Anti-Catabolism: Strategic CNS recovery with planned deloads and leucine timing during late PMS.
 
-  Resistance Training & Hevy Integration (100% On-Device):
-  • Hevy CSV Import: Import your workout history (workouts.csv) completely on-device without any third-party APIs.
+  Resistance Training & Workout CSV Integration (100% On-Device):
+  • Workout CSV Import: Import your workout history (workouts.csv) completely on-device without any third-party APIs.
   • DOMS Muscle Repair Fluid Retention Shield: Automatically detects heavy lifting sessions; reassures you that post-workout scale spikes are muscle repair fluid and glycogen, not body fat.
   • Cycle-Workout Correlation Sheet: Visualize volume load across cycle phases, PR distribution heatmaps, luteal RPE shift, and relative strength ratios.
 

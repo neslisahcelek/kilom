@@ -72,4 +72,21 @@ class RepositoryTest {
     @Test fun prefsIgnoreUnknownStoredValue() {
         assertEquals(WeightUnit.KG, SettingsPrefsRepository(MapSettings("weight_unit" to "STONE")).unit.value)
     }
+
+    @Test fun prefsUserGenderAndCycleDismissedPersist() {
+        val settings = MapSettings()
+        val prefs = SettingsPrefsRepository(settings)
+        assertEquals(UserGender.UNSPECIFIED, prefs.userGender.value)
+        assertEquals(false, prefs.cycleDismissed.value)
+
+        prefs.setUserGender(UserGender.FEMALE)
+        prefs.setCycleDismissed(true)
+
+        assertEquals(UserGender.FEMALE, prefs.userGender.value)
+        assertEquals(true, prefs.cycleDismissed.value)
+
+        val reloaded = SettingsPrefsRepository(settings)
+        assertEquals(UserGender.FEMALE, reloaded.userGender.value)
+        assertEquals(true, reloaded.cycleDismissed.value)
+    }
 }

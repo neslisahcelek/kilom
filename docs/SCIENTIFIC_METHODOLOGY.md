@@ -1,7 +1,7 @@
 # Kilom – Bilimsel Metodoloji ve Fizyolojik Kanıt Dosyası
 *(Scientific Methodology & Physiological Evidence Dossier)*
 
-Bu doküman; **Kilom** uygulamasının menstrüel döngü fazlama, tartı su tutma (ödem) tahminleri, Hevy antrenman hacmi korelasyonu ve beslenme rehberliğinde kullandığı tüm biyolojik modelleri, matematiksel algoritmaları ve hakemli akademik kaynakları detaylandırmak amacıyla hazırlanmıştır. 
+Bu doküman; **Kilom** uygulamasının menstrüel döngü fazlama, tartı su tutma (ödem) tahminleri, antrenman hacmi korelasyonu ve beslenme rehberliğinde kullandığı tüm biyolojik modelleri, matematiksel algoritmaları ve hakemli akademik kaynakları detaylandırmak amacıyla hazırlanmıştır. 
 
 Spor hekimleri, kadın doğum ve jinekoloji uzmanları, endokrinologlar ve performans antrenörleri tarafından incelenmeye uygun bilimsel titizlikle yapılandırılmıştır.
 
@@ -56,10 +56,10 @@ $$\text{Yumurtlama Günü (Ovulation Day)} = \text{Döngü Uzunluğu} - 14$$
 
 ---
 
-## 3. Antrenman Hacmi (Hevy), DOMS ve Tartı Ödemi Korelasyonu
+## 3. Antrenman Hacmi, DOMS ve Tartı Ödemi Korelasyonu
 
 ### 3.1. Tonaj / Hacim Yükü (Volume Load) Formülasyonu
-Hevy'den içe aktarılan CSV kayıtları egzersiz bazında ayrıştırılarak toplam hacim yükü hesaplanır:
+İçe aktarılan workouts.csv antrenman kayıtları egzersiz bazında ayrıştırılarak toplam hacim yükü hesaplanır:
 
 $$\text{Volume Load (kg)} = \sum_{i=1}^{n} (\text{Set}_i \times \text{Tekrar}_i \times \text{Ağırlık}_i)$$
 
@@ -73,7 +73,7 @@ $$\text{Volume Load (kg)} = \sum_{i=1}^{n} (\text{Set}_i \times \text{Tekrar}_i 
 * **Örnek Matematik:** Ağır bacak gününün ardından 300 gram glikojen depolayan bir sporcunun vücudunda $300\text{g} + (300 \times 3.5\text{g}) = 1350\text{g}$ (yaklaşık **+1.35 kg**) geçici su tutulur.
 
 ### 3.4. Kilom Tartı Kalkanı Algoritması:
-Kilom, sabah tartısında görülen artışları (`currentWeight - previousWeight > +0.3 kg`) analiz ederken son 48 saatteki Hevy kayıtlarını tarar:
+Kilom, sabah tartısında görülen artışları (`currentWeight - previousWeight > +0.3 kg`) analiz ederken son 48 saatteki antrenman kayıtlarını tarar:
 * *Koşul:* Son 48 saatte büyük kas grubu tonajı $\ge 8.000\text{ kg}$ ise;
 * *Karar:* Artışın yağ kütlesi değil, **EIMD ödemi ve glikojen hidrasyonu** olduğu kullanıcıya bilimsel verilerle bildirilir.
 

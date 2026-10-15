@@ -4,13 +4,15 @@ Uygulamanın yeni bir sürümünü App Store veya Google Play Store'a göndermed
 
 ## Adımlar
 
-1. **Mağaza Yönergelerini Oku**
-   - `.agents/skills/kilo-store-checklist/SKILL.md` dosyasını baştan sona incele.
+1. **Mağaza Yönergelerini ve Uyumluluk Ajanını Çalıştır**
+   - `.agents/skills/kilo-store-checklist/SKILL.md` kontrol listesini incele.
+   - `store-compliance` alt ajanını (`.agents/agents/store-compliance.md`) çalıştırarak App Store Review Guidelines ve Google Play Developer Program Policies uyumluluk raporunu üret.
 
-2. **İzin ve Yasal Beyanları Doğrula**
-   - iOS `Info.plist`: `NSCameraUsageDescription` ve `NSPhotoLibraryUsageDescription` metinlerini kontrol et.
-   - Android `AndroidManifest.xml`: `android.permission.CAMERA` tanımlı mı?
-   - Gizlilik politikası bağlantısını ve cihaz içi veri işleme beyanını kontrol et (`PRIVACY_POLICY.md` / `https://neslisahcelek.github.io/kilom/`).
+2. **İzin, Yasal Beyan ve Manifest Doğrulaması**
+   - iOS `Info.plist`: `NSCameraUsageDescription`, `NSPhotoLibraryUsageDescription`, `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription` metinlerini kontrol et.
+   - iOS Privacy Manifest: `PrivacyInfo.xcprivacy` dosyasını ve Required Reason API kodlarını (`CA92.1` UserDefaults vb.) doğrula.
+   - Android `AndroidManifest.xml`: `android.permission.CAMERA` (`required="false"`), `android.permission.POST_NOTIFICATIONS` ve donanım tanımlarını kontrol et.
+   - Gizlilik politikası bağlantısını (`https://neslisahcelek.github.io/kilom/`) ve App Store Nutrition Label ("Data Not Collected") / Google Play Data Safety ("No user data collected") beyanlarını doğrula.
 
 3. **Versiyon ve Derleme Numaralarını Kontrol Et**
    - `build.gradle.kts` veya `versionCode` / `versionName` güncelliğini doğrula.
