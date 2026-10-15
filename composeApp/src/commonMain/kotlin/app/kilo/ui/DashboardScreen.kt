@@ -67,6 +67,8 @@ import androidx.compose.ui.semantics.semantics
 import kilo.composeapp.generated.resources.Res
 import kilo.composeapp.generated.resources.app_name
 import kilo.composeapp.generated.resources.backup_title
+import kilo.composeapp.generated.resources.cycle_date_picker_prompt
+import kilo.composeapp.generated.resources.cycle_last_period_date
 import kilo.composeapp.generated.resources.health_badge_connected
 import kilo.composeapp.generated.resources.health_badge_not_connected
 import kilo.composeapp.generated.resources.health_badge_title
@@ -203,6 +205,24 @@ fun DashboardScreen(
                     }
                 }
 
+                // Action Bar (Camera, Gallery, Manual + Unit toggle)
+                item(key = "action_bar") {
+                    ActionBar(
+                        selectedUnit = state.unit,
+                        onUnitChange = viewModel::setUnit,
+                        onCameraClick = {
+                            if (app.kilo.platform.isCustomCameraSupported) {
+                                isCameraOpen = true
+                            } else {
+                                photoPicker.takePhoto()
+                            }
+                        },
+                        onGalleryClick = { photoPicker.pickFromGallery() },
+                        onManualClick = { viewModel.openManual() },
+                        hazeState = hazeState,
+                    )
+                }
+
                 // Apple Health / Health Connect Badge (Guideline 2.5.1 Visibility)
                 if (state.isHealthSyncSupported) {
                     item(key = "health_badge") {
@@ -311,24 +331,6 @@ fun DashboardScreen(
                     TrendChart(
                         entries = state.history.map { it.entry },
                         unit = state.unit,
-                        hazeState = hazeState,
-                    )
-                }
-
-                // Action Bar (Camera, Gallery, Manual + Unit toggle)
-                item(key = "action_bar") {
-                    ActionBar(
-                        selectedUnit = state.unit,
-                        onUnitChange = viewModel::setUnit,
-                        onCameraClick = {
-                            if (app.kilo.platform.isCustomCameraSupported) {
-                                isCameraOpen = true
-                            } else {
-                                photoPicker.takePhoto()
-                            }
-                        },
-                        onGalleryClick = { photoPicker.pickFromGallery() },
-                        onManualClick = { viewModel.openManual() },
                         hazeState = hazeState,
                     )
                 }
@@ -516,9 +518,11 @@ fun DashboardScreen(
             }
             IosDatePicker(
                 selectedDateMillis = nowMillis,
+                title = stringResource(Res.string.cycle_last_period_date),
+                subtitle = stringResource(Res.string.cycle_date_picker_prompt),
                 onDateSelected = { millis ->
                     val instant = Instant.fromEpochMilliseconds(millis)
-                    val date = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                    val date = instant.toLocalDateTime(TimeZone.UTC).date
                     viewModel.enableCycleTracking(date)
                 },
                 onDismiss = viewModel::dismissCycleSetup,

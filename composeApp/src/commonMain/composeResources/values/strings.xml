@@ -28,9 +28,9 @@
     <string name="tag_water_retention">Water Retention</string>
     <string name="history_tag_badge">%1$s</string>
     <string name="error_empty">Enter your weight.</string>
-    <string name="error_not_a_number">That doesn\'t look like a number.</string>
+    <string name="error_not_a_number">That doesn't look like a number.</string>
     <string name="error_out_of_range">Enter a weight between 20 and 500 kg (44–1102 lb).</string>
-    <string name="error_ocr_no_result">Couldn\'t read a weight from the photo. Try again or enter it manually.</string>
+    <string name="error_ocr_no_result">Couldn't read a weight from the photo. Try again or enter it manually.</string>
     <string name="error_ocr_failed">Something went wrong reading the photo. You can enter the weight manually.</string>
     <string name="date_today">Today</string>
     <string name="date_yesterday">Yesterday</string>
@@ -86,7 +86,7 @@
     <string name="trend_max">Max</string>
     <string name="trend_avg">Avg</string>
     <string name="backup_title">Backup &amp; Export</string>
-    <string name="backup_subtitle">100% on-device &amp; private. Your data never touches a server.</string>
+    <string name="backup_subtitle">%%100 on-device &amp; private. Your data never touches a server.</string>
     <string name="backup_export_csv">Export CSV</string>
     <string name="backup_export_json">Export JSON</string>
     <string name="backup_import">Import from File</string>
@@ -182,7 +182,7 @@
     <string name="share_text_with_weight">🎯 %1$s • %2$d day weigh-in streak on Kilom!</string>
     <string name="share_text_private">🔥 %1$d day weigh-in streak on Kilom! Consistency is key.</string>
     <string name="share_card_subtitle">Kilom • Pure On-Device Weigh-In Tracker</string>
-    <string name="share_card_badge_on_device">100% On-Device</string>
+    <string name="share_card_badge_on_device">%%100 On-Device</string>
     <string name="share_card_streak_badge">🔥 %1$d Day Weigh-In Streak</string>
 
     <!-- Milestone Titles -->
@@ -210,6 +210,7 @@
     <string name="cycle_settings_enable">Enable Cycle Tracking</string>
     <string name="cycle_settings_enable_subtitle">Phase-by-phase nutrition guidance &amp; fluid retention alerts</string>
     <string name="cycle_last_period_date">Last Period Start Date</string>
+    <string name="cycle_date_picker_prompt">Select the first day of your last period to calculate your cycle phase and water retention.</string>
     <string name="cycle_length_title">Cycle Length</string>
     <string name="cycle_length_unit">%1$d days</string>
     <string name="cycle_period_duration_title">Period Duration</string>
@@ -222,7 +223,7 @@
     <string name="cycle_section_eat">Recommended Today</string>
     <string name="cycle_section_avoid">Foods to Avoid</string>
     <string name="cycle_section_hormones">Hormonal State</string>
-    <string name="cycle_section_body">What\'s Happening in Your Body</string>
+    <string name="cycle_section_body">What's Happening in Your Body</string>
     <string name="cycle_next_period_in">Next period in %1$d days</string>
     <string name="cycle_water_retention_suggested">Water retention tag suggested based on your cycle phase.</string>
     <string name="cycle_update_period_cta">Update Last Period Date</string>
@@ -324,7 +325,7 @@
     <!-- Cycle-Synced Strength & Weight Training -->
     <string name="cycle_tab_workout">Strength</string>
     <string name="cycle_card_workout_badge">Lifting</string>
-    <string name="cycle_workout_strategy_title">Today\'s Lifting Strategy</string>
+    <string name="cycle_workout_strategy_title">Today's Lifting Strategy</string>
     <string name="cycle_workout_focus_section">Target Focus &amp; Exercises</string>
     <string name="cycle_workout_physiology_section">Biomechanics &amp; Hormonal Insight</string>
     <string name="cycle_workout_caution_section">Injury Prevention &amp; Safety</string>

@@ -64,59 +64,62 @@ fun CycleCard(
     ) {
         if (!state.isEnabled || state.currentDayInfo == null) {
             // Setup / CTA state
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 18.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+                    .padding(20.dp),
             ) {
                 Row(
-                    modifier = Modifier.weight(1f).padding(end = 12.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(42.dp)
-                            .clip(CircleShape)
-                            .background(colors.accent.copy(alpha = 0.15f)),
-                        contentAlignment = Alignment.Center,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f).padding(end = 12.dp),
                     ) {
-                        Text(text = "🌸", fontSize = 20.sp)
-                    }
-                    Spacer(Modifier.width(14.dp))
-                    Column {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                                .background(colors.accent.copy(alpha = 0.15f)),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(text = "🌸", fontSize = 18.sp)
+                        }
+                        Spacer(Modifier.width(12.dp))
                         Text(
                             text = stringResource(Res.string.cycle_card_cta_title),
                             style = typography.headline,
                             color = colors.textPrimary,
                             fontWeight = FontWeight.SemiBold,
                         )
-                        Spacer(Modifier.height(2.dp))
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(colors.accent)
+                            .padding(horizontal = 14.dp, vertical = 8.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
                         Text(
-                            text = stringResource(Res.string.cycle_card_cta_subtitle),
+                            text = stringResource(Res.string.cycle_card_cta_button),
                             style = typography.caption,
-                            color = colors.textSecondary,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.onAccent,
                         )
                     }
                 }
 
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(colors.accent)
-                        .padding(horizontal = 14.dp, vertical = 8.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = stringResource(Res.string.cycle_card_cta_button),
-                        style = typography.caption,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.onAccent,
-                    )
-                }
+                Spacer(Modifier.height(10.dp))
+
+                Text(
+                    text = stringResource(Res.string.cycle_card_cta_subtitle),
+                    style = typography.caption.copy(lineHeight = 16.sp),
+                    color = colors.textSecondary,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         } else {
             // Active Cycle Card

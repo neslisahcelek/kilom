@@ -74,6 +74,8 @@ import kilo.composeapp.generated.resources.cycle_workout_physiology_section
 import kilo.composeapp.generated.resources.cycle_workout_strategy_title
 import kilo.composeapp.generated.resources.cycle_update_period_cta
 import kilo.composeapp.generated.resources.cycle_water_retention_alert
+import kilo.composeapp.generated.resources.cycle_date_picker_prompt
+import kilo.composeapp.generated.resources.cycle_last_period_date
 import kilo.composeapp.generated.resources.cycle_length_title
 import kilo.composeapp.generated.resources.cycle_length_desc
 import kilo.composeapp.generated.resources.cycle_length_days_format
@@ -337,9 +339,11 @@ fun CycleSheet(
         }
         IosDatePicker(
             selectedDateMillis = lastMillis,
+            title = stringResource(Res.string.cycle_last_period_date),
+            subtitle = stringResource(Res.string.cycle_date_picker_prompt),
             onDateSelected = { millis ->
                 val instant = Instant.fromEpochMilliseconds(millis)
-                val newDate = instant.toLocalDateTime(timeZone).date
+                val newDate = instant.toLocalDateTime(TimeZone.UTC).date
                 onUpdateLastPeriodDate(newDate)
                 isDatePickerOpen = false
             },

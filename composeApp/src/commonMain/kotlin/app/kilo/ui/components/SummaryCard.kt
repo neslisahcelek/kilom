@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -82,7 +83,8 @@ fun SummaryCard(
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .background(colors.glassBorder.copy(alpha = 0.5f))
+                        .background(colors.glassBorder.copy(alpha = 0.25f))
+                        .border(0.5.dp, colors.glassBorder, RoundedCornerShape(12.dp))
                         .padding(2.dp),
                 ) {
                     val periods = listOf(SummaryPeriod.WEEK to Res.string.summary_week, SummaryPeriod.MONTH to Res.string.summary_month)
@@ -112,6 +114,7 @@ fun SummaryCard(
             AnimatedContent(
                 targetState = summary,
                 transitionSpec = { fadeIn() togetherWith fadeOut() },
+                label = "summary_card_content",
             ) { s ->
                 if (s == null) {
                     Box(
@@ -127,94 +130,112 @@ fun SummaryCard(
                         )
                     }
                 } else {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        // Average
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(Res.string.summary_average),
-                                style = typography.caption,
-                                color = colors.textSecondary,
-                            )
-                            Spacer(Modifier.height(4.dp))
-                            Text(
-                                text = formatWeight(s.averageKg, unit),
-                                style = typography.headline,
-                                color = colors.textPrimary,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-
-                        // Range (min - max)
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(Res.string.summary_range),
-                                style = typography.caption,
-                                color = colors.textSecondary,
-                            )
-                            Spacer(Modifier.height(4.dp))
-                            Text(
-                                text = "${formatWeight(s.minKg, unit)} - ${formatWeight(s.maxKg, unit)}",
-                                style = typography.headline,
-                                color = colors.textPrimary,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-
-                        // Change
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(Res.string.summary_change),
-                                style = typography.caption,
-                                color = colors.textSecondary,
-                            )
-                            Spacer(Modifier.height(4.dp))
-                            val change = s.changeKg
-                            if (change != null) {
-                                val prefix = if (change > 0) "+" else ""
-                                val changeText = "$prefix${formatWeight(change, unit)}"
-                                val changeColor = when {
-                                    change < 0 -> colors.negative // loss is green
-                                    change > 0 -> colors.positive // gain is orange
-                                    else -> colors.textSecondary
-                                }
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top,
+                        ) {
+                            // Average
+                            Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = changeText,
-                                    style = typography.headline,
-                                    color = changeColor,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            } else {
-                                Text(
-                                    text = "—",
-                                    style = typography.headline,
+                                    text = stringResource(Res.string.summary_average),
+                                    style = typography.caption,
                                     color = colors.textSecondary,
+                                )
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    text = formatWeight(s.averageKg, unit),
+                                    style = typography.headline,
+                                    color = colors.textPrimary,
                                     fontWeight = FontWeight.Bold,
                                 )
                             }
-                        }
-                    }
 
-                    // Comparison vs previous period if available
-                    if (s.previousAverageKg != null) {
-                        Spacer(Modifier.height(12.dp))
-                        val periodName = if (period == SummaryPeriod.WEEK) {
-                            stringResource(Res.string.summary_period_week)
-                        } else {
-                            stringResource(Res.string.summary_period_month)
+                            // Range (min - max)
+                            Column(
+                                modifier = Modifier.weight(1.3f),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Text(
+                                    text = stringResource(Res.string.summary_range),
+                                    style = typography.caption,
+                                    color = colors.textSecondary,
+                                )
+                                Spacer(Modifier.height(4.dp))
+                                Text(
+                                    text = "${formatWeight(s.minKg, unit)} - ${formatWeight(s.maxKg, unit)}",
+                                    style = typography.headline.copy(fontSize = 15.5.sp),
+                                    color = colors.textPrimary,
+                                    fontWeight = FontWeight.Bold,
+                                    maxLines = 1,
+                                )
+                            }
+
+                            // Change
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                horizontalAlignment = Alignment.End,
+                            ) {
+                                Text(
+                                    text = stringResource(Res.string.summary_change),
+                                    style = typography.caption,
+                                    color = colors.textSecondary,
+                                )
+                                Spacer(Modifier.height(4.dp))
+                                val change = s.changeKg
+                                if (change != null) {
+                                    val prefix = if (change > 0) "+" else ""
+                                    val changeText = "$prefix${formatWeight(change, unit)}"
+                                    val changeColor = when {
+                                        change < 0 -> colors.negative // loss is green
+                                        change > 0 -> colors.positive // gain is orange
+                                        else -> colors.textSecondary
+                                    }
+                                    Text(
+                                        text = changeText,
+                                        style = typography.headline,
+                                        color = changeColor,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                } else {
+                                    Text(
+                                        text = "—",
+                                        style = typography.headline,
+                                        color = colors.textSecondary,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                            }
                         }
-                        val diff = s.averageKg - s.previousAverageKg
-                        val diffPrefix = if (diff > 0) "+" else ""
-                        val diffFormatted = "$diffPrefix${formatWeight(diff, unit)}"
-                        val diffColor = if (diff <= 0) colors.negative else colors.positive
-                        Text(
-                            text = "${stringResource(Res.string.summary_vs_previous, periodName)}: $diffFormatted",
-                            style = typography.caption,
-                            color = diffColor,
-                            fontSize = 12.sp,
-                        )
+
+                        // Comparison vs previous period if available
+                        if (s.previousAverageKg != null) {
+                            Spacer(Modifier.height(14.dp))
+                            val periodName = if (period == SummaryPeriod.WEEK) {
+                                stringResource(Res.string.summary_period_week)
+                            } else {
+                                stringResource(Res.string.summary_period_month)
+                            }
+                            val diff = s.averageKg - s.previousAverageKg
+                            val diffPrefix = if (diff > 0) "+" else ""
+                            val diffFormatted = "$diffPrefix${formatWeight(diff, unit)}"
+                            val diffColor = if (diff <= 0) colors.negative else colors.positive
+
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(diffColor.copy(alpha = 0.12f))
+                                    .border(0.5.dp, diffColor.copy(alpha = 0.25f), RoundedCornerShape(8.dp))
+                                    .padding(horizontal = 9.dp, vertical = 4.dp),
+                            ) {
+                                Text(
+                                    text = "${stringResource(Res.string.summary_vs_previous, periodName)}: $diffFormatted",
+                                    style = typography.caption.copy(fontSize = 11.5.sp, fontWeight = FontWeight.SemiBold),
+                                    color = diffColor,
+                                )
+                            }
+                        }
                     }
                 }
             }

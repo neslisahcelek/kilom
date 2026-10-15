@@ -95,6 +95,8 @@ fun IosDatePicker(
     hazeState: HazeState?,
     modifier: Modifier = Modifier,
     timeZone: TimeZone = TimeZone.currentSystemDefault(),
+    title: String? = null,
+    subtitle: String? = null,
 ) {
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
@@ -160,6 +162,27 @@ fun IosDatePicker(
                         .padding(horizontal = 20.dp, vertical = 22.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
+                    // Optional Context Title and Explanatory Subtitle
+                    if (title != null) {
+                        Text(
+                            text = title,
+                            style = typography.title.copy(fontSize = 17.5.sp, fontWeight = FontWeight.Bold),
+                            color = colors.textPrimary,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        if (subtitle != null) {
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                text = subtitle,
+                                style = typography.caption.copy(fontSize = 12.sp, lineHeight = 16.sp),
+                                color = colors.textSecondary,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                            )
+                        }
+                        Spacer(Modifier.height(16.dp))
+                    }
                     // Header: Month & Year + Left/Right compact chevron buttons
                     Row(
                         modifier = Modifier.fillMaxWidth(),

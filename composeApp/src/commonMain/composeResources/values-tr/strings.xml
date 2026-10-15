@@ -101,8 +101,8 @@
     <string name="health_sync_success">%1$d kayıt Sağlık uygulamasına aktarıldı.</string>
     <string name="health_sync_denied">Sağlık uygulamasında gerekli izin verilmedi.</string>
     <string name="camera_permission_denied_title">Kamera İzni Gerekiyor</string>
-    <string name="camera_permission_denied_desc">Kilom\'un tartınızı tarayabilmesi için lütfen Ayarlar\'dan kamera erişimine izin verin.</string>
-    <string name="camera_permission_open_settings">Ayarlar\'ı Aç</string>
+    <string name="camera_permission_denied_desc">Kilom'un tartınızı tarayabilmesi için lütfen Ayarlar'dan kamera erişimine izin verin.</string>
+    <string name="camera_permission_open_settings">Ayarlar'ı Aç</string>
     <string name="camera_unavailable_title">Kamera Kullanılamıyor</string>
     <string name="camera_unavailable_desc">Bu cihazda veya simülatörde kamera donanımı bulunamadı.</string>
     <string name="camera_choose_gallery">Galeriden Seç</string>
@@ -115,11 +115,11 @@
     <string name="health_badge_not_connected">Bağlı Değil</string>
     <string name="health_badge_sync_now">Eşitle</string>
     <string name="health_onboarding_title">Apple Sağlık ile Eşitle</string>
-    <string name="health_onboarding_body">Kilom yeni tartımlarınızı otomatik olarak Apple Sağlık\'a yazabilir ve geçmiş ölçümlerinizi içe aktarabilir. Tüm verileriniz %%100 cihazınızda ve gizli kalır.</string>
-    <string name="health_onboarding_connect">Apple Sağlık\'ı Bağla</string>
-    <string name="health_onboarding_import_option">Geçmiş tartımları Sağlık\'tan içe aktar</string>
+    <string name="health_onboarding_body">Kilom yeni tartımlarınızı otomatik olarak Apple Sağlık'a yazabilir ve geçmiş ölçümlerinizi içe aktarabilir. Tüm verileriniz %%100 cihazınızda ve gizli kalır.</string>
+    <string name="health_onboarding_connect">Apple Sağlık'ı Bağla</string>
+    <string name="health_onboarding_import_option">Geçmiş tartımları Sağlık'tan içe aktar</string>
     <string name="health_onboarding_later">Şimdi Değil</string>
-    <string name="health_import_button">Sağlık\'tan Geçmiş Tartımları İçe Aktar</string>
+    <string name="health_import_button">Sağlık'tan Geçmiş Tartımları İçe Aktar</string>
     <string name="health_import_loading">Sağlık uygulamasından okunuyor...</string>
     <string name="health_import_success">Sağlık uygulamasından %1$d yeni kayıt aktarıldı.</string>
     <string name="health_import_empty">Sağlık uygulamasında yeni bir tartı kaydı bulunamadı.</string>
@@ -154,7 +154,7 @@
     <string name="reminder_enable_title">Günlük hatırlatıcı</string>
     <string name="reminder_enable_subtitle">Her gün belirlediğiniz saatte hafif bir bildirim alın</string>
     <string name="reminder_time_title">Hatırlatma Saati</string>
-    <string name="reminder_permission_denied">Ayarlar\'da bildirim izni verilmedi.</string>
+    <string name="reminder_permission_denied">Ayarlar'da bildirim izni verilmedi.</string>
     <string name="reminder_notification_title">Kilom Tartı Vakti</string>
     <string name="reminder_notification_body">Günlük tartılma vaktiniz geldi. Tartıya çıkıp kilonuzu kaydedin!</string>
 
@@ -210,6 +210,7 @@
     <string name="cycle_settings_enable">Döngü Takibini Etkinleştir</string>
     <string name="cycle_settings_enable_subtitle">Faza göre beslenme rehberi ve tartı ödem uyarıları</string>
     <string name="cycle_last_period_date">Son Regl Başlangıç Tarihi</string>
+    <string name="cycle_date_picker_prompt">Döngü fazınızı ve tartıdaki su tutulumunu hesaplamak için son reglinizin ilk gününü seçin.</string>
     <string name="cycle_length_title">Döngü Uzunluğu</string>
     <string name="cycle_length_unit">%1$d gün</string>
     <string name="cycle_period_duration_title">Regl Süresi</string>
@@ -310,7 +311,7 @@
     <string name="cycle_luteal_mid_hormones">Progesteron zirvesi; aldosteron artışı; insülin duyarlılığında hafif düşüş.</string>
 
     <string name="cycle_luteal_late_title">PMS Eşiği &amp; Maksimum Ödem</string>
-    <string name="cycle_luteal_late_body">Hormonların ani düşüşü 2.5 kg\'a varan su tutulması ve tatlı isteği yaratabilir. Tartının moralinizi bozmasına izin vermeyin. Dinlenin ve tuzdan kaçının.</string>
+    <string name="cycle_luteal_late_body">Hormonların ani düşüşü 2.5 kg'a varan su tutulması ve tatlı isteği yaratabilir. Tartının moralinizi bozmasına izin vermeyin. Dinlenin ve tuzdan kaçının.</string>
     <string name="cycle_luteal_late_hormones">Menstrüasyon öncesi östrojen ve progesteronun hızlı düşüşü.</string>
 
     <!-- Scientific Sources Text -->
@@ -434,7 +435,7 @@
     <string name="correlation_prs_card_title">⚡ Kişisel Rekorlar (PR)</string>
     <string name="correlation_total_prs_format">%1$d PR</string>
     <string name="correlation_luteal_rpe_card_title">Luteal RPE ve Algılanan Zorluk</string>
-    <string name="correlation_no_rpe_hint">Evreler arası zorluğu kıyaslamak için Hevy\'de set RPE (Zorluk Derecesi) kaydedin.</string>
+    <string name="correlation_no_rpe_hint">Evreler arası zorluğu kıyaslamak için Hevy'de set RPE (Zorluk Derecesi) kaydedin.</string>
     <string name="correlation_no_compound_lifts">İçe aktarılan antrenmanlarda bileşik hareket bulunamadı.</string>
     <string name="correlation_est_1rm_format">Tahmini 1RM: %1$.1f kg</string>
     <string name="correlation_bw_ratio_format">%1$.2fx Kilo</string>
