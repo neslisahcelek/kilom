@@ -460,8 +460,8 @@
 
     <!-- Correlation Explanations & Insights -->
     <string name="correlation_volume_insight_title">Hormonal Hacim Analizi</string>
-    <string name="correlation_volume_anabolic_higher_format">Foliküler ve Ovülasyon evrelerinde seans başına ortalama tonajınız Luteal evreye göre %%1$d daha yüksek. Yükselen östrojen kas glikojen depolarını ve toparlanma hızını destekler.</string>
-    <string name="correlation_volume_luteal_higher_format">Luteal evrede seans başına ortalama tonajınız %%1$d daha yüksek görünüyor. Progesteron kas yıkımını artırdığı için bu dönemde antrenman sonrası protein alımına ve uykuya ekstra özen gösterin.</string>
+    <string name="correlation_volume_anabolic_higher_format">Foliküler ve Ovülasyon evrelerinde seans başına ortalama tonajınız Luteal evreye göre %1$s daha yüksek. Yükselen östrojen kas glikojen depolarını ve toparlanma hızını destekler.</string>
+    <string name="correlation_volume_luteal_higher_format">Luteal evrede seans başına ortalama tonajınız %1$s daha yüksek görünüyor. Progesteron kas yıkımını artırdığı için bu dönemde antrenman sonrası protein alımına ve uykuya ekstra özen gösterin.</string>
     <string name="correlation_volume_general_insight_format">Antrenman başına en yüksek ortalama tonaja %1$s döneminde ulaşıyorsunuz (%2$s kg / seans). Evre süreleri farklı olduğu için toplam yerine seans ortalamasını kıyaslamak gerçek performansınızı gösterir.</string>
     <string name="correlation_phase_desc_menstrual">Hormonlar taban seviyededir; demir kaybı ve kramplar karın içi basıncı zorlayabileceği için kontrollü yenilenme setleri öne çıkar.</string>
     <string name="correlation_phase_desc_follicular">Yükselen östrojen insülin duyarlılığını ve kasların karbonhidrat kullanımını zirveye taşır; yüksek hacim ve ağırlık artışı için en verimli evredir.</string>
@@ -469,10 +469,10 @@
     <string name="correlation_phase_desc_luteal">Baskın progesteron bazal vücut ısısını (+0.4°C) ve sıvı tutulumunu artırır; nabız daha hızlı yükselir ve merkezi sinir sistemi daha çabuk yorulur.</string>
 
     <string name="correlation_prs_anabolic_title">Anabolik PR Penceresi</string>
-    <string name="correlation_prs_anabolic_insight_format">Kişisel rekorlarınızın (PR) %%1$d kadarı Foliküler ve Ovülasyon evrelerinde kırıldı. Östrojenin maksimum kas kuvveti ürettiği bu günleri ağır (1–5 tekrar) rekor denemelerine ayırın.</string>
+    <string name="correlation_prs_anabolic_insight_format">Kişisel rekorlarınızın (PR) %1$s kadarı Foliküler ve Ovülasyon evrelerinde kırıldı. Östrojenin maksimum kas kuvveti ürettiği bu günleri ağır (1–5 tekrar) rekor denemelerine ayırın.</string>
     <string name="correlation_prs_general_insight">Kişisel rekorlarınızın hangi döngü evresinde yoğunlaştığını takip etmek, sinir sisteminizin maksimum kuvvete ne zaman hazır olduğunu gösterir.</string>
-    <string name="correlation_prs_share_format">%1$d PR (%%2$d)</string>
-    <string name="correlation_luteal_volume_fallback_format">RPE kaydı olmasa da Luteal evrede seans başı tonajınız %%1$s oranında değişiyor. Progesteron vücut ısısını ve nabzı yükselttiği için aynı ağırlıklar bu evrede daha ağır hissedilir.</string>
+    <string name="correlation_prs_share_format">%1$d PR (%2$s)</string>
+    <string name="correlation_luteal_volume_fallback_format">RPE kaydı olmasa da Luteal evrede seans başı tonajınız %1$s oranında değişiyor. Progesteron vücut ısısını ve nabzı yükselttiği için aynı ağırlıklar bu evrede daha ağır hissedilir.</string>
     <string name="correlation_luteal_physiology_fallback">Luteal evrede progesteron dinlenme vücut ısısını ~0.4°C artırır ve sıvı dengesini değiştirir; bu durum ağır bileşik setlerde algılanan zorluğu doğal olarak yükseltir.</string>
 
     <string name="correlation_strength_guide_title">1RM ve Göreceli Kuvvet Nedir?</string>
@@ -485,5 +485,87 @@
     <string name="correlation_tier_intermediate">Orta Seviye</string>
     <string name="correlation_tier_advanced">İleri Seviye</string>
     <string name="correlation_tier_elite">Elit Kuvvet</string>
+
+    <!-- Universal Workout & Relative Strength Card & Full Screen -->
+    <string name="workout_card_title">Kuvvet &amp; Biyomekanik</string>
+    <string name="workout_card_empty_subtitle">Epley 1RM tahmininizi, kadın/erkek normatif göreceli kuvvet ölçeklerini (Başlangıç – Elit), kas grubu tonajınızı ve DOMS ödem kalkanını görmek için workouts.csv yükleyin.</string>
+    <string name="workout_card_preview_cta">Kuvvet Ölçeklerini &amp; Bilimsel Metodolojiyi İncele →</string>
+    <string name="workout_card_active_sessions_format">%1$d antrenman • Ort. %2$s kg / seans</string>
+    <string name="workout_card_top_lift_format">Zirve Kuvvet: %1$s (%2$sx Kilo • %3$s)</string>
+    <string name="workout_card_open_cta">Tam Ekran Kuvvet &amp; Hacim Analizini Aç →</string>
+
+    <string name="workout_screen_title">Kuvvet &amp; Antrenman Analizi</string>
+    <string name="workout_screen_subtitle">Kanıta dayalı 1RM hesaplaması, normatif göreceli kuvvet ölçekleri (alt-üst sınırlar), kas grubu tonajı ve hakemli egzersiz fizyolojisi.</string>
+    <string name="workout_tab_strength">1RM &amp; Ölçekler</string>
+    <string name="workout_tab_volume">Hacim &amp; DOMS</string>
+    <string name="workout_tab_sources">Metodoloji</string>
+
+    <string name="workout_standard_selector_label">Biyomekanik Referans Standardı</string>
+    <string name="workout_standard_female">Kadın Normları</string>
+    <string name="workout_standard_male">Erkek Normları</string>
+    <string name="workout_standard_hint">Başlangıç, Orta, İleri ve Elit kademelerinin 1RM / Vücut Ağırlığı alt-üst sınırlarını NSCA ve Kilgore/Rippetoe fizyolojik standartlarına göre kalibre eder.</string>
+
+    <string name="workout_formula_card_title">Göreceli Kuvvet Nasıl Hesaplanır?</string>
+    <string name="workout_formula_epley_line">1. Tahmini 1RM (Epley, 1985): Ağırlık × (1 + Tekrar ÷ 30)</string>
+    <string name="workout_formula_ratio_line">2. Göreceli Oran (x Kilo): Tahmini 1RM (kg) ÷ Güncel Vücut Ağırlığı (kg)</string>
+    <string name="workout_formula_scale_line">3. Normatif Ölçek: Oranınızı aşağıdaki cinsiyet ve hareket bazlı alt-üst sınır tablolarıyla kıyaslar.</string>
+
+    <string name="workout_lift_calc_breakdown_format">Hesap: %1$s kg × (1 + %2$d ÷ 30) = %3$s kg 1RM ÷ %4$s kg Kilo = %5$sx Kilo</string>
+    <string name="workout_lift_no_record_hint">Yüklenen CSV içinde bu hareket henüz yok — güncel kilonuz için hedef ölçek aralıkları:</string>
+    <string name="workout_scale_header">Normatif Ölçek (Alt – Üst Sınırlar)</string>
+    <string name="workout_tier_bounds_range_format">%1$sx – %2$sx</string>
+    <string name="workout_tier_bounds_open_format">≥ %1$sx</string>
+    <string name="workout_tier_bounds_kg_range_format">%1$s – %2$s kg</string>
+    <string name="workout_tier_bounds_kg_open_format">≥ %1$s kg</string>
+    <string name="workout_next_tier_progress_format">Sonraki Kademe (%1$s ≥ %2$sx): 1RM için +%3$s kg kaldı</string>
+    <string name="workout_elite_reached_badge">🏆 En Üst Normatif Kademeye Ulaşıldı (Elit ≥ %1$sx Kilo)</string>
+
+    <string name="workout_general_summary_title">Antrenman Hacmi &amp; Şiddet Özeti</string>
+    <string name="workout_metric_sessions">Seans</string>
+    <string name="workout_metric_avg_tonnage">Ort. / Seans</string>
+    <string name="workout_metric_peak_tonnage">Zirve Seans</string>
+    <string name="workout_metric_total_prs">Toplam PR</string>
+    <string name="workout_muscle_dist_title">Kas Grubu Set &amp; Tonaj Dağılımı</string>
+    <string name="workout_muscle_sets_format">%1$d set (%2$s) • %3$s kg</string>
+    <string name="workout_muscle_legs_glutes">Bacak &amp; Kalça</string>
+    <string name="workout_muscle_back_pull">Sırt &amp; Çekiş</string>
+    <string name="workout_muscle_chest_push">Göğüs &amp; İtiş</string>
+    <string name="workout_muscle_shoulders_arms">Omuz &amp; Kol</string>
+    <string name="workout_muscle_core">Core &amp; Tam Vücut</string>
+
+    <string name="workout_doms_card_title">DOMS &amp; Glikojen Ödem Kalkanı Modeli</string>
+    <string name="workout_doms_formula_desc">Algoritma Kuralı: Son 48 saatte ağır Bacak/Sırt seansı (≥ 8.000 kg tonaj) + Tartıda ≥ +0,3 kg artış = Hücre İçi Glikojen Su Bağlanması ve EIMD Kas Onarım Ödemi.</string>
+    <string name="workout_doms_peak_session_format">En Yüksek Bacak/Sırt Seansınız: %1$s kg (Eşik: 8.000 kg)</string>
+    <string name="workout_top_prs_title">En Güçlü Kişisel Rekorlar (PR)</string>
+    <string name="workout_pr_count_badge_format">%1$d PR</string>
+
+    <!-- Workout Analytics: Methodology & Scientific Sources Tab -->
+    <string name="correlation_sources_header">Metodoloji &amp; Hakemli Bilimsel Kaynaklar</string>
+    <string name="correlation_sources_intro">Tüm kuvvet, tonaj ve antrenman ödemi analizleri hakemli spor bilimi modellerine dayanır ve %100 cihaz içinde, çevrimdışı olarak hesaplanır.</string>
+
+    <string name="correlation_source_1rm_title">1RM Hesaplaması — Epley (1985) &amp; LeSuer ve ark. (1997)</string>
+    <string name="correlation_source_1rm_desc">Teorik Tek Tekrar Maksimumu, Epley doğrusal denklemiyle hesaplanır: 1RM = Ağırlık × (1 + Tekrar / 30). LeSuer ve ark. (1997, Journal of Strength and Conditioning Research, 11(4), 211–213; DOI: 10.1519/00124278-199711000-00001) tarafından Squat (r = 0.97), Bench Press (r = 0.99) ve Deadlift (r = 0.95) hareketlerinde gerçek 1RM ile çok yüksek korelasyon (r ≥ 0.95) gösterdiği doğrulanmıştır.</string>
+
+    <string name="correlation_source_strength_title">Göreceli Kuvvet &amp; Seviyeler — Suchomel ve ark. (2016) &amp; NSCA</string>
+    <string name="correlation_source_strength_desc">1RM değerinin vücut ağırlığına oranı (1RM / Kilo), tartı dalgalanmalarından bağımsız olarak gerçek sinir-kas verimliliğini ölçer (Suchomel, Nimphius ve Stone, 2016, Sports Medicine, 46(10), 1419–1449; PMID: 26838985). Cinsiyete göre ayrıştırılmış kuvvet sınıflandırmaları (Başlangıç, Orta, İleri, Elit), NSCA (Haff ve Triplett, 2016, Essentials of Strength Training and Conditioning) ve Rippetoe, Kilgore ve Pendlay (2006, Practical Programming for Strength Training) biyomekanik normlarından uyarlanmıştır.</string>
+
+    <string name="correlation_source_doms_title">DOMS Kas Ödemi &amp; Glikojen Su Tutulumu — Peake ve ark. (2017) &amp; Kreitzman ve ark. (1992)</string>
+    <string name="correlation_source_doms_desc">Yüksek hacimli direnç antrenmanları kas liflerinde mikro hasar (EIMD) ve 24–72 saat süren onarım kaynaklı hücre dışı ödem oluşturur (Peake ve ark., 2017, J Appl Physiol, 122(3), 559–570, PMID: 28035017; Clarkson ve Hubal, 2002, Am J Phys Med Rehabil, 81(11), S52–S69, PMID: 12409811). Aynı süreçte yenilenen her 1 g kas glikojeni hücre içine 3–4 g su bağlar (Kreitzman ve ark., 1992, Am J Clin Nutr, PMID: 1615908; Fernández-Elías ve ark., 2015, Eur J Appl Physiol, PMID: 25911631).</string>
+
+    <string name="correlation_source_volume_title">Antrenman Hacmi &amp; RIR-RPE Otoregülasyonu — Schoenfeld ve ark. (2017) &amp; Helms ve ark. (2016)</string>
+    <string name="correlation_source_volume_desc">Seans tonajı (Set × Tekrar × Ağırlık), haftalık antrenman hacmi ile kas gelişimi (hipertrofi) arasındaki doz-yanıt ilişkisini izler (Schoenfeld, Ogborn ve Krieger, 2017, J Sports Sci, 35(11), 1073–1082; PMID: 27433992). Zorluk derecesi analizleri, merkezi sinir sistemi yorgunluğunu ölçmek için Cepteki Tekrar (RIR) tabanlı RPE ölçeğini kullanır (Helms ve ark., 2016, Strength Cond J, 38(4), 42–49; PMID: 27531969).</string>
+
+    <!-- Expanded Menstrual Cycle Scientific Sources -->
+    <string name="cycle_inline_correlation_header">Döngü &amp; Antrenman Korelasyonu</string>
+    <string name="cycle_inline_correlation_subtitle">4 hormonal evrenin kaldırdığınız tonaj, kişisel rekorlar (PR) ve algılanan zorluk (RPE) üzerindeki kişisel analizi.</string>
+    <string name="cycle_source_mcnulty_title">Menstrüel Evre ve Kuvvet Meta-Analizi (McNulty ve ark., 2020)</string>
+    <string name="cycle_source_mcnulty_desc">78 klinik çalışmayı inceleyen kapsamlı meta-analiz (Sports Medicine, 50(10), 1813–1827; PMID: 32661870); östrojen ve progesteron dalgalanmalarının kas kuvveti, toparlanma hızı ve bireysel antrenman kapasitesi üzerindeki etkilerini ortaya koyar.</string>
+    <string name="cycle_source_stachenfeld_title">Cinsiyet Hormonları ve Luteal Ödem Mekanizması (Stachenfeld, 2008)</string>
+    <string name="cycle_source_stachenfeld_desc">Luteal evrede yükselen progesteron ve östrojenin renin-anjiyotensin-aldosteron sistemini (RAAS) uyararak böbreklerde sodyum ve su tutulumunu nasıl tetiklediğini açıklayan klinik çalışma (Exerc Sport Sci Rev, 36(3), 152–159; PMID: 18580296). Tartıdaki +1–2,5 kg'lık geçici artışın yağ değil, hücre dışı ödem olduğunu kanıtlar.</string>
+    <string name="cycle_source_baker_solomon_title">Luteal Vücut Isısı ve Bazal Metabolizma Hızı (Baker ve ark., 2020; Solomon ve ark., 1982)</string>
+    <string name="cycle_source_baker_solomon_desc">Progesteronun hipotalamus üzerinden bazal vücut ısısını +0,3–0,5°C artırdığını (Temperature, 7(3), 226–262; PMID: 33123618) ve luteal dinlenme metabolizma hızını günde +100–250 kcal yükselttiğini (Am J Clin Nutr, 36(4), 611–616, PMID: 7124662; PLOS ONE, PMID: 32658929) gösteren çalışmalar; bu evredeki yüksek efor algısını (RPE) ve doğal iştah artışını açıklar.</string>
+    <string name="cycle_source_herzberg_acog_title">Ovülasyonda Bağ Esnekliği (ACL) ve ACOG Kılavuzları (Herzberg ve ark., 2017; ACOG, 2023)</string>
+    <string name="cycle_source_herzberg_acog_desc">Ovülasyon evresindeki östrojen zirvesinin ön çapraz bağ (ACL) gevşekliğini artırdığını kanıtlayan 68.758 katılımcılı meta-analiz (Orthop J Sports Med, 5(7); PMID: 28795075) ile ACOG Klinik Uygulama Kılavuzu No. 7'nin (Obstet Gynecol, 142(6), 1516–1533; PMID: 37973069) prostaglandin krampları, demir desteği ve PMS yönetimi protokollerini birleştirir.</string>
 </resources>
+
 

@@ -276,7 +276,11 @@ object HevyCsvParser {
                 val bestSetAtMaxWeight = candidateSets.filter { it.weightKg == maxWeight }.maxByOrNull { it.reps }
 
                 val estimated1Rm = if (bestSetAtMaxWeight != null && maxWeight > 0.0 && bestSetAtMaxWeight.reps > 0) {
-                    (maxWeight * (1.0 + bestSetAtMaxWeight.reps / 30.0)).round2()
+                    if (bestSetAtMaxWeight.reps <= 1) {
+                        maxWeight
+                    } else {
+                        (maxWeight * (1.0 + bestSetAtMaxWeight.reps / 30.0)).round2()
+                    }
                 } else {
                     maxWeight
                 }

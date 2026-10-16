@@ -1,5 +1,8 @@
 package app.kilo.domain
 
+import app.kilo.data.HevyWorkoutSession
+import app.kilo.data.MuscleCategory
+import kotlin.math.max
 import kotlin.math.round
 
 /**
@@ -49,8 +52,53 @@ enum class StrengthTier {
 }
 
 /**
+ * Lower and upper relative-strength ratio bounds (1RM / Body Weight) for a specific [StrengthTier].
+ * When [maxRatio] is null, the tier is open-ended (e.g., Elite >= eliteMin).
+ */
+data class TierBounds(
+    val tier: StrengthTier,
+    val minRatio: Double,
+    val maxRatio: Double?,
+)
+
+/**
+ * Normative relative strength thresholds (1RM / Body Weight) for a movement category and biological sex.
+ * Based on NSCA (Haff & Triplett, 2016) and Rippetoe, Kilgore & Pendlay (2006).
+ */
+data class StrengthNorms(
+    val isMale: Boolean,
+    val intermediateMin: Double,
+    val advancedMin: Double,
+    val eliteMin: Double,
+) {
+    val tierBounds: List<TierBounds>
+        get() = listOf(
+            TierBounds(
+                tier = StrengthTier.BEGINNER,
+                minRatio = 0.0,
+                maxRatio = round((intermediateMin - 0.01) * 100.0) / 100.0,
+            ),
+            TierBounds(
+                tier = StrengthTier.INTERMEDIATE,
+                minRatio = intermediateMin,
+                maxRatio = round((advancedMin - 0.01) * 100.0) / 100.0,
+            ),
+            TierBounds(
+                tier = StrengthTier.ADVANCED,
+                minRatio = advancedMin,
+                maxRatio = round((eliteMin - 0.01) * 100.0) / 100.0,
+            ),
+            TierBounds(
+                tier = StrengthTier.ELITE,
+                minRatio = eliteMin,
+                maxRatio = null,
+            ),
+        )
+}
+
+/**
  * Relative strength progress tracking Epley 1RM relative to current bodyweight,
- * along with the actual best set and cycle phase context.
+ * along with normative scale bounds, next tier progress, actual best set, and optional cycle phase context.
  */
 data class RelativeStrengthProgress(
     val exerciseName: String,
@@ -60,7 +108,65 @@ data class RelativeStrengthProgress(
     val bestWeightKg: Double = 0.0,
     val bestReps: Int = 0,
     val achievedInPhase: CyclePhase? = null,
-    val tier: StrengthTier = classifyStrengthTier(exerciseName, relativeRatio),
+    val isMaleStandard: Boolean = false,
+    val norms: StrengthNorms = strengthNormsFor(exerciseName, isMaleStandard),
+    val tier: StrengthTier = classifyStrengthTier(exerciseName, relativeRatio, isMaleStandard),
+    val nextTier: StrengthTier? = when (tier) {
+        StrengthTier.BEGINNER -> StrengthTier.INTERMEDIATE
+        StrengthTier.INTERMEDIATE -> StrengthTier.ADVANCED
+        StrengthTier.ADVANCED -> StrengthTier.ELITE
+        StrengthTier.ELITE -> null
+    },
+    val nextTierTargetRatio: Double? = when (tier) {
+        StrengthTier.BEGINNER -> norms.intermediateMin
+        StrengthTier.INTERMEDIATE -> norms.advancedMin
+        StrengthTier.ADVANCED -> norms.eliteMin
+        StrengthTier.ELITE -> null
+    },
+    val nextTierDeltaKg: Double? = nextTierTargetRatio?.let { targetRatio ->
+        if (bodyWeightKg > 0.0) {
+            val target1Rm = targetRatio * bodyWeightKg
+            max(0.0, round((target1Rm - estimated1RmKg) * 10.0) / 10.0)
+        } else {
+            null
+        }
+    },
+)
+
+/**
+ * Cycle-independent muscle category volume and set distribution.
+ */
+data class MuscleVolumeShare(
+    val category: MuscleCategory,
+    val setCount: Int,
+    val totalVolumeKg: Double,
+    val sharePercent: Int,
+)
+
+/**
+ * Cycle-independent personal record summary for an exercise.
+ */
+data class ExercisePrSummary(
+    val exerciseName: String,
+    val maxWeightKg: Double,
+    val estimated1RmKg: Double,
+    val bestReps: Int,
+    val prCount: Int,
+)
+
+/**
+ * Cycle-independent universal workout analytics for both male and female users.
+ */
+data class GeneralWorkoutAnalytics(
+    val sessionCount: Int,
+    val totalVolumeKg: Double,
+    val avgSessionVolumeKg: Double,
+    val maxSessionVolumeKg: Double,
+    val avgRpe: Double?,
+    val totalPrCount: Int,
+    val maxLegsOrBackSessionVolumeKg: Double,
+    val muscleShares: List<MuscleVolumeShare>,
+    val topExercisePrs: List<ExercisePrSummary>,
 )
 
 /**
@@ -78,40 +184,55 @@ data class WorkoutSessionSummary(
 )
 
 /**
+ * Returns sex-stratified normative relative strength thresholds (1RM / Body Weight)
+ * based on NSCA (Haff & Triplett, 2016) and Rippetoe, Kilgore & Pendlay (2006).
+ */
+fun strengthNormsFor(
+    exerciseName: String,
+    isMale: Boolean = false,
+): StrengthNorms {
+    val lower = exerciseName.lowercase()
+    return when {
+        lower.contains("overhead") || lower.contains("military") || lower.contains("ohp") || lower.contains("shoulder") -> {
+            if (isMale) {
+                StrengthNorms(isMale = true, intermediateMin = 0.55, advancedMin = 0.80, eliteMin = 1.05)
+            } else {
+                StrengthNorms(isMale = false, intermediateMin = 0.35, advancedMin = 0.55, eliteMin = 0.80)
+            }
+        }
+        lower.contains("bench") || lower.contains("chest") || lower.contains("row") || lower.contains("pull") -> {
+            if (isMale) {
+                StrengthNorms(isMale = true, intermediateMin = 0.85, advancedMin = 1.20, eliteMin = 1.60)
+            } else {
+                StrengthNorms(isMale = false, intermediateMin = 0.55, advancedMin = 0.85, eliteMin = 1.15)
+            }
+        }
+        else -> {
+            // Squat, Deadlift, RDL, Hip Thrust, and lower-body compounds
+            if (isMale) {
+                StrengthNorms(isMale = true, intermediateMin = 1.25, advancedMin = 1.75, eliteMin = 2.25)
+            } else {
+                StrengthNorms(isMale = false, intermediateMin = 0.85, advancedMin = 1.25, eliteMin = 1.75)
+            }
+        }
+    }
+}
+
+/**
  * Classifies relative strength (1RM / Bodyweight) into biomechanical tiers
- * tailored to the movement pattern (lower-body compound, horizontal press/pull, vertical press).
+ * tailored to the movement pattern and biological sex standard.
  */
 fun classifyStrengthTier(
     exerciseName: String,
     relativeRatio: Double,
+    isMale: Boolean = false,
 ): StrengthTier {
-    val lower = exerciseName.lowercase()
+    val norms = strengthNormsFor(exerciseName = exerciseName, isMale = isMale)
     return when {
-        lower.contains("overhead") || lower.contains("military") || lower.contains("ohp") || lower.contains("shoulder") -> {
-            when {
-                relativeRatio >= 0.80 -> StrengthTier.ELITE
-                relativeRatio >= 0.55 -> StrengthTier.ADVANCED
-                relativeRatio >= 0.35 -> StrengthTier.INTERMEDIATE
-                else -> StrengthTier.BEGINNER
-            }
-        }
-        lower.contains("bench") || lower.contains("chest") || lower.contains("row") || lower.contains("pull") -> {
-            when {
-                relativeRatio >= 1.15 -> StrengthTier.ELITE
-                relativeRatio >= 0.85 -> StrengthTier.ADVANCED
-                relativeRatio >= 0.55 -> StrengthTier.INTERMEDIATE
-                else -> StrengthTier.BEGINNER
-            }
-        }
-        else -> {
-            // Squat, Deadlift, RDL, Hip Thrust, and general lower-body compounds
-            when {
-                relativeRatio >= 1.75 -> StrengthTier.ELITE
-                relativeRatio >= 1.25 -> StrengthTier.ADVANCED
-                relativeRatio >= 0.85 -> StrengthTier.INTERMEDIATE
-                else -> StrengthTier.BEGINNER
-            }
-        }
+        relativeRatio >= norms.eliteMin -> StrengthTier.ELITE
+        relativeRatio >= norms.advancedMin -> StrengthTier.ADVANCED
+        relativeRatio >= norms.intermediateMin -> StrengthTier.INTERMEDIATE
+        else -> StrengthTier.BEGINNER
     }
 }
 
@@ -302,9 +423,15 @@ fun calculateRelativeStrength(
     weightLiftedKg: Double,
     reps: Int,
     achievedInPhase: CyclePhase? = null,
+    isMale: Boolean = false,
 ): RelativeStrengthProgress {
-    val estimated1Rm = weightLiftedKg * (1.0 + reps / 30.0)
+    val estimated1Rm = if (reps <= 1) {
+        weightLiftedKg
+    } else {
+        weightLiftedKg * (1.0 + reps / 30.0)
+    }
     val ratio = if (bodyWeightKg > 0.0) estimated1Rm / bodyWeightKg else 0.0
+    val norms = strengthNormsFor(exerciseName = exerciseName, isMale = isMale)
 
     return RelativeStrengthProgress(
         exerciseName = exerciseName,
@@ -314,6 +441,126 @@ fun calculateRelativeStrength(
         bestWeightKg = weightLiftedKg,
         bestReps = reps,
         achievedInPhase = achievedInPhase,
-        tier = classifyStrengthTier(exerciseName, ratio),
+        isMaleStandard = isMale,
+        norms = norms,
+        tier = classifyStrengthTier(exerciseName = exerciseName, relativeRatio = ratio, isMale = isMale),
     )
 }
+
+/**
+ * Analyzes workout sessions independently of menstrual cycle for universal (male & female) insights:
+ * - Total and average session volume load (tonnage)
+ * - Muscle group set and volume distribution
+ * - Chronological Personal Records (PRs) and top exercises
+ * - Maximum legs/back session volume for DOMS threshold comparison (8,000 kg)
+ */
+fun analyzeGeneralWorkouts(
+    workouts: List<HevyWorkoutSession>,
+): GeneralWorkoutAnalytics {
+    if (workouts.isEmpty()) {
+        return GeneralWorkoutAnalytics(
+            sessionCount = 0,
+            totalVolumeKg = 0.0,
+            avgSessionVolumeKg = 0.0,
+            maxSessionVolumeKg = 0.0,
+            avgRpe = null,
+            totalPrCount = 0,
+            maxLegsOrBackSessionVolumeKg = 0.0,
+            muscleShares = emptyList(),
+            topExercisePrs = emptyList(),
+        )
+    }
+
+    val sessionCount = workouts.size
+    val totalVolumeKg = workouts.sumOf { it.totalVolumeKg }
+    val avgSessionVolumeKg = totalVolumeKg / sessionCount
+    val maxSessionVolumeKg = workouts.maxOfOrNull { it.totalVolumeKg } ?: 0.0
+
+    val allRpes = workouts.flatMap { s -> s.exercises.flatMap { e -> e.sets.mapNotNull { it.rpe } } }
+    val avgRpe = if (allRpes.isNotEmpty()) round(allRpes.average() * 10.0) / 10.0 else null
+
+    val legsOrBackSessions = workouts.filter { session ->
+        session.exercises.any {
+            it.category == MuscleCategory.LEGS_GLUTES || it.category == MuscleCategory.BACK_PULL
+        }
+    }
+    val maxLegsOrBackSessionVolumeKg = legsOrBackSessions.maxOfOrNull { it.totalVolumeKg } ?: 0.0
+
+    // Muscle group set & volume share
+    val trackedCategories = listOf(
+        MuscleCategory.LEGS_GLUTES,
+        MuscleCategory.BACK_PULL,
+        MuscleCategory.CHEST_PUSH,
+        MuscleCategory.SHOULDERS_ARMS,
+        MuscleCategory.CORE_FULL_BODY,
+    )
+    val allExercises = workouts.flatMap { it.exercises }
+    val totalSets = allExercises.sumOf { it.sets.size }.coerceAtLeast(1)
+
+    val muscleShares = trackedCategories.map { category ->
+        val catExercises = allExercises.filter { it.category == category }
+        val setCount = catExercises.sumOf { it.sets.size }
+        val catVolume = catExercises.sumOf { it.totalVolumeKg }
+        val sharePct = round((setCount.toDouble() / totalSets.toDouble()) * 100.0).toInt()
+        MuscleVolumeShare(
+            category = category,
+            setCount = setCount,
+            totalVolumeKg = catVolume,
+            sharePercent = sharePct,
+        )
+    }.filter { it.setCount > 0 }.sortedByDescending { it.setCount }
+
+    // Chronological PR count and best exercise records
+    val sortedChronologically = workouts.sortedWith(
+        compareBy<HevyWorkoutSession> { it.dateEpochDays }.thenBy { it.startTimeEpochMs }
+    )
+    val runningMaxWeight = mutableMapOf<String, Double>()
+    val prCountByExercise = mutableMapOf<String, Int>()
+    val best1RmByExercise = mutableMapOf<String, Double>()
+    val bestRepsByExercise = mutableMapOf<String, Int>()
+
+    for (session in sortedChronologically) {
+        for (exercise in session.exercises) {
+            val title = exercise.title.trim()
+            if (title.isBlank()) continue
+            val prevMax = runningMaxWeight[title] ?: 0.0
+            if (exercise.maxWeightKg > prevMax && exercise.maxWeightKg > 0.0) {
+                runningMaxWeight[title] = exercise.maxWeightKg
+                prCountByExercise[title] = (prCountByExercise[title] ?: 0) + 1
+            }
+            val currentBest1Rm = best1RmByExercise[title] ?: 0.0
+            if (exercise.estimated1RmKg > currentBest1Rm) {
+                best1RmByExercise[title] = exercise.estimated1RmKg
+                val maxSet = exercise.sets.maxByOrNull { it.weightKg }
+                bestRepsByExercise[title] = maxSet?.reps ?: 1
+            }
+        }
+    }
+
+    val totalPrCount = prCountByExercise.values.sum()
+    val topExercisePrs = runningMaxWeight.entries
+        .map { (name, maxW) ->
+            ExercisePrSummary(
+                exerciseName = name,
+                maxWeightKg = maxW,
+                estimated1RmKg = best1RmByExercise[name] ?: maxW,
+                bestReps = bestRepsByExercise[name] ?: 1,
+                prCount = prCountByExercise[name] ?: 1,
+            )
+        }
+        .sortedByDescending { it.estimated1RmKg }
+        .take(6)
+
+    return GeneralWorkoutAnalytics(
+        sessionCount = sessionCount,
+        totalVolumeKg = totalVolumeKg,
+        avgSessionVolumeKg = avgSessionVolumeKg,
+        maxSessionVolumeKg = maxSessionVolumeKg,
+        avgRpe = avgRpe,
+        totalPrCount = totalPrCount,
+        maxLegsOrBackSessionVolumeKg = maxLegsOrBackSessionVolumeKg,
+        muscleShares = muscleShares,
+        topExercisePrs = topExercisePrs,
+    )
+}
+

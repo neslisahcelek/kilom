@@ -50,7 +50,8 @@ import app.kilo.ui.components.EntrySheet
 import app.kilo.ui.components.GlassCard
 import app.kilo.ui.components.GoalCard
 import app.kilo.ui.components.GoalSheet
-import app.kilo.ui.components.WorkoutCorrelationSheet
+import app.kilo.ui.components.WorkoutAnalyticsScreen
+import app.kilo.ui.components.WorkoutCard
 import app.kilo.ui.components.HealthOnboardingSheet
 import app.kilo.ui.components.HeroCard
 import app.kilo.ui.components.HistoryRow
@@ -302,6 +303,18 @@ fun DashboardScreen(
                     )
                 }
 
+                // Universal Strength & Workout Analytics Card (Male & Female Inclusive)
+                item(key = "workout_card") {
+                    WorkoutCard(
+                        workouts = state.workouts,
+                        currentWeightKg = state.hero?.latest?.entry?.kg ?: 0.0,
+                        userGender = state.userGender,
+                        hazeState = hazeState,
+                        onImportHevyCsv = { viewModel.importHevyCsv(it) },
+                        onOpenScreen = viewModel::openCorrelationSheet,
+                    )
+                }
+
                 // Cycle & Nutrition Guide Card
                 if (state.isCycleCardVisible) {
                     item(key = "cycle_card") {
@@ -513,7 +526,9 @@ fun DashboardScreen(
         ) {
             CycleScreen(
                 state = state.cycle,
+                workouts = state.workouts,
                 hasWorkouts = state.workouts.isNotEmpty(),
+                onImportHevyCsv = { viewModel.importHevyCsv(it) },
                 onOpenCorrelation = viewModel::openCorrelationSheet,
                 onUpdateCycleLength = viewModel::setCycleLengthDays,
                 onUpdateLastPeriodDate = viewModel::updateCycleLastPeriodDate,
@@ -523,20 +538,27 @@ fun DashboardScreen(
             )
         }
 
-        // Workout & Menstrual Cycle Correlation Analytics Sheet
+        // Universal Strength & Workout Analytics Full Screen (Male & Female Inclusive)
         val cycleStartEpochDays = state.cycle.lastPeriodDate?.toEpochDays()?.toLong()
         val currentWeightKg = state.hero?.latest?.entry?.kg ?: 0.0
 
-        WorkoutCorrelationSheet(
-            isOpen = state.isCorrelationSheetOpen,
-            workouts = state.workouts,
-            cycleStartEpochDays = cycleStartEpochDays,
-            cycleLength = state.cycle.cycleLength,
-            currentWeightKg = currentWeightKg,
-            onImportHevyCsv = { viewModel.importHevyCsv(it) },
-            onDismiss = viewModel::dismissCorrelationSheet,
-            hazeState = hazeState,
-        )
+        AnimatedVisibility(
+            visible = state.isCorrelationSheetOpen,
+            enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+            exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut(),
+        ) {
+            WorkoutAnalyticsScreen(
+                workouts = state.workouts,
+                currentWeightKg = currentWeightKg,
+                userGender = state.userGender,
+                onSelectGender = viewModel::setUserGender,
+                cycleStartEpochDays = cycleStartEpochDays,
+                cycleLength = state.cycle.cycleLength,
+                onImportHevyCsv = { viewModel.importHevyCsv(it) },
+                onDismiss = viewModel::dismissCorrelationSheet,
+                hazeState = hazeState,
+            )
+        }
 
         // Modal Date Picker for Initial Cycle Setup
         if (state.isCycleSetupOpen) {

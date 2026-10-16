@@ -460,8 +460,8 @@
 
     <!-- Correlation Explanations & Insights -->
     <string name="correlation_volume_insight_title">Hormonal Volume Analysis</string>
-    <string name="correlation_volume_anabolic_higher_format">Your average volume per workout is %1$d% higher during the Follicular &amp; Ovulatory phases compared to Luteal. Rising estrogen boosts muscle glycogen storage and recovery speed.</string>
-    <string name="correlation_volume_luteal_higher_format">Your average workout volume is %1$d% higher in the Luteal phase. Remember to prioritize recovery and protein intake as progesterone increases muscle breakdown.</string>
+    <string name="correlation_volume_anabolic_higher_format">Your average volume per workout is %1$s higher during the Follicular &amp; Ovulatory phases compared to Luteal. Rising estrogen boosts muscle glycogen storage and recovery speed.</string>
+    <string name="correlation_volume_luteal_higher_format">Your average workout volume is %1$s higher in the Luteal phase. Remember to prioritize recovery and protein intake as progesterone increases muscle breakdown.</string>
     <string name="correlation_volume_general_insight_format">Your highest single-session volume average occurs in the %1$s (%2$s kg per workout). Comparing average volume per session prevents longer phases from skewing total tonnage.</string>
     <string name="correlation_phase_desc_menstrual">Hormones are at baseline low; iron loss and cramps can limit intra-abdominal bracing, favoring controlled recovery sets.</string>
     <string name="correlation_phase_desc_follicular">Rising estradiol maximizes insulin sensitivity and muscle glycogen uptake — your body's prime window for high training volume.</string>
@@ -469,10 +469,10 @@
     <string name="correlation_phase_desc_luteal">Dominant progesterone raises core body temperature (+0.4°C) and sodium/water shifts, increasing cardiovascular and CNS fatigue.</string>
 
     <string name="correlation_prs_anabolic_title">Anabolic PR Window</string>
-    <string name="correlation_prs_anabolic_insight_format">%1$d% of all your personal records were set during the Follicular &amp; Ovulatory phases. Schedule heavy 1–5 rep strength attempts here when estrogen supports peak force output.</string>
+    <string name="correlation_prs_anabolic_insight_format">%1$s of all your personal records were set during the Follicular &amp; Ovulatory phases. Schedule heavy 1–5 rep strength attempts here when estrogen supports peak force output.</string>
     <string name="correlation_prs_general_insight">Tracking which cycle phase your personal records occur in reveals when your central nervous system is primed for maximum force production.</string>
-    <string name="correlation_prs_share_format">%1$d PRs (%2$d%)</string>
-    <string name="correlation_luteal_volume_fallback_format">Even without RPE logs, your session volume shifts by %1$s% in the Luteal phase. Progesterone elevates core temperature and heart rate, making standard working weights feel heavier.</string>
+    <string name="correlation_prs_share_format">%1$d PRs (%2$s)</string>
+    <string name="correlation_luteal_volume_fallback_format">Even without RPE logs, your session volume shifts by %1$s in the Luteal phase. Progesterone elevates core temperature and heart rate, making standard working weights feel heavier.</string>
     <string name="correlation_luteal_physiology_fallback">In the Luteal phase, progesterone raises resting body temperature by ~0.4°C and shifts fluid balance, which naturally increases perceived effort on heavy compound sets.</string>
 
     <string name="correlation_strength_guide_title">What Do 1RM &amp; Relative Strength Mean?</string>
@@ -485,5 +485,87 @@
     <string name="correlation_tier_intermediate">Intermediate</string>
     <string name="correlation_tier_advanced">Advanced</string>
     <string name="correlation_tier_elite">Elite Strength</string>
+
+    <!-- Universal Workout & Relative Strength Card & Full Screen -->
+    <string name="workout_card_title">Strength &amp; Biomechanics</string>
+    <string name="workout_card_empty_subtitle">Upload your workouts.csv to calculate Epley 1RM, sex-normative relative strength scales (Beginner to Elite), muscle group tonnage, and DOMS fluid shield.</string>
+    <string name="workout_card_preview_cta">Explore Strength Scales &amp; Science →</string>
+    <string name="workout_card_active_sessions_format">%1$d sessions • Avg %2$s kg / workout</string>
+    <string name="workout_card_top_lift_format">Top Relative Lift: %1$s (%2$sx BW • %3$s)</string>
+    <string name="workout_card_open_cta">Open Full Strength &amp; Volume Analytics →</string>
+
+    <string name="workout_screen_title">Strength &amp; Workout Analytics</string>
+    <string name="workout_screen_subtitle">Evidence-based 1RM estimation, normative relative strength scales, muscle group volume, and peer-reviewed sports physiology.</string>
+    <string name="workout_tab_strength">1RM &amp; Scales</string>
+    <string name="workout_tab_volume">Volume &amp; DOMS</string>
+    <string name="workout_tab_sources">Science &amp; Math</string>
+
+    <string name="workout_standard_selector_label">Biomechanical Reference Standard</string>
+    <string name="workout_standard_female">Female Norms</string>
+    <string name="workout_standard_male">Male Norms</string>
+    <string name="workout_standard_hint">Calibrates Beginner, Intermediate, Advanced, and Elite 1RM / Body Weight thresholds based on NSCA &amp; Kilgore/Rippetoe physiological norms.</string>
+
+    <string name="workout_formula_card_title">How Is Relative Strength Calculated?</string>
+    <string name="workout_formula_epley_line">1. Estimated 1RM (Epley, 1985): Weight × (1 + Reps ÷ 30)</string>
+    <string name="workout_formula_ratio_line">2. Relative Ratio (x BW): Estimated 1RM (kg) ÷ Current Body Weight (kg)</string>
+    <string name="workout_formula_scale_line">3. Normative Scale: Compares your x BW ratio against sex- and movement-specific lower and upper bounds below.</string>
+
+    <string name="workout_lift_calc_breakdown_format">Formula: %1$s kg × (1 + %2$d ÷ 30) = %3$s kg 1RM ÷ %4$s kg BW = %5$sx BW</string>
+    <string name="workout_lift_no_record_hint">Not yet recorded in imported CSV — showing normative target scale for your current weight:</string>
+    <string name="workout_scale_header">Normative Scale (Lower – Upper Bounds)</string>
+    <string name="workout_tier_bounds_range_format">%1$sx – %2$sx</string>
+    <string name="workout_tier_bounds_open_format">≥ %1$sx</string>
+    <string name="workout_tier_bounds_kg_range_format">%1$s – %2$s kg</string>
+    <string name="workout_tier_bounds_kg_open_format">≥ %1$s kg</string>
+    <string name="workout_next_tier_progress_format">Next Tier (%1$s ≥ %2$sx): +%3$s kg 1RM needed</string>
+    <string name="workout_elite_reached_badge">🏆 Highest Normative Tier Reached (Elite ≥ %1$sx BW)</string>
+
+    <string name="workout_general_summary_title">Training Volume &amp; Intensity Overview</string>
+    <string name="workout_metric_sessions">Sessions</string>
+    <string name="workout_metric_avg_tonnage">Avg / Session</string>
+    <string name="workout_metric_peak_tonnage">Peak Session</string>
+    <string name="workout_metric_total_prs">Total PRs</string>
+    <string name="workout_muscle_dist_title">Muscle Group Set &amp; Volume Distribution</string>
+    <string name="workout_muscle_sets_format">%1$d sets (%2$s) • %3$s kg</string>
+    <string name="workout_muscle_legs_glutes">Legs &amp; Glutes</string>
+    <string name="workout_muscle_back_pull">Back &amp; Pull</string>
+    <string name="workout_muscle_chest_push">Chest &amp; Push</string>
+    <string name="workout_muscle_shoulders_arms">Shoulders &amp; Arms</string>
+    <string name="workout_muscle_core">Core &amp; Full Body</string>
+
+    <string name="workout_doms_card_title">DOMS &amp; Glycogen Fluid Shield Model</string>
+    <string name="workout_doms_formula_desc">Algorithm Rule: Heavy Lower-Body/Back Session (≥ 8,000 kg volume within 48h) + Scale Increase (≥ +0.3 kg) = Intracellular Glycogen Hydration &amp; EIMD Edema.</string>
+    <string name="workout_doms_peak_session_format">Your Peak Legs/Back Session: %1$s kg (Threshold: 8,000 kg)</string>
+    <string name="workout_top_prs_title">Personal Record (PR) Leaders</string>
+    <string name="workout_pr_count_badge_format">%1$d PRs</string>
+
+    <!-- Workout Analytics: Methodology & Scientific Sources Tab -->
+    <string name="correlation_sources_header">Methodology &amp; Peer-Reviewed Literature</string>
+    <string name="correlation_sources_intro">All strength, tonnage, and fluid-retention calculations run 100% offline on your device using validated sports science equations and clinical physiology literature.</string>
+
+    <string name="correlation_source_1rm_title">1RM Estimation — Epley (1985) &amp; LeSuer et al. (1997)</string>
+    <string name="correlation_source_1rm_desc">Estimated One-Repetition Maximum is computed via the Epley linear equation: 1RM = Weight × (1 + Reps / 30). Validated by LeSuer et al. (1997, Journal of Strength and Conditioning Research, 11(4), 211–213; DOI: 10.1519/00124278-199711000-00001), demonstrating r ≥ 0.95 correlation with actual tested 1RM across the Squat (r = 0.97), Bench Press (r = 0.99), and Deadlift (r = 0.95).</string>
+
+    <string name="correlation_source_strength_title">Relative Strength &amp; Normative Tiers — Suchomel et al. (2016) &amp; NSCA</string>
+    <string name="correlation_source_strength_desc">Dividing 1RM by current body weight (1RM / BW) isolates true neuromuscular efficiency from scale weight fluctuations (Suchomel, Nimphius, &amp; Stone, 2016, Sports Medicine, 46(10), 1419–1449; PMID: 26838985). Sex-stratified tiers (Starter, Intermediate, Advanced, Elite) are calibrated from NSCA (Haff &amp; Triplett, 2016, Essentials of Strength Training and Conditioning) and Rippetoe, Kilgore, &amp; Pendlay (2006, Practical Programming for Strength Training).</string>
+
+    <string name="correlation_source_doms_title">DOMS Edema &amp; Glycogen Hydration — Peake et al. (2017) &amp; Kreitzman et al. (1992)</string>
+    <string name="correlation_source_doms_desc">High-volume eccentric loading triggers sarcomere micro-trauma and acute inflammatory extracellular fluid retention for 24–72h (Peake et al., 2017, J Appl Physiol, 122(3), 559–570, PMID: 28035017; Clarkson &amp; Hubal, 2002, Am J Phys Med Rehabil, 81(11), S52–S69, PMID: 12409811). Simultaneously, muscle glycogen resynthesis binds 3–4g of intracellular water per 1g of glycogen (Kreitzman et al., 1992, Am J Clin Nutr, PMID: 1615908; Fernández-Elías et al., 2015, Eur J Appl Physiol, PMID: 25911631).</string>
+
+    <string name="correlation_source_volume_title">Volume Load &amp; RIR-RPE Autoregulation — Schoenfeld et al. (2017) &amp; Helms et al. (2016)</string>
+    <string name="correlation_source_volume_desc">Session tonnage (Sets × Reps × Weight) tracks the graded dose-response between weekly training volume and skeletal muscle hypertrophy (Schoenfeld, Ogborn, &amp; Krieger, 2017, J Sports Sci, 35(11), 1073–1082; PMID: 27433992). Exertion analysis utilizes the Repetitions in Reserve (RIR)-based RPE scale to quantify CNS fatigue and autoregulate load (Helms et al., 2016, Strength Cond J, 38(4), 42–49; PMID: 27531969).</string>
+
+    <!-- Expanded Menstrual Cycle Scientific Sources -->
+    <string name="cycle_inline_correlation_header">Cycle-Synced Training Correlation</string>
+    <string name="cycle_inline_correlation_subtitle">How your personal workout tonnage, PRs, and perceived exertion shift across your 4 hormonal phases.</string>
+    <string name="cycle_source_mcnulty_title">Exercise Performance &amp; Strength Meta-Analysis (McNulty et al., 2020)</string>
+    <string name="cycle_source_mcnulty_desc">Systematic review of 78 studies (Sports Medicine, 50(10), 1813–1827; PMID: 32661870) mapping how estradiol and progesterone fluctuations across the cycle influence neuromuscular force, recovery kinetics, and individualized training readiness.</string>
+    <string name="cycle_source_stachenfeld_title">Sex Hormones &amp; Luteal Fluid Regulation (Stachenfeld, 2008)</string>
+    <string name="cycle_source_stachenfeld_desc">Endocrine physiology research (Exerc Sport Sci Rev, 36(3), 152–159; PMID: 18580296) detailing how luteal progesterone and estradiol activate the renin-angiotensin-aldosterone system (RAAS) and shift osmotic thresholds, causing temporary +1–2.5 kg extracellular water retention on the scale.</string>
+    <string name="cycle_source_baker_solomon_title">Luteal Thermoregulation &amp; Basal Metabolic Rate (Baker et al., 2020; Solomon et al., 1982)</string>
+    <string name="cycle_source_baker_solomon_desc">Clinical evidence on progesterone's hypothalamic thermogenic shift (+0.3–0.5°C core temperature; Temperature, 7(3), 226–262, PMID: 33123618) and luteal resting metabolic rate elevation (+100–250 kcal/day; Am J Clin Nutr, 36(4), 611–616, PMID: 7124662; PLOS ONE, PMID: 32658929), explaining higher luteal RPE and caloric needs.</string>
+    <string name="cycle_source_herzberg_acog_title">Ovulatory ACL Laxity &amp; ACOG Guidelines (Herzberg et al., 2017; ACOG, 2023)</string>
+    <string name="cycle_source_herzberg_acog_desc">Meta-analysis of 68,758 participants (Orthop J Sports Med, 5(7); PMID: 28795075) confirming estrogen-induced anterior cruciate ligament (ACL) laxity peaks during ovulation, paired with ACOG Clinical Practice Guideline No. 7 (Obstet Gynecol, 142(6), 1516–1533; PMID: 37973069) on prostaglandin cramping, iron replacement, and PMS management.</string>
 </resources>
+
 

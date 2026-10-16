@@ -76,9 +76,10 @@ app.kilo/
         ├── DomsAlertBanner.kt # Kas onarım ödemi ve glikojen tutulumu uyarı kalkanı
         ├── GoalCard.kt     # Hedef kilo ve ilerleme kartı
         ├── GoalSheet.kt    # Hedef kilo belirleme alt sayfası
-        ├── CycleCard.kt    # Menstrüel döngü & beslenme rehberi kartı
-        ├── CycleSheet.kt   # 4 sekmeli döngü, beslenme, antrenman ve kaynaklar sayfası
-        ├── WorkoutCorrelationSheet.kt # Hacim yükü, PR dağılımı ve göreceli kuvvet korelasyon sayfası
+        ├── CycleCard.kt    # Menstrüel döngü & beslenme rehberi kartı (bağımsız modül)
+        ├── CycleSheet.kt   # 4 sekmeli döngü, beslenme, döngü-antrenman korelasyonu ve kaynaklar tam ekranı
+        ├── WorkoutCard.kt  # Evrensel (kadın/erkek) kuvvet, 1RM ölçekleri ve antrenman analizi ana ekran kartı
+        ├── WorkoutCorrelationSheet.kt # Tam ekran kuvvet & biyomekanik analizi (1RM ölçekleri, hacim/DOMS, metodoloji)
         ├── StreakCard.kt   # İstikrar matrisi & 14 günlük alışkanlık ısı haritası kartı
         ├── ShareCardSheet.kt # Başarı ve seri sıvı cam paylaşım kartı sayfası
         ├── SummaryCard.kt  # Dönemsel özet kartı (Haftalık / Aylık)
@@ -189,7 +190,9 @@ Projede `.agents/skills/` altında özel yetenekler tanımlanmıştır:
 | **kilo-architecture** | `.agents/skills/kilo-architecture` | KMP, Compose Multiplatform ve katman kurallarını uygulama |
 | **architect** | `.agents/skills/architect` | Apple (2026) seviyesi UI/UX ürün tasarımı ve KMP yapısal mimari planlama |
 | **design** | `.agents/skills/design` | Apple (2026) seviyesi Liquid Glass UI/UX tasarım sistemi ve bileşen tanımlama |
+| **kilo-science** | `.agents/skills/kilo-science` | Egzersiz fizyolojisi, 1RM/Göreceli Kuvvet normları, DOMS ödem modeli, menstrüel endokrinoloji ve hakemli kaynakça (PubMed/DOI) doğrulaması |
 | **code-review** | `.agents/skills/code-review` | Gizlilik, KMP sınırları, doğruluk ve güvenlik kod incelemesi |
 | **kilo-media** | `.agents/skills/kilo-media` | Kamera, galeri, EXIF ve OCR entegrasyonu |
 | **kilo-store-checklist** | `.agents/skills/kilo-store-checklist` | App Store ve Play Store mağaza yayın kontrol listesi |
 | **store-compliance** | `.agents/agents/store-compliance.md` | Apple App Store & Google Play Store inceleme uyumluluğu ve ret önleme ajanı |
+

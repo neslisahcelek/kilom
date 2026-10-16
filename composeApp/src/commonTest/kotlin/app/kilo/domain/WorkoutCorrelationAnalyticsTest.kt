@@ -309,4 +309,161 @@ class WorkoutCorrelationAnalyticsTest {
         assertEquals(StrengthTier.ADVANCED, classifyStrengthTier("Overhead Press", 0.60))
         assertEquals(StrengthTier.ELITE, classifyStrengthTier("Overhead Press", 0.85))
     }
+
+    @Test
+    fun strengthNormsForProvidesSexStratifiedBoundsAndTierRanges() {
+        val femaleSquat = strengthNormsFor("Squat", isMale = false)
+        assertFalse(femaleSquat.isMale)
+        assertEquals(0.85, femaleSquat.intermediateMin)
+        assertEquals(1.25, femaleSquat.advancedMin)
+        assertEquals(1.75, femaleSquat.eliteMin)
+
+        val femaleBounds = femaleSquat.tierBounds
+        assertEquals(4, femaleBounds.size)
+        assertEquals(0.0, femaleBounds[0].minRatio)
+        assertEquals(0.84, femaleBounds[0].maxRatio)
+        assertEquals(0.85, femaleBounds[1].minRatio)
+        assertEquals(1.24, femaleBounds[1].maxRatio)
+        assertEquals(1.25, femaleBounds[2].minRatio)
+        assertEquals(1.74, femaleBounds[2].maxRatio)
+        assertEquals(1.75, femaleBounds[3].minRatio)
+        assertNull(femaleBounds[3].maxRatio)
+
+        val maleSquat = strengthNormsFor("Squat", isMale = true)
+        assertTrue(maleSquat.isMale)
+        assertEquals(1.25, maleSquat.intermediateMin)
+        assertEquals(1.75, maleSquat.advancedMin)
+        assertEquals(2.25, maleSquat.eliteMin)
+
+        val maleBench = strengthNormsFor("Bench Press", isMale = true)
+        assertEquals(0.85, maleBench.intermediateMin)
+        assertEquals(1.20, maleBench.advancedMin)
+        assertEquals(1.60, maleBench.eliteMin)
+
+        val maleOhp = strengthNormsFor("Overhead Press", isMale = true)
+        assertEquals(0.55, maleOhp.intermediateMin)
+        assertEquals(0.80, maleOhp.advancedMin)
+        assertEquals(1.05, maleOhp.eliteMin)
+    }
+
+    @Test
+    fun calculateRelativeStrengthComputesNextTierProgressAndDeltaKg() {
+        // 80 kg bodyweight male doing 80 kg Bench Press for 1 rep:
+        // 1RM = 80 kg, ratio = 1.0 -> Intermediate (>= 0.85, < 1.20)
+        // Next tier is Advanced (target: 1.20x BW = 96.0 kg)
+        // Delta needed = 96.0 - 80.0 = 16.0 kg
+        val progress = calculateRelativeStrength(
+            bodyWeightKg = 80.0,
+            exerciseName = "Barbell Bench Press",
+            weightLiftedKg = 80.0,
+            reps = 1,
+            isMale = true,
+        )
+
+        assertEquals(80.0, progress.estimated1RmKg)
+        assertEquals(1.0, progress.relativeRatio)
+        assertEquals(StrengthTier.INTERMEDIATE, progress.tier)
+        assertTrue(progress.isMaleStandard)
+        assertEquals(StrengthTier.ADVANCED, progress.nextTier)
+        assertEquals(1.20, progress.nextTierTargetRatio)
+        assertEquals(16.0, progress.nextTierDeltaKg)
+
+        // Elite male lifter doing 200 kg Squat at 80 kg BW (2.50x BW >= 2.25x Elite):
+        val eliteProgress = calculateRelativeStrength(
+            bodyWeightKg = 80.0,
+            exerciseName = "Squat",
+            weightLiftedKg = 200.0,
+            reps = 1,
+            isMale = true,
+        )
+        assertEquals(StrengthTier.ELITE, eliteProgress.tier)
+        assertNull(eliteProgress.nextTier)
+        assertNull(eliteProgress.nextTierTargetRatio)
+        assertNull(eliteProgress.nextTierDeltaKg)
+    }
+
+    @Test
+    fun analyzeGeneralWorkoutsComputesUniversalTonnageMuscleSharesAndPrs() {
+        val s1 = app.kilo.data.HevyWorkoutSession(
+            id = "s1",
+            title = "Heavy Legs",
+            dateEpochDays = 10,
+            startTimeEpochMs = 1000L,
+            endTimeEpochMs = 4600L,
+            durationMinutes = 60,
+            totalVolumeKg = 9000.0,
+            exercises = listOf(
+                app.kilo.data.HevyExercise(
+                    title = "Squat",
+                    category = app.kilo.data.MuscleCategory.LEGS_GLUTES,
+                    sets = listOf(
+                        app.kilo.data.HevySet(1, "normal", 100.0, 5, null),
+                        app.kilo.data.HevySet(2, "normal", 110.0, 5, null), // 110 * (1 + 5/30) = 128.33
+                    ),
+                    maxWeightKg = 110.0,
+                    estimated1RmKg = 128.33,
+                    totalVolumeKg = 6000.0,
+                ),
+                app.kilo.data.HevyExercise(
+                    title = "Romanian Deadlift",
+                    category = app.kilo.data.MuscleCategory.LEGS_GLUTES,
+                    sets = listOf(
+                        app.kilo.data.HevySet(1, "normal", 80.0, 8, null),
+                    ),
+                    maxWeightKg = 80.0,
+                    estimated1RmKg = 101.33,
+                    totalVolumeKg = 3000.0,
+                ),
+            ),
+        )
+
+        val s2 = app.kilo.data.HevyWorkoutSession(
+            id = "s2",
+            title = "Push Day",
+            dateEpochDays = 12,
+            startTimeEpochMs = 5000L,
+            endTimeEpochMs = 8600L,
+            durationMinutes = 60,
+            totalVolumeKg = 5000.0,
+            exercises = listOf(
+                app.kilo.data.HevyExercise(
+                    title = "Bench Press",
+                    category = app.kilo.data.MuscleCategory.CHEST_PUSH,
+                    sets = listOf(
+                        app.kilo.data.HevySet(1, "normal", 70.0, 8, null),
+                        app.kilo.data.HevySet(2, "normal", 75.0, 6, null),
+                    ),
+                    maxWeightKg = 75.0,
+                    estimated1RmKg = 90.0,
+                    totalVolumeKg = 5000.0,
+                ),
+            ),
+        )
+
+        val analytics = analyzeGeneralWorkouts(listOf(s1, s2))
+
+        assertEquals(2, analytics.sessionCount)
+        assertEquals(14000.0, analytics.totalVolumeKg)
+        assertEquals(7000.0, analytics.avgSessionVolumeKg)
+        assertEquals(9000.0, analytics.maxSessionVolumeKg)
+        assertEquals(9000.0, analytics.maxLegsOrBackSessionVolumeKg)
+
+        // Muscle share: LEGS_GLUTES has 3 sets (60%), CHEST_PUSH has 2 sets (40%)
+        val legsShare = analytics.muscleShares.first { it.category == app.kilo.data.MuscleCategory.LEGS_GLUTES }
+        assertEquals(3, legsShare.setCount)
+        assertEquals(9000.0, legsShare.totalVolumeKg)
+        assertEquals(60, legsShare.sharePercent)
+
+        val chestShare = analytics.muscleShares.first { it.category == app.kilo.data.MuscleCategory.CHEST_PUSH }
+        assertEquals(2, chestShare.setCount)
+        assertEquals(5000.0, chestShare.totalVolumeKg)
+        assertEquals(40, chestShare.sharePercent)
+
+        // Top PRs: Squat (128.33), RDL (101.33), Bench Press (90.0)
+        assertEquals(3, analytics.topExercisePrs.size)
+        assertEquals("Squat", analytics.topExercisePrs[0].exerciseName)
+        assertEquals("Romanian Deadlift", analytics.topExercisePrs[1].exerciseName)
+        assertEquals("Bench Press", analytics.topExercisePrs[2].exerciseName)
+    }
 }
+
