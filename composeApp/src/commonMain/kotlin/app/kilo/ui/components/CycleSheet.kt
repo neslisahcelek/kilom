@@ -56,6 +56,7 @@ import kilo.composeapp.generated.resources.Res
 import kilo.composeapp.generated.resources.cycle_back_action
 import kilo.composeapp.generated.resources.cycle_day_counter
 import kilo.composeapp.generated.resources.cycle_remove_cta
+import kilo.composeapp.generated.resources.cycle_medical_disclaimer
 import kilo.composeapp.generated.resources.cycle_section_avoid
 import kilo.composeapp.generated.resources.cycle_section_body
 import kilo.composeapp.generated.resources.cycle_section_eat
