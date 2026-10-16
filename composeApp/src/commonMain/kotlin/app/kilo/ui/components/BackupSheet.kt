@@ -45,11 +45,9 @@ import app.kilo.ui.BackupNotice
 import app.kilo.ui.theme.KiloTheme
 import dev.chrisbanes.haze.HazeState
 import io.github.vinceglb.filekit.PlatformFile
-import io.github.vinceglb.filekit.dialogs.FileKitDialogSettings
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.dialogs.compose.rememberFileSaverLauncher
 import io.github.vinceglb.filekit.readString
-import io.github.vinceglb.filekit.writeString
+import app.kilo.platform.rememberFileSaver
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import app.kilo.ui.HealthSyncNotice
@@ -143,20 +141,7 @@ fun BackupSheet(
     val typography = KiloTheme.type
     val scope = rememberCoroutineScope()
 
-    var pendingExportType by remember { mutableStateOf<String?>(null) }
-
-    val fileSaver = rememberFileSaverLauncher(dialogSettings = FileKitDialogSettings()) { platformFile: PlatformFile? ->
-        if (platformFile != null) {
-            val type = pendingExportType
-            scope.launch {
-                val data = if (type == "json") onExportJson() else onExportCsv()
-                try {
-                    platformFile.writeString(data)
-                } catch (_: Exception) {}
-            }
-        }
-        pendingExportType = null
-    }
+    val fileSaver = rememberFileSaver()
 
     val filePicker = rememberFilePickerLauncher { platformFile: PlatformFile? ->
         if (platformFile != null) {
@@ -293,8 +278,11 @@ fun BackupSheet(
                             title = stringResource(Res.string.backup_export_csv),
                             iconLabel = "CSV",
                             onClick = {
-                                pendingExportType = "csv"
-                                fileSaver.launch(suggestedName = "kilom_backup", defaultExtension = "csv")
+                                fileSaver.saveFile(
+                                    suggestedName = "kilom_backup",
+                                    extension = "csv",
+                                    data = onExportCsv(),
+                                )
                             },
                         )
 
@@ -305,8 +293,11 @@ fun BackupSheet(
                             title = stringResource(Res.string.backup_export_json),
                             iconLabel = "JSON",
                             onClick = {
-                                pendingExportType = "json"
-                                fileSaver.launch(suggestedName = "kilom_backup", defaultExtension = "json")
+                                fileSaver.saveFile(
+                                    suggestedName = "kilom_backup",
+                                    extension = "json",
+                                    data = onExportJson(),
+                                )
                             },
                         )
 
