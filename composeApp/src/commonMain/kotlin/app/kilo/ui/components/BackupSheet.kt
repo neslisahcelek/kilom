@@ -82,12 +82,20 @@ import kilo.composeapp.generated.resources.cycle_settings_enable_subtitle
 import kilo.composeapp.generated.resources.cycle_settings_title
 import kilo.composeapp.generated.resources.cycle_show_card_subtitle
 import kilo.composeapp.generated.resources.cycle_show_card_title
+import kilo.composeapp.generated.resources.hevy_active_status_desc
+import kilo.composeapp.generated.resources.hevy_benefit_cycle
+import kilo.composeapp.generated.resources.hevy_benefit_doms
+import kilo.composeapp.generated.resources.hevy_benefit_strength
 import kilo.composeapp.generated.resources.hevy_clear_button
+import kilo.composeapp.generated.resources.hevy_how_to_export_hint
 import kilo.composeapp.generated.resources.hevy_import_button
+import kilo.composeapp.generated.resources.hevy_import_empty_error
+import kilo.composeapp.generated.resources.hevy_import_success_format
 import kilo.composeapp.generated.resources.hevy_imported_count_format
-import kilo.composeapp.generated.resources.hevy_no_workouts
+import kilo.composeapp.generated.resources.hevy_open_analytics_cta
 import kilo.composeapp.generated.resources.hevy_section_desc
 import kilo.composeapp.generated.resources.hevy_section_title
+import kilo.composeapp.generated.resources.hevy_why_title
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -121,8 +129,10 @@ fun BackupSheet(
     onSelectUserGender: (app.kilo.data.UserGender) -> Unit = {},
     onOpenCycleSetup: () -> Unit = {},
     workoutCount: Int = 0,
+    workoutImportNotice: BackupNotice? = null,
     onImportHevyCsv: (String) -> Unit = {},
     onClearWorkouts: () -> Unit = {},
+    onOpenCorrelation: () -> Unit = {},
     onExportCsv: () -> String,
     onExportJson: () -> String,
     onImport: (String) -> Unit,

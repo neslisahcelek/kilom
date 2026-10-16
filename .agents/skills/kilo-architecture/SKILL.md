@@ -41,6 +41,7 @@ Bu skill, varsa repodaki `AGENTS.md` ile birlikte okunur. Çelişki varsa kullan
 - UI state `StateFlow` içinde tutulur ve güncellenirken `MutableStateFlow.update {}` kullanılır. İş doğrulama ve iş kurallarını Composable'a taşıma; ViewModel iş state'inin sahibidir.
 - Depolama/OCR hatalarında UI'ya ham exception taşıma; anlaşılır, lokalize metin/kaynak anahtarı üret. Hata, boş liste veya sıfır değere çevrilmemeli.
 - Kullanıcı metinleri repository/domain içinde üretilmez. Compose kaynakları `composeApp/src/commonMain/composeResources/values/strings.xml` (EN) ve `values-tr/strings.xml` (TR) içinde tutulur; yeni string her iki dilde eklenir. Renkler `ui/theme/Colors.kt` üzerinden kullanılır.
+- **Doğal Türkçe ve Motamot Çeviri YASAKTIR:** Türkçe stringler asla İngilizce'den kelimesi kelimesine (motamot) çevrilmemelidir (örn. "1 day since last weigh-in" -> "Son tartıdan 1 gün önce" gibi robotik/anlamsız çeviriler YASAKTIR). Her zaman Türkçe'nin doğal konuşma akışına, kullanıcı dostu ikinci tekil şahıs diline ("En son dün tartıldın", "En son %1$d gün önce tartıldın", "Bugün tartıldın") ve bağlamına uygun, anlamlı ifadeler kullanılmalıdır.
 - Ekran için mevcut ortak bileşenleri önce ara (`GlassCard`, `HeroCard`, `ActionBar`, `EntrySheet`, `HistoryRow`); yinelenen yapıyı ortaklaştır.
 - Lazy list öğelerine stabil `key` ekle (kayıt `id`). Görünürlük/scroll state'ini ViewModel iş state'inin yerine koyma.
 - Önemli yeni Compose bileşenlerine Preview ekle.

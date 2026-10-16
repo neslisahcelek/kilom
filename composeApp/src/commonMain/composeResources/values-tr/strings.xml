@@ -3,8 +3,8 @@
     <string name="hero_empty_title">Henüz kayıt yok</string>
     <string name="hero_empty_subtitle">Tartının fotoğrafını çek veya kilonu girerek başla.</string>
     <string name="hero_since_today">Bugün tartıldın</string>
-    <string name="hero_since_yesterday">Son tartıdan 1 gün önce</string>
-    <string name="hero_since_days">Son tartıdan %1$d gün önce</string>
+    <string name="hero_since_yesterday">En son dün tartıldın</string>
+    <string name="hero_since_days">En son %1$d gün önce tartıldın</string>
     <string name="delta_vs_previous">önceki kayda göre</string>
     <string name="action_camera">Kamera</string>
     <string name="action_gallery">Galeri</string>
@@ -411,12 +411,21 @@
     <string name="cycle_length_adjust">Döngü Süresini Ayarla</string>
 
     <!-- Workout CSV Integration -->
-    <string name="hevy_section_title">Antrenman Geçmişi Verisi</string>
-    <string name="hevy_section_desc">Tartı kilonuz ile antrenman hacmi, rekorlar ve kas toparlanmasını ilişkilendirmek için workouts.csv dosyasını içe aktarın.</string>
-    <string name="hevy_import_button">Antrenman CSV İçe Aktar</string>
-    <string name="hevy_imported_count_format">%1$d antrenman seansı kaydedildi</string>
-    <string name="hevy_clear_button">Antrenman Verilerini Temizle</string>
-    <string name="hevy_no_workouts">Henüz antrenman verisi aktarılmadı</string>
+    <string name="hevy_section_title">Antrenman &amp; Kuvvet Verisi</string>
+    <string name="hevy_section_desc">Antrenman geçmişinizi tartı kilonuz ve döngünüzle ilişkilendirin — %100 gizli ve tamamen cihaz içinde işlenir.</string>
+    <string name="hevy_why_title">Antrenman Verisi Ne İşe Yarar?</string>
+    <string name="hevy_benefit_doms">⚡ DOMS Kas Ödemi Kalkanı: Ağır bacak ve sırt antrenmanı sonrası tartıdaki +0.5–1.5 kg artışın yağ değil, kas onarım sıvısı olduğunu otomatik yakalar.</string>
+    <string name="hevy_benefit_cycle">🧬 Hormonal Hacim ve PR Korelasyonu: Döngünüzün hangi evresinde daha yüksek tonaj kaldırdığınızı ve rekor kırdığınızı ortaya çıkarır.</string>
+    <string name="hevy_benefit_strength">💪 Göreceli Kuvvet (1RM / Kilo): Squat, Deadlift, Hip Thrust ve Bench Press gibi ana hareketlerde vücut ağırlığınıza oranla gerçek kuvvet seviyenizi ölçer.</string>
+    <string name="hevy_how_to_export_hint">💡 Nasıl alınır: Antrenman uygulamanızda Ayarlar &gt; Verileri Dışa Aktar (Export CSV) menüsünden aldığınız workouts.csv dosyasını seçin.</string>
+    <string name="hevy_import_button">Antrenman CSV Yükle (workouts.csv)</string>
+    <string name="hevy_imported_count_format">%1$d antrenman seansı aktif</string>
+    <string name="hevy_import_success_format">✅ %1$d antrenman seansı analiz edildi! DOMS ödem kalkanı ve kuvvet korelasyonu artık aktif.</string>
+    <string name="hevy_import_empty_error">⚠️ Dosyada geçerli antrenman kaydı bulunamadı. Lütfen standart workouts.csv formatında bir dosya seçin.</string>
+    <string name="hevy_active_status_desc">DOMS ödem kalkanı ana ekranda aktif. Hacim, rekor (PR) ve göreceli kuvvet analizlerinizi incelemek için aşağıya dokunun.</string>
+    <string name="hevy_open_analytics_cta">Kuvvet &amp; Döngü Analizini Aç</string>
+    <string name="hevy_clear_button">Veriyi Temizle</string>
+    <string name="cycle_correlation_empty_cta">Rekor ve tonaj korelasyonu için workouts.csv yükleyin</string>
 
     <!-- DOMS Alert -->
     <string name="doms_alert_title">Antrenman Sonrası Sıvı Tutulumu</string>

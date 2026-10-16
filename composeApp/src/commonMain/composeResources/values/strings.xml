@@ -411,12 +411,21 @@
     <string name="cycle_length_adjust">Adjust Cycle Length</string>
 
     <!-- Workout CSV Integration -->
-    <string name="hevy_section_title">Workout Log Data</string>
-    <string name="hevy_section_desc">Import your workouts.csv to correlate training volume, PRs, and muscle recovery with your scale weight.</string>
-    <string name="hevy_import_button">Import Workout CSV</string>
-    <string name="hevy_imported_count_format">%1$d workout sessions imported</string>
-    <string name="hevy_clear_button">Clear Workout Data</string>
-    <string name="hevy_no_workouts">No workout data imported yet</string>
+    <string name="hevy_section_title">Workout &amp; Strength Data</string>
+    <string name="hevy_section_desc">Connect your training history with your scale weight and hormonal cycle — 100% private and processed on-device.</string>
+    <string name="hevy_why_title">Why Import Workout Data?</string>
+    <string name="hevy_benefit_doms">⚡ DOMS Fluid Shield: Automatically detects when a +0.5–1.5 kg scale jump after heavy leg/back days is temporary muscle repair fluid, not fat.</string>
+    <string name="hevy_benefit_cycle">🧬 Hormonal Volume &amp; PR Correlation: Reveals which cycle phase gives you peak lifting tonnage and personal records.</string>
+    <string name="hevy_benefit_strength">💪 Relative Strength (1RM / BW): Tracks your true strength-to-bodyweight ratio on Squat, Deadlift, Hip Thrust &amp; Bench Press.</string>
+    <string name="hevy_how_to_export_hint">💡 How to get workouts.csv: In your workout tracker app, open Settings &gt; Export Data (CSV) and select the file below.</string>
+    <string name="hevy_import_button">Import Workout CSV (workouts.csv)</string>
+    <string name="hevy_imported_count_format">%1$d workout sessions active</string>
+    <string name="hevy_import_success_format">✅ %1$d workout sessions analyzed! DOMS fluid shield and strength correlation are now active.</string>
+    <string name="hevy_import_empty_error">⚠️ No valid workouts found in file. Please select a standard workouts.csv export file.</string>
+    <string name="hevy_active_status_desc">DOMS fluid shield is active on your dashboard. Tap below to explore your cycle volume, PRs, and relative strength.</string>
+    <string name="hevy_open_analytics_cta">Open Strength &amp; Cycle Analytics</string>
+    <string name="hevy_clear_button">Clear Data</string>
+    <string name="cycle_correlation_empty_cta">Import workouts.csv to correlate your PRs &amp; volume</string>
 
     <!-- DOMS Alert -->
     <string name="doms_alert_title">Post-Workout Fluid Retention</string>

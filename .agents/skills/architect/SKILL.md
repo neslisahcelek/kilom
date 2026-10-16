@@ -47,6 +47,7 @@ When designing a new feature, screen, or refactoring existing flows, follow thes
 - **Scale Usage:** Exact `KiloTypography` tokens used for each text element.
 - **Weights & Line Heights:** Bold hero, semibold headlines, regular body.
 - **Zero Hardcoded Strings:** Every text must have an EN (`values/strings.xml`) and TR (`values-tr/strings.xml`) key defined.
+- **Doğal Türkçe ve Motamot Çeviri YASAKTIR:** Türkçe metinler asla İngilizce'den kelimesi kelimesine çevrilmemelidir. Dilin doğal konuşma akışına ve arayüz bağlamına uygun, akıcı ve anlamlı Türkçe kullanılmalıdır (örn. *"1 day since last weigh-in"* $\rightarrow$ *"Son tartıdan 1 gün önce"* gibi robotik/anlamsız ifadeler YASAKTIR; *"En son dün tartıldın"* / *"En son %1$d gün önce tartıldın"* gibi doğal, kullanıcı dostu ifadeler yazılmalıdır).
 
 #### 4. Color & Glass System
 - **Palette Mapping:** Map elements to `KiloColors` (`backgroundTop`, `backgroundBottom`, `glassTint`, `glassBorder`, `glassSpecular`, `textPrimary`, `textSecondary`, `accent`, `positive`, `negative`, `danger`).

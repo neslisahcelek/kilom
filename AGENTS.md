@@ -152,6 +152,7 @@ app.kilo/
    - Yeni ekran veya dialog tasarlamadan önce bu bileşenleri kullanın.
 3. **Hardcoded String ve Renk YASAKTIR:**
    - Tüm kullanıcı arayüzü metinleri `composeApp/src/commonMain/composeResources/values/strings.xml` (İngilizce) ve `values-tr/strings.xml` (Türkçe) dosyalarına eklenmelidir. Yeni eklenen her metin **her iki dilde de** tanımlanmalıdır.
+   - **Doğal Türkçe ve Motamot Çeviri YASAKTIR:** Türkçe metinler asla İngilizce'den kelimesi kelimesine (motamot) çevrilmemelidir. Türkçe dil bilgisine, akışına ve arayüz bağlamına uygun, akıcı ve anlamlı Türkçe kullanılmalıdır (örn. *"1 day since last weigh-in"* ifadesi *"Son tartıdan 1 gün önce"* gibi anlamsız/çeviri kokan şekilde çevrilemez; *"En son dün tartıldın"* veya *"En son %1$d gün önce tartıldın"* gibi doğal, kullanıcı dostu ifadeler yazılmalıdır).
    - Compose Multiplatform `stringResource` yalnızca `%1$s` ve `%1$d` yer tutucularını destekler (`%1$.1f` gibi float formatlayıcıları desteklemez; ondalıklı sayılar Kotlin'de `String`'e çevrilip `%1$s` ile verilmelidir). Statik yüzde ifadelerinde (`%100`, `100%`) tek `%` kullanılır (`%%100` kaçışı desteklenmez, ekranda çift `%%` görünür).
    - Renkler `app.kilo.ui.theme.Colors` dosyasından alınmalıdır.
 4. **State Yönetimi ve Performans:**

@@ -148,6 +148,7 @@ data class UiState(
     val isCycleSheetOpen: Boolean = false,
     val isCycleSetupOpen: Boolean = false,
     val workouts: List<HevyWorkoutSession> = emptyList(),
+    val workoutImportNotice: BackupNotice? = null,
     val domsAssessment: DomsAssessment? = null,
     val isDomsAlertDismissed: Boolean = false,
     val isCorrelationSheetOpen: Boolean = false,
@@ -522,7 +523,14 @@ class DashboardViewModel(
     }
 
     fun openBackup() {
-        _state.update { it.copy(isBackupSheetOpen = true, backupNotice = null, healthSyncNotice = null) }
+        _state.update {
+            it.copy(
+                isBackupSheetOpen = true,
+                backupNotice = null,
+                healthSyncNotice = null,
+                workoutImportNotice = null,
+            )
+        }
     }
 
     fun dismissBackup() {
@@ -816,6 +824,15 @@ class DashboardViewModel(
         _state.update { it.copy(isCorrelationSheetOpen = true) }
     }
 
+    fun openCorrelationFromBackup() {
+        _state.update {
+            it.copy(
+                isBackupSheetOpen = false,
+                isCorrelationSheetOpen = true,
+            )
+        }
+    }
+
     fun dismissCorrelationSheet() {
         _state.update { it.copy(isCorrelationSheetOpen = false) }
     }
@@ -826,12 +843,20 @@ class DashboardViewModel(
 
     fun importHevyCsv(csvText: String): Int {
         val parsed = HevyCsvParser.parse(csvText, timeZone())
-        if (parsed.isNotEmpty()) {
-            viewModelScope.launch {
-                workoutRepository.saveWorkouts(parsed)
-            }
-            feedback.success()
+        if (parsed.isEmpty()) {
+            _state.update { it.copy(workoutImportNotice = BackupNotice(count = 0, isSuccess = false)) }
+            return 0
         }
+        viewModelScope.launch {
+            workoutRepository.saveWorkouts(parsed)
+        }
+        _state.update {
+            it.copy(
+                workoutImportNotice = BackupNotice(count = parsed.size, isSuccess = true),
+                isDomsAlertDismissed = false,
+            )
+        }
+        feedback.success()
         return parsed.size
     }
 
@@ -839,6 +864,7 @@ class DashboardViewModel(
         viewModelScope.launch {
             workoutRepository.clearWorkouts()
         }
+        _state.update { it.copy(workoutImportNotice = null) }
         feedback.success()
     }
 

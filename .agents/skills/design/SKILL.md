@@ -46,6 +46,7 @@ Avoid generic, AI-generated aesthetics. Prioritize clarity, restraint, hierarchy
 - Font scale mapped to `KiloTypography` (`hero`, `largeTitle`, `title`, `headline`, `body`, `caption`)
 - Weight usage (Bold, SemiBold, Medium, Regular)
 - Complete localization requirement: Strings must have EN (`strings.xml`) and TR (`values-tr/strings.xml`) keys. No hardcoded text.
+- **Doğal Türkçe Kuralı (No Literal/Robot Translation):** Türkçe metinler asla İngilizce'den motamot çevrilmemelidir. Dilin doğal konuşma akışına ve arayüz bağlamına uygun, akıcı ve anlamlı Türkçe kullanılmalıdır (örn. *"1 day since last weigh-in"* $\rightarrow$ *"Son tartıdan 1 gün önce"* gibi anlamsız çeviriler YASAKTIR; *"En son dün tartıldın"* / *"En son %1$d gün önce tartıldın"* gibi doğal, kullanıcı dostu ifadeler yazılmalıdır).
 
 ---
 
