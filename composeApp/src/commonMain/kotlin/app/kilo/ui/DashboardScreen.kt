@@ -156,27 +156,90 @@ fun DashboardScreen(
                     color = colors.textPrimary,
                 )
 
-                // Backup & Export/Import Button
-                val backupDesc = stringResource(Res.string.backup_title)
-                Box(
-                    modifier = Modifier
-                        .size(38.dp)
-                        .clip(CircleShape)
-                        .background(colors.glassTint)
-                        .border(1.dp, colors.glassBorder, CircleShape)
-                        .clickable(
-                            role = Role.Button,
-                            onClickLabel = backupDesc,
-                            onClick = { viewModel.openBackup() },
-                        )
-                        .semantics { contentDescription = backupDesc },
-                    contentAlignment = Alignment.Center,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text(
-                        text = "⇅",
-                        style = typography.title.copy(fontSize = 18.sp),
-                        color = colors.textSecondary,
-                    )
+                    // Apple Health / Health Connect Header Pill (Guideline 2.5.1 Visibility)
+                    if (state.isHealthSyncSupported) {
+                        val isConnected = state.healthSyncEnabled
+                        val title = if (state.healthProvider == app.kilo.platform.HealthProvider.APPLE_HEALTH) {
+                            stringResource(Res.string.health_badge_title)
+                        } else {
+                            stringResource(Res.string.health_section_title_android)
+                        }
+                        val statusText = if (isConnected) {
+                            stringResource(Res.string.health_badge_connected)
+                        } else {
+                            stringResource(Res.string.health_badge_not_connected)
+                        }
+                        val accessibilityLabel = "$title: $statusText"
+
+                        Box(
+                            modifier = Modifier
+                                .defaultMinSize(minHeight = 38.dp)
+                                .clip(RoundedCornerShape(19.dp))
+                                .background(colors.glassTint)
+                                .border(
+                                    width = 1.dp,
+                                    color = if (isConnected) colors.negative.copy(alpha = 0.35f) else colors.glassBorder,
+                                    shape = RoundedCornerShape(19.dp),
+                                )
+                                .clickable(
+                                    role = Role.Button,
+                                    onClickLabel = accessibilityLabel,
+                                    onClick = {
+                                        if (!isConnected) viewModel.openHealthOnboarding() else viewModel.openBackup()
+                                    },
+                                )
+                                .semantics { contentDescription = accessibilityLabel }
+                                .padding(horizontal = 10.dp, vertical = 6.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                Text(text = "❤️", fontSize = 11.sp)
+                                Spacer(Modifier.width(5.dp))
+                                Text(
+                                    text = title,
+                                    style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 11.5.sp),
+                                    color = colors.textPrimary,
+                                )
+                                Spacer(Modifier.width(6.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .size(6.dp)
+                                        .clip(CircleShape)
+                                        .background(if (isConnected) colors.negative else colors.textSecondary.copy(alpha = 0.45f))
+                                )
+                            }
+                        }
+                    }
+
+                    // Backup & Export/Import Button
+                    val backupDesc = stringResource(Res.string.backup_title)
+                    Box(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(colors.glassTint)
+                            .border(1.dp, colors.glassBorder, CircleShape)
+                            .clickable(
+                                role = Role.Button,
+                                onClickLabel = backupDesc,
+                                onClick = { viewModel.openBackup() },
+                            )
+                            .semantics { contentDescription = backupDesc },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "⇅",
+                            style = typography.title.copy(fontSize = 18.sp),
+                            color = colors.textSecondary,
+                        )
+                    }
                 }
             }
 
@@ -227,71 +290,7 @@ fun DashboardScreen(
                     )
                 }
 
-                // Apple Health / Health Connect Badge (Guideline 2.5.1 Visibility)
-                if (state.isHealthSyncSupported) {
-                    item(key = "health_badge") {
-                        val isConnected = state.healthSyncEnabled
-                        val title = if (state.healthProvider == app.kilo.platform.HealthProvider.APPLE_HEALTH) {
-                            stringResource(Res.string.health_badge_title)
-                        } else {
-                            stringResource(Res.string.health_section_title_android)
-                        }
-                        val statusText = if (isConnected) {
-                            stringResource(Res.string.health_badge_connected)
-                        } else {
-                            stringResource(Res.string.health_badge_not_connected)
-                        }
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .defaultMinSize(minHeight = 44.dp)
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(colors.glassTint)
-                                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
-                                    .clickable(
-                                        role = Role.Button,
-                                        onClick = {
-                                            if (!isConnected) viewModel.openHealthOnboarding() else viewModel.openBackup()
-                                        },
-                                    )
-                                    .padding(horizontal = 14.dp, vertical = 8.dp),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center,
-                                ) {
-                                    Text(text = "❤️", fontSize = 12.sp)
-                                    Spacer(Modifier.width(6.dp))
-                                    Text(
-                                        text = title,
-                                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.sp),
-                                        color = colors.textPrimary,
-                                    )
-                                    Spacer(Modifier.width(8.dp))
-                                    Box(
-                                        modifier = Modifier
-                                            .size(5.dp)
-                                            .clip(CircleShape)
-                                            .background(if (isConnected) colors.negative else colors.textSecondary.copy(alpha = 0.5f))
-                                    )
-                                    Spacer(Modifier.width(5.dp))
-                                    Text(
-                                        text = statusText,
-                                        style = typography.caption.copy(fontSize = 11.5.sp),
-                                        color = if (isConnected) colors.negative else colors.textSecondary,
-                                        fontWeight = FontWeight.Medium,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+
 
                 // Goal Progress Card
                 item(key = "goal_card") {

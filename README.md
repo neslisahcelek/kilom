@@ -7,7 +7,7 @@
 [![Apple Health](https://img.shields.io/badge/HealthKit-Two--Way%20Sync-FF2D55.svg)](https://developer.apple.com/healthkit/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A minimal, distraction-free, liquid-glass weight tracker and hormonal & fitness companion for iOS and Android. Step on your scale, snap a photo or enter your weight, and get on with your day—with zero cloud servers, zero trackers, and 100% on-device privacy.
+A minimal, distraction-free, liquid-glass weight tracker, hormonal health companion, and biomechanical strength analytics application for iOS and Android. Step on your scale, snap a photo or log your weight, and get on with your day—with zero cloud servers, zero trackers, and 100% on-device privacy.
 
 ---
 
@@ -21,20 +21,25 @@ A minimal, distraction-free, liquid-glass weight tracker and hormonal & fitness 
 - **Instant Delta Context:** See weight difference vs. your last weigh-in (`-0.7 kg` / `+0.4 kg`) and days elapsed at a glance.
 - **Unit Toggle:** Seamlessly switch between `kg` and `lb` anytime (data is always stored natively in kilograms).
 
-### 🌸 Dynamic Menstrual Cycle & Evidence-Based Nutrition
-- **Dynamic Cycle Length (21–45 Days):** Customizable cycle length with Backward Luteal Mapping ($ovulation = length - 14$) accommodating diverse biological rhythms.
+### 🏋️‍♂️ Universal Strength & Biomechanical Analytics
+- **Sex-Stratified Relative Strength Scales:** 4-tier normative standards (**Beginner**, **Intermediate**, **Advanced**, **Elite**) for both **Female** and **Male** lifters across the Big 4 compound movements (Squat, Deadlift, Bench Press, and Overhead Press) based on NSCA norms.
+- **Transparent Epley 1RM Equation:** Clear, inline display of the 1RM prediction formula ($\text{1RM} = \text{Weight} \times (1 + \text{Reps} / 30)$) and real-time target kilogram bounds for your current body weight.
+- **100% On-Device Workout Parser:** Import your resistance training history (`workouts.csv`) without third-party APIs or cloud sync.
+- **Automatic Muscle Grouping:** Classifies sets into Legs/Glutes, Back/Pull, Chest/Push, Shoulders/Arms, and Core.
+- **DOMS & Glycogen Water Retention Shield:** Automatically detects heavy resistance sessions (>8,000 kg volume or high intensity in past 48 hours). If your scale increases, Kilom reassuringly alerts you that it is temporary muscle repair inflammation fluid (EIMD) and glycogen-bound water ($1\text{g}\text{ glycogen} : 3\text{--}4\text{g}\text{ water}$), not body fat!
+
+### 🌸 Decoupled Menstrual Cycle & Evidence-Based Nutrition
+- **Independent Full-Screen Module:** Access everything related to infradian biology in a dedicated screen without cluttering the main dashboard.
+- **Dynamic Cycle Length (21–45 Days):** Customizable cycle length with Backward Luteal Mapping ($\text{Ovulation} = \text{Length} - 14$) accommodating diverse biological rhythms.
 - **14 Micro-Period Hormonal Analytics:** Daily insights into estrogen, progesterone, and aldosterone fluctuations.
 - **Water Retention Shield:** Understand natural 0.8–2.5 kg premenstrual fluid shifts so you never confuse hormonal water retention with body fat.
 - **Phase-Specific Nutrition:** Macronutrient ratios and critical micronutrient guidance (iron, magnesium, zinc, omega-3) backed by ACOG and PubMed literature.
-- **Cycle-Synced Strength Training:** 4-tier workout intensity mapping (Rest, Moderate, High, Peak Power), PR lift windows (Squat, Deadlift, Hip Thrust), ACL ligament laxity precautions during ovulatory estrogen peaks, and PMS deload strategies (based on Dr. Stacy Sims' research).
-- **In-App Scientific Sources:** Direct medical citations and peer-reviewed studies available in the Sources tab.
+- **Biomechanical Injury Prevention:** ACL ligament laxity precautions during ovulatory estrogen peaks, thermoregulation guidance, and PMS deload strategies.
 
-### 🏋️‍♂️ Resistance Training & Workout CSV Integration
-- **100% On-Device Workout Parser:** Import your resistance training history (`workouts.csv`) without third-party APIs or cloud sync.
-- **Automatic Muscle Grouping:** Automatically classifies exercises into Legs/Glutes, Back/Pull, Chest/Push, Shoulders/Arms, and Core.
-- **Volume & 1RM Calculations:** Calculates total session tonnage and estimated 1RM using the validated Epley formula.
-- **DOMS Muscle Repair Fluid Retention Alert:** Automatically detects heavy leg/back sessions (>8,000 kg volume or high intensity in the last 48 hours). If your scale increases, Kilom reassuringly alerts you that it is temporary muscle inflammation fluid and glycogen retention, not body fat!
-- **Workout & Cycle Correlation Sheet:** Visualizes 4-phase volume load, PR distribution heatmaps across cycle phases, luteal RPE/exertion shifts, and compound lift relative strength (ratio to body weight).
+### 🧠 100% On-Device Parametric Natural Language Generation (NLG)
+- **Zero-Hallucination Data Storytelling:** A deterministic narrative generation engine written in pure Kotlin that runs 100% locally with zero cloud LLM/AI dependencies.
+- **Observed Data vs. Literature Expectation:** Dynamically compares your personal PR and volume distribution with academic findings (e.g. McNulty et al., 2020 meta-analysis). If your PRs peak during the luteal phase instead of follicular, Kilom validates your individual recovery rather than repeating generic text.
+- **Supportive, Non-Judgmental Coaching:** Generates empathetic, encouraging insights tailored to your real data.
 
 ### 🔥 Weigh-In Consistency Matrix & Liquid Glass Share Card
 - **Streak & Habit Tracking:** Tracks current streak, best streak, total weigh-in days, and monthly consistency percentage.
@@ -56,7 +61,7 @@ Kilom is built from the ground up on the principle of zero data leakage:
 - **Zero Accounts:** No email, phone number, passwords, or profile setup required.
 - **Zero Cloud Servers:** No remote database, no cloud storage, and no backend API.
 - **Zero Third-Party SDKs / Trackers:** Zero advertising networks, zero analytics SDKs (no Firebase Analytics, Google Analytics, Mixpanel, etc.).
-- **Zero Cloud AI / LLM Calls:** All cycle calculations, nutrition advice, workout correlations, and DOMS assessments run locally in deterministic Kotlin.
+- **Zero Cloud AI / LLM Calls:** All cycle calculations, nutrition advice, workout correlations, relative strength scales, and parametric NLG narratives run locally in deterministic Kotlin.
 - **Volatile Image Processing:** Scale photos are processed strictly in RAM for OCR and immediately released; photos are never stored to disk or transmitted over the network.
 
 ---
@@ -91,13 +96,14 @@ composeApp/src/commonMain/kotlin/app/kilo/
 │   ├── GoalProgress.kt             # Goal progress & dynamic ETA calculation
 │   ├── PeriodSummary.kt            # Weekly & monthly aggregations
 │   ├── StreakAnalytics.kt          # Consistency matrix & habit heatmap
-│   ├── CycleAnalytics.kt           # Dynamic cycle length (21–45d), backward luteal mapping, advice
-│   ├── WorkoutCorrelationAnalytics.kt # DOMS risk evaluation & cycle-workout correlation
+│   ├── CycleAnalytics.kt           # Dynamic cycle (21–45d), backward luteal mapping, 14 micro-periods
+│   ├── WorkoutCorrelationAnalytics.kt # DOMS threshold, relative strength norms (M/F), parametric NLG
 │   └── WeightExportImport.kt       # CSV / JSON backup and restore
 ├── ocr/
 │   ├── ScaleOcr.kt                 # expect ScaleOcr interface
 │   ├── WeightParser.kt             # Pure Kotlin weight candidate extractor
-│   └── SevenSegmentReader.kt       # 7-segment digital screen reader
+│   ├── SevenSegmentReader.kt       # 7-segment digital screen reader
+│   └── OcrDiagnostics.kt           # OCR diagnostics utilities
 ├── platform/
 │   ├── Haptics.kt                  # expect Haptics & rememberHaptics
 │   ├── PhotoPicker.kt              # FileKit wrapper (Camera & Gallery)
@@ -118,8 +124,9 @@ composeApp/src/commonMain/kotlin/app/kilo/
         ├── GoalCard.kt             # Goal weight & progress card
         ├── GoalSheet.kt            # Goal setting bottom sheet
         ├── CycleCard.kt            # Menstrual cycle & nutrition guide card
-        ├── CycleSheet.kt           # 4-tab interactive cycle, nutrition & strength sheet
-        ├── WorkoutCorrelationSheet.kt # Volume by phase, PR heatmaps, and relative strength
+        ├── CycleSheet.kt           # Independent 4-tab cycle, nutrition & strength screen
+        ├── WorkoutCard.kt          # Universal strength & workout analytics dashboard card
+        ├── WorkoutCorrelationSheet.kt # Full-screen strength & biomechanics (Normative scales, DOMS, Sources)
         ├── StreakCard.kt           # Consistency matrix & 14-day habit heatmap
         ├── ShareCardSheet.kt       # Milestone & streak liquid-glass share card
         ├── SummaryCard.kt          # Period summary card (Week / Month)
