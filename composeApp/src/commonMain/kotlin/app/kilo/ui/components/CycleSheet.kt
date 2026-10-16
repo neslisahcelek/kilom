@@ -85,6 +85,7 @@ import kilo.composeapp.generated.resources.cycle_length_desc
 import kilo.composeapp.generated.resources.cycle_length_days_format
 import kilo.composeapp.generated.resources.correlation_title
 import kilo.composeapp.generated.resources.correlation_open_button
+import kilo.composeapp.generated.resources.cycle_correlation_empty_cta
 import androidx.compose.ui.semantics.Role
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -754,62 +755,66 @@ private fun WorkoutTab(
     val advice = info.advice
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        // If Hevy workouts exist, show Cycle & Workout correlation button
-        if (hasWorkouts) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(colors.accent.copy(alpha = 0.12f))
-                    .border(0.5.dp, colors.accent.copy(alpha = 0.35f), RoundedCornerShape(16.dp))
-                    .clickable(role = Role.Button, onClick = onOpenCorrelation)
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+        // Always show Cycle & Workout correlation entry point (prompts import if empty)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(colors.accent.copy(alpha = 0.12f))
+                .border(0.5.dp, colors.accent.copy(alpha = 0.35f), RoundedCornerShape(16.dp))
+                .clickable(role = Role.Button, onClick = onOpenCorrelation)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Row(
-                        modifier = Modifier.weight(1f),
-                        verticalAlignment = Alignment.CenterVertically,
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(colors.accent.copy(alpha = 0.18f)),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .background(colors.accent.copy(alpha = 0.18f)),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(text = "📊", fontSize = 16.sp)
-                        }
-                        Spacer(Modifier.width(12.dp))
-                        Column {
-                            Text(
-                                text = stringResource(Res.string.correlation_title),
-                                style = typography.subhead.copy(fontWeight = FontWeight.Bold),
-                                color = colors.textPrimary,
-                            )
-                            Spacer(Modifier.height(2.dp))
-                            Text(
-                                text = stringResource(Res.string.correlation_open_button),
-                                style = typography.caption.copy(fontSize = 11.5.sp),
-                                color = colors.accent,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                        }
+                        Text(text = "📊", fontSize = 16.sp)
                     }
-
-                    Text(
-                        text = "›",
-                        style = typography.title.copy(fontWeight = FontWeight.Light),
-                        color = colors.accent,
-                    )
+                    Spacer(Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = stringResource(Res.string.correlation_title),
+                            style = typography.subhead.copy(fontWeight = FontWeight.Bold),
+                            color = colors.textPrimary,
+                        )
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = stringResource(
+                                if (hasWorkouts) {
+                                    Res.string.correlation_open_button
+                                } else {
+                                    Res.string.cycle_correlation_empty_cta
+                                }
+                            ),
+                            style = typography.caption.copy(fontSize = 11.5.sp),
+                            color = colors.accent,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
-            }
 
-            Spacer(Modifier.height(14.dp))
+                Text(
+                    text = "›",
+                    style = typography.title.copy(fontWeight = FontWeight.Light),
+                    color = colors.accent,
+                )
+            }
         }
+
+        Spacer(Modifier.height(14.dp))
 
         // Intensity Banner
         Row(

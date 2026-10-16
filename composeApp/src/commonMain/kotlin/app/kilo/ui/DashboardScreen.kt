@@ -461,8 +461,10 @@ fun DashboardScreen(
             onSelectUserGender = viewModel::setUserGender,
             onOpenCycleSetup = viewModel::openCycleSetup,
             workoutCount = state.workouts.size,
+            workoutImportNotice = state.workoutImportNotice,
             onImportHevyCsv = { viewModel.importHevyCsv(it) },
             onClearWorkouts = viewModel::clearWorkouts,
+            onOpenCorrelation = viewModel::openCorrelationFromBackup,
             onExportCsv = viewModel::exportCsv,
             onExportJson = viewModel::exportJson,
             onImport = { viewModel.importData(it) },
@@ -531,6 +533,7 @@ fun DashboardScreen(
             cycleStartEpochDays = cycleStartEpochDays,
             cycleLength = state.cycle.cycleLength,
             currentWeightKg = currentWeightKg,
+            onImportHevyCsv = { viewModel.importHevyCsv(it) },
             onDismiss = viewModel::dismissCorrelationSheet,
             hazeState = hazeState,
         )

@@ -340,48 +340,163 @@ fun BackupSheet(
                             modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 10.dp),
                         )
 
+                        // "Why Import Workout Data?" Explanation Card
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(colors.glassTint)
+                                .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+                                .padding(14.dp),
+                        ) {
+                            Column {
+                                Text(
+                                    text = stringResource(Res.string.hevy_why_title),
+                                    style = typography.caption.copy(fontWeight = FontWeight.Bold, fontSize = 12.5.sp),
+                                    color = colors.accent,
+                                )
+
+                                Spacer(Modifier.height(6.dp))
+
+                                Text(
+                                    text = stringResource(Res.string.hevy_benefit_doms),
+                                    style = typography.caption.copy(fontSize = 11.5.sp, lineHeight = 16.sp),
+                                    color = colors.textSecondary,
+                                )
+
+                                Spacer(Modifier.height(5.dp))
+
+                                Text(
+                                    text = stringResource(Res.string.hevy_benefit_cycle),
+                                    style = typography.caption.copy(fontSize = 11.5.sp, lineHeight = 16.sp),
+                                    color = colors.textSecondary,
+                                )
+
+                                Spacer(Modifier.height(5.dp))
+
+                                Text(
+                                    text = stringResource(Res.string.hevy_benefit_strength),
+                                    style = typography.caption.copy(fontSize = 11.5.sp, lineHeight = 16.sp),
+                                    color = colors.textSecondary,
+                                )
+
+                                Spacer(Modifier.height(8.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(colors.accent.copy(alpha = 0.08f))
+                                        .border(0.5.dp, colors.accent.copy(alpha = 0.25f), RoundedCornerShape(10.dp))
+                                        .padding(horizontal = 10.dp, vertical = 8.dp),
+                                ) {
+                                    Text(
+                                        text = stringResource(Res.string.hevy_how_to_export_hint),
+                                        style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.5.sp),
+                                        color = colors.textSecondary,
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(Modifier.height(10.dp))
+
+                        // Workout Import Status Notice Banner (if user just uploaded a CSV)
+                        if (workoutImportNotice != null) {
+                            val wBg = if (workoutImportNotice.isSuccess) {
+                                colors.negative.copy(alpha = 0.15f)
+                            } else {
+                                colors.positive.copy(alpha = 0.15f)
+                            }
+                            val wBorder = if (workoutImportNotice.isSuccess) colors.negative else colors.positive
+                            val wText = if (workoutImportNotice.isSuccess) {
+                                stringResource(Res.string.hevy_import_success_format, workoutImportNotice.count)
+                            } else {
+                                stringResource(Res.string.hevy_import_empty_error)
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(wBg)
+                                    .border(1.dp, wBorder.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = wText,
+                                    style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.sp, lineHeight = 16.5.sp),
+                                    color = wBorder,
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
+
+                            Spacer(Modifier.height(10.dp))
+                        }
+
                         // Action button: Import Hevy CSV
                         BackupActionButton(
                             title = stringResource(Res.string.hevy_import_button),
                             iconLabel = "🏋️",
-                            isAccent = true,
+                            isAccent = workoutCount == 0,
                             onClick = {
                                 hevyPicker.launch()
                             },
                         )
 
                         if (workoutCount > 0) {
-                            Spacer(Modifier.height(8.dp))
+                            Spacer(Modifier.height(10.dp))
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(16.dp))
-                                    .background(colors.glassTint)
-                                    .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
-                                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                                    .background(colors.accent.copy(alpha = 0.08f))
+                                    .border(0.5.dp, colors.accent.copy(alpha = 0.35f), RoundedCornerShape(16.dp))
+                                    .padding(14.dp),
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                ) {
-                                    Text(
-                                        text = stringResource(Res.string.hevy_imported_count_format, workoutCount),
-                                        style = typography.caption.copy(fontWeight = FontWeight.SemiBold, fontSize = 12.sp),
-                                        color = colors.accent,
-                                    )
+                                Column {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                    ) {
+                                        Text(
+                                            text = stringResource(Res.string.hevy_imported_count_format, workoutCount),
+                                            style = typography.caption.copy(fontWeight = FontWeight.Bold, fontSize = 12.5.sp),
+                                            color = colors.accent,
+                                        )
+
+                                        Text(
+                                            text = stringResource(Res.string.hevy_clear_button),
+                                            style = typography.caption.copy(fontSize = 11.5.sp),
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = colors.danger,
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(8.dp))
+                                                .background(colors.danger.copy(alpha = 0.10f))
+                                                .border(0.5.dp, colors.danger.copy(alpha = 0.25f), RoundedCornerShape(8.dp))
+                                                .clickable(role = Role.Button, onClick = onClearWorkouts)
+                                                .padding(horizontal = 10.dp, vertical = 5.dp),
+                                        )
+                                    }
+
+                                    Spacer(Modifier.height(6.dp))
 
                                     Text(
-                                        text = stringResource(Res.string.hevy_clear_button),
-                                        style = typography.caption.copy(fontSize = 11.5.sp),
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = colors.danger,
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(8.dp))
-                                            .background(colors.danger.copy(alpha = 0.10f))
-                                            .border(0.5.dp, colors.danger.copy(alpha = 0.25f), RoundedCornerShape(8.dp))
-                                            .clickable(role = Role.Button, onClick = onClearWorkouts)
-                                            .padding(horizontal = 10.dp, vertical = 5.dp),
+                                        text = stringResource(Res.string.hevy_active_status_desc),
+                                        style = typography.caption.copy(fontSize = 11.5.sp, lineHeight = 16.sp),
+                                        color = colors.textSecondary,
+                                    )
+
+                                    Spacer(Modifier.height(10.dp))
+
+                                    // Direct redirection button to open Correlation & Strength Analytics
+                                    BackupActionButton(
+                                        title = stringResource(Res.string.hevy_open_analytics_cta),
+                                        iconLabel = "📊",
+                                        isAccent = true,
+                                        onClick = onOpenCorrelation,
                                     )
                                 }
                             }

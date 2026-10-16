@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,6 +58,9 @@ import app.kilo.domain.calculateRelativeStrength
 import app.kilo.domain.resolveWorkoutCyclePhase
 import app.kilo.ui.theme.KiloTheme
 import dev.chrisbanes.haze.HazeState
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.readString
 import kilo.composeapp.generated.resources.Res
 import kilo.composeapp.generated.resources.correlation_avg_volume_format
 import kilo.composeapp.generated.resources.correlation_best_set_format
@@ -107,6 +111,12 @@ import kilo.composeapp.generated.resources.cycle_phase_follicular
 import kilo.composeapp.generated.resources.cycle_phase_luteal
 import kilo.composeapp.generated.resources.cycle_phase_menstrual
 import kilo.composeapp.generated.resources.cycle_phase_ovulation
+import kilo.composeapp.generated.resources.hevy_benefit_cycle
+import kilo.composeapp.generated.resources.hevy_benefit_doms
+import kilo.composeapp.generated.resources.hevy_benefit_strength
+import kilo.composeapp.generated.resources.hevy_how_to_export_hint
+import kilo.composeapp.generated.resources.hevy_import_button
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 import kotlin.math.round
@@ -119,6 +129,7 @@ fun WorkoutCorrelationSheet(
     cycleStartEpochDays: Long?,
     cycleLength: Int = 28,
     currentWeightKg: Double = 0.0,
+    onImportHevyCsv: (String) -> Unit = {},
     onDismiss: () -> Unit,
     hazeState: HazeState? = null,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -127,6 +138,22 @@ fun WorkoutCorrelationSheet(
 
     val colors = KiloTheme.colors
     val typography = KiloTheme.type
+    val scope = rememberCoroutineScope()
+
+    val hevyPicker = rememberFilePickerLauncher(
+        type = PickerType.File(extensions = listOf("csv")),
+    ) { platformFile: PlatformFile? ->
+        if (platformFile != null) {
+            scope.launch {
+                try {
+                    val text = platformFile.readString()
+                    if (text.isNotBlank()) {
+                        onImportHevyCsv(text)
+                    }
+                } catch (_: Exception) {}
+            }
+        }
+    }
 
     var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -221,19 +248,19 @@ fun WorkoutCorrelationSheet(
             Spacer(Modifier.height(18.dp))
 
             if (workouts.isEmpty()) {
-                // Empty state
+                // Empty state with benefits and direct CSV upload button
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(20.dp))
                         .background(colors.glassTint)
                         .border(0.5.dp, colors.glassBorder, RoundedCornerShape(20.dp))
-                        .padding(28.dp),
+                        .padding(22.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(text = "🏋️", fontSize = 36.sp)
-                        Spacer(Modifier.height(12.dp))
+                        Spacer(Modifier.height(10.dp))
                         Text(
                             text = stringResource(Res.string.correlation_no_data),
                             style = typography.headline,
@@ -247,6 +274,58 @@ fun WorkoutCorrelationSheet(
                             color = colors.textSecondary,
                             textAlign = TextAlign.Center,
                         )
+
+                        Spacer(Modifier.height(16.dp))
+
+                        // 3 Benefits list
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(colors.glassStrong)
+                                .border(0.5.dp, colors.glassBorder, RoundedCornerShape(14.dp))
+                                .padding(14.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            listOf(
+                                Res.string.hevy_benefit_doms,
+                                Res.string.hevy_benefit_cycle,
+                                Res.string.hevy_benefit_strength,
+                            ).forEach { benefitRes ->
+                                Text(
+                                    text = stringResource(benefitRes),
+                                    style = typography.caption.copy(lineHeight = 17.sp),
+                                    color = colors.textPrimary,
+                                )
+                            }
+
+                            Text(
+                                text = stringResource(Res.string.hevy_how_to_export_hint),
+                                style = typography.caption.copy(fontSize = 11.5.sp, lineHeight = 16.sp),
+                                color = colors.textSecondary,
+                            )
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
+                        // Direct CSV Import Button
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(colors.accent.copy(alpha = 0.16f))
+                                .border(0.5.dp, colors.accent.copy(alpha = 0.45f), RoundedCornerShape(14.dp))
+                                .clickable(role = Role.Button) { hevyPicker.launch() }
+                                .padding(vertical = 13.dp, horizontal = 16.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.hevy_import_button),
+                                style = typography.subhead,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.accent,
+                            )
+                        }
                     }
                 }
             } else {
