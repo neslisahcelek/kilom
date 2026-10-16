@@ -15,7 +15,7 @@ HEALTHKIT INTEGRATION (Guideline 2.5.1)
   2. READ (import) the user's past weight entries from Apple Health into Kilom.
 - HealthKit is clearly and prominently identified in the user interface:
   • First launch: An onboarding sheet explains why Kilom requests HealthKit access prior to presenting the system authorization dialog.
-  • Main dashboard: A dedicated "Apple Health Connected" liquid-glass status badge displays real-time connection status.
+  • Main dashboard: A dedicated "Apple Health" liquid-glass status badge in the top navigation header displays real-time connection status.
   • Data Management / Backup: An "Import from Apple Health" button allows users to initiate on-demand synchronization anytime.
 - Health data stays strictly on the physical device. It is never transmitted across a network, never shared with third parties, and never used for advertising, marketing, analytics, or data brokering.
 - Purpose strings: NSHealthShareUsageDescription and NSHealthUpdateUsageDescription are detailed in Info.plist.
@@ -99,7 +99,7 @@ Thank you for your review and ongoing guidance on Kilom. In this version, we hav
 1. Guideline 2.5.1 – HealthKit:
 Kilom uses HealthKit exclusively to write user-logged weights and import past weight records. HealthKit is explicitly identified throughout the app:
 - An educational onboarding sheet is presented before the system permission prompt.
-- An "Apple Health Connected" status badge is permanently visible on the dashboard.
+- A prominent "Apple Health" liquid-glass status badge is permanently visible in the top navigation header of the dashboard.
 - An "Import from Apple Health" option is accessible within the settings/backup sheet.
 Health data never leaves the device and is never used for advertising, marketing, or analytics. Both NSHealthShareUsageDescription and NSHealthUpdateUsageDescription in Info.plist detail this usage.
 
@@ -165,7 +165,7 @@ Fiziksel iPhone üzerinde, temiz kurulumla tek seferde kaydedilecek 60–90 sani
 1. **Onboarding & Apple Health İzni (00:00–00:15):**
    - Uygulamayı açın, Apple Sağlık onboarding kartını gösterin.
    - Sistem izin diyaloğunda kilo okuma ve yazmaya izin verin.
-   - Ana ekranda "Apple Sağlık Bağlı" rozetini gösterin.
+   - Ana ekran üst başlık barında "Apple Sağlık" rozetini gösterin.
 
 2. **Kilo Kaydı & Apple Sağlık Doğrulaması (00:15–00:30):**
    - '+' butonu ile veya tartı fotoğrafı çekerek bir kilo kaydedin.
