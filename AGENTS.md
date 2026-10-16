@@ -191,6 +191,7 @@ Projede `.agents/skills/` altında özel yetenekler tanımlanmıştır:
 | **architect** | `.agents/skills/architect` | Apple (2026) seviyesi UI/UX ürün tasarımı ve KMP yapısal mimari planlama |
 | **design** | `.agents/skills/design` | Apple (2026) seviyesi Liquid Glass UI/UX tasarım sistemi ve bileşen tanımlama |
 | **kilo-science** | `.agents/skills/kilo-science` | Egzersiz fizyolojisi, 1RM/Göreceli Kuvvet normları, DOMS ödem modeli, menstrüel endokrinoloji ve hakemli kaynakça (PubMed/DOI) doğrulaması |
+| **kilo-health-nlg** | `.agents/skills/kilo-health-nlg` | %100 cihaz içi Parametrik Doğal Dil Üretim (NLG), veri hikayesi sentezi ve destekleyici/yumuşak koçluk dili |
 | **code-review** | `.agents/skills/code-review` | Gizlilik, KMP sınırları, doğruluk ve güvenlik kod incelemesi |
 | **kilo-media** | `.agents/skills/kilo-media` | Kamera, galeri, EXIF ve OCR entegrasyonu |
 | **kilo-store-checklist** | `.agents/skills/kilo-store-checklist` | App Store ve Play Store mağaza yayın kontrol listesi |

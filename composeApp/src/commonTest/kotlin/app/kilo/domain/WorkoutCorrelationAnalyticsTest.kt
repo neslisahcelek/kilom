@@ -465,5 +465,88 @@ class WorkoutCorrelationAnalyticsTest {
         assertEquals("Romanian Deadlift", analytics.topExercisePrs[1].exerciseName)
         assertEquals("Bench Press", analytics.topExercisePrs[2].exerciseName)
     }
+
+    @Test
+    fun calculateCycleWorkoutCorrelationClassifiesFollicularLutealDualPeakCorrectly() {
+        // Simulating the user's exact data distribution:
+        // Follicular: 39 PRs (44%), Luteal: 32 PRs (36%), Menstrual: 10 PRs (11%), Ovulation: 7 PRs (8%)
+        // Total = 88 PRs
+        val workouts = mutableListOf<WorkoutSessionSummary>()
+        fun addPrs(days: List<Long>, count: Int, startWeight: Double, prefix: String) {
+            for (i in 0 until count) {
+                val d = days[i % days.size]
+                val w = startWeight + i
+                workouts.add(
+                    WorkoutSessionSummary(
+                        id = "${prefix}_$i",
+                        title = "Session",
+                        dateEpochDays = d,
+                        totalVolumeKg = 5000.0,
+                        isLegsOrBack = true,
+                        exerciseNames = listOf("Ex_${prefix}_$i"),
+                        maxWeights = mapOf("Ex_${prefix}_$i" to w),
+                        avgRpe = 8.0,
+                    )
+                )
+            }
+        }
+        val fDays = listOf(6L, 7L, 8L, 9L, 10L, 11L, 12L)
+        val lDays = listOf(17L, 18L, 19L, 20L, 21L, 22L, 23L)
+        val mDays = listOf(1L, 2L, 3L, 4L)
+        val oDays = listOf(14L, 15L)
+
+        addPrs(fDays, 39, 100.0, "f")
+        addPrs(lDays, 32, 200.0, "l")
+        addPrs(mDays, 10, 300.0, "m")
+        addPrs(oDays, 7, 400.0, "o")
+
+        val correlation = analyzeCycleWorkoutCorrelation(
+            workouts = workouts,
+            cycleStartEpochDays = 1L,
+            cycleLength = 28,
+        )
+        assertEquals(88, correlation.prDistribution.values.sum())
+        assertEquals(39, correlation.prDistribution[CyclePhase.FOLLICULAR])
+        assertEquals(32, correlation.prDistribution[CyclePhase.LUTEAL])
+        assertEquals(10, correlation.prDistribution[CyclePhase.MENSTRUAL])
+        assertEquals(7, correlation.prDistribution[CyclePhase.OVULATION])
+
+        assertEquals(CyclePhase.FOLLICULAR, correlation.peakPrPhase)
+        assertEquals(44, correlation.peakPrPercentage)
+        assertEquals(CyclePhase.LUTEAL, correlation.secondPeakPrPhase)
+        assertEquals(36, correlation.secondPeakPrPercentage)
+        assertEquals(PrDistributionPattern.FOLLICULAR_LUTEAL_DUAL, correlation.prPattern)
+    }
+
+    @Test
+    fun calculateCycleWorkoutCorrelationClassifiesLutealDominantCorrectly() {
+        val workouts = mutableListOf<WorkoutSessionSummary>()
+        val lDays = listOf(17L, 18L, 19L, 20L, 21L, 22L)
+        val fDays = listOf(6L, 7L)
+        val mDays = listOf(1L, 2L)
+        for (i in 0 until 6) {
+            workouts.add(WorkoutSessionSummary("l_$i", "S", lDays[i], 5000.0, true, listOf("E$i"), mapOf("E$i" to 100.0 + i)))
+        }
+        for (i in 0 until 2) {
+            workouts.add(WorkoutSessionSummary("f_$i", "S", fDays[i], 5000.0, true, listOf("F$i"), mapOf("F$i" to 200.0 + i)))
+        }
+        for (i in 0 until 2) {
+            workouts.add(WorkoutSessionSummary("m_$i", "S", mDays[i], 5000.0, true, listOf("M$i"), mapOf("M$i" to 300.0 + i)))
+        }
+        val correlation = analyzeCycleWorkoutCorrelation(workouts, 1L, 28)
+        assertEquals(10, correlation.prDistribution.values.sum())
+        assertEquals(CyclePhase.LUTEAL, correlation.peakPrPhase)
+        assertEquals(60, correlation.peakPrPercentage)
+        assertEquals(PrDistributionPattern.LUTEAL_DOMINANT, correlation.prPattern)
+    }
+
+    @Test
+    fun calculateCycleWorkoutCorrelationClassifiesEmptyWhenNoWorkouts() {
+        val correlation = analyzeCycleWorkoutCorrelation(emptyList(), 1L, 28)
+        assertEquals(0, correlation.prDistribution.values.sum())
+        assertNull(correlation.peakPrPhase)
+        assertEquals(0, correlation.peakPrPercentage)
+        assertEquals(PrDistributionPattern.EMPTY, correlation.prPattern)
+    }
 }
 

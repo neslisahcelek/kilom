@@ -36,10 +36,31 @@ data class CycleWorkoutCorrelation(
     val peakVolumePhase: CyclePhase?,
     val peakAvgVolumePhase: CyclePhase? = null,
     val prDistribution: Map<CyclePhase, Int>,
+    val peakPrPhase: CyclePhase? = null,
+    val peakPrPercentage: Int = 0,
+    val secondPeakPrPhase: CyclePhase? = null,
+    val secondPeakPrPercentage: Int = 0,
+    val prPattern: PrDistributionPattern = PrDistributionPattern.EMPTY,
     val anabolicPrPercentage: Int = 0,
     val anabolicVsLutealVolumeDiffPercent: Int? = null,
     val lutealRpeDifference: Double?,
 )
+
+/**
+ * Data-driven pattern classification for personal records (PR) across cycle phases.
+ * Evaluates whether PR distribution aligns with, challenges, or is independent of
+ * classical literature expectations (McNulty et al., 2020).
+ */
+enum class PrDistributionPattern {
+    EMPTY,
+    FOLLICULAR_LUTEAL_DUAL,
+    LUTEAL_DOMINANT,
+    ANABOLIC_DOMINANT,
+    FOLLICULAR_DOMINANT,
+    OVULATION_DOMINANT,
+    MENSTRUAL_DOMINANT,
+    BALANCED,
+}
 
 /**
  * Biomechanical relative strength classification tier (1RM / bodyweight ratio).
@@ -366,11 +387,50 @@ fun analyzeCycleWorkoutCorrelation(
     }
 
     val totalPrs = prCounts.values.sum()
+    val sortedPrEntries = prCounts.entries
+        .filter { it.value > 0 }
+        .sortedByDescending { it.value }
+
+    val peakPrEntry = sortedPrEntries.getOrNull(0)
+    val secondPeakPrEntry = sortedPrEntries.getOrNull(1)
+
+    val peakPrPhase = peakPrEntry?.key
+    val peakPrPercentage = if (totalPrs > 0 && peakPrEntry != null) {
+        round((peakPrEntry.value.toDouble() / totalPrs.toDouble()) * 100.0).toInt()
+    } else {
+        0
+    }
+
+    val secondPeakPrPhase = secondPeakPrEntry?.key
+    val secondPeakPrPercentage = if (totalPrs > 0 && secondPeakPrEntry != null) {
+        round((secondPeakPrEntry.value.toDouble() / totalPrs.toDouble()) * 100.0).toInt()
+    } else {
+        0
+    }
+
     val anabolicPrs = (prCounts[CyclePhase.FOLLICULAR] ?: 0) + (prCounts[CyclePhase.OVULATION] ?: 0)
     val anabolicPrPercentage = if (totalPrs > 0) {
         round((anabolicPrs.toDouble() / totalPrs.toDouble()) * 100.0).toInt()
     } else {
         0
+    }
+
+    val prPattern = when {
+        totalPrs == 0 -> PrDistributionPattern.EMPTY
+        peakPrPhase == CyclePhase.FOLLICULAR && secondPeakPrPhase == CyclePhase.LUTEAL && secondPeakPrPercentage >= 25 ->
+            PrDistributionPattern.FOLLICULAR_LUTEAL_DUAL
+        peakPrPhase == CyclePhase.LUTEAL && peakPrPercentage >= 35 ->
+            PrDistributionPattern.LUTEAL_DOMINANT
+        anabolicPrPercentage >= 65 ->
+            PrDistributionPattern.ANABOLIC_DOMINANT
+        peakPrPhase == CyclePhase.FOLLICULAR && peakPrPercentage >= 35 ->
+            PrDistributionPattern.FOLLICULAR_DOMINANT
+        peakPrPhase == CyclePhase.OVULATION && peakPrPercentage >= 35 ->
+            PrDistributionPattern.OVULATION_DOMINANT
+        peakPrPhase == CyclePhase.MENSTRUAL && peakPrPercentage >= 35 ->
+            PrDistributionPattern.MENSTRUAL_DOMINANT
+        else ->
+            PrDistributionPattern.BALANCED
     }
 
     val anabolicWorkouts = workoutWithPhase.filter {
@@ -406,6 +466,11 @@ fun analyzeCycleWorkoutCorrelation(
         peakVolumePhase = peakVolumePhase,
         peakAvgVolumePhase = peakAvgVolumePhase,
         prDistribution = prCounts.toMap(),
+        peakPrPhase = peakPrPhase,
+        peakPrPercentage = peakPrPercentage,
+        secondPeakPrPhase = secondPeakPrPhase,
+        secondPeakPrPercentage = secondPeakPrPercentage,
+        prPattern = prPattern,
         anabolicPrPercentage = anabolicPrPercentage,
         anabolicVsLutealVolumeDiffPercent = anabolicVsLutealVolumeDiffPercent,
         lutealRpeDifference = lutealRpeDifference,

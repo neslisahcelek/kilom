@@ -77,11 +77,19 @@ import kilo.composeapp.generated.resources.correlation_peak_volume_format
 import kilo.composeapp.generated.resources.correlation_phase_desc_follicular
 import kilo.composeapp.generated.resources.correlation_phase_desc_luteal
 import kilo.composeapp.generated.resources.correlation_phase_desc_menstrual
+import app.kilo.domain.PrDistributionPattern
 import kilo.composeapp.generated.resources.correlation_phase_desc_ovulation
 import kilo.composeapp.generated.resources.correlation_prs_anabolic_insight_format
 import kilo.composeapp.generated.resources.correlation_prs_anabolic_title
 import kilo.composeapp.generated.resources.correlation_prs_card_title
 import kilo.composeapp.generated.resources.correlation_prs_general_insight
+import kilo.composeapp.generated.resources.correlation_prs_pattern_anabolic_dominant
+import kilo.composeapp.generated.resources.correlation_prs_pattern_balanced
+import kilo.composeapp.generated.resources.correlation_prs_pattern_follicular_dominant
+import kilo.composeapp.generated.resources.correlation_prs_pattern_follicular_luteal
+import kilo.composeapp.generated.resources.correlation_prs_pattern_luteal_dominant
+import kilo.composeapp.generated.resources.correlation_prs_pattern_menstrual_dominant
+import kilo.composeapp.generated.resources.correlation_prs_pattern_ovulation_dominant
 import kilo.composeapp.generated.resources.correlation_prs_share_format
 import kilo.composeapp.generated.resources.correlation_rpe_insight_format
 import kilo.composeapp.generated.resources.correlation_subtitle
@@ -1153,13 +1161,55 @@ private fun InlineCycleCorrelationContent(
 
                 Spacer(Modifier.height(6.dp))
 
-                val prInsightText = if (totalPrs > 0) {
-                    stringResource(
-                        Res.string.correlation_prs_anabolic_insight_format,
-                        "${correlation.anabolicPrPercentage}%",
-                    )
-                } else {
-                    stringResource(Res.string.correlation_prs_general_insight)
+                val prInsightText = when (correlation.prPattern) {
+                    PrDistributionPattern.EMPTY -> {
+                        stringResource(Res.string.correlation_prs_general_insight)
+                    }
+                    PrDistributionPattern.FOLLICULAR_LUTEAL_DUAL -> {
+                        stringResource(
+                            Res.string.correlation_prs_pattern_follicular_luteal,
+                            "${correlation.peakPrPercentage}%",
+                            "${correlation.secondPeakPrPercentage}%",
+                        )
+                    }
+                    PrDistributionPattern.LUTEAL_DOMINANT -> {
+                        stringResource(
+                            Res.string.correlation_prs_pattern_luteal_dominant,
+                            "${correlation.peakPrPercentage}%",
+                        )
+                    }
+                    PrDistributionPattern.ANABOLIC_DOMINANT -> {
+                        stringResource(
+                            Res.string.correlation_prs_pattern_anabolic_dominant,
+                            "${correlation.anabolicPrPercentage}%",
+                        )
+                    }
+                    PrDistributionPattern.FOLLICULAR_DOMINANT -> {
+                        stringResource(
+                            Res.string.correlation_prs_pattern_follicular_dominant,
+                            "${correlation.peakPrPercentage}%",
+                        )
+                    }
+                    PrDistributionPattern.OVULATION_DOMINANT -> {
+                        stringResource(
+                            Res.string.correlation_prs_pattern_ovulation_dominant,
+                            "${correlation.peakPrPercentage}%",
+                        )
+                    }
+                    PrDistributionPattern.MENSTRUAL_DOMINANT -> {
+                        stringResource(
+                            Res.string.correlation_prs_pattern_menstrual_dominant,
+                            "${correlation.peakPrPercentage}%",
+                        )
+                    }
+                    PrDistributionPattern.BALANCED -> {
+                        val topPhaseName = correlation.peakPrPhase?.let { cyclePhaseName(it) } ?: ""
+                        stringResource(
+                            Res.string.correlation_prs_pattern_balanced,
+                            topPhaseName,
+                            "${correlation.peakPrPercentage}%",
+                        )
+                    }
                 }
 
                 Text(
