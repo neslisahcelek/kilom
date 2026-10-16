@@ -66,7 +66,6 @@ import kilo.composeapp.generated.resources.health_auto_sync_subtitle
 import kilo.composeapp.generated.resources.health_auto_sync_title
 import kilo.composeapp.generated.resources.health_import_button
 import kilo.composeapp.generated.resources.health_import_loading
-import kilo.composeapp.generated.resources.health_section_title
 import kilo.composeapp.generated.resources.health_section_title_android
 import kilo.composeapp.generated.resources.health_section_title_ios
 import kilo.composeapp.generated.resources.health_sync_all_button

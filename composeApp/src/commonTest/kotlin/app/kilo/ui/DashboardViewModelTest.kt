@@ -768,6 +768,13 @@ class DashboardViewModelTest {
 
         assertEquals(0, vm.workouts.value.size)
         assertEquals(0, vm.state.value.workouts.size)
+        assertNull(vm.state.value.workoutImportNotice)
+
+        // 1. Invalid / empty CSV sets failure notice
+        val emptyCount = vm.importHevyCsv("not a valid csv")
+        advanceUntilIdle()
+        assertEquals(0, emptyCount)
+        assertEquals(BackupNotice(count = 0, isSuccess = false), vm.state.value.workoutImportNotice)
 
         val csvSample = """
             title,start_time,end_time,description,exercise_title,superset_id,exercise_notes,set_index,set_type,weight_kg,reps,distance_km,duration_seconds,rpe
@@ -775,10 +782,12 @@ class DashboardViewModelTest {
             "Leg Day","2026-10-06 10:00:00","2026-10-06 11:15:00","","Barbell Squat",,"",2,"normal",100,10,,,8.5
         """.trimIndent()
 
+        // 2. Valid CSV sets success notice and populates workouts
         val count = vm.importHevyCsv(csvSample)
         advanceUntilIdle()
 
         assertEquals(1, count)
+        assertEquals(BackupNotice(count = 1, isSuccess = true), vm.state.value.workoutImportNotice)
         assertEquals(1, vm.workouts.value.size)
         assertEquals(1, vm.state.value.workouts.size)
         val session = vm.workouts.value.first()
@@ -787,12 +796,13 @@ class DashboardViewModelTest {
         assertEquals("Barbell Squat", session.exercises.first().title)
         assertEquals(2000.0, session.totalVolumeKg)
 
-        // Clear workouts
+        // 3. Clear workouts resets notice and workouts
         vm.clearWorkouts()
         advanceUntilIdle()
 
         assertEquals(0, vm.workouts.value.size)
         assertEquals(0, vm.state.value.workouts.size)
+        assertNull(vm.state.value.workoutImportNotice)
     }
 
     @Test
@@ -861,5 +871,12 @@ class DashboardViewModelTest {
 
         vm.dismissCorrelationSheet()
         assertEquals(false, vm.state.value.isCorrelationSheetOpen)
+
+        // Opening correlation directly from BackupSheet closes backup and opens correlation
+        vm.openBackup()
+        assertEquals(true, vm.state.value.isBackupSheetOpen)
+        vm.openCorrelationFromBackup()
+        assertEquals(false, vm.state.value.isBackupSheetOpen)
+        assertEquals(true, vm.state.value.isCorrelationSheetOpen)
     }
 }

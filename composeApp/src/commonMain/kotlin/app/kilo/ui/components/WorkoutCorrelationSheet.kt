@@ -282,7 +282,7 @@ fun WorkoutCorrelationSheet(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(14.dp))
-                                .background(colors.glassStrong)
+                                .background(colors.glassTint)
                                 .border(0.5.dp, colors.glassBorder, RoundedCornerShape(14.dp))
                                 .padding(14.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp),
