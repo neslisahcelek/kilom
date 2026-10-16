@@ -204,8 +204,10 @@ class WorkoutCorrelationAnalyticsTest {
             cycleLength = 28,
         )
 
-        // Peak volume was in Follicular (22000 kg vs 15000 kg)
+        // Peak total volume was in Follicular (22000 kg vs 15000 kg)
         assertEquals(CyclePhase.FOLLICULAR, correlation.peakVolumePhase)
+        // Peak average volume per workout was in Ovulation (15000 kg/session vs 11000 kg/session)
+        assertEquals(CyclePhase.OVULATION, correlation.peakAvgVolumePhase)
 
         // Follicular: 2 workouts, 22000 kg total, avg 11000 kg, avg RPE 7.0
         val follicular = correlation.phaseSummaries.first { it.phase == CyclePhase.FOLLICULAR }
@@ -243,24 +245,37 @@ class WorkoutCorrelationAnalyticsTest {
         assertEquals(2, correlation.prDistribution[CyclePhase.OVULATION])
         assertEquals(1, correlation.prDistribution[CyclePhase.LUTEAL])
         assertEquals(0, correlation.prDistribution[CyclePhase.MENSTRUAL] ?: 0)
+
+        // Anabolic PR share: (2 + 2) / 5 = 80%
+        assertEquals(80, correlation.anabolicPrPercentage)
+
+        // Anabolic avg volume: (10000 + 12000 + 15000) / 3 = 12333.33 kg
+        // Luteal avg volume: 8000 kg
+        // Diff %: ((12333.33 - 8000) / 8000) * 100 = +54%
+        assertEquals(54, correlation.anabolicVsLutealVolumeDiffPercent)
     }
 
     @Test
-    fun calculateRelativeStrengthCalculatesEpleyOneRmAndRatio() {
+    fun calculateRelativeStrengthCalculatesEpleyOneRmRatioAndTier() {
         // 100 kg x 6 reps on a 60 kg bodyweight:
         // 1RM = 100 * (1 + 6/30) = 120 kg
-        // Relative ratio = 120 / 60 = 2.0
+        // Relative ratio = 120 / 60 = 2.0 -> ELITE for Squat (>= 1.75)
         val progress1 = calculateRelativeStrength(
             bodyWeightKg = 60.0,
             exerciseName = "Barbell Back Squat",
             weightLiftedKg = 100.0,
             reps = 6,
+            achievedInPhase = CyclePhase.FOLLICULAR,
         )
 
         assertEquals("Barbell Back Squat", progress1.exerciseName)
         assertEquals(60.0, progress1.bodyWeightKg)
         assertEquals(120.0, progress1.estimated1RmKg)
         assertEquals(2.0, progress1.relativeRatio)
+        assertEquals(100.0, progress1.bestWeightKg)
+        assertEquals(6, progress1.bestReps)
+        assertEquals(CyclePhase.FOLLICULAR, progress1.achievedInPhase)
+        assertEquals(StrengthTier.ELITE, progress1.tier)
 
         // 120 kg x 0 reps (or 1 rep baseline) on 64 kg bodyweight
         val progress2 = calculateRelativeStrength(
@@ -271,5 +286,27 @@ class WorkoutCorrelationAnalyticsTest {
         )
         assertEquals(120.0, progress2.estimated1RmKg)
         assertEquals(1.875, progress2.relativeRatio)
+        assertEquals(StrengthTier.ELITE, progress2.tier)
+    }
+
+    @Test
+    fun classifyStrengthTierHandlesMovementCategoriesCorrectly() {
+        // Lower body compound (Squat / Deadlift): <0.85 Beginner, >=0.85 Intermediate, >=1.25 Advanced, >=1.75 Elite
+        assertEquals(StrengthTier.BEGINNER, classifyStrengthTier("Squat", 0.70))
+        assertEquals(StrengthTier.INTERMEDIATE, classifyStrengthTier("Squat", 1.00))
+        assertEquals(StrengthTier.ADVANCED, classifyStrengthTier("Deadlift", 1.35))
+        assertEquals(StrengthTier.ELITE, classifyStrengthTier("Hip Thrust", 1.80))
+
+        // Upper body horizontal press/pull (Bench Press): <0.55 Beginner, >=0.55 Intermediate, >=0.85 Advanced, >=1.15 Elite
+        assertEquals(StrengthTier.BEGINNER, classifyStrengthTier("Bench Press", 0.45))
+        assertEquals(StrengthTier.INTERMEDIATE, classifyStrengthTier("Bench Press", 0.65))
+        assertEquals(StrengthTier.ADVANCED, classifyStrengthTier("Bench Press", 0.90))
+        assertEquals(StrengthTier.ELITE, classifyStrengthTier("Bench Press", 1.20))
+
+        // Vertical press (Overhead Press): <0.35 Beginner, >=0.35 Intermediate, >=0.55 Advanced, >=0.80 Elite
+        assertEquals(StrengthTier.BEGINNER, classifyStrengthTier("Overhead Press", 0.30))
+        assertEquals(StrengthTier.INTERMEDIATE, classifyStrengthTier("Overhead Press", 0.40))
+        assertEquals(StrengthTier.ADVANCED, classifyStrengthTier("Overhead Press", 0.60))
+        assertEquals(StrengthTier.ELITE, classifyStrengthTier("Overhead Press", 0.85))
     }
 }

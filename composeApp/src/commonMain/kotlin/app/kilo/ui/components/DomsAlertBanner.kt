@@ -1,10 +1,5 @@
 package app.kilo.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -152,13 +147,20 @@ fun DomsAlertBanner(
 
             Spacer(Modifier.height(4.dp))
 
+            val fluidFormatted = run {
+                val tenthsTotal = kotlin.math.round(assessment.expectedFluidWeightKg * 10.0).toInt()
+                val whole = tenthsTotal / 10
+                val tenths = kotlin.math.abs(tenthsTotal % 10)
+                "$whole.$tenths"
+            }
+
             // Description
             Text(
                 text = stringResource(
                     Res.string.doms_alert_desc_format,
                     targetGroup,
                     volumeFormatted,
-                    assessment.expectedFluidWeightKg,
+                    fluidFormatted,
                 ),
                 style = typography.caption.copy(fontSize = 12.5.sp, lineHeight = 17.5.sp),
                 color = colors.textSecondary,

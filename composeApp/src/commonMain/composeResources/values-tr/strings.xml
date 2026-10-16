@@ -86,7 +86,7 @@
     <string name="trend_max">Maks</string>
     <string name="trend_avg">Ort</string>
     <string name="backup_title">Yedekleme ve Dışa Aktar</string>
-    <string name="backup_subtitle">%%100 cihazda ve gizli. Verileriniz hiçbir sunucuya gitmez.</string>
+    <string name="backup_subtitle">%100 cihazda ve gizli. Verileriniz hiçbir sunucuya gitmez.</string>
     <string name="backup_export_csv">CSV Olarak Dışa Aktar</string>
     <string name="backup_export_json">JSON Olarak Dışa Aktar</string>
     <string name="backup_import">Dosyadan İçe Aktar</string>
@@ -115,7 +115,7 @@
     <string name="health_badge_not_connected">Bağlı Değil</string>
     <string name="health_badge_sync_now">Eşitle</string>
     <string name="health_onboarding_title">Apple Sağlık ile Eşitle</string>
-    <string name="health_onboarding_body">Kilom yeni tartımlarınızı otomatik olarak Apple Sağlık'a yazabilir ve geçmiş ölçümlerinizi içe aktarabilir. Tüm verileriniz %%100 cihazınızda ve gizli kalır.</string>
+    <string name="health_onboarding_body">Kilom yeni tartımlarınızı otomatik olarak Apple Sağlık'a yazabilir ve geçmiş ölçümlerinizi içe aktarabilir. Tüm verileriniz %100 cihazınızda ve gizli kalır.</string>
     <string name="health_onboarding_connect">Apple Sağlık'ı Bağla</string>
     <string name="health_onboarding_import_option">Geçmiş tartımları Sağlık'tan içe aktar</string>
     <string name="health_onboarding_later">Şimdi Değil</string>
@@ -181,8 +181,8 @@
     <string name="share_action_button">Başarı Kartını Paylaş</string>
     <string name="share_text_with_weight">🎯 %1$s • Kilom ile %2$d günlük tartı serisi!</string>
     <string name="share_text_private">🔥 Kilom ile %1$d günlük tartı serisi! İstikrar devam ediyor.</string>
-    <string name="share_card_subtitle">Kilom • %%100 Cihaz İçi Tartı ve Kilo Takibi</string>
-    <string name="share_card_badge_on_device">%%100 Cihaz İçi</string>
+    <string name="share_card_subtitle">Kilom • %100 Cihaz İçi Tartı ve Kilo Takibi</string>
+    <string name="share_card_badge_on_device">%100 Cihaz İçi</string>
     <string name="share_card_streak_badge">🔥 %1$d Günlük Tartı Serisi</string>
 
     <!-- Milestone Titles -->
@@ -265,7 +265,7 @@
     <string name="cycle_eat_sweet_potatoes">Kompleks karbonhidratlar (tatlı patates, yulaf, esmer pirinç)</string>
     <string name="cycle_eat_walnuts">Ceviz ve çiğ badem</string>
     <string name="cycle_eat_chickpeas_b6">Nohut ve B6 vitamini zengini bakliyatlar</string>
-    <string name="cycle_eat_dark_chocolate">Bitter çikolata (%%70+) veya ham kakao</string>
+    <string name="cycle_eat_dark_chocolate">Bitter çikolata (%70+) veya ham kakao</string>
     <string name="cycle_eat_spinach_magnesium">Ispanak ve magnezyum zengini tohumlar</string>
     <string name="cycle_eat_tryptophan_banana">Triptofan kaynakları (muz, hindi eti, yulaf)</string>
     <string name="cycle_eat_dandelion_tea">Karahindiba veya maydanoz çayı (doğal ödem atıcı)</string>
@@ -370,7 +370,7 @@
     <string name="workout_luteal_mid_desc">Sıvı tutumu eklemlerde şişkinlik yaratabilir ve kilolar daha ağır hissedilebilir (RPE artışı). Serbest bar yerine kablo ve makinelere geçerek eklem güvenliğini sağlayın.</string>
 
     <string name="workout_luteal_late_title">Deload &amp; Kas Koruma Seansı</string>
-    <string name="workout_luteal_late_desc">Hormonların ani düşüşü merkezi sinir sistemini yorar ve kas yıkımını (katabolizma) tetikler. Ağırlıkları 40–50%% düşürün, seansı 40 dk altında tutun ve antrenman sonrası protein tüketin.</string>
+    <string name="workout_luteal_late_desc">Hormonların ani düşüşü merkezi sinir sistemini yorar ve kas yıkımını (katabolizma) tetikler. Ağırlıkları %40–50 düşürün, seansı 40 dk altında tutun ve antrenman sonrası protein tüketin.</string>
 
     <!-- Workout Focus Chips -->
     <string name="workout_focus_light_upper">Hafif Dambıl / Üst Vücut</string>
@@ -394,7 +394,7 @@
     <string name="workout_focus_machines_cables">Kablo &amp; Makine Egzersizleri</string>
     <string name="workout_focus_high_reps_12_15">12–15 Tekrar Aralığı</string>
     <string name="workout_focus_joint_friendly">Eklem Dostu Direnç</string>
-    <string name="workout_focus_deload_half_weight">Deload (Ağırlığı 40–50%% Düşür)</string>
+    <string name="workout_focus_deload_half_weight">Deload (Ağırlığı %40–50 Düşür)</string>
     <string name="workout_focus_form_refinement">Form &amp; Hız Tekrarı</string>
     <string name="workout_focus_mobility_stretch">Bant Direnci &amp; Mobilite</string>
 
@@ -420,35 +420,61 @@
 
     <!-- DOMS Alert -->
     <string name="doms_alert_title">Antrenman Sonrası Sıvı Tutulumu</string>
-    <string name="doms_alert_desc_format">Ağır direnç antrenmanı (%1$s, %2$s kg hacim) mikro yırtıklara yol açar. Tartıdaki +%3$.1f kg artış kas onarım sıvısı ve glikojen tutulumudur, yağ değildir!</string>
+    <string name="doms_alert_desc_format">Ağır direnç antrenmanı (%1$s, %2$s kg hacim) mikro yırtıklara yol açar. Tartıdaki +%3$s kg artış kas onarım sıvısı ve glikojen tutulumudur, yağ değildir!</string>
     <string name="doms_alert_badge">DOMS / Kas Toparlanması</string>
     <string name="doms_alert_dismiss">Anladım</string>
     <string name="doms_default_muscle_group">Bacak ve Sırt</string>
 
     <!-- Correlation Sheet -->
     <string name="correlation_title">Döngü &amp; Antrenman Korelasyonu</string>
-    <string name="correlation_subtitle">Hormonal evrelerin kaldırdığınız hacim, kişisel rekorlar ve zorluk algısı (RPE) üzerindeki etkisini inceleyin.</string>
+    <string name="correlation_subtitle">Hormonal evrelerin kaldırdığınız hacim, kişisel rekorlar ve göreceli kuvvet üzerindeki etkisini keşfedin.</string>
     <string name="correlation_tab_volume">Antrenman Hacmi</string>
     <string name="correlation_tab_prs">Kişisel Rekorlar</string>
     <string name="correlation_tab_strength">Göreceli Kuvvet</string>
-    <string name="correlation_phase_format">%1$s: %2$s kg toplam (%3$d antrenman)</string>
-    <string name="correlation_prs_format">%2$s evresinde %1$d rekor</string>
-    <string name="correlation_rpe_insight_format">Progesteron ve artan vücut ısısı sebebiyle Luteal evrede algılanan zorluk (RPE) %1$+.1f daha yüksektir; kilolar daha ağır hissedilir.</string>
+    <string name="correlation_rpe_insight_format">Progesteron ve artan vücut ısısı (+0.3–0.5°C) sebebiyle Luteal evrede algılanan zorluk (RPE) %1$s puan daha yüksektir; aynı kilolar daha ağır hissedilir.</string>
     <string name="correlation_open_button">Döngü &amp; Antrenman Analizini Gör</string>
     <string name="correlation_relative_strength_title">Göreceli Kuvvet (1RM / Vücut Ağırlığı)</string>
-    <string name="correlation_peak_volume_format">Zirve Hacim: %1$s</string>
+    <string name="correlation_peak_volume_format">Seans Başı Zirve Hacim: %1$s</string>
     <string name="correlation_no_data">Kayıtlı Antrenman Bulunamadı</string>
     <string name="correlation_empty_desc">Hormonal kuvvet ve hacim korelasyon analizlerini görmek için Ayarlar menüsünden workouts.csv dosyanızı yükleyin.</string>
-    <string name="correlation_luteal_rpe_normal">Algılanan zorluk seviyesi döngü evreleri arasında dengeli seyrediyor.</string>
-    <string name="correlation_luteal_rpe_higher">Luteal evrede artan algılanan zorluk seviyesi</string>
+    <string name="correlation_luteal_rpe_normal">Algılanan zorluk seviyesi döngü evreleri arasında dengeli seyrediyor. Dinlenme süreleriniz ve yük dağılımınız ideal.</string>
     <string name="correlation_workouts_count_format">%1$d antrenman</string>
-    <string name="correlation_avg_volume_format">Ort: %1$s kg</string>
-    <string name="correlation_prs_card_title">⚡ Kişisel Rekorlar (PR)</string>
+    <string name="correlation_avg_volume_format">%1$s kg / seans</string>
+    <string name="correlation_total_volume_format">Toplam: %1$s kg</string>
+    <string name="correlation_prs_card_title">⚡ Evrelere Göre Kişisel Rekorlar (PR)</string>
     <string name="correlation_total_prs_format">%1$d PR</string>
-    <string name="correlation_luteal_rpe_card_title">Luteal RPE ve Algılanan Zorluk</string>
+    <string name="correlation_luteal_rpe_card_title">Luteal Yorgunluk &amp; Zorluk Analizi</string>
     <string name="correlation_no_rpe_hint">Evreler arası zorluğu kıyaslamak için antrenman uygulamanızda set RPE (Zorluk Derecesi) kaydedin.</string>
     <string name="correlation_no_compound_lifts">İçe aktarılan antrenmanlarda bileşik hareket bulunamadı.</string>
-    <string name="correlation_est_1rm_format">Tahmini 1RM: %1$.1f kg</string>
-    <string name="correlation_bw_ratio_format">%1$.2fx Kilo</string>
+    <string name="correlation_est_1rm_format">Tahmini 1RM: %1$s kg</string>
+    <string name="correlation_bw_ratio_format">%1$sx Kilo</string>
+
+    <!-- Correlation Explanations & Insights -->
+    <string name="correlation_volume_insight_title">Hormonal Hacim Analizi</string>
+    <string name="correlation_volume_anabolic_higher_format">Foliküler ve Ovülasyon evrelerinde seans başına ortalama tonajınız Luteal evreye göre %%1$d daha yüksek. Yükselen östrojen kas glikojen depolarını ve toparlanma hızını destekler.</string>
+    <string name="correlation_volume_luteal_higher_format">Luteal evrede seans başına ortalama tonajınız %%1$d daha yüksek görünüyor. Progesteron kas yıkımını artırdığı için bu dönemde antrenman sonrası protein alımına ve uykuya ekstra özen gösterin.</string>
+    <string name="correlation_volume_general_insight_format">Antrenman başına en yüksek ortalama tonaja %1$s döneminde ulaşıyorsunuz (%2$s kg / seans). Evre süreleri farklı olduğu için toplam yerine seans ortalamasını kıyaslamak gerçek performansınızı gösterir.</string>
+    <string name="correlation_phase_desc_menstrual">Hormonlar taban seviyededir; demir kaybı ve kramplar karın içi basıncı zorlayabileceği için kontrollü yenilenme setleri öne çıkar.</string>
+    <string name="correlation_phase_desc_follicular">Yükselen östrojen insülin duyarlılığını ve kasların karbonhidrat kullanımını zirveye taşır; yüksek hacim ve ağırlık artışı için en verimli evredir.</string>
+    <string name="correlation_phase_desc_ovulation">Sinir sistemi ateşlemesi ve hafif testosteron artışı patlayıcı gücü zirveye çıkarır; ancak eklem bağları gevşediği için kusursuz form şarttır.</string>
+    <string name="correlation_phase_desc_luteal">Baskın progesteron bazal vücut ısısını (+0.4°C) ve sıvı tutulumunu artırır; nabız daha hızlı yükselir ve merkezi sinir sistemi daha çabuk yorulur.</string>
+
+    <string name="correlation_prs_anabolic_title">Anabolik PR Penceresi</string>
+    <string name="correlation_prs_anabolic_insight_format">Kişisel rekorlarınızın (PR) %%1$d kadarı Foliküler ve Ovülasyon evrelerinde kırıldı. Östrojenin maksimum kas kuvveti ürettiği bu günleri ağır (1–5 tekrar) rekor denemelerine ayırın.</string>
+    <string name="correlation_prs_general_insight">Kişisel rekorlarınızın hangi döngü evresinde yoğunlaştığını takip etmek, sinir sisteminizin maksimum kuvvete ne zaman hazır olduğunu gösterir.</string>
+    <string name="correlation_prs_share_format">%1$d PR (%%2$d)</string>
+    <string name="correlation_luteal_volume_fallback_format">RPE kaydı olmasa da Luteal evrede seans başı tonajınız %%1$s oranında değişiyor. Progesteron vücut ısısını ve nabzı yükselttiği için aynı ağırlıklar bu evrede daha ağır hissedilir.</string>
+    <string name="correlation_luteal_physiology_fallback">Luteal evrede progesteron dinlenme vücut ısısını ~0.4°C artırır ve sıvı dengesini değiştirir; bu durum ağır bileşik setlerde algılanan zorluğu doğal olarak yükseltir.</string>
+
+    <string name="correlation_strength_guide_title">1RM ve Göreceli Kuvvet Nedir?</string>
+    <string name="correlation_strength_guide_body">• Tahmini 1RM (Tek Tekrar Maksimumu): En iyi setinizdeki ağırlık ve tekrar sayısından (Epley formülüyle) hesaplanan, tek seferde kaldırabileceğiniz teorik maksimum ağırlıktır.\n• Göreceli Kuvvet (x Kilo): 1RM değerinizin o günkü vücut ağırlığınıza oranıdır. Tartıdaki kilonuz dalgalansa bile bu oran artıyorsa saf kas gücünüz artıyor demektir.</string>
+    <string name="correlation_strength_edema_note">💧 Döngü Ödemi Notu: Luteal veya menstrüel fazdaki +1–2 kg'lık geçici su tutulumu (ödem), gerçek kas gücünüz düşmediği halde kağıt üzerinde bu oranı hafifçe düşük gösterebilir.</string>
+    <string name="correlation_bw_ratio_explained_format">Vücut ağırlığının %1$s katı</string>
+    <string name="correlation_best_set_format">En İyi Set: %1$s kg × %2$d tekrar</string>
+    <string name="correlation_set_in_phase_format">%1$s Rekoru</string>
+    <string name="correlation_tier_beginner">Başlangıç Seviyesi</string>
+    <string name="correlation_tier_intermediate">Orta Seviye</string>
+    <string name="correlation_tier_advanced">İleri Seviye</string>
+    <string name="correlation_tier_elite">Elit Kuvvet</string>
 </resources>
 

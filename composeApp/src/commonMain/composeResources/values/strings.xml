@@ -86,7 +86,7 @@
     <string name="trend_max">Max</string>
     <string name="trend_avg">Avg</string>
     <string name="backup_title">Backup &amp; Export</string>
-    <string name="backup_subtitle">%%100 on-device &amp; private. Your data never touches a server.</string>
+    <string name="backup_subtitle">100% on-device &amp; private. Your data never touches a server.</string>
     <string name="backup_export_csv">Export CSV</string>
     <string name="backup_export_json">Export JSON</string>
     <string name="backup_import">Import from File</string>
@@ -115,7 +115,7 @@
     <string name="health_badge_not_connected">Not Connected</string>
     <string name="health_badge_sync_now">Sync</string>
     <string name="health_onboarding_title">Sync with Apple Health</string>
-    <string name="health_onboarding_body">Kilom can automatically write your weigh-ins to Apple Health and import your previous measurements. All data stays 100%% private on your device.</string>
+    <string name="health_onboarding_body">Kilom can automatically write your weigh-ins to Apple Health and import your previous measurements. All data stays 100% private on your device.</string>
     <string name="health_onboarding_connect">Connect Apple Health</string>
     <string name="health_onboarding_import_option">Import past weigh-ins from Health</string>
     <string name="health_onboarding_later">Not Now</string>
@@ -182,7 +182,7 @@
     <string name="share_text_with_weight">🎯 %1$s • %2$d day weigh-in streak on Kilom!</string>
     <string name="share_text_private">🔥 %1$d day weigh-in streak on Kilom! Consistency is key.</string>
     <string name="share_card_subtitle">Kilom • Pure On-Device Weigh-In Tracker</string>
-    <string name="share_card_badge_on_device">%%100 On-Device</string>
+    <string name="share_card_badge_on_device">100% On-Device</string>
     <string name="share_card_streak_badge">🔥 %1$d Day Weigh-In Streak</string>
 
     <!-- Milestone Titles -->
@@ -265,7 +265,7 @@
     <string name="cycle_eat_sweet_potatoes">Complex carbs (sweet potatoes, oats, brown rice)</string>
     <string name="cycle_eat_walnuts">Walnuts &amp; raw almonds</string>
     <string name="cycle_eat_chickpeas_b6">Chickpeas &amp; foods rich in Vitamin B6</string>
-    <string name="cycle_eat_dark_chocolate">Dark chocolate (70%%+) or raw cacao</string>
+    <string name="cycle_eat_dark_chocolate">Dark chocolate (70%+) or raw cacao</string>
     <string name="cycle_eat_spinach_magnesium">Spinach &amp; magnesium-dense seeds</string>
     <string name="cycle_eat_tryptophan_banana">Tryptophan sources (bananas, turkey, oats)</string>
     <string name="cycle_eat_dandelion_tea">Dandelion or parsley tea (natural diuretic)</string>
@@ -370,7 +370,7 @@
     <string name="workout_luteal_mid_desc">Fluid retention can create joint stiffness and increase perceived exertion (RPE). Transition to cable and machine exercises (Leg Press, Cable Rows) for joint safety.</string>
 
     <string name="workout_luteal_late_title">Deload &amp; Muscle Preservation Session</string>
-    <string name="workout_luteal_late_desc">Hormone withdrawal accelerates muscle catabolism and strains CNS recovery. Drop working weights by 40–50%%, keep sessions under 40 mins, and consume protein with leucine immediately post-workout.</string>
+    <string name="workout_luteal_late_desc">Hormone withdrawal accelerates muscle catabolism and strains CNS recovery. Drop working weights by 40–50%, keep sessions under 40 mins, and consume protein with leucine immediately post-workout.</string>
 
     <!-- Workout Focus Chips -->
     <string name="workout_focus_light_upper">Light Dumbbells / Upper Body</string>
@@ -394,7 +394,7 @@
     <string name="workout_focus_machines_cables">Cables &amp; Machine Lifts</string>
     <string name="workout_focus_high_reps_12_15">High Reps (12–15 Reps)</string>
     <string name="workout_focus_joint_friendly">Joint-Friendly Resistance</string>
-    <string name="workout_focus_deload_half_weight">Deload (40–50%% Weight)</string>
+    <string name="workout_focus_deload_half_weight">Deload (40–50% Weight)</string>
     <string name="workout_focus_form_refinement">Technique &amp; Speed Reps</string>
     <string name="workout_focus_mobility_stretch">Resistance Bands &amp; Stretches</string>
 
@@ -420,35 +420,61 @@
 
     <!-- DOMS Alert -->
     <string name="doms_alert_title">Post-Workout Fluid Retention</string>
-    <string name="doms_alert_desc_format">Heavy lifting (%1$s, %2$s kg volume) causes micro-tears. The +%3$.1f kg scale elevation is temporary muscle repair fluid &amp; glycogen, not body fat!</string>
+    <string name="doms_alert_desc_format">Heavy lifting (%1$s, %2$s kg volume) causes micro-tears. The +%3$s kg scale elevation is temporary muscle repair fluid &amp; glycogen, not body fat!</string>
     <string name="doms_alert_badge">DOMS / Muscle Recovery</string>
     <string name="doms_alert_dismiss">Got it</string>
     <string name="doms_default_muscle_group">Legs &amp; Back</string>
 
     <!-- Correlation Sheet -->
     <string name="correlation_title">Cycle &amp; Training Correlation</string>
-    <string name="correlation_subtitle">Analyze how hormonal phases influence your lifting volume, personal records, and perceived exertion.</string>
+    <string name="correlation_subtitle">Analyze how hormonal phases influence your lifting volume, personal records, and relative strength.</string>
     <string name="correlation_tab_volume">Volume Load</string>
     <string name="correlation_tab_prs">PRs &amp; Records</string>
     <string name="correlation_tab_strength">Relative Strength</string>
-    <string name="correlation_phase_format">%1$s: %2$s kg total (%3$d workouts)</string>
-    <string name="correlation_prs_format">%1$d PRs in %2$s</string>
-    <string name="correlation_rpe_insight_format">Luteal RPE is %1$+.1f higher due to elevated core temperature and progesterone, making the same weight feel heavier.</string>
+    <string name="correlation_rpe_insight_format">Luteal RPE is %1$s higher due to elevated core temperature (+0.3–0.5°C) and progesterone, making the same weight feel heavier.</string>
     <string name="correlation_open_button">View Cycle &amp; Workout Analytics</string>
     <string name="correlation_relative_strength_title">Relative Strength (1RM / Body Weight)</string>
-    <string name="correlation_peak_volume_format">Peak Volume: %1$s</string>
+    <string name="correlation_peak_volume_format">Peak Volume per Session: %1$s</string>
     <string name="correlation_no_data">No Workouts Found</string>
     <string name="correlation_empty_desc">Import your workouts.csv in Settings to unlock hormonal strength &amp; volume correlation analytics.</string>
-    <string name="correlation_luteal_rpe_normal">Perceived exertion is consistent across cycle phases.</string>
-    <string name="correlation_luteal_rpe_higher">Elevated perceived exertion in Luteal phase</string>
+    <string name="correlation_luteal_rpe_normal">Perceived exertion is consistent across cycle phases. Your pacing and recovery between sets are well-regulated.</string>
     <string name="correlation_workouts_count_format">%1$d workouts</string>
-    <string name="correlation_avg_volume_format">Avg: %1$s kg</string>
-    <string name="correlation_prs_card_title">⚡ Personal Records</string>
+    <string name="correlation_avg_volume_format">%1$s kg / session</string>
+    <string name="correlation_total_volume_format">Total: %1$s kg</string>
+    <string name="correlation_prs_card_title">⚡ Personal Records by Phase</string>
     <string name="correlation_total_prs_format">%1$d PRs</string>
-    <string name="correlation_luteal_rpe_card_title">Luteal RPE &amp; Exertion</string>
+    <string name="correlation_luteal_rpe_card_title">Luteal Fatigue &amp; Exertion Analysis</string>
     <string name="correlation_no_rpe_hint">Log set RPE (Rate of Perceived Exertion) in your workout tracker to compare exertion across phases.</string>
     <string name="correlation_no_compound_lifts">No compound lifts recorded in imported workouts.</string>
-    <string name="correlation_est_1rm_format">Est. 1RM: %1$.1f kg</string>
-    <string name="correlation_bw_ratio_format">%1$.2fx BW</string>
+    <string name="correlation_est_1rm_format">Est. 1RM: %1$s kg</string>
+    <string name="correlation_bw_ratio_format">%1$sx BW</string>
+
+    <!-- Correlation Explanations & Insights -->
+    <string name="correlation_volume_insight_title">Hormonal Volume Analysis</string>
+    <string name="correlation_volume_anabolic_higher_format">Your average volume per workout is %1$d% higher during the Follicular &amp; Ovulatory phases compared to Luteal. Rising estrogen boosts muscle glycogen storage and recovery speed.</string>
+    <string name="correlation_volume_luteal_higher_format">Your average workout volume is %1$d% higher in the Luteal phase. Remember to prioritize recovery and protein intake as progesterone increases muscle breakdown.</string>
+    <string name="correlation_volume_general_insight_format">Your highest single-session volume average occurs in the %1$s (%2$s kg per workout). Comparing average volume per session prevents longer phases from skewing total tonnage.</string>
+    <string name="correlation_phase_desc_menstrual">Hormones are at baseline low; iron loss and cramps can limit intra-abdominal bracing, favoring controlled recovery sets.</string>
+    <string name="correlation_phase_desc_follicular">Rising estradiol maximizes insulin sensitivity and muscle glycogen uptake — your body's prime window for high training volume.</string>
+    <string name="correlation_phase_desc_ovulation">Peak neuromuscular drive and a mild testosterone surge create peak explosive power, though ligament laxity requires strict form.</string>
+    <string name="correlation_phase_desc_luteal">Dominant progesterone raises core body temperature (+0.4°C) and sodium/water shifts, increasing cardiovascular and CNS fatigue.</string>
+
+    <string name="correlation_prs_anabolic_title">Anabolic PR Window</string>
+    <string name="correlation_prs_anabolic_insight_format">%1$d% of all your personal records were set during the Follicular &amp; Ovulatory phases. Schedule heavy 1–5 rep strength attempts here when estrogen supports peak force output.</string>
+    <string name="correlation_prs_general_insight">Tracking which cycle phase your personal records occur in reveals when your central nervous system is primed for maximum force production.</string>
+    <string name="correlation_prs_share_format">%1$d PRs (%2$d%)</string>
+    <string name="correlation_luteal_volume_fallback_format">Even without RPE logs, your session volume shifts by %1$s% in the Luteal phase. Progesterone elevates core temperature and heart rate, making standard working weights feel heavier.</string>
+    <string name="correlation_luteal_physiology_fallback">In the Luteal phase, progesterone raises resting body temperature by ~0.4°C and shifts fluid balance, which naturally increases perceived effort on heavy compound sets.</string>
+
+    <string name="correlation_strength_guide_title">What Do 1RM &amp; Relative Strength Mean?</string>
+    <string name="correlation_strength_guide_body">• Est. 1RM (One-Rep Max): The heaviest weight you could theoretically lift for 1 repetition, calculated from your best multi-rep set using the Epley formula.\n• Relative Strength (x BW): Your 1RM divided by your body weight. If this ratio climbs, you are gaining true neuromuscular strength regardless of scale fluctuations.</string>
+    <string name="correlation_strength_edema_note">💧 Cycle Edema Note: Temporary +1–2 kg water retention in the Luteal or Menstrual phase can slightly lower your x BW ratio on paper even when your actual muscle strength hasn't dropped.</string>
+    <string name="correlation_bw_ratio_explained_format">%1$sx your body weight</string>
+    <string name="correlation_best_set_format">Best Set: %1$s kg × %2$d reps</string>
+    <string name="correlation_set_in_phase_format">Set in %1$s</string>
+    <string name="correlation_tier_beginner">Starter Level</string>
+    <string name="correlation_tier_intermediate">Intermediate</string>
+    <string name="correlation_tier_advanced">Advanced</string>
+    <string name="correlation_tier_elite">Elite Strength</string>
 </resources>
 

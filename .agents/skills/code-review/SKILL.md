@@ -46,7 +46,7 @@ git ls-files --others --exclude-standard
 - `WeightParser`: aralık dışı, çoklu sayı, `O→0`, kg/lb etiketi senaryoları doğru mu? OCR sonucu önceden doldurulup kullanıcı onayı isteniyor mu (otomatik kaydetme yok)?
 - Async OCR/foto: kullanıcı sheet'i kapatır, ikinci foto seçer veya iptal ederse eski sonuç yeni durumu ezmiyor mu? Hata görünür mü, boş sonuç hata gibi ele alınıyor mu?
 - `StateFlow.update {}` kullanımı, `collectAsStateWithLifecycle`, lazy list stabil `key` (kayıt `id`), ortak glass bileşen kullanımı, önemli ekranlarda `@Preview` varlığı.
-- Kullanıcı metinleri `strings.xml`'de mi (EN + TR ikisi de)? Hata etiketleri kaynak kimliğine map ediliyor mu? Compose resource formatında yüzde literal'i (`%%`) doğru mu? Renkler tema dosyasında mı?
+- Kullanıcı metinleri `strings.xml`'de mi (EN + TR ikisi de)? Hata etiketleri kaynak kimliğine map ediliyor mu? Compose Multiplatform `stringResource` formatında yalnızca `%1$s`/`%1$d` kullanılmış mı (`%1$.1f` ve `%%100` gibi desteklenmeyen kalıplar yok mu)? Renkler tema dosyasında mı?
 - `!!`, zorla cast, boş liste/index sınırları, tekrar submit, silme (sola kaydır) sonrası liste ve delta güncellemesi, boş/loading/error durumları.
 - Zaman: gece yarısı geçişi, saat dilimi/DST değişimi ve geçmiş tarihli giriş gün farkını bozuyor mu?
 - Haptic: başarı/hata geri bildirimi doğru olaylara bağlı mı, iki platformda da çalışıyor mu?
