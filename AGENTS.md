@@ -213,5 +213,6 @@ Uzun süren oturumlarda bağlam şişmesi (context bloat) ve stream zaman aşım
 3. **Alt Ajan (`invoke_subagent`) Kullanımı ve Erken Yanıt:**
    - Çoklu dosya tarama veya görsel üretim/kontrol görevlerini ana oturumun token yükünü artırmamak için alt ajanlara (`research` veya `self`) devredin.
    - Bir oturumda adım sayısı 60'ı veya bağlam boyutu 80K token'ı geçtiğinde, mevcut adımı hızla tamamlayıp kullanıcıya yanıt verin ve bağlamı temizlemek için `/compact` komutunu önerin.
-
-
+4. **Git Sahneleme Hijyeni ve Ağ/Stream Kilitlenmesi Önleme:**
+   - Asla körlemesine `git add .` çalıştırmayın; commit öncesinde `git status -s` ve `git diff composeApp/` ile ekran görüntüsü/test üretimi için eklenen geçici preview/mock kodlarının uygulama kaynak koduna (`composeApp/`) sızmadığını doğrulayın.
+   - Büyük boyutlu binary/görsel `git push` işlemleri upload bant genişliğini doyurup kurumsal güvenlik uzantılarında (Symantec WSSA / Cortex XDR) HTTP/2 SSE akışlarının `EOF` veya 10 dakikalık TCP soket zaman aşımına (hang) düşmesine yol açabilir; büyük push işlemlerini tekil ve izole çalıştırın.
