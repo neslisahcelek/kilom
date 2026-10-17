@@ -18,10 +18,11 @@ Her iki mağaza da varsayılan sistem ikonlarını veya kalitesiz görselleri re
 - [ ] **Splash / Launch Screen:** `UILaunchScreen` storyboard veya native asset kontrolü (siyah ekran başlatma hatası olmamalı).
 - [ ] **Ekran Görüntüleri (Screenshots):**
   - Gerçek UI ekran görüntüleri olmalı (Figma mock-up tek başına reddedilir).
-  - 6.9" iPhone (1320 x 2868 px veya 1290 x 2796 px) - en az 3 adet (Dashboard, Hero Card, Entry Sheet / Tarama).
-  - 6.5" iPhone (1242 x 2688 px).
+  - 6.9" iPhone (1320 x 2868 px), 6.7" iPhone (1290 x 2796 px) ve 6.5" iPhone (1284 x 2778 px / 1242 x 2688 px) — detaylar ve üretim betiği için [kilo-store-assets](../kilo-store-assets/SKILL.md) becerisine bakın.
   - iPad desteği aktifse 13" iPad Pro ekran görüntüleri.
   - **DİKKAT:** Ekran görüntülerinde Android cihaz çerçeveleri, Material Design FAB veya "Android" ibaresi bulunamaz (Guideline 2.3.3).
+  - **Bağlam Koruması:** Ekran görüntülerinin boyut, `hasAlpha: no` ve `sRGB` kontrollerini `view_file` ile 10+ görsel okuyarak değil, `sips` CLI komutu ile doğrulayın.
+
 
 ### Android (Google Play - Metadata & Store Listing Policy)
 - [ ] **Uygulama İkonu:** `res/mipmap-*/ic_launcher.png` ve adaptive icon (`ic_launcher_foreground.xml` + `background`).

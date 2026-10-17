@@ -195,5 +195,23 @@ Projede `.agents/skills/` altında özel yetenekler tanımlanmıştır:
 | **code-review** | `.agents/skills/code-review` | Gizlilik, KMP sınırları, doğruluk ve güvenlik kod incelemesi |
 | **kilo-media** | `.agents/skills/kilo-media` | Kamera, galeri, EXIF ve OCR entegrasyonu |
 | **kilo-store-checklist** | `.agents/skills/kilo-store-checklist` | App Store ve Play Store mağaza yayın kontrol listesi |
+| **kilo-store-assets** | `.agents/skills/kilo-store-assets` | Apple (2026) App Store/Play Store ekran görüntüleri, Dynamic Island, Titanyum çerçeve, tipografi ve çözünürlük standartları |
 | **store-compliance** | `.agents/agents/store-compliance.md` | Apple App Store & Google Play Store inceleme uyumluluğu ve ret önleme ajanı |
+
+---
+
+## 8. Ajan Performans, Bağlam (Context) ve Kilitlenme Önleme Kuralları (Anti-Hang Protocol)
+
+Uzun süren oturumlarda bağlam şişmesi (context bloat) ve stream zaman aşımı (timeout) nedeniyle ajanın "düşünüyor/çalışıyor" durumunda asılı kalmasını önlemek için tüm ajanlar şu kurallara uymak zorundadır:
+
+1. **Yüksek Çözünürlüklü Görsel Okuma Sınırı (Maksimum 2 Görsel Kuralı):**
+   - `view_file` aracını yüksek çözünürlüklü PNG/ekran görüntüsü dosyaları üzerinde ardışık olarak **en fazla 2 kez** kullanın.
+   - Çoklu görsel doğrulamalarını (boyut, renk profili, alfa kanalı) `view_file` ile görselleri bağlama yükleyerek değil, terminalde `sips` veya küçük bir Python betiği çalıştırarak sıfır token maliyetiyle yapın. (Bir oturumda 10+ yüksek çözünürlüklü görsel okumak bağlamı 140K+ token'a şişirip stream timeout'a yol açar.)
+2. **Hızlı Komut ve Kısa Bekleme Süresi:**
+   - `run_command` çağrılarında asla sonsuz bekleyen (interactive/watch/blocking) komutlar çalıştırmayın; çıktıyı `head`/`tail` ile sınırlandırın ve `WaitMsBeforeAsync` değerini kısa tutun (`3000`–`5000` ms).
+   - Yanıt vermeyen MCP veya tarayıcı araçlarını (örn. `DevToolsActivePort` hatası) tekrar tekrar denemeyin; ilk hatada yerel CLI alternatifine geçin.
+3. **Alt Ajan (`invoke_subagent`) Kullanımı ve Erken Yanıt:**
+   - Çoklu dosya tarama veya görsel üretim/kontrol görevlerini ana oturumun token yükünü artırmamak için alt ajanlara (`research` veya `self`) devredin.
+   - Bir oturumda adım sayısı 60'ı veya bağlam boyutu 80K token'ı geçtiğinde, mevcut adımı hızla tamamlayıp kullanıcıya yanıt verin ve bağlamı temizlemek için `/compact` komutunu önerin.
+
 

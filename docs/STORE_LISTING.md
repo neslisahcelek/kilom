@@ -1,6 +1,6 @@
 # Kilom – Mağaza Listeleme Metinleri (App Store & Google Play 2026)
 
-Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın gerçek davranışıyla uyumludur: veriler cihazdan çıkmaz, analitik/reklam/hesap yoktur. Apple Sağlık (HealthKit) kullanımı, evrensel kuvvet ve biyomekanik normları (NSCA 1RM), bağımsız menstrüel döngü & beslenme rehberi ve %100 cihaz içi parametrik veri hikayesi (NLG) açıklamalarda şeffafça belirtilir.
+Değer odaklı, akıcı, sade ve dürüst mağaza metinleri. Aşırı teknik formüller ve çeviri kokan karmaşık terimler ayıklanmış; doğrudan kullanıcı faydasına ve %100 cihaz içi gizliliğe odaklanılmıştır.
 
 > **Karakter limitleri:** Apple Subtitle 30, Promotional Text 170, Keywords 100; Google Play Başlık 30, Kısa Açıklama 80; Tam Açıklama 4000.
 
@@ -10,67 +10,64 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
 
 ## 1. Apple App Store (Türkçe)
 
-- **Uygulama Adı / Title (Maks 30 karakter — 28):**
+- **Uygulama Adı / Title (Maks 30 karakter — 5):**
   ```text
-  Kilom: Tartı & Kuvvet Takibi
+  Kilom
   ```
 
 - **Alt Başlık / Subtitle (Maks 30 karakter — 28):**
   ```text
-  Cihaz İçi Kilo, Döngü ve 1RM
+  Tartı, Ödem ve Kuvvet Takibi
   ```
 
-- **Promosyon Metni / Promotional Text (Maks 170 karakter — 161):**
+- **Promosyon Metni / Promotional Text (Maks 170 karakter — 156):**
   ```text
-  Tartınızı fotoğrafla kaydedin. Cihaz içi 1RM kuvvet ölçekleri, döngüye göre beslenme ve DOMS ödem kalkanını keşfedin. Sıfır sunucu, sıfır reklam, %100 cihazınızda.
+  Tartınızı saniyeler içinde fotoğrafla kaydedin. Su tutulumu, kas onarım ödemi ve gerçek kuvvetinizi keşfedin. Sıfır sunucu, sıfır reklam, %100 cihazınızda.
   ```
 
-- **Anahtar Kelimeler / Keywords (Maks 100 karakter — 95):**
+- **Anahtar Kelimeler / Keywords (Maks 100 karakter — 79):**
   ```text
-  kilo takibi,tartı,ocr,ağırlık,kuvvet,1rm,menstrüel,döngü,ödem,regl,kalori,sağlık,antrenman,doms
+  tartı,kilo takibi,ağırlık,kuvvet,1rm,döngü,ödem,regl,sağlık,antrenman,doms,ocr
   ```
 
 - **Açıklama / Description:**
   ```text
-  Tartıdaki sayılar tek başına gerçeği söylemez. Kilom; kilonuzu saniyeler içinde kaydederken su tutulumu, hormonal döngü, kas onarım ödemi ve kuvvet kazanımının arkasındaki fizyolojiyi çözmenizi sağlayan %100 gizlilik odaklı kişisel sağlık asistanınızdır.
+  Tartıdaki tek bir sayı her zaman gerçeği anlatmaz. Ağır bir antrenman sonrası oluşan kas ödemi, hormonal döngünün getirdiği doğal su tutulumu veya günlük sıvı dalgalanmaları kilonuzu geçici olarak yükseltebilir.
 
-  Verileriniz asla sunuculara gitmez; %100 telefonunuzda kalır.
+  Kilom; tartılmayı zahmetsiz hale getirirken, tartıdaki dalgalanmaların arkasındaki biyolojik nedenleri anlamanızı sağlayan %100 gizlilik odaklı kişisel sağlık yardımcınızdır.
 
-  Hızlı ve Akıllı Tartı Kaydı:
-  • Tartı Fotoğrafı (Cihaz İçi OCR): Tartınızın ekranını kamerayla çekin veya galeriden seçin; Kilom sayıları tamamen telefonunuzda okur. Apple Vision ile 7 segmentli LED/LCD ekranları parlamaya toleranslı tanır. Siz onaylamadan hiçbir kayıt eklenmez.
-  • Hızlı Giriş: Büyük klavyeyle saniyeler içinde kaydedin. kg ve lb arasında anında geçiş yapın. Son tartıya göre anlık fark (-0,4 kg / +0,7 kg) ve gün sayısını görün.
+  Verileriniz asla sunuculara gitmez; tamamen telefonunuzda güvendedir.
 
-  Evrensel Kuvvet & Biyomekanik Modülü (Kadın & Erkek):
-  • 100% Cihaz İçi Antrenman Entegrasyonu: workouts.csv dosyanızı üçüncü taraf bulutlara ihtiyaç duymadan içe aktarın.
-  • Şeffaf 1RM Hesabı: Epley formülüyle (Ağırlık × (1 + Tekrar / 30)) bileşik hareketlerdeki (Squat, Deadlift, Bench Press, Hip Thrust, Overhead Press, Barbell Row) tahmini tek tekrar maksimumunuzu hesaplar.
-  • NSCA & Kilgore-Rippetoe Normatif Ölçekleri: Vücut ağırlığınıza göre 4 kademeli göreceli kuvvet (Başlangıç, Orta, İleri, Elit) takibi. Hem x Kilo katsayısını hem de hedef kg sınırlarını şeffafça gösterir.
-  • DOMS & Glikojen Ödem Kalkanı: Ağır bacak veya sırt antrenmanından (≥8.000 kg tonaj) sonraki 48 saatte tartı artarsa, Kilom bunun yağ değil; kas onarım sıvısı ve glikojen hidrasyonu (1g glikojen = 3-4g su) olduğunu bildirir.
-  • Kas Grubu Tonaj Dağılımı: Bacak/Kalça, Sırt/Çekiş, Göğüs/İtiş, Omuz/Kol ve Core set ve hacim yüzdeleri.
+  Hızlı ve Zahmetsiz Tartı Kaydı:
+  • Fotoğrafla Tartı Tanıma (Cihaz İçi OCR): Tartınızın ekranını kamerayla çekin veya galeriden seçin; Kilom sayıyı telefonunuzda anında okur. Dijital 7 segmentli ekranları kolayca tanır. Siz onaylamadan hiçbir kayıt eklenmez.
+  • Hızlı Manuel Giriş: Büyük ve sade klavyeyle saniyeler içinde kaydedin. Son tartıya göre anlık farkı (-0,4 kg / +0,6 kg) ve geçen gün sayısını tek bakışta görün. kg ve lb arasında anında geçiş yapın.
 
-  Bağımsız Menstrüel Döngü & Kanıta Dayalı Beslenme:
-  • 21–45 Gün Dinamik Döngü Uzunluğu: Geriye Dönük Luteal Haritalama (ovülasyon = döngü - 14) ile kişiselleştirilmiş evreler.
-  • 14 Mikro-Evre Hormonal Analiz: Östrojen, progesteron ve aldosteron eğrilerine göre günlük içgörüler.
-  • Hormonal Su Tutumu Kalkanı: Luteal evredeki 0,8–2,5 kg doğal sıvı tutumunu vücut yağıyla karıştırmayın.
-  • Evreye Özgü Beslenme & Strateji: İnsülin duyarlılığına uygun karbonhidrat dengesi, demir, magnezyum, çinko ve ACL bağ koruma uyarıları.
-  • Hakemli Tıp Literatürü: McNulty (2020), Stachenfeld (2008), Baker (2020), Solomon (1982) ve ACOG kılavuzlarına dayanan zengin kaynakça sekmesi.
+  Kas Onarım Ödemi (DOMS) Kalkanı:
+  • Ağır bir bacak veya sırt antrenmanının ertesi günü tartıda artış gördüğünüzde endişelenmeyin. Kilom, antrenman geçmişinizi inceleyerek bunun yağ artışı değil, kasların toparlanması için tutulan geçici sıvı ve glikojen olduğunu size net bir dille açıklar.
 
-  %100 Cihaz İçi Veri Hikayesi (Parametrik NLG):
-  • Sıfır Bulut Yapay Zekası: Sağlık ve döngü verileriniz asla dışarıdaki LLM sunucularına iletilmez.
-  • Deterministik Veri Hikayesi: Beklenen bilimsel normlar ile sizin gerçek antrenman verilerinizi kıyaslayan, halüsinasyonsuz, destekleyici ve yumuşak koçluk dili.
+  Kuvvet ve Performans Takibi:
+  • Antrenman dosyanızı (workouts.csv) hiçbir buluta yüklemeden doğrudan cihazınıza aktarın.
+  • Temel hareketlerdeki tek tekrar maksimumunuzu (1RM) ve vücut ağırlığınıza oranlı göreceli kuvvet seviyenizi (Başlangıç, Orta, İleri, Elit) takip edin.
+  • Kas gruplarınıza göre antrenman hacminizi ve gelişim çizginizi izleyin.
 
-  Apple Sağlık (HealthKit) & Veri Egemenliği:
-  • İki Yönlü HealthKit Entegrasyonu: Kilo kayıtlarını Apple Sağlık'a yazar ve geçmiş ölçümleri tek dokunuşla içe aktarır.
-  • Hedef Kilo & Akıllı Tahmini Varış Süresi (ETA): Hareketli ortalama trend eğrisiyle hedefinize ne zaman ulaşacağınızı görün.
-  • İstikrar Matrisi & 14 Günlük Alışkanlık Isı Haritası: Tartılma düzeninizi görsel bir matriste izleyin.
-  • Sıvı Cam Paylaşım Kartı: Kilometre taşlarınızı kilonuzu gizleyerek sadece serinizi gösterecek şekilde estetik cam kartla paylaşın.
-  • Tam Yedekleme: Standart CSV ve JSON ile tam veri mülkiyeti.
+  Döngü ve Beslenme Rehberi:
+  • Kişiselleştirilmiş döngü takvimiyle luteal fazdaki doğal su tutulum günlerini önceden görün; geçici ödem artışlarını vücut yağıyla karıştırmayın.
+  • Döngünüzün evrelerine özel bilimsel beslenme, enerji dengesi ve mikro besin önerileriyle tartıyla barışık kalın.
+
+  İstikrar ve Alışkanlık Isı Haritası:
+  • 14 günlük görsel alışkanlık ısı haritası ve tartı serileriyle düzenli tartılma alışkanlığı kazanın.
+  • Hedef kilonuzu ve hedefe tahmini varış tarihinizi hareketli ortalama trend eğrisiyle takip edin.
+  • Sıvı Cam Paylaşım Kartı: Başarılarınızı dilerseniz kilonuzu gizleyerek sadece serinizi gösterecek şekilde estetik cam kartla arkadaşlarınızla paylaşın.
+
+  Apple Sağlık (HealthKit) Uyumu:
+  • Kilo kayıtlarınızı Apple Sağlık ile çift yönlü eşzamanlayın ve geçmiş ölçümlerinizi tek dokunuşla içe aktarın.
 
   %100 Cihaz İçi Gizlilik Mimarisi:
   • Sıfır hesap, sıfır sunucu, sıfır bulut veritabanı.
-  • Reklam yok, analitik araç yok, üçüncü taraf izleyici (Firebase vb.) yok.
-  • Fotoğraflarınız yalnızca OCR anında geçici bellekte (RAM) tutulur, diske veya ağa aktarılmaz.
+  • Reklam yok, analitik araç yok, üçüncü taraf izleyici yok.
+  • Fotoğraflarınız yalnızca okuma anında geçici bellekte tutulur; diske kaydedilmez ve asla ağa iletilmez.
 
-  Yasal Uyarı: Kilom'daki beslenme ve antrenman rehberi yalnızca bilgilendirme ve eğitim amaçlıdır; tıbbi teşhis veya tedavi tavsiyesi niteliği taşımaz.
+  Yasal Uyarı: Kilom'daki beslenme ve egzersiz rehberi genel bilgilendirme amaçlıdır; tıbbi teşhis veya tedavi tavsiyesi niteliği taşımaz.
 
   Gizlilik Politikası: https://neslisahcelek.github.io/kilom/
   İletişim: neslisah.celek@outlook.com
@@ -80,30 +77,29 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
 
 ## 2. Google Play Store (Türkçe)
 
-- **Uygulama Adı / App Title (Maks 30 karakter — 28):**
+- **Uygulama Adı / App Title (Maks 30 karakter — 5):**
   ```text
-  Kilom: Tartı & Kuvvet Takibi
+  Kilom
   ```
 
-- **Kısa Açıklama / Short Description (Maks 80 karakter — 76):**
+- **Kısa Açıklama / Short Description (Maks 80 karakter — 74):**
   ```text
-  Tartı OCR, 1RM kuvvet ölçekleri, döngü beslenmesi ve %100 cihaz içi gizlilik.
+  Tartı fotoğrafı tanıma, kuvvet takibi, döngü rehberi ve %100 gizlilik.
   ```
 
 - **Tam Açıklama:**
   ```text
-  Kilom; kilonuzu kolayca kaydetmenizi, tartılma alışkanlığı kazanmanızı, biyolojik döngünüze göre beslenmenizi ve ağırlık antrenmanlarınızı planlamanızı sağlayan %100 gizlilik odaklı kişisel sağlık uygulamasıdır.
+  Kilom; tartılmayı zahmetsiz hale getiren, su tutulumu ile yağ değişimini ayırt etmenizi sağlayan ve antrenman performansınızı takip eden %100 gizlilik odaklı kişisel tartı ve sağlık uygulamasıdır.
 
   Öne Çıkan Özellikler:
-  • Tartı Ekranı Algılama (Cihaz İçi OCR): Tartınızın fotoğrafını çekin veya galeriden seçin; kilo değeri cihazınızda otomatik okunur. 7 segmentli dijital ekranları destekler. Onayınız olmadan hiçbir veri kaydedilmez.
-  • Evrensel Kuvvet & Biyomekanik: workouts.csv antrenman dosyanızı içe aktarın. Epley 1RM formülü, NSCA normatif 4 kademeli göreceli kuvvet ölçekleri (Başlangıç–Elit), kas grubu tonajı ve DOMS ödem kalkanı.
-  • Döngü ve Kanıta Dayalı Beslenme Rehberi: 21–45 gün dinamik hormonal döngü evreleri, luteal faz su tutma (ödem) uyarısı, demir, çinko, magnezyum ve mikrobesin önerileri (ACOG ve PubMed destekli).
-  • Cihaz İçi Veri Hikayesi (NLG): Spor bilimi beklentileriyle sizin gerçek verilerinizi kıyaslayan, yargılamayan, destekleyici koçluk değerlendirmeleri.
-  • İstikrar Matrisi & Tartı Serisi (Streak): Mevcut seri, en uzun seri, aylık tutarlılık oranı ve 14 günlük görsel alışkanlık ısı haritası.
-  • Sıvı Cam Başarı Paylaşımı: Başarılarınızı kilonuzu gizleme seçeneğiyle estetik bir cam kart tasarımıyla kolayca paylaşın.
-  • Hedef Kilo ve Tahmini Tarih: Ulaşmak istediğiniz kiloyu belirleyin, ilerleme yüzdesi ve tahmini varış tarihini izleyin.
-  • Trend Grafiği & Özet Kartları: Kilonuzun genel yönünü gösteren hareketli ortalama trend eğrisi ve haftalık/aylık değişim özetleri.
-  • İsteğe Bağlı Günlük Hatırlatıcı: Seçtiğiniz saatte telefonunuzda yerel olarak tetiklenen tartı hatırlatıcısı.
+  • Tartı Ekranı Algılama: Tartınızın fotoğrafını çekin veya galeriden seçin; kilo değeri cihazınızda otomatik okunur. Dijital 7 segmentli ekranları destekler. Onayınız olmadan hiçbir veri kaydedilmez.
+  • Kas Onarım Ödemi Kalkanı: Ağır direnç antrenmanı sonrası tartıda gördüğünüz artış yağ değil; kas onarım sıvısı ve glikojendir. Kilom bunu bilerek motivasyonunuzu korur.
+  • Kuvvet ve 1RM Takibi: Antrenman dosyanızı içe aktararak temel egzersizlerdeki 1RM seviyenizi ve vücut ağırlığınıza oranlı kuvvetinizi izleyin.
+  • Döngü ve Beslenme Rehberi: Hormonal döngü evrelerinizi takip edin, doğal su tutulum günlerini önceden görün ve döneminize uygun beslenme önerileri alın.
+  • İstikrar Isı Haritası ve Seri: 14 günlük görsel alışkanlık ısı haritasıyla düzenli tartılma alışkanlığı kazanın.
+  • Sıvı Cam Başarı Paylaşımı: Başarılarınızı dilerseniz kilonuzu gizleyerek estetik cam kart tasarımıyla sevdiklerinizle paylaşın.
+  • Hedef Kilo ve Tahmini Tarih: Ulaşmak istediğiniz kiloyu belirleyin, ilerleme yüzdesi ve tahmini varış tarihini görün.
+  • Hareketli Ortalama Trendi: Günlük dalgalanmaları filtreleyen yumuşak trend eğrisiyle kilonuzun gerçek yönünü izleyin.
   • CSV ve JSON Yedekleme: Tüm verilerinizi tek dokunuşla dışa aktarın ve istediğiniz zaman geri yükleyin.
 
   %100 Cihaz İçi Gizlilik:
@@ -128,67 +124,59 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Kilom: Weight & Strength Log
   ```
 
-- **Subtitle (Max 30 chars — 28):**
+- **Subtitle (Max 30 chars — 27):**
   ```text
-  On-Device 1RM, Cycle & Scale
+  Scale, Strength & Water Log
   ```
 
-- **Promotional Text (Max 170 chars — 158):**
+- **Promotional Text (Max 170 chars — 156):**
   ```text
-  Snap your scale in seconds. Unlock evidence-based 1RM strength tiers, cycle-synced nutrition, and DOMS fluid shields. 100% on-device, zero servers, zero ads.
+  Log weigh-ins in seconds with a scale photo. Understand water retention, workout edema, and true strength gains. 100% on-device, zero servers, zero ads.
   ```
 
-- **Keywords (Max 100 chars — 96):**
+- **Keywords (Max 100 chars — 87):**
   ```text
-  weight tracker,scale ocr,1rm,strength,compound,squat,menstrual,cycle,doms,period,healthkit,water
+  weight tracker,scale,ocr,strength,1rm,squat,menstrual,cycle,doms,period,healthkit,water
   ```
 
 - **Description:**
   ```text
-  The scale doesn't tell the whole story. Kilom logs your weight in seconds while uncovering the biological rhythms behind water retention, hormonal cycles, workout-induced fluid shifts, and true neuromuscular strength.
+  The number on the scale doesn't tell the whole story. Post-workout muscle repair, hormonal cycle shifts, and daily hydration changes can temporarily elevate scale weight without adding body fat.
 
-  100% on-device & private: Your data never leaves your physical phone. Zero servers, zero accounts, zero ads.
+  Kilom is a privacy-first personal health companion designed to make weigh-ins effortless while demystifying fluid fluctuations and strength progress.
+
+  Your data never leaves your physical phone. Zero servers, zero accounts, zero ads.
 
   Effortless Scale Logging:
-  • Scale Photo Scan (On-Device OCR): Snap a photo of your scale display or pick from your gallery. Kilom recognizes digits locally using Apple Vision—including seven-segment LED/LCD screens with glare tolerance. Nothing is saved until you confirm.
-  • Quick Manual Entry: Type in seconds with an oversized numeric keypad. Switch between kg and lb with a single tap. See instant delta context (-0.4 kg / +0.7 kg) and elapsed days.
+  • Scale Photo Recognition (On-Device OCR): Snap your scale screen or pick from your gallery. Kilom reads the digits locally using Apple Vision—supporting digital 7-segment LED/LCD displays. Nothing is saved until you review and confirm.
+  • Quick Manual Entry: Type in seconds with a clean, oversized numeric keypad. Instantly see your delta from your last weigh-in (-0.4 kg / +0.6 kg) and elapsed days. Seamlessly switch between kg and lb.
 
-  Universal Strength & Biomechanics Module (Male & Female):
-  • 100% On-Device Workout Parser: Import your resistance training history (workouts.csv) with zero cloud sync.
-  • Transparent 1RM Science: Calculates estimated 1RM using the validated Epley formula: Weight × (1 + Reps / 30).
-  • NSCA & Kilgore-Rippetoe 4-Tier Normative Scales: Benchmark your Squat, Deadlift, Bench Press, Overhead Press, Hip Thrust, and Barbell Row against sex-stratified relative strength standards (Starter, Intermediate, Advanced, Elite) with exact xBW and kg targets.
-  • DOMS & Glycogen Water Retention Shield: Automatically detects heavy lower-body/back sessions (≥8,000 kg volume in 48h). If the scale spikes, Kilom reassures you that it is temporary muscle repair fluid and glycogen storage (1g glycogen = 3-4g water), not fat gain!
-  • Muscle Group Volume Distribution: Track set and volume shares across Legs/Glutes, Back/Pull, Chest/Push, Shoulders/Arms, and Core.
+  DOMS & Muscle Repair Water Shield:
+  • When the scale spikes after a heavy lower-body or back workout, don't be discouraged. Kilom cross-references your training volume to remind you that temporary gains are muscle repair fluids and glycogen hydration, not body fat.
 
-  Independent Menstrual Cycle & Evidence-Based Nutrition:
-  • Dynamic Cycle Length (21–45 Days): Adaptive cycle forecasting using Backward Luteal Mapping (ovulation = cycle length - 14) tailored to your personal biology.
-  • Water Retention & Bloat Forecast: Foresee natural progesterone-driven water retention (0.8–2.5 kg) in the luteal phase so temporary scale spikes never discourage you.
-  • Hormonally Aligned Nutrition: Evidence-based macronutrient balance and essential micronutrient recommendations (iron, zinc, magnesium, omega-3) backed by ACOG and PubMed literature.
-  • Peer-Reviewed Citations: Directly inspect scientific citations in the in-app Sources tab (McNulty 2020, Stachenfeld 2008, Baker 2020, Solomon 1982, Herzberg 2017).
+  Strength & Biomechanics:
+  • Import your resistance training log (workouts.csv) with zero cloud sync.
+  • Track your estimated One-Rep Max (1RM) on compound lifts (Squat, Deadlift, Bench Press, Hip Thrust, Overhead Press).
+  • Benchmark your performance against bodyweight relative strength tiers (Starter, Intermediate, Advanced, Elite).
+  • Inspect muscle group volume distribution across legs, push, pull, and core.
 
-  100% On-Device Parametric Data Storytelling (NLG):
-  • Zero Cloud AI / Zero LLM Hallucinations: All coaching insights are generated deterministically on-device in pure Kotlin.
-  • Real-World vs. Literature Comparison: Highlights your personal PR patterns (e.g., Follicular-Luteal dual peaks) with an empathetic, non-judgmental tone.
+  Cycle & Nutrition Guide:
+  • Predict natural luteal-phase water retention with personalized cycle tracking so scale spikes never catch you off guard.
+  • Get science-backed macronutrient and micronutrient guidance tailored to your biological rhythm.
+
+  Consistency Matrix & Streak Heatmap:
+  • Build lasting weighing habits with a 14-day visual habit heatmap and streak counter.
+  • Track your target weight and estimated goal arrival date via moving average trend lines.
+  • Liquid-Glass Share Card: Share your milestone streaks with friends, with the option to conceal your exact weight for privacy.
 
   Apple Health (HealthKit) Integration:
-  • Two-Way Apple Health Sync: Writes weight logs to Apple Health and seamlessly imports past history on demand.
-  • The main-screen Apple Health badge displays real-time connection status.
-  • Your health data is never shared, never sold, and never leaves your device.
+  • Seamless two-way synchronization: automatically write weigh-ins to Apple Health and import historical records on demand.
 
-  Goal Weight & Consistency Tracking:
-  • Target Weight & ETA: Set your goal, track milestone progress, and see an estimated arrival date based on your moving average.
-  • Moving Average Trend Line: Smooth out daily fluid fluctuations to reveal your true body mass trend.
-  • Consistency Matrix & 14-Day Habit Heatmap: Visualize your weighing consistency at a glance.
-  • Liquid-Glass Share Card: Share your streaks with friends with an option to hide your exact scale weight.
-  • Optional Daily Reminder: A local notification scheduled entirely on-device; zero push servers.
-  • Full Data Ownership: Complete export and restore via CSV and JSON.
+  100% On-Device Privacy Architecture:
+  • Zero accounts, zero cloud servers, zero analytics, zero ads.
+  • Photos are analyzed in volatile RAM and immediately discarded; never stored on disk or transmitted over a network.
 
-  Uncompromising Privacy:
-  • 100% on-device architecture: no account, no cloud database, no tracking, no third-party SDKs (no Firebase, Mixpanel, etc.).
-  • Scale photos are analyzed in volatile RAM and immediately discarded; never stored on disk or sent over a network.
-  • Swipe left to delete erroneous entries.
-
-  Disclaimer: Kilom’s nutrition and strength guides are for educational and awareness purposes only and do not constitute medical diagnosis or treatment.
+  Disclaimer: Kilom’s nutrition and workout guides are for educational and informational purposes only and do not constitute medical diagnosis or treatment.
 
   Privacy Policy: https://neslisahcelek.github.io/kilom/
   Support: neslisah.celek@outlook.com
@@ -203,33 +191,31 @@ Değer odaklı, net ve dürüst mağaza metinleri. Tüm iddialar uygulamanın ge
   Kilom: Weight & Strength Log
   ```
 
-- **Short Description (Max 80 chars — 78):**
+- **Short Description (Max 80 chars — 80):**
   ```text
-  Scale photo OCR, 1RM strength tiers, cycle nutrition & 100% on-device privacy.
+  Scale photo OCR, strength tracking, cycle insights, and 100% on-device privacy.
   ```
 
 - **Full Description:**
   ```text
-  Kilom is a privacy-first personal health companion that simplifies weight tracking, habit building, and cycle-synced nutrition and strength training.
+  Kilom is a privacy-first personal health companion that simplifies weight tracking, habit building, and workout-induced fluid awareness.
 
   Key Features:
-  • Scale Screen Recognition (On-Device OCR): Take a photo of your scale or choose from gallery. Numbers are parsed on your device (supports 7-segment displays). You confirm every entry before saving.
-  • Universal Strength & Biomechanics: Import your workouts.csv file. Calculates Epley 1RM, NSCA 4-tier relative strength scales (Starter to Elite), muscle group tonnage, and DOMS fluid shield.
-  • Cycle & Evidence-Based Nutrition: 21–45 day infradian cycle insights, luteal water retention warnings, and micronutrient advice (iron, zinc, magnesium) backed by ACOG and PubMed literature.
-  • On-Device Parametric Data Storytelling: Evidence-based coaching comparing sports science expectations with your real-world progress without cloud AI hallucinations.
-  • Consistency Matrix & Weigh-In Streak: Current streak, longest streak, monthly consistency rate, and a 14-day visual habit heatmap.
-  • Liquid-Glass Milestone Sharing: Share your streaks and achievements with an option to conceal exact weight.
-  • Goal Weight with ETA: Set your target weight and view your progress and estimated arrival date.
-  • Trend Chart & Period Summaries: Follow your smoothed weight trajectory and review weekly/monthly changes.
-  • Optional Daily Reminder: Local on-device notification at your chosen hour.
-  • CSV / JSON Backup: Export and restore your data anytime.
+  • Scale Screen Recognition: Snap a photo of your scale or choose from your gallery. Digits are parsed instantly on your device with 7-segment display support. You confirm every log.
+  • DOMS Water Retention Shield: Reassures you when the scale rises after intense lifting, explaining temporary muscle repair fluid and glycogen storage.
+  • Strength & 1RM Tracking: Import your workouts.csv file to track 1RM progression and bodyweight-relative strength tiers.
+  • Cycle & Nutrition Insights: Anticipate natural luteal water retention and receive cycle-phase nutrition tips.
+  • 14-Day Streak Heatmap: Visualize your weighing consistency and build reliable daily routines.
+  • Liquid-Glass Milestone Sharing: Share your consistency streaks with an option to keep your exact weight private.
+  • Target Weight with ETA: Set your goal weight and watch your trajectory on a smoothed moving average curve.
+  • CSV and JSON Backup: Export and restore your data anytime with one tap.
 
   100% On-Device Privacy:
-  • No account, no cloud servers, no ads, no trackers.
+  • No account, no servers, no ads, no trackers.
   • Your photos and health metrics never leave your smartphone.
   • kg / lb toggle and swipe-to-delete history.
 
-  Disclaimer: Nutrition and exercise guidance in Kilom is intended for educational purposes only and does not replace professional medical advice.
+  Disclaimer: Guidance in Kilom is intended for educational purposes only and does not replace professional medical advice.
 
   Privacy Policy: https://neslisahcelek.github.io/kilom/
   Contact: neslisah.celek@outlook.com

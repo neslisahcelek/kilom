@@ -104,6 +104,7 @@ interface PrefsRepository {
     suspend fun setAiCoachApiKey(key: String?)
     val aiProvider: Flow<String>
     suspend fun setAiProvider(provider: String)
+    val previewScreen: String? get() = null
 }
 
 enum class UserGender {
@@ -290,6 +291,9 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         _aiProvider.value = clean
     }
 
+    override val previewScreen: String?
+        get() = settings.getStringOrNull(KEY_PREVIEW_SCREEN)
+
     private companion object {
         const val KEY_UNIT = "weight_unit"
         const val KEY_HEALTH_SYNC = "health_sync_enabled"
@@ -310,6 +314,7 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
         const val KEY_AI_COACH_API_KEY = "ai_coach_api_key"
         const val KEY_AI_PROVIDER = "ai_provider"
         const val DEFAULT_AI_PROVIDER = "GEMINI"
+        const val KEY_PREVIEW_SCREEN = "app_store_screen_preview"
     }
 }
 

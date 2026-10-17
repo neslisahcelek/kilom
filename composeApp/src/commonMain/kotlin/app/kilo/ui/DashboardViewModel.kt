@@ -308,6 +308,29 @@ class DashboardViewModel(
                 }
             }.collect()
         }
+
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(150)
+            prefs.previewScreen?.let { previewMode ->
+                when (previewMode) {
+                    "entry_ocr" -> {
+                        _state.update {
+                            it.copy(
+                                sheet = SheetState(
+                                    input = "64.20",
+                                    isPrefilledFromOcr = true,
+                                    selectedTag = WeightTag.MORNING_FASTED,
+                                )
+                            )
+                        }
+                    }
+                    "workout_sheet" -> openCorrelationSheet()
+                    "cycle_sheet" -> openCycleSheet()
+                    "share_sheet" -> openShareSheet()
+                    "backup_sheet" -> openBackup()
+                }
+            }
+        }
     }
 
     fun setUnit(unit: WeightUnit) {
