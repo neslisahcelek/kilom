@@ -202,6 +202,8 @@ data class WorkoutSessionSummary(
     val exerciseNames: List<String>,
     val maxWeights: Map<String, Double> = emptyMap(),
     val avgRpe: Double? = null,
+    val durationMinutes: Int = 0,
+    val isFromHealth: Boolean = false,
 )
 
 /**
@@ -274,8 +276,9 @@ fun resolveWorkoutCyclePhase(
 /**
  * Evaluates DOMS-induced water retention risk.
  *
- * Scans the last 48 hours (epochDays in currentEpochDays - 2 until currentEpochDays) for a heavy
- * workout targeting major muscle groups (isLegsOrBack == true and totalVolumeKg >= 8000 kg).
+ * Scans the last 48 hours (epochDays in currentEpochDays - 2 until currentEpochDays) for either:
+ * 1. A rich CSV workout targeting major muscle groups (`isLegsOrBack == true` and `totalVolumeKg >= 8000 kg`), OR
+ * 2. A Health-synced resistance workout (`isFromHealth == true` and `durationMinutes >= 35`).
  *
  * If weight increased by >= 0.3 kg vs previous weigh-in, confirms DOMS fluid retention.
  */
@@ -286,12 +289,15 @@ fun evaluateDomsRisk(
     currentEpochDays: Long,
 ): DomsAssessment {
     val qualifyingWorkouts = workouts.filter {
-        it.dateEpochDays in (currentEpochDays - 2 until currentEpochDays) &&
-            it.isLegsOrBack &&
-            it.totalVolumeKg >= 8000.0
+        val inLast48h = it.dateEpochDays in (currentEpochDays - 2 until currentEpochDays)
+        val csvHeavyCompound = it.isLegsOrBack && it.totalVolumeKg >= 8000.0
+        val healthStrengthSession = it.isFromHealth && it.durationMinutes >= 35
+        inLast48h && (csvHeavyCompound || healthStrengthSession)
     }
 
-    val recentVolumeKg = qualifyingWorkouts.sumOf { it.totalVolumeKg }
+    val recentVolumeKg = qualifyingWorkouts.sumOf {
+        if (it.totalVolumeKg > 0.0) it.totalVolumeKg else (it.durationMinutes * 180.0)
+    }
     val exerciseNames = qualifyingWorkouts.flatMap { it.exerciseNames }.distinct()
     val targetMuscleGroup = if (qualifyingWorkouts.isNotEmpty()) {
         val titles = qualifyingWorkouts.map { it.title }.filter { it.isNotBlank() }.distinct()
@@ -538,7 +544,8 @@ fun analyzeGeneralWorkouts(
 
     val sessionCount = workouts.size
     val totalVolumeKg = workouts.sumOf { it.totalVolumeKg }
-    val avgSessionVolumeKg = totalVolumeKg / sessionCount
+    val sessionsWithVolume = workouts.count { it.totalVolumeKg > 0.0 }
+    val avgSessionVolumeKg = if (sessionsWithVolume > 0) totalVolumeKg / sessionsWithVolume else 0.0
     val maxSessionVolumeKg = workouts.maxOfOrNull { it.totalVolumeKg } ?: 0.0
 
     val allRpes = workouts.flatMap { s -> s.exercises.flatMap { e -> e.sets.mapNotNull { it.rpe } } }

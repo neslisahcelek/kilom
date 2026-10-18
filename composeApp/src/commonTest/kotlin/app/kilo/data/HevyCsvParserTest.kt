@@ -231,4 +231,125 @@ class HevyCsvParserTest {
         prefs.setAiProvider("")
         assertEquals("GEMINI", prefs.aiProvider.first())
     }
+
+    @Test
+    fun mergeWorkoutsPreservesHistoryAndUpgradesHealthSummariesWithRichCsv() {
+        val oldCsvSession = HevyWorkoutSession(
+            id = "hevy_1715000000000_OldLegDay",
+            title = "Old Leg Day",
+            dateEpochDays = 19850L,
+            startTimeEpochMs = 1715000000000L,
+            endTimeEpochMs = 1715003600000L,
+            durationMinutes = 60,
+            totalVolumeKg = 8500.0,
+            exercises = listOf(
+                HevyExercise(
+                    title = "Barbell Squat",
+                    category = MuscleCategory.LEGS_GLUTES,
+                    sets = listOf(HevySet(1, "normal", 100.0, 10)),
+                    totalVolumeKg = 1000.0,
+                    maxWeightKg = 100.0,
+                    estimated1RmKg = 133.33,
+                )
+            ),
+            source = WorkoutSource.CSV,
+        )
+
+        val healthAutoSyncedSession = HevyWorkoutSession(
+            id = "health_workout_1715362200000",
+            title = "Hevy Antrenmanı (Apple Health)",
+            dateEpochDays = 19853L,
+            startTimeEpochMs = 1715362200000L, // May 10, 2024 17:30:00 UTC
+            endTimeEpochMs = 1715365800000L,
+            durationMinutes = 60,
+            totalVolumeKg = 0.0,
+            exercises = emptyList(),
+            source = WorkoutSource.HEALTH,
+        )
+
+        val existing = listOf(healthAutoSyncedSession, oldCsvSession)
+
+        // Incoming CSV has a workout at the same time as healthAutoSyncedSession (+2 min offset) and a brand new workout
+        val incomingRichUpgrade = HevyWorkoutSession(
+            id = "hevy_1715362320000_LegDay",
+            title = "Leg Day",
+            dateEpochDays = 19853L,
+            startTimeEpochMs = 1715362320000L,
+            endTimeEpochMs = 1715365920000L,
+            durationMinutes = 60,
+            totalVolumeKg = 9200.0,
+            exercises = listOf(
+                HevyExercise(
+                    title = "Barbell Squat",
+                    category = MuscleCategory.LEGS_GLUTES,
+                    sets = listOf(HevySet(1, "normal", 120.0, 8)),
+                    totalVolumeKg = 960.0,
+                    maxWeightKg = 120.0,
+                    estimated1RmKg = 152.0,
+                )
+            ),
+            source = WorkoutSource.CSV,
+        )
+
+        val brandNewCsvSession = HevyWorkoutSession(
+            id = "hevy_1715500000000_PushDay",
+            title = "Push Day",
+            dateEpochDays = 19855L,
+            startTimeEpochMs = 1715500000000L,
+            endTimeEpochMs = 1715503600000L,
+            durationMinutes = 60,
+            totalVolumeKg = 5400.0,
+            exercises = listOf(
+                HevyExercise(
+                    title = "Bench Press",
+                    category = MuscleCategory.CHEST_PUSH,
+                    sets = listOf(HevySet(1, "normal", 80.0, 8)),
+                    totalVolumeKg = 640.0,
+                    maxWeightKg = 80.0,
+                    estimated1RmKg = 101.33,
+                )
+            ),
+            source = WorkoutSource.CSV,
+        )
+
+        val result = mergeWorkouts(existing, listOf(incomingRichUpgrade, brandNewCsvSession))
+
+        // Old Leg Day is preserved, Health session is upgraded to rich CSV Leg Day, and Push Day is added -> total 3
+        assertEquals(3, result.merged.size)
+        assertEquals(1, result.addedCount)
+        assertEquals(1, result.upgradedCount)
+
+        // All 3 sessions should now be rich CSV sessions
+        assertTrue(result.merged.all { it.source == WorkoutSource.CSV && it.exercises.isNotEmpty() })
+        assertEquals("Push Day", result.merged[0].title)
+        assertEquals("Leg Day", result.merged[1].title)
+        assertEquals(9200.0, result.merged[1].totalVolumeKg)
+        assertEquals("Old Leg Day", result.merged[2].title)
+
+        // Verify that a subsequent Health sync for the same timestamp does NOT overwrite the rich CSV workout
+        val reverseResult = mergeWorkouts(result.merged, listOf(healthAutoSyncedSession))
+        assertEquals(3, reverseResult.merged.size)
+        assertEquals(0, reverseResult.addedCount)
+        assertEquals(0, reverseResult.upgradedCount)
+        assertEquals(9200.0, reverseResult.merged[1].totalVolumeKg)
+        assertEquals(WorkoutSource.CSV, reverseResult.merged[1].source)
+
+        // Verify fallback matching by dateEpochDays when incoming CSV has startTimeEpochMs == 0L
+        val healthOnDay20000 = healthAutoSyncedSession.copy(
+            id = "health_day_20000",
+            dateEpochDays = 20000L,
+            startTimeEpochMs = 1728000000000L,
+        )
+        val csvWithoutTimeOnDay20000 = incomingRichUpgrade.copy(
+            id = "hevy_0_DateOnly",
+            title = "Date Only Workout",
+            dateEpochDays = 20000L,
+            startTimeEpochMs = 0L,
+            endTimeEpochMs = 0L,
+        )
+        val dateFallbackResult = mergeWorkouts(listOf(healthOnDay20000), listOf(csvWithoutTimeOnDay20000))
+        assertEquals(1, dateFallbackResult.merged.size)
+        assertEquals(1, dateFallbackResult.upgradedCount)
+        assertEquals(WorkoutSource.CSV, dateFallbackResult.merged.first().source)
+    }
 }

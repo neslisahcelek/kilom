@@ -20,6 +20,8 @@ class AndroidHealthSync : HealthSync {
     override suspend fun writeWeights(entries: List<WeightEntry>): Int = 0
 
     override suspend fun readWeights(since: Instant?): List<HealthWeightSample> = emptyList()
+
+    override suspend fun readWorkouts(since: Instant?): List<HealthWorkoutSample> = emptyList()
 }
 
 @Composable

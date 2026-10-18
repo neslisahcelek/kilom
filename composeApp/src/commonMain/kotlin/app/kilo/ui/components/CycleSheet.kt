@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.kilo.data.HevyWorkoutSession
 import app.kilo.data.MuscleCategory
+import app.kilo.data.WorkoutSource
 import app.kilo.domain.CycleDayInfo
 import app.kilo.domain.CyclePhase
 import app.kilo.domain.CycleState
@@ -241,6 +242,8 @@ fun CycleScreen(
                     exerciseNames = session.exercises.map { it.title },
                     maxWeights = session.exercises.associate { it.title to it.maxWeightKg },
                     avgRpe = avgRpe,
+                    durationMinutes = session.durationMinutes,
+                    isFromHealth = session.source == WorkoutSource.HEALTH,
                 )
             }
             analyzeCycleWorkoutCorrelation(

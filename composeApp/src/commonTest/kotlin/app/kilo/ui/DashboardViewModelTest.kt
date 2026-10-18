@@ -79,8 +79,11 @@ class DashboardViewModelTest {
         }
 
         var readSamples: List<app.kilo.platform.HealthWeightSample> = emptyList()
+        var readWorkoutSamples: List<app.kilo.platform.HealthWorkoutSample> = emptyList()
 
         override suspend fun readWeights(since: Instant?): List<app.kilo.platform.HealthWeightSample> = readSamples
+
+        override suspend fun readWorkouts(since: Instant?): List<app.kilo.platform.HealthWorkoutSample> = readWorkoutSamples
 
         override suspend fun writeWeights(entries: List<app.kilo.domain.WeightEntry>): Int {
             writtenBatches.add(entries)
@@ -878,5 +881,109 @@ class DashboardViewModelTest {
         vm.openCorrelationFromBackup()
         assertEquals(false, vm.state.value.isBackupSheetOpen)
         assertEquals(true, vm.state.value.isCorrelationSheetOpen)
+    }
+
+    @Test
+    fun syncWorkoutsFromHealthMergesWithoutOverwritingExistingCsvWorkouts() = runTest(testDispatcher) {
+        val workoutRepo = FakeWorkoutRepository()
+        val existingCsvSession = HevyWorkoutSession(
+            id = "hevy_csv_1",
+            title = "Leg Day",
+            dateEpochDays = LocalDate.parse("2026-10-05").toEpochDays().toLong(),
+            startTimeEpochMs = Instant.parse("2026-10-05T10:00:00Z").toEpochMilliseconds(),
+            endTimeEpochMs = Instant.parse("2026-10-05T11:00:00Z").toEpochMilliseconds(),
+            durationMinutes = 60,
+            totalVolumeKg = 8500.0,
+            exercises = listOf(
+                HevyExercise(
+                    title = "Barbell Squat",
+                    category = MuscleCategory.LEGS_GLUTES,
+                    totalVolumeKg = 8500.0,
+                    sets = listOf(HevySet(1, "normal", 100.0, 10, 8.0)),
+                )
+            ),
+            source = app.kilo.data.WorkoutSource.CSV,
+        )
+        workoutRepo.saveWorkouts(listOf(existingCsvSession))
+
+        val healthSync = FakeHealthSync(isSupported = true, authResult = true).apply {
+            readWorkoutSamples = listOf(
+                // Overlapping with existing CSV session -> should NOT overwrite rich CSV
+                app.kilo.platform.HealthWorkoutSample(
+                    id = "health_1",
+                    title = "Hevy · Apple Health",
+                    startInstant = Instant.parse("2026-10-05T10:05:00Z"),
+                    endInstant = Instant.parse("2026-10-05T11:05:00Z"),
+                    durationMinutes = 60,
+                    sourceId = "com.hevy.app",
+                ),
+                // Brand new session on next day -> should be added as HEALTH summary
+                app.kilo.platform.HealthWorkoutSample(
+                    id = "health_2",
+                    title = "Hevy · Apple Health",
+                    startInstant = Instant.parse("2026-10-06T15:00:00Z"),
+                    endInstant = Instant.parse("2026-10-06T15:50:00Z"),
+                    durationMinutes = 50,
+                    sourceId = "com.hevy.app",
+                ),
+            )
+        }
+
+        val prefs = SettingsPrefsRepository(MapSettings()).apply {
+            setHealthSyncEnabled(true)
+        }
+
+        val vm = createViewModel(
+            prefs = prefs,
+            workoutRepository = workoutRepo,
+            healthSync = healthSync,
+        )
+        advanceUntilIdle()
+
+        assertEquals(2, vm.workouts.value.size)
+        val oct5 = vm.workouts.value.first { it.dateEpochDays == LocalDate.parse("2026-10-05").toEpochDays().toLong() }
+        assertEquals(app.kilo.data.WorkoutSource.CSV, oct5.source)
+        assertEquals(8500.0, oct5.totalVolumeKg)
+        assertEquals(1, oct5.exercises.size)
+
+        val oct6 = vm.workouts.value.first { it.dateEpochDays == LocalDate.parse("2026-10-06").toEpochDays().toLong() }
+        assertEquals(app.kilo.data.WorkoutSource.HEALTH, oct6.source)
+        assertEquals(50, oct6.durationMinutes)
+    }
+
+    @Test
+    fun incomingFileBufferAutomaticallyMergesSharedHevyCsvAndUpgradesHealthWorkout() = runTest(testDispatcher) {
+        val workoutRepo = FakeWorkoutRepository()
+        val healthSummary = HevyWorkoutSession(
+            id = "health_oct6",
+            title = "Hevy · Apple Health",
+            dateEpochDays = LocalDate.parse("2026-10-06").toEpochDays().toLong(),
+            startTimeEpochMs = Instant.parse("2026-10-06T15:00:00Z").toEpochMilliseconds(),
+            endTimeEpochMs = Instant.parse("2026-10-06T15:50:00Z").toEpochMilliseconds(),
+            durationMinutes = 50,
+            totalVolumeKg = 0.0,
+            exercises = emptyList(),
+            source = app.kilo.data.WorkoutSource.HEALTH,
+        )
+        workoutRepo.saveWorkouts(listOf(healthSummary))
+
+        val vm = createViewModel(workoutRepository = workoutRepo)
+        advanceUntilIdle()
+
+        val sharedCsv = """
+            "title","start_time","end_time","description","exercise_title","superset_id","exercise_notes","set_index","set_type","weight_kg","reps","distance_km","duration_seconds","rpe"
+            "Upper Power","6 Oct 2026, 15:02","6 Oct 2026, 15:52","","Bench Press (Barbell)","","","0","normal","80","8","","","8.5"
+        """.trimIndent()
+
+        app.kilo.platform.IncomingFileBuffer.onFileReceived(sharedCsv)
+        advanceUntilIdle()
+
+        assertEquals(1, vm.workouts.value.size)
+        val upgraded = vm.workouts.value.first()
+        assertEquals(app.kilo.data.WorkoutSource.CSV, upgraded.source)
+        assertEquals("Upper Power", upgraded.title)
+        assertEquals(640.0, upgraded.totalVolumeKg)
+        assertEquals(true, vm.state.value.isCorrelationSheetOpen)
+        assertEquals(1, vm.state.value.workoutImportNotice?.upgradedCount)
     }
 }

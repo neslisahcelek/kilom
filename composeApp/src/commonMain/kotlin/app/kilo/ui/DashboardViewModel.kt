@@ -63,10 +63,14 @@ import app.kilo.data.HevyWorkoutSession
 import app.kilo.data.MuscleCategory
 import app.kilo.data.NoOpWorkoutRepository
 import app.kilo.data.WorkoutRepository
+import app.kilo.data.WorkoutSource
+import app.kilo.data.mergeWorkouts
 import app.kilo.domain.DomsAssessment
 import app.kilo.domain.WorkoutSessionSummary
 import app.kilo.domain.evaluateDomsRisk
+import app.kilo.platform.IncomingFileBuffer
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 
 /** Localizable error keys; the UI maps them to string resources (no raw exceptions reach the UI). */
 enum class UiError { EMPTY, NOT_A_NUMBER, OUT_OF_RANGE, OCR_NO_RESULT, OCR_FAILED }
@@ -99,7 +103,12 @@ data class SheetState(
     val isEditing: Boolean get() = editingEntryId != null
 }
 
-data class BackupNotice(val count: Int, val isSuccess: Boolean)
+data class BackupNotice(
+    val count: Int,
+    val isSuccess: Boolean,
+    val addedCount: Int = count,
+    val upgradedCount: Int = 0,
+)
 
 data class HealthSyncNotice(val count: Int, val isSuccess: Boolean)
 
@@ -171,7 +180,7 @@ class DashboardViewModel(
 
     private val _summaryPeriod = MutableStateFlow(SummaryPeriod.WEEK)
 
-    private val _workouts = MutableStateFlow<List<HevyWorkoutSession>>(emptyList())
+    private val _workouts = MutableStateFlow<List<HevyWorkoutSession>>(workoutRepository.workouts.value)
     val workouts: StateFlow<List<HevyWorkoutSession>> = _workouts.asStateFlow()
 
     private val _domsAssessment = MutableStateFlow<DomsAssessment?>(null)
@@ -260,6 +269,8 @@ class DashboardViewModel(
                         exerciseNames = session.exercises.map { it.title },
                         maxWeights = session.exercises.associate { it.title to it.maxWeightKg },
                         avgRpe = avgRpe,
+                        durationMinutes = session.durationMinutes,
+                        isFromHealth = session.source == WorkoutSource.HEALTH,
                     )
                 }
 
@@ -307,6 +318,24 @@ class DashboardViewModel(
                     )
                 }
             }.collect()
+        }
+
+        // Automatically sync new workouts from Apple Health / Health Connect on startup when Health Sync is enabled
+        viewModelScope.launch {
+            if (healthSync.isSupported && prefs.healthSyncEnabled.value) {
+                syncWorkoutsFromHealthInternal(requestAuth = false)
+            }
+        }
+
+        // Listen for incoming CSV/JSON files shared directly to Kilom via OS Share Sheet / Open-In
+        val fileConsumerId = IncomingFileBuffer.registerConsumer()
+        viewModelScope.launch {
+            IncomingFileBuffer.pendingContent.filterNotNull().collect { content ->
+                if (IncomingFileBuffer.isCurrentConsumer(fileConsumerId)) {
+                    IncomingFileBuffer.consume(fileConsumerId)
+                    handleExternalSharedContent(content)
+                }
+            }
         }
     }
 
@@ -551,6 +580,7 @@ class DashboardViewModel(
             if (granted) {
                 prefs.setHealthSyncEnabled(true)
                 feedback.success()
+                syncWorkoutsFromHealthInternal(requestAuth = false)
             } else {
                 prefs.setHealthSyncEnabled(false)
                 _state.update { it.copy(healthSyncNotice = HealthSyncNotice(count = 0, isSuccess = false)) }
@@ -602,6 +632,8 @@ class DashboardViewModel(
                 feedback.success()
                 if (importAlso) {
                     importFromHealth()
+                } else {
+                    syncWorkoutsFromHealthInternal(requestAuth = false)
                 }
             } else {
                 prefs.setHealthSyncEnabled(false)
@@ -631,13 +663,92 @@ class DashboardViewModel(
             val importedCount = merged.size - current.size
             if (importedCount > 0) {
                 weights.replaceEntries(merged)
+            }
+            val syncedWorkouts = syncWorkoutsFromHealthInternal(requestAuth = false)
+            if (importedCount > 0 || syncedWorkouts > 0) {
                 feedback.success()
             }
             _state.update {
                 it.copy(
                     isImportingHealth = false,
-                    healthSyncNotice = HealthSyncNotice(count = importedCount, isSuccess = importedCount > 0 || samples.isEmpty()),
+                    healthSyncNotice = HealthSyncNotice(
+                        count = importedCount,
+                        isSuccess = importedCount > 0 || samples.isEmpty() || syncedWorkouts > 0,
+                    ),
                 )
+            }
+        }
+    }
+
+    fun syncWorkoutsFromHealth() {
+        if (!healthSync.isSupported) return
+        viewModelScope.launch {
+            val added = syncWorkoutsFromHealthInternal(requestAuth = true)
+            if (added > 0) {
+                feedback.success()
+            }
+        }
+    }
+
+    private suspend fun syncWorkoutsFromHealthInternal(requestAuth: Boolean): Int {
+        if (!healthSync.isSupported) return 0
+        if (requestAuth) {
+            val auth = healthSync.requestAuthorization()
+            if (!auth) return 0
+        }
+        val samples = try {
+            healthSync.readWorkouts()
+        } catch (_: Exception) {
+            emptyList()
+        }
+        if (samples.isEmpty()) return 0
+
+        val tz = timeZone()
+        val incomingSessions = samples.map { sample ->
+            val dateEpochDays = sample.startInstant.toLocalDateTime(tz).date.toEpochDays().toLong()
+            HevyWorkoutSession(
+                id = sample.id,
+                title = sample.title,
+                dateEpochDays = dateEpochDays,
+                startTimeEpochMs = sample.startInstant.toEpochMilliseconds(),
+                endTimeEpochMs = sample.endInstant.toEpochMilliseconds(),
+                durationMinutes = sample.durationMinutes,
+                totalVolumeKg = 0.0,
+                exercises = emptyList(),
+                source = WorkoutSource.HEALTH,
+            )
+        }
+
+        val mergeResult = mergeWorkouts(existing = workoutRepository.workouts.value, incoming = incomingSessions)
+        if (mergeResult.totalAffectedCount > 0) {
+            _workouts.value = mergeResult.merged
+            workoutRepository.saveWorkouts(mergeResult.merged)
+        }
+        return mergeResult.addedCount
+    }
+
+    private fun handleExternalSharedContent(content: String) {
+        val trimmed = content.trimStart()
+        if (trimmed.isEmpty()) return
+
+        // Check if this is a Hevy workout CSV (header contains exercise_title or start_time/set_index)
+        val firstLine = trimmed.lineSequence().firstOrNull()?.lowercase().orEmpty()
+        val looksLikeHevyCsv = firstLine.contains("exercise_title") ||
+            firstLine.contains("set_index") ||
+            (firstLine.contains("start_time") && firstLine.contains("weight_kg"))
+
+        if (looksLikeHevyCsv) {
+            val count = importHevyCsv(content)
+            if (count > 0) {
+                _state.update { it.copy(isCorrelationSheetOpen = true) }
+            }
+        } else {
+            val hevyAttempt = HevyCsvParser.parse(content, timeZone())
+            if (hevyAttempt.isNotEmpty()) {
+                importHevyCsv(content)
+                _state.update { it.copy(isCorrelationSheetOpen = true) }
+            } else {
+                importData(content)
             }
         }
     }
@@ -847,17 +958,24 @@ class DashboardViewModel(
             _state.update { it.copy(workoutImportNotice = BackupNotice(count = 0, isSuccess = false)) }
             return 0
         }
+        val mergeResult = mergeWorkouts(existing = workoutRepository.workouts.value, incoming = parsed)
+        _workouts.value = mergeResult.merged
         viewModelScope.launch {
-            workoutRepository.saveWorkouts(parsed)
+            workoutRepository.saveWorkouts(mergeResult.merged)
         }
         _state.update {
             it.copy(
-                workoutImportNotice = BackupNotice(count = parsed.size, isSuccess = true),
+                workoutImportNotice = BackupNotice(
+                    count = mergeResult.merged.size,
+                    isSuccess = true,
+                    addedCount = mergeResult.addedCount,
+                    upgradedCount = mergeResult.upgradedCount,
+                ),
                 isDomsAlertDismissed = false,
             )
         }
         feedback.success()
-        return parsed.size
+        return mergeResult.merged.size
     }
 
     fun clearWorkouts() {

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.kilo.data.HevyWorkoutSession
 import app.kilo.data.UserGender
+import app.kilo.data.WorkoutSource
 import app.kilo.domain.StrengthTier
 import app.kilo.domain.analyzeGeneralWorkouts
 import app.kilo.domain.calculateRelativeStrength
@@ -44,6 +45,7 @@ import kilo.composeapp.generated.resources.correlation_tier_beginner
 import kilo.composeapp.generated.resources.correlation_tier_elite
 import kilo.composeapp.generated.resources.correlation_tier_intermediate
 import kilo.composeapp.generated.resources.hevy_import_button
+import kilo.composeapp.generated.resources.hevy_sync_health_Pending_badge
 import kilo.composeapp.generated.resources.workout_card_active_sessions_format
 import kilo.composeapp.generated.resources.workout_card_empty_subtitle
 import kilo.composeapp.generated.resources.workout_card_open_cta
@@ -88,6 +90,10 @@ fun WorkoutCard(
 
     val generalAnalytics = remember(workouts) {
         analyzeGeneralWorkouts(workouts)
+    }
+
+    val healthSummaryCount = remember(workouts) {
+        workouts.count { it.source == WorkoutSource.HEALTH && it.exercises.isEmpty() }
     }
 
     val topLift = remember(workouts, currentWeightKg, isMaleStandard) {
@@ -228,6 +234,24 @@ fun WorkoutCard(
                     color = colors.textSecondary,
                     fontWeight = FontWeight.Medium,
                 )
+
+                if (healthSummaryCount > 0) {
+                    Spacer(Modifier.height(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(colors.glassTint)
+                            .border(0.5.dp, colors.glassBorder, RoundedCornerShape(10.dp))
+                            .padding(horizontal = 10.dp, vertical = 7.dp),
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.hevy_sync_health_Pending_badge, healthSummaryCount),
+                            style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.sp),
+                            color = colors.textSecondary,
+                        )
+                    }
+                }
 
                 // Top Relative Strength Lift Badge
                 if (topLift != null && currentWeightKg > 0.0) {

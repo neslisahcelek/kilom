@@ -573,6 +573,15 @@
     <string name="cycle_source_baker_solomon_desc">Progesteronun hipotalamus üzerinden bazal vücut ısısını +0,3–0,5°C artırdığını (Temperature, 7(3), 226–262; PMID: 33123618) ve luteal dinlenme metabolizma hızını günde +100–250 kcal yükselttiğini (Am J Clin Nutr, 36(4), 611–616, PMID: 7124662; PLOS ONE, PMID: 32658929) gösteren çalışmalar; bu evredeki yüksek efor algısını (RPE) ve doğal iştah artışını açıklar.</string>
     <string name="cycle_source_herzberg_acog_title">Ovülasyonda Bağ Esnekliği (ACL) ve ACOG Kılavuzları (Herzberg ve ark., 2017; ACOG, 2023)</string>
     <string name="cycle_source_herzberg_acog_desc">Ovülasyon evresindeki östrojen zirvesinin ön çapraz bağ (ACL) gevşekliğini artırdığını kanıtlayan 68.758 katılımcılı meta-analiz (Orthop J Sports Med, 5(7); PMID: 28795075) ile ACOG Klinik Uygulama Kılavuzu No. 7'nin (Obstet Gynecol, 142(6), 1516–1533; PMID: 37973069) prostaglandin krampları, demir desteği ve PMS yönetimi protokollerini birleştirir.</string>
+
+    <!-- Hybrid Workout Sync & Info (Health Auto-Sync + Smart CSV Merge) -->
+    <string name="hevy_sync_mode_title">🔄 Hibrit Antrenman Eşitleme Nasıl Çalışır?</string>
+    <string name="hevy_sync_mode_auto_health">• Günlük Otomatik Eşitleme (Apple Sağlık): Hangi gün ve kaç dakika antrenman yaptığını otomatik algılar; böylece hiçbir dosya yüklemesen bile DOMS Kas Ödemi Kalkanı ve antrenman sıklığın her gün güncel kalır.</string>
+    <string name="hevy_sync_mode_why_csv">• 1RM ve Rekorlar İçin Neden CSV Gerekir? Apple Sağlık yalnızca antrenman süresini ve kaloriyi tutar; hangi harekette kaç set ve kaç kg kaldırdığını kaydetmez. Yeni rekorlarını (PR), 1RM kuvvet ölçeklerini ve kas grubu tonajını güncellemek istediğinde Hevy'de CSV Dışa Aktar'a dokunup Paylaş menüsünden doğrudan Kilom'u seçmen yeterlidir. Eski kayıtların asla silinmez, yalnızca yeni antrenmanlar birleştirilir!</string>
+    <string name="hevy_sync_health_Pending_badge">⚡ %1$d yeni antrenman Sağlık'tan otomatik alındı (Süre ve DOMS kalkanı aktif). Bu antrenmanların set, kg ve 1RM rekor detaylarını görmek için dilediğin zaman Hevy'den CSV paylaşabilirsin.</string>
+    <string name="hevy_merge_summary_format">%1$d Detaylı (CSV) • %2$d Özet (Sağlık)</string>
+    <string name="hevy_import_merged_notice_format">✅ %1$d yeni seans eklendi, %2$d seans detaylandırıldı (Toplam %3$d antrenman aktif). Geçmiş verilerin korundu!</string>
+    <string name="hevy_sync_from_health_button">Sağlık'tan Antrenmanları Eşitle</string>
 </resources>
 
 

@@ -314,13 +314,13 @@ class SettingsPrefsRepository(private val settings: Settings) : PrefsRepository 
 }
 
 interface WorkoutRepository {
-    val workouts: Flow<List<HevyWorkoutSession>>
+    val workouts: StateFlow<List<HevyWorkoutSession>>
     suspend fun saveWorkouts(workouts: List<HevyWorkoutSession>)
     suspend fun clearWorkouts()
 }
 
 object NoOpWorkoutRepository : WorkoutRepository {
-    override val workouts: Flow<List<HevyWorkoutSession>> = MutableStateFlow(emptyList())
+    override val workouts: StateFlow<List<HevyWorkoutSession>> = MutableStateFlow<List<HevyWorkoutSession>>(emptyList()).asStateFlow()
     override suspend fun saveWorkouts(workouts: List<HevyWorkoutSession>) {}
     override suspend fun clearWorkouts() {}
 }

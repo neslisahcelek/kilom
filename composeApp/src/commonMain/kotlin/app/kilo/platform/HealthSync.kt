@@ -39,10 +39,26 @@ interface HealthSync {
 
     /** Reads body-mass samples (kg) from the health store, newest first. Own app samples are excluded. */
     suspend fun readWeights(since: Instant? = null): List<HealthWeightSample>
+
+    /** Reads strength/resistance workout sessions from the health store, newest first. */
+    suspend fun readWorkouts(since: Instant? = null): List<HealthWorkoutSample> = emptyList()
 }
 
 /** A body-mass sample read from the platform health store. Weight is always in kg. */
 data class HealthWeightSample(val kg: Double, val at: Instant, val sourceId: String)
+
+/**
+ * A workout session summary read from the platform health store (e.g., Apple Health / HealthKit).
+ * Note: HealthKit stores session duration and timing, not individual exercise sets/reps/weights.
+ */
+data class HealthWorkoutSample(
+    val id: String,
+    val title: String,
+    val startInstant: Instant,
+    val endInstant: Instant,
+    val durationMinutes: Int,
+    val sourceId: String,
+)
 
 /**
  * No-op implementation used when health sync is unsupported, disabled, or in tests.
@@ -53,6 +69,7 @@ object NoOpHealthSync : HealthSync {
     override suspend fun writeWeight(kg: Double, timestamp: Instant, syncId: String?): Boolean = false
     override suspend fun writeWeights(entries: List<WeightEntry>): Int = 0
     override suspend fun readWeights(since: Instant?): List<HealthWeightSample> = emptyList()
+    override suspend fun readWorkouts(since: Instant?): List<HealthWorkoutSample> = emptyList()
 }
 
 @Composable

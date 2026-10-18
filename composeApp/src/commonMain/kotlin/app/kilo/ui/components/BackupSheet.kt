@@ -87,11 +87,15 @@ import kilo.composeapp.generated.resources.hevy_clear_button
 import kilo.composeapp.generated.resources.hevy_how_to_export_hint
 import kilo.composeapp.generated.resources.hevy_import_button
 import kilo.composeapp.generated.resources.hevy_import_empty_error
+import kilo.composeapp.generated.resources.hevy_import_merged_notice_format
 import kilo.composeapp.generated.resources.hevy_import_success_format
 import kilo.composeapp.generated.resources.hevy_imported_count_format
 import kilo.composeapp.generated.resources.hevy_open_analytics_cta
 import kilo.composeapp.generated.resources.hevy_section_desc
 import kilo.composeapp.generated.resources.hevy_section_title
+import kilo.composeapp.generated.resources.hevy_sync_mode_auto_health
+import kilo.composeapp.generated.resources.hevy_sync_mode_title
+import kilo.composeapp.generated.resources.hevy_sync_mode_why_csv
 import kilo.composeapp.generated.resources.hevy_why_title
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import kotlinx.coroutines.launch
@@ -330,7 +334,7 @@ fun BackupSheet(
                             modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 10.dp),
                         )
 
-                        // "Why Import Workout Data?" Explanation Card
+                        // "Why Import Workout Data?" & Hybrid Sync Explanation Card
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -370,21 +374,36 @@ fun BackupSheet(
                                     color = colors.textSecondary,
                                 )
 
-                                Spacer(Modifier.height(8.dp))
+                                Spacer(Modifier.height(10.dp))
 
+                                // Clear Hybrid Sync Education Box (Auto Health vs Smart CSV Merge)
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clip(RoundedCornerShape(10.dp))
+                                        .clip(RoundedCornerShape(12.dp))
                                         .background(colors.accent.copy(alpha = 0.08f))
-                                        .border(0.5.dp, colors.accent.copy(alpha = 0.25f), RoundedCornerShape(10.dp))
-                                        .padding(horizontal = 10.dp, vertical = 8.dp),
+                                        .border(0.5.dp, colors.accent.copy(alpha = 0.25f), RoundedCornerShape(12.dp))
+                                        .padding(horizontal = 11.dp, vertical = 9.dp),
                                 ) {
-                                    Text(
-                                        text = stringResource(Res.string.hevy_how_to_export_hint),
-                                        style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.5.sp),
-                                        color = colors.textSecondary,
-                                    )
+                                    Column {
+                                        Text(
+                                            text = stringResource(Res.string.hevy_sync_mode_title),
+                                            style = typography.caption.copy(fontWeight = FontWeight.Bold, fontSize = 11.5.sp),
+                                            color = colors.accent,
+                                        )
+                                        Spacer(Modifier.height(4.dp))
+                                        Text(
+                                            text = stringResource(Res.string.hevy_sync_mode_auto_health),
+                                            style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.5.sp),
+                                            color = colors.textSecondary,
+                                        )
+                                        Spacer(Modifier.height(4.dp))
+                                        Text(
+                                            text = stringResource(Res.string.hevy_sync_mode_why_csv),
+                                            style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.5.sp),
+                                            color = colors.textSecondary,
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -400,7 +419,12 @@ fun BackupSheet(
                             }
                             val wBorder = if (workoutImportNotice.isSuccess) colors.negative else colors.positive
                             val wText = if (workoutImportNotice.isSuccess) {
-                                stringResource(Res.string.hevy_import_success_format, workoutImportNotice.count)
+                                stringResource(
+                                    Res.string.hevy_import_merged_notice_format,
+                                    workoutImportNotice.addedCount,
+                                    workoutImportNotice.upgradedCount,
+                                    workoutImportNotice.count,
+                                )
                             } else {
                                 stringResource(Res.string.hevy_import_empty_error)
                             }

@@ -18,6 +18,7 @@ import platform.HealthKit.HKHealthStore
 import platform.HealthKit.HKMetadataKeySyncIdentifier
 import platform.HealthKit.HKMetadataKeySyncVersion
 import platform.HealthKit.HKObjectQueryNoLimit
+import platform.HealthKit.HKObjectType
 import platform.HealthKit.HKQuantity
 import platform.HealthKit.HKQuantitySample
 import platform.HealthKit.HKQuantityType
@@ -28,10 +29,16 @@ import platform.HealthKit.HKSampleQuery
 import platform.HealthKit.HKSampleSortIdentifierEndDate
 import platform.HealthKit.HKSource
 import platform.HealthKit.HKUnit
-import platform.HealthKit.HKMetricPrefixKilo
+import platform.HealthKit.HKWorkout
+import platform.HealthKit.HKWorkoutActivityTypeCoreTraining
+import platform.HealthKit.HKWorkoutActivityTypeCrossTraining
+import platform.HealthKit.HKWorkoutActivityTypeFunctionalStrengthTraining
+import platform.HealthKit.HKWorkoutActivityTypeHighIntensityIntervalTraining
+import platform.HealthKit.HKWorkoutActivityTypeTraditionalStrengthTraining
 import platform.HealthKit.predicateForObjectsFromSource
 import platform.HealthKit.predicateForSamplesWithStartDate
 import kotlin.coroutines.resume
+import kotlin.math.roundToInt
 
 /**
  * iOS implementation of [HealthSync] leveraging Apple HealthKit with deduplication support.
@@ -40,6 +47,7 @@ import kotlin.coroutines.resume
 class IosHealthSync : HealthSync {
     private val healthStore: HKHealthStore? = if (HKHealthStore.isHealthDataAvailable()) HKHealthStore() else null
     private val bodyMassType: HKQuantityType? = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBodyMass)
+    private val workoutType = HKObjectType.workoutType()
 
     override val isSupported: Boolean
         get() = healthStore != null && bodyMassType != null
@@ -53,7 +61,7 @@ class IosHealthSync : HealthSync {
 
         return suspendCancellableCoroutine { cont ->
             val shareTypes = setOf(type)
-            val readTypes = setOf(type)
+            val readTypes = setOf(type, workoutType)
             store.requestAuthorizationToShareTypes(
                 typesToShare = shareTypes,
                 readTypes = readTypes,
@@ -210,6 +218,73 @@ class IosHealthSync : HealthSync {
                             kg = sample.quantity.doubleValueForUnit(unit),
                             at = Instant.fromEpochMilliseconds((seconds * 1000.0).toLong()),
                             sourceId = sample.sourceRevision.source.bundleIdentifier,
+                        )
+                    }
+                }
+                if (cont.isActive) {
+                    cont.resume(samples)
+                }
+            }
+            store.executeQuery(query)
+        }
+    }
+
+    override suspend fun readWorkouts(since: Instant?): List<HealthWorkoutSample> {
+        val store = healthStore ?: return emptyList()
+
+        return suspendCancellableCoroutine { cont ->
+            val predicate: NSPredicate? = if (since != null) {
+                HKQuery.predicateForSamplesWithStartDate(
+                    startDate = since.toNSDate(),
+                    endDate = null,
+                    options = HKQueryOptionNone,
+                )
+            } else {
+                null
+            }
+            val sort = NSSortDescriptor(key = HKSampleSortIdentifierEndDate, ascending = false)
+            val query = HKSampleQuery(
+                sampleType = workoutType,
+                predicate = predicate,
+                limit = 250u,
+                sortDescriptors = listOf(sort),
+            ) { _, results, error ->
+                val samples = if (error != null) {
+                    emptyList()
+                } else {
+                    results.orEmpty().mapNotNull { item ->
+                        val workout = item as? HKWorkout ?: return@mapNotNull null
+                        val bundleId = workout.sourceRevision.source.bundleIdentifier.lowercase()
+                        val sourceName = workout.sourceRevision.source.name
+                        val activityType = workout.workoutActivityType
+
+                        val isHevySource = bundleId.contains("hevy") || sourceName.lowercase().contains("hevy")
+                        val isStrengthActivity = activityType == HKWorkoutActivityTypeTraditionalStrengthTraining ||
+                            activityType == HKWorkoutActivityTypeFunctionalStrengthTraining ||
+                            activityType == HKWorkoutActivityTypeCrossTraining ||
+                            activityType == HKWorkoutActivityTypeCoreTraining ||
+                            activityType == HKWorkoutActivityTypeHighIntensityIntervalTraining
+
+                        if (!isHevySource && !isStrengthActivity) return@mapNotNull null
+
+                        val startMs = (workout.startDate.timeIntervalSince1970 * 1000.0).toLong()
+                        val endMs = (workout.endDate.timeIntervalSince1970 * 1000.0).toLong()
+                        val durationMin = (workout.duration / 60.0).roundToInt().coerceAtLeast(1)
+
+                        val cleanSource = sourceName.trim().ifBlank { "Apple Health" }
+                        val title = when {
+                            isHevySource -> "Hevy · Apple Health"
+                            cleanSource.equals("Apple Health", ignoreCase = true) -> "Apple Health"
+                            else -> "$cleanSource · Apple Health"
+                        }
+
+                        HealthWorkoutSample(
+                            id = "health_workout_$startMs",
+                            title = title,
+                            startInstant = Instant.fromEpochMilliseconds(startMs),
+                            endInstant = Instant.fromEpochMilliseconds(endMs),
+                            durationMinutes = durationMin,
+                            sourceId = workout.sourceRevision.source.bundleIdentifier,
                         )
                     }
                 }

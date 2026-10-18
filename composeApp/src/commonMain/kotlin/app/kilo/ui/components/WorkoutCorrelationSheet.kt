@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import app.kilo.data.HevyWorkoutSession
 import app.kilo.data.MuscleCategory
 import app.kilo.data.UserGender
+import app.kilo.data.WorkoutSource
 import app.kilo.domain.CyclePhase
 import app.kilo.domain.GeneralWorkoutAnalytics
 import app.kilo.domain.RelativeStrengthProgress
@@ -95,6 +96,11 @@ import kilo.composeapp.generated.resources.hevy_benefit_doms
 import kilo.composeapp.generated.resources.hevy_benefit_strength
 import kilo.composeapp.generated.resources.hevy_how_to_export_hint
 import kilo.composeapp.generated.resources.hevy_import_button
+import kilo.composeapp.generated.resources.hevy_merge_summary_format
+import kilo.composeapp.generated.resources.hevy_sync_health_Pending_badge
+import kilo.composeapp.generated.resources.hevy_sync_mode_auto_health
+import kilo.composeapp.generated.resources.hevy_sync_mode_title
+import kilo.composeapp.generated.resources.hevy_sync_mode_why_csv
 import kilo.composeapp.generated.resources.workout_doms_card_title
 import kilo.composeapp.generated.resources.workout_doms_formula_desc
 import kilo.composeapp.generated.resources.workout_doms_peak_session_format
@@ -322,7 +328,15 @@ fun WorkoutAnalyticsScreen(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                Spacer(Modifier.height(18.dp))
+                Spacer(Modifier.height(14.dp))
+
+                // Concise Hybrid Sync Status & Education Banner
+                HybridWorkoutSyncBanner(
+                    workouts = workouts,
+                    onImportClick = { hevyPicker.launch() },
+                )
+
+                Spacer(Modifier.height(14.dp))
 
                 // If no workouts uploaded yet, show compact CSV Upload CTA Banner above the tabs
                 if (workouts.isEmpty() && selectedTabIndex != 2) {
@@ -429,6 +443,102 @@ private fun WorkoutAnalyticsTabSelector(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HybridWorkoutSyncBanner(
+    workouts: List<HevyWorkoutSession>,
+    onImportClick: () -> Unit,
+) {
+    val colors = KiloTheme.colors
+    val typography = KiloTheme.type
+    var isExpanded by remember { mutableStateOf(false) }
+
+    val csvCount = remember(workouts) {
+        workouts.count { it.source == WorkoutSource.CSV && it.exercises.isNotEmpty() }
+    }
+    val healthSummaryCount = remember(workouts) {
+        workouts.count { it.source == WorkoutSource.HEALTH && it.exercises.isEmpty() }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(colors.glassTint)
+            .border(0.5.dp, colors.glassBorder, RoundedCornerShape(16.dp))
+            .clickable(role = Role.Button) { isExpanded = !isExpanded }
+            .padding(horizontal = 14.dp, vertical = 11.dp),
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(Res.string.hevy_sync_mode_title),
+                    style = typography.caption.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp),
+                    color = colors.accent,
+                    modifier = Modifier.weight(1f),
+                )
+                if (workouts.isNotEmpty()) {
+                    Text(
+                        text = stringResource(Res.string.hevy_merge_summary_format, csvCount, healthSummaryCount),
+                        style = typography.caption.copy(fontSize = 10.5.sp, fontWeight = FontWeight.SemiBold),
+                        color = colors.textSecondary,
+                    )
+                } else {
+                    Text(
+                        text = if (isExpanded) "▲" else "▼",
+                        style = typography.caption.copy(fontSize = 11.sp),
+                        color = colors.textSecondary,
+                    )
+                }
+            }
+
+            if (healthSummaryCount > 0 && !isExpanded) {
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = stringResource(Res.string.hevy_sync_health_Pending_badge, healthSummaryCount),
+                    style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.5.sp),
+                    color = colors.textSecondary,
+                )
+            }
+
+            if (isExpanded || workouts.isEmpty()) {
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = stringResource(Res.string.hevy_sync_mode_auto_health),
+                    style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.5.sp),
+                    color = colors.textSecondary,
+                )
+                Spacer(Modifier.height(5.dp))
+                Text(
+                    text = stringResource(Res.string.hevy_sync_mode_why_csv),
+                    style = typography.caption.copy(fontSize = 11.sp, lineHeight = 15.5.sp),
+                    color = colors.textSecondary,
+                )
+                if (healthSummaryCount > 0) {
+                    Spacer(Modifier.height(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(colors.accent.copy(alpha = 0.14f))
+                            .border(0.5.dp, colors.accent.copy(alpha = 0.35f), RoundedCornerShape(10.dp))
+                            .clickable(role = Role.Button, onClick = onImportClick)
+                            .padding(horizontal = 12.dp, vertical = 7.dp),
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.hevy_import_button),
+                            style = typography.caption.copy(fontSize = 11.5.sp, fontWeight = FontWeight.Bold),
+                            color = colors.accent,
+                        )
+                    }
+                }
             }
         }
     }

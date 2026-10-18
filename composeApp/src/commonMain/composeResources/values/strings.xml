@@ -573,6 +573,15 @@
     <string name="cycle_source_baker_solomon_desc">Clinical evidence on progesterone's hypothalamic thermogenic shift (+0.3–0.5°C core temperature; Temperature, 7(3), 226–262, PMID: 33123618) and luteal resting metabolic rate elevation (+100–250 kcal/day; Am J Clin Nutr, 36(4), 611–616, PMID: 7124662; PLOS ONE, PMID: 32658929), explaining higher luteal RPE and caloric needs.</string>
     <string name="cycle_source_herzberg_acog_title">Ovulatory ACL Laxity &amp; ACOG Guidelines (Herzberg et al., 2017; ACOG, 2023)</string>
     <string name="cycle_source_herzberg_acog_desc">Meta-analysis of 68,758 participants (Orthop J Sports Med, 5(7); PMID: 28795075) confirming estrogen-induced anterior cruciate ligament (ACL) laxity peaks during ovulation, paired with ACOG Clinical Practice Guideline No. 7 (Obstet Gynecol, 142(6), 1516–1533; PMID: 37973069) on prostaglandin cramping, iron replacement, and PMS management.</string>
+
+    <!-- Hybrid Workout Sync & Info (Health Auto-Sync + Smart CSV Merge) -->
+    <string name="hevy_sync_mode_title">🔄 How Hybrid Workout Sync Works</string>
+    <string name="hevy_sync_mode_auto_health">• Daily Auto-Sync (Apple Health): Automatically detects when and how long you trained so your DOMS Fluid Shield and workout frequency stay up to date without lifting a finger.</string>
+    <string name="hevy_sync_mode_why_csv">• Why Share CSV for 1RM &amp; PRs? Apple Health only stores workout duration and calories — it does not store exercise names, sets, or weights lifted (kg). Whenever you want to update your 1RM scales, personal records (PRs), and muscle group tonnage, tap Export CSV in Hevy and choose Kilom from the Share menu. Old history is never erased; only new sessions are merged!</string>
+    <string name="hevy_sync_health_Pending_badge">⚡ %1$d new workouts auto-synced from Health (Duration &amp; DOMS active). Share CSV from Hevy anytime to unlock set, 1RM &amp; PR details for these sessions.</string>
+    <string name="hevy_merge_summary_format">%1$d CSV Detailed • %2$d Health Summary</string>
+    <string name="hevy_import_merged_notice_format">✅ Merged %1$d new &amp; %2$d upgraded sessions (%3$d total active). Your history is preserved!</string>
+    <string name="hevy_sync_from_health_button">Sync Workouts from Health</string>
 </resources>
 
 

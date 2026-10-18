@@ -151,6 +151,42 @@ class WorkoutCorrelationAnalyticsTest {
     }
 
     @Test
+    fun domsEvaluationDetectsTraumaOnHealthSyncedWorkoutOver35MinutesWithWeightSpike() {
+        val healthStrengthWorkout = WorkoutSessionSummary(
+            id = "health_workout_1",
+            title = "Hevy · Apple Health",
+            dateEpochDays = 99,
+            totalVolumeKg = 0.0,
+            isLegsOrBack = false,
+            exerciseNames = emptyList(),
+            durationMinutes = 45,
+            isFromHealth = true,
+        )
+
+        val assessment = evaluateDomsRisk(
+            workouts = listOf(healthStrengthWorkout),
+            previousWeightKg = 65.0,
+            currentWeightKg = 65.6,
+            currentEpochDays = 100,
+        )
+
+        assertTrue(assessment.hasTrauma)
+        assertEquals(45 * 180.0, assessment.recentVolumeKg)
+        assertEquals(0.6, assessment.expectedFluidWeightKg)
+        assertEquals("Hevy · Apple Health", assessment.targetMuscleGroup)
+
+        // Short 20-minute Health session (< 35 min threshold) should not trigger DOMS shield
+        val shortHealthWorkout = healthStrengthWorkout.copy(durationMinutes = 20)
+        val shortAssessment = evaluateDomsRisk(
+            workouts = listOf(shortHealthWorkout),
+            previousWeightKg = 65.0,
+            currentWeightKg = 65.6,
+            currentEpochDays = 100,
+        )
+        assertFalse(shortAssessment.hasTrauma)
+    }
+
+    @Test
     fun analyzeCycleWorkoutCorrelationCalculatesVolumeAndRpeDifference() {
         // Cycle starts at epoch day 1, length 28
         // Day 8 (Follicular): volume 10000, Squat 100, RPE 7.0
