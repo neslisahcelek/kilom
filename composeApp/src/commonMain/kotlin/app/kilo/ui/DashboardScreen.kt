@@ -81,6 +81,8 @@ import kilo.composeapp.generated.resources.history_empty
 import kilo.composeapp.generated.resources.history_title
 import kilo.composeapp.generated.resources.reminder_notification_body
 import kilo.composeapp.generated.resources.reminder_notification_title
+import kilo.composeapp.generated.resources.unit_kg
+import kilo.composeapp.generated.resources.unit_lb
 import kotlinx.datetime.TimeZone
 import org.jetbrains.compose.resources.stringResource
 
@@ -427,6 +429,13 @@ fun DashboardScreen(
         }
 
         // In-App Live Camera Viewfinder Overlay
+        val liveUnitLabel = stringResource(
+            if (state.unit == app.kilo.domain.WeightUnit.KG) {
+                Res.string.unit_kg
+            } else {
+                Res.string.unit_lb
+            }
+        )
         AnimatedVisibility(
             visible = isCameraOpen,
             enter = fadeIn(),
@@ -446,7 +455,7 @@ fun DashboardScreen(
                     viewModel.analyzeLiveFrame(bytes)
                 },
                 onFormatLiveWeight = { kg ->
-                    viewModel.formatLiveWeight(kg)
+                    "${app.kilo.domain.formatWeight(kg, state.unit)} $liveUnitLabel"
                 },
                 onLiveWeightLocked = { kg ->
                     isCameraOpen = false

@@ -986,4 +986,52 @@ class DashboardViewModelTest {
         assertEquals(true, vm.state.value.isCorrelationSheetOpen)
         assertEquals(1, vm.state.value.workoutImportNotice?.upgradedCount)
     }
+
+    @Test
+    fun analyzeLiveFrameAndOnImageUseReferenceKgToRepairSevenSegmentLeadingDigit() = runTest(testDispatcher) {
+        val weights = SettingsWeightRepository(MapSettings()).apply {
+            add(app.kilo.domain.WeightEntry("prev_1", 72.1, Instant.parse("2026-10-05T08:00:00Z")))
+        }
+        val vm = createViewModel(
+            weights = weights,
+            readText = { listOf("22.4 kg") }, // Leading '7' misread as '2'
+        )
+        advanceUntilIdle()
+
+        val liveDetected = vm.analyzeLiveFrame(byteArrayOf(1, 2, 3))
+        assertEquals(72.4, liveDetected)
+
+        vm.onImage(byteArrayOf(1, 2, 3))
+        advanceUntilIdle()
+        assertEquals("72.40", vm.state.value.sheet?.input)
+        assertEquals(true, vm.state.value.sheet?.isPrefilledFromOcr)
+        // Must not auto-save without user confirmation
+        assertEquals(1, vm.state.value.history.size)
+    }
+
+    @Test
+    fun onLiveWeightLockedOpensEntrySheetForUserConfirmationAndCancelsInFlightScan() = runTest(testDispatcher) {
+        val ocrGate = kotlinx.coroutines.CompletableDeferred<List<String>>()
+        val vm = createViewModel(
+            readText = { ocrGate.await() },
+        )
+        advanceUntilIdle()
+
+        // Start a slow in-flight OCR scan
+        vm.onImage(byteArrayOf(9, 9))
+        assertEquals(true, vm.state.value.sheet?.scanning)
+
+        // Lock a live weight before the slow scan finishes
+        vm.onLiveWeightLocked(68.4)
+        val sheetAfterLock = vm.state.value.sheet
+        assertEquals(false, sheetAfterLock?.scanning)
+        assertEquals("68.40", sheetAfterLock?.input)
+        assertEquals(true, sheetAfterLock?.isPrefilledFromOcr)
+        assertEquals(0, vm.state.value.history.size)
+
+        // Completing the old scan must NOT overwrite the locked live weight
+        ocrGate.complete(listOf("55.0 kg"))
+        advanceUntilIdle()
+        assertEquals("68.40", vm.state.value.sheet?.input)
+    }
 }

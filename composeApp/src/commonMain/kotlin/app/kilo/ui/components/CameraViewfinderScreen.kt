@@ -52,6 +52,7 @@ import kilo.composeapp.generated.resources.camera_permission_denied_title
 import kilo.composeapp.generated.resources.camera_permission_open_settings
 import kilo.composeapp.generated.resources.camera_unavailable_desc
 import kilo.composeapp.generated.resources.camera_unavailable_title
+import kilo.composeapp.generated.resources.unit_kg
 import kilo.composeapp.generated.resources.viewfinder_auto_scan_hint
 import kilo.composeapp.generated.resources.viewfinder_instruction
 import kilo.composeapp.generated.resources.viewfinder_led_mode_off
@@ -205,8 +206,9 @@ fun CameraViewfinderScreen(
 
                 // 5. Instruction Pill above reticle
                 val candidateValue = liveCandidateKg
+                val defaultUnitLabel = stringResource(Res.string.unit_kg)
                 val instructionText = if (candidateValue != null) {
-                    val formatted = onFormatLiveWeight?.invoke(candidateValue) ?: "$candidateValue kg"
+                    val formatted = onFormatLiveWeight?.invoke(candidateValue) ?: "$candidateValue $defaultUnitLabel"
                     "✨ " + stringResource(Res.string.viewfinder_live_detected_format, formatted)
                 } else {
                     stringResource(Res.string.viewfinder_instruction)

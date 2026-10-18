@@ -95,11 +95,20 @@ actual class CameraController {
     private val ciContext = CIContext(options = null)
     private var videoDevice: AVCaptureDevice? = null
     var previewLayer: AVCaptureVideoPreviewLayer? = null
+    @kotlin.concurrent.Volatile
+    internal var previewWidth: Double = 0.0
+    @kotlin.concurrent.Volatile
+    internal var previewHeight: Double = 0.0
     private val sessionQueue = NSOperationQueue().apply { maxConcurrentOperationCount = 1 }
     private val videoFrameQueue = dispatch_queue_create("app.kilo.camera.videoframes", null)
     private var activeCaptureDelegate: NSObject? = null
     private var videoSampleDelegate: NSObject? = null
     private var pendingFrameRequest: Pair<ViewfinderRect, (ByteArray?) -> Unit>? = null
+
+    internal fun updatePreviewBounds(bounds: CValue<CGRect>) {
+        previewWidth = bounds.useContents { size.width }
+        previewHeight = bounds.useContents { size.height }
+    }
 
     var permissionStatusState by mutableStateOf(CameraPermissionStatus.CHECKING)
         private set
@@ -331,10 +340,9 @@ actual class CameraController {
         val imgH = extent.useContents { size.height }
         if (imgW <= 0.0 || imgH <= 0.0) return null
 
-        // Calculate aspect-fill transformation between image and viewfinder screen
-        val layerBounds = previewLayer?.bounds
-        val screenW = layerBounds?.useContents { size.width } ?: 0.0
-        val screenH = layerBounds?.useContents { size.height } ?: 0.0
+        // Calculate aspect-fill transformation between image and viewfinder screen using Main-Thread cached dimensions
+        val screenW = previewWidth
+        val screenH = previewHeight
 
         val (rawImgX1, rawImgY1, rawImgX2, rawImgY2) = if (screenW > 0.0 && screenH > 0.0) {
             val scale = maxOf(screenW / imgW, screenH / imgH)
@@ -420,9 +428,11 @@ private class CameraPreviewUIView(
     frame: CValue<CGRect> = CGRectZero.readValue(),
 ) : UIView(frame = frame) {
     var previewLayer: AVCaptureVideoPreviewLayer? = null
+    var onBoundsChanged: ((CValue<CGRect>) -> Unit)? = null
 
     override fun layoutSubviews() {
         super.layoutSubviews()
+        onBoundsChanged?.invoke(bounds)
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         previewLayer?.let { layer ->
@@ -454,11 +464,13 @@ actual fun CameraPreview(
             }
             view.layer.addSublayer(layer)
             view.previewLayer = layer
+            view.onBoundsChanged = { controller.updatePreviewBounds(it) }
             controller.previewLayer = layer
             view
         },
         modifier = modifier,
         update = { view ->
+            controller.updatePreviewBounds(view.bounds)
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             view.previewLayer?.let { layer ->
@@ -471,6 +483,7 @@ actual fun CameraPreview(
             CATransaction.commit()
         },
         onResize = { view, _ ->
+            controller.updatePreviewBounds(view.bounds)
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             view.previewLayer?.let { layer ->

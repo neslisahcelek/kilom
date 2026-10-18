@@ -423,18 +423,12 @@ class DashboardViewModel(
         return if (parsed.unit == WeightUnit.KG) parsed.value else parsed.value.lbToKg()
     }
 
-    fun formatLiveWeight(kg: Double): String {
-        val unit = _state.value.unit
-        val suffix = if (unit == WeightUnit.KG) "kg" else "lb"
-        return "${formatWeight(kg, unit)} $suffix"
-    }
-
     fun onLiveWeightLocked(kg: Double) {
         scanJob?.cancel()
         ++scanCounter
         val unit = _state.value.unit
         val suggestedTag = if (_state.value.cycle.isWaterRetentionActive) WeightTag.WATER_RETENTION else null
-        logOcr("live_scan_locked kg=$kg")
+        logOcr("live_scan_locked prefill_applied")
         _state.update {
             it.copy(
                 sheet = SheetState(
