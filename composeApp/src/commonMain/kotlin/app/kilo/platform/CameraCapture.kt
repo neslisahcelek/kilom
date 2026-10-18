@@ -26,8 +26,11 @@ expect val isCustomCameraSupported: Boolean
 expect class CameraController {
     val permissionStatus: CameraPermissionStatus
     val isTorchActive: Boolean
+    val isLowGlareMode: Boolean
     fun toggleTorch()
+    fun toggleLowGlareMode()
     suspend fun capture(viewfinder: ViewfinderRect): ByteArray?
+    suspend fun sampleLiveFrame(viewfinder: ViewfinderRect): ByteArray?
     fun release()
     fun openSettings()
     fun refreshPermission()

@@ -62,17 +62,44 @@ import platform.darwin.NSObject
 import app.kilo.ocr.logOcr
 import kotlin.coroutines.resume
 
+import platform.AVFoundation.AVCaptureConnection
+import platform.AVFoundation.AVCaptureExposureModeContinuousAutoExposure
+import platform.AVFoundation.AVCaptureFocusModeContinuousAutoFocus
+import platform.AVFoundation.AVCaptureOutput
+import platform.AVFoundation.AVCaptureVideoDataOutput
+import platform.AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegateProtocol
+import platform.AVFoundation.exposureMode
+import platform.AVFoundation.exposurePointOfInterest
+import platform.AVFoundation.exposurePointOfInterestSupported
+import platform.AVFoundation.focusMode
+import platform.AVFoundation.focusPointOfInterest
+import platform.AVFoundation.focusPointOfInterestSupported
+import platform.AVFoundation.isExposureModeSupported
+import platform.AVFoundation.isFocusModeSupported
+import platform.AVFoundation.maxExposureTargetBias
+import platform.AVFoundation.minExposureTargetBias
+import platform.AVFoundation.setExposureTargetBias
+import platform.CoreGraphics.CGImageRelease
+import platform.CoreGraphics.CGPointMake
+import platform.CoreMedia.CMSampleBufferGetImageBuffer
+import platform.CoreMedia.CMSampleBufferRef
+import platform.darwin.dispatch_queue_create
+
 actual val isCustomCameraSupported: Boolean = true
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 actual class CameraController {
     val session = AVCaptureSession()
     val photoOutput = AVCapturePhotoOutput()
+    private val videoDataOutput = AVCaptureVideoDataOutput()
     private val ciContext = CIContext(options = null)
     private var videoDevice: AVCaptureDevice? = null
     var previewLayer: AVCaptureVideoPreviewLayer? = null
     private val sessionQueue = NSOperationQueue().apply { maxConcurrentOperationCount = 1 }
+    private val videoFrameQueue = dispatch_queue_create("app.kilo.camera.videoframes", null)
     private var activeCaptureDelegate: NSObject? = null
+    private var videoSampleDelegate: NSObject? = null
+    private var pendingFrameRequest: Pair<ViewfinderRect, (ByteArray?) -> Unit>? = null
 
     var permissionStatusState by mutableStateOf(CameraPermissionStatus.CHECKING)
         private set
@@ -83,6 +110,11 @@ actual class CameraController {
         private set
 
     actual val isTorchActive: Boolean get() = isTorchActiveState
+
+    var isLowGlareModeState by mutableStateOf(false)
+        private set
+
+    actual val isLowGlareMode: Boolean get() = isLowGlareModeState
 
     init {
         checkPermissionAndSetup()
@@ -137,10 +169,71 @@ actual class CameraController {
                 if (session.canAddOutput(photoOutput)) {
                     session.addOutput(photoOutput)
                 }
+
+                videoDataOutput.alwaysDiscardsLateVideoFrames = true
+                val sampleDelegate = object : NSObject(), AVCaptureVideoDataOutputSampleBufferDelegateProtocol {
+                    override fun captureOutput(
+                        output: AVCaptureOutput,
+                        didOutputSampleBuffer: CMSampleBufferRef?,
+                        fromConnection: AVCaptureConnection
+                    ) {
+                        val req = pendingFrameRequest ?: return
+                        pendingFrameRequest = null
+                        val sampleBuffer = didOutputSampleBuffer ?: run {
+                            req.second(null)
+                            return
+                        }
+                        val imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) ?: run {
+                            req.second(null)
+                            return
+                        }
+                        val rawCi = CIImage.imageWithCVPixelBuffer(imageBuffer)
+                        // Ensure portrait orientation if connection wasn't already rotated
+                        val ci = if (fromConnection.videoOrientation == AVCaptureVideoOrientationPortrait) {
+                            rawCi
+                        } else {
+                            rawCi.imageByApplyingOrientation(6)
+                        }
+                        val bytes = cropCiImageToJpeg(ci, req.first)
+                        req.second(bytes)
+                    }
+                }
+                videoSampleDelegate = sampleDelegate
+                videoDataOutput.setSampleBufferDelegate(sampleDelegate, queue = videoFrameQueue)
+                if (session.canAddOutput(videoDataOutput)) {
+                    session.addOutput(videoDataOutput)
+                    val conn = videoDataOutput.connectionWithMediaType(AVMediaTypeVideo)
+                    if (conn != null && conn.supportsVideoOrientation) {
+                        conn.videoOrientation = AVCaptureVideoOrientationPortrait
+                    }
+                }
+
                 session.commitConfiguration()
+                configureDeviceFocusAndExposure(dev, lowGlare = isLowGlareModeState)
                 session.startRunning()
             }
         }
+    }
+
+    private fun configureDeviceFocusAndExposure(dev: AVCaptureDevice, lowGlare: Boolean) {
+        try {
+            if (dev.lockForConfiguration(null)) {
+                val targetPoint = CGPointMake(0.5, 0.42)
+                if (dev.focusPointOfInterestSupported && dev.isFocusModeSupported(AVCaptureFocusModeContinuousAutoFocus)) {
+                    dev.focusPointOfInterest = targetPoint
+                    dev.focusMode = AVCaptureFocusModeContinuousAutoFocus
+                }
+                if (dev.exposurePointOfInterestSupported && dev.isExposureModeSupported(AVCaptureExposureModeContinuousAutoExposure)) {
+                    dev.exposurePointOfInterest = targetPoint
+                    dev.exposureMode = AVCaptureExposureModeContinuousAutoExposure
+                }
+                // Slight negative bias stops bright LED segments on dark glass scales from blooming into 8s
+                val desiredBias = if (lowGlare) -1.15f else -0.35f
+                val clampedBias = desiredBias.coerceIn(dev.minExposureTargetBias, dev.maxExposureTargetBias)
+                dev.setExposureTargetBias(clampedBias, completionHandler = null)
+                dev.unlockForConfiguration()
+            }
+        } catch (_: Exception) {}
     }
 
     actual fun openSettings() {
@@ -169,6 +262,27 @@ actual class CameraController {
         } catch (_: Exception) {}
     }
 
+    actual fun toggleLowGlareMode() {
+        val dev = videoDevice ?: return
+        val next = !isLowGlareModeState
+        isLowGlareModeState = next
+        configureDeviceFocusAndExposure(dev, lowGlare = next)
+    }
+
+    actual suspend fun sampleLiveFrame(viewfinder: ViewfinderRect): ByteArray? = withContext(Dispatchers.Default) {
+        if (!session.isRunning()) return@withContext null
+        suspendCancellableCoroutine { continuation ->
+            pendingFrameRequest = viewfinder to { bytes ->
+                if (continuation.isActive) {
+                    continuation.resume(bytes)
+                }
+            }
+            continuation.invokeOnCancellation {
+                pendingFrameRequest = null
+            }
+        }
+    }
+
     actual suspend fun capture(viewfinder: ViewfinderRect): ByteArray? = withContext(Dispatchers.Default) {
         suspendCancellableCoroutine { continuation ->
             val settings = AVCapturePhotoSettings.photoSettings()
@@ -191,7 +305,7 @@ actual class CameraController {
                         return
                     }
 
-                    // Crop to viewfinder rectangle with safe margin
+                    // Crop to viewfinder rectangle with generous safe margin
                     val croppedBytes = cropViewfinderImage(data, viewfinder)
                     continuation.resume(croppedBytes)
                 }
@@ -206,7 +320,13 @@ actual class CameraController {
 
     private fun cropViewfinderImage(data: platform.Foundation.NSData, vf: ViewfinderRect): ByteArray? {
         val ci = CIImage.imageWithData(data, options = mapOf(kCIImageApplyOrientationProperty to true)) ?: return null
+        return cropCiImageToJpeg(ci, vf)
+    }
+
+    private fun cropCiImageToJpeg(ci: CIImage, vf: ViewfinderRect): ByteArray? {
         val extent = ci.extent
+        val originX = extent.useContents { origin.x }
+        val originY = extent.useContents { origin.y }
         val imgW = extent.useContents { size.width }
         val imgH = extent.useContents { size.height }
         if (imgW <= 0.0 || imgH <= 0.0) return null
@@ -232,35 +352,42 @@ actual class CameraController {
             listOf(vf.left.toDouble() * imgW, vf.top.toDouble() * imgH, vf.right.toDouble() * imgW, vf.bottom.toDouble() * imgH)
         }
 
-        // Add 15% padding so digits aren't clipped on edges
-        val padX = (rawImgX2 - rawImgX1) * 0.15
-        val padY = (rawImgY2 - rawImgY1) * 0.15
+        // Add generous padding (25% horizontal, 35% vertical) so outer LCD bezels and digits are never clipped
+        val padX = (rawImgX2 - rawImgX1) * 0.25
+        val padY = (rawImgY2 - rawImgY1) * 0.35
         val left = (rawImgX1 - padX).coerceIn(0.0, imgW)
         val right = (rawImgX2 + padX).coerceIn(0.0, imgW)
         val top = (rawImgY1 - padY).coerceIn(0.0, imgH)
         val bottom = (rawImgY2 + padY).coerceIn(0.0, imgH)
 
-        // CoreImage coordinate system has origin at bottom-left
-        val cropX = left
-        val cropY = imgH - bottom
-        val cropW = right - left
-        val cropH = bottom - top
+        // CoreImage coordinate system has origin at bottom-left + extent origin offset
+        val cropX = originX + left
+        val cropY = originY + (imgH - bottom)
+        val cropW = (right - left).coerceAtLeast(1.0)
+        val cropH = (bottom - top).coerceAtLeast(1.0)
 
         val croppedCi = ci.imageByCroppingToRect(CGRectMake(cropX, cropY, cropW, cropH))
         val cg = ciContext.createCGImage(croppedCi, fromRect = croppedCi.extent) ?: return null
-        val uiImage = UIImage.imageWithCGImage(cg)
-        val jpeg = UIImageJPEGRepresentation(uiImage, 0.92) ?: return null
+        return try {
+            val uiImage = UIImage.imageWithCGImage(cg)
+            val jpeg = UIImageJPEGRepresentation(uiImage, 0.92) ?: return null
 
-        val length = jpeg.length.toInt()
-        val bytes = ByteArray(length)
-        bytes.usePinned { pinned ->
-            platform.posix.memcpy(pinned.addressOf(0), jpeg.bytes, jpeg.length)
+            val length = jpeg.length.toInt()
+            val bytes = ByteArray(length)
+            bytes.usePinned { pinned ->
+                platform.posix.memcpy(pinned.addressOf(0), jpeg.bytes, jpeg.length)
+            }
+            bytes
+        } finally {
+            CGImageRelease(cg)
         }
-        return bytes
     }
 
     actual fun release() {
         activeCaptureDelegate = null
+        pendingFrameRequest = null
+        videoDataOutput.setSampleBufferDelegate(null, queue = null)
+        videoSampleDelegate = null
         if (isTorchActiveState) {
             videoDevice?.let { dev ->
                 if (dev.hasTorch && dev.lockForConfiguration(null)) {

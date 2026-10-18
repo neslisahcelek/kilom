@@ -21,12 +21,25 @@ actual class CameraController {
 
     actual val isTorchActive: Boolean get() = isTorchActiveState
 
+    var isLowGlareModeState by mutableStateOf(false)
+        private set
+
+    actual val isLowGlareMode: Boolean get() = isLowGlareModeState
+
     actual fun toggleTorch() {
         isTorchActiveState = !isTorchActiveState
     }
 
+    actual fun toggleLowGlareMode() {
+        isLowGlareModeState = !isLowGlareModeState
+    }
+
     actual suspend fun capture(viewfinder: ViewfinderRect): ByteArray? {
         // Fallback stub on Android if custom camera is requested
+        return null
+    }
+
+    actual suspend fun sampleLiveFrame(viewfinder: ViewfinderRect): ByteArray? {
         return null
     }
 

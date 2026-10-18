@@ -158,7 +158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :composeApp:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n\n# Load Xcode Cloud Java environment if present\nif [ -f \".xcode_cloud_env\" ]; then\n  source .xcode_cloud_env\nfi\n\nif [ -z \"$JAVA_HOME\" ]; then\n  if [ -d \"$HOME/jdk-17/Contents/Home\" ]; then\n    export JAVA_HOME=\"$HOME/jdk-17/Contents/Home\"\n  elif [ -d \"/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home\" ]; then\n    export JAVA_HOME=\"/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home\"\n  elif /usr/libexec/java_home -v 17 >/dev/null 2>&1; then\n    export JAVA_HOME=\"$(/usr/libexec/java_home -v 17)\"\n  fi\nfi\n\nif [ -n \"$JAVA_HOME\" ]; then\n  export PATH=\"$JAVA_HOME/bin:$PATH\"\nfi\n\nchmod +x ./gradlew\n./gradlew :composeApp:embedAndSignAppleFrameworkForXcode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

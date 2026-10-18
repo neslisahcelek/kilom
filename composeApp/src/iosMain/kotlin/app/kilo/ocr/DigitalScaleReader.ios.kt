@@ -133,32 +133,98 @@ internal suspend fun readDigitalScale(source: CIImage, context: CIContext): List
             }
 
             // 2. Run SevenSegmentReader fallback on rectified grayscale pixels (unit-label agnostic)
-            if (width in 80..1200 && height in 60..1200) {
-                val pixels = ByteArray(width * height)
-                val colorSpace = CGColorSpaceCreateDeviceGray()
-                if (colorSpace != null) {
-                    try {
-                        pixels.usePinned { pinned ->
-                            val bitmap = CGBitmapContextCreate(pinned.addressOf(0), width.toULong(), height.toULong(), 8u,
-                                width.toULong(), colorSpace, CGImageAlphaInfo.kCGImageAlphaNone.value) ?: return@usePinned
-                            try {
-                                CGContextDrawImage(bitmap, CGRectMake(0.0, 0.0, width.toDouble(), height.toDouble()), cgImage)
-                            } finally {
-                                CGContextRelease(bitmap)
-                            }
-                        }
-                        coroutineContext.ensureActive()
-                        val value = SevenSegmentReader.read(pixels, width, height, 0.95)
-                        logOcr("ios digital_fallback rectangle=$index segments_verified=${value != null}")
-                        if (value != null) results += value
-                    } finally {
-                        CGColorSpaceRelease(colorSpace)
-                    }
-                }
+            extractSevenSegmentFromCgImage(cgImage, width, height)?.let { value ->
+                logOcr("ios digital_fallback rectangle=$index segments_verified=true")
+                results += value
             }
         } finally {
             CGImageRelease(cgImage)
         }
     }
+
+    // 3. Direct SevenSegmentReader pass on the image itself (critical for viewfinder crops where outer LCD bezel is already cropped out)
+    readSevenSegmentDirect(source, context).forEach { results += it }
+
     return results.toList()
+}
+
+@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
+internal suspend fun readSevenSegmentDirect(source: CIImage, context: CIContext): List<String> {
+    val extent = source.extent
+    val srcW = extent.useContents { size.width }
+    val srcH = extent.useContents { size.height }
+    if (srcW <= 0.0 || srcH <= 0.0) return emptyList()
+
+    val found = mutableSetOf<String>()
+    val scale = minOf(1.0, 900.0 / maxOf(srcW, srcH))
+    val scaled = if (scale < 1.0) {
+        source.imageByApplyingTransform(CGAffineTransformMakeScale(scale, scale))
+    } else {
+        source
+    }
+
+    // Pass A: Full cropped image
+    val fullCg = context.createCGImage(scaled, fromRect = scaled.extent)
+    if (fullCg != null) {
+        try {
+            val w = CGImageGetWidth(fullCg).toInt()
+            val h = CGImageGetHeight(fullCg).toInt()
+            coroutineContext.ensureActive()
+            extractSevenSegmentFromCgImage(fullCg, w, h)?.let { found += it }
+        } finally {
+            CGImageRelease(fullCg)
+        }
+    }
+
+    // Pass B: Center horizontal band (if viewfinder crop has extra top/bottom padding around the LCD strip)
+    val sExtent = scaled.extent
+    val sX = sExtent.useContents { origin.x }
+    val sY = sExtent.useContents { origin.y }
+    val sW = sExtent.useContents { size.width }
+    val sH = sExtent.useContents { size.height }
+    if (sH > 120.0 && sW > 120.0) {
+        val bandRect = CGRectMake(sX + sW * 0.06, sY + sH * 0.18, sW * 0.88, sH * 0.64)
+        val bandCi = scaled.imageByCroppingToRect(bandRect)
+        val bandCg = context.createCGImage(bandCi, fromRect = bandCi.extent)
+        if (bandCg != null) {
+            try {
+                val w = CGImageGetWidth(bandCg).toInt()
+                val h = CGImageGetHeight(bandCg).toInt()
+                coroutineContext.ensureActive()
+                extractSevenSegmentFromCgImage(bandCg, w, h)?.let { found += it }
+            } finally {
+                CGImageRelease(bandCg)
+            }
+        }
+    }
+
+    return found.toList()
+}
+
+@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
+private fun extractSevenSegmentFromCgImage(cgImage: platform.CoreGraphics.CGImageRef, width: Int, height: Int): String? {
+    if (width !in 80..1200 || height !in 60..1200) return null
+    val pixels = ByteArray(width * height)
+    val colorSpace = CGColorSpaceCreateDeviceGray() ?: return null
+    return try {
+        pixels.usePinned { pinned ->
+            val bitmap = CGBitmapContextCreate(
+                pinned.addressOf(0),
+                width.toULong(),
+                height.toULong(),
+                8u,
+                width.toULong(),
+                colorSpace,
+                CGImageAlphaInfo.kCGImageAlphaNone.value,
+            ) ?: return null
+            try {
+                CGContextDrawImage(bitmap, CGRectMake(0.0, 0.0, width.toDouble(), height.toDouble()), cgImage)
+            } finally {
+                CGContextRelease(bitmap)
+            }
+        }
+        SevenSegmentReader.read(pixels, width, height, 0.95)
+    } finally {
+        CGColorSpaceRelease(colorSpace)
+    }
 }

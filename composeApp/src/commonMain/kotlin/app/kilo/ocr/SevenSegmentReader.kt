@@ -72,16 +72,18 @@ internal object SevenSegmentReader {
                 if (y + 1 < bottom) visit(index + width)
             }
             val box = Box(minX, minY, maxX, maxY)
-            if (box.top > height * 0.7 && box.width in (height * 0.025).toInt()..(height * 0.12).toInt() &&
-                box.height in (height * 0.025).toInt()..(height * 0.12).toInt() &&
-                box.width.toDouble() / box.height in 0.6..1.6 &&
-                tail.toDouble() / (box.width * box.height) > 0.45
+            val minDotPx = (height * 0.02).toInt().coerceAtLeast(2)
+            val maxDotPx = (height * 0.13).toInt().coerceAtLeast(minDotPx + 1)
+            if (box.top > height * 0.42 && box.width in minDotPx..maxDotPx &&
+                box.height in minDotPx..maxDotPx &&
+                box.width.toDouble() / box.height in 0.55..1.75 &&
+                tail.toDouble() / (box.width * box.height) > 0.42
             ) {
                 dots += box
                 for (index in 0 until tail) dark[queue[index]] = false
             }
         }
-        if (dots.size != 1) return null
+        if (dots.isEmpty()) return null
 
         val columns = IntArray(width)
         for (y in top until bottom) for (x in left until right) if (dark[y * width + x]) columns[x]++
@@ -102,7 +104,7 @@ internal object SevenSegmentReader {
         }
         val referenceHeight = digits.maxOfOrNull { it.height } ?: return null
         val baseline = digits.maxOfOrNull { it.bottom } ?: return null
-        if (referenceHeight <= height * 0.65) return null
+        if (referenceHeight <= height * 0.25) return null
 
         // If the first detected element is a horizontal minus/tare indicator well above the baseline,
         // safely discard it so values like "- 49.1" are recognized without dropping damaged digits.
@@ -116,7 +118,7 @@ internal object SevenSegmentReader {
             dots.size > 1 -> {
                 val minX = digits.first().centerX
                 val maxX = digits.last().centerX
-                dots.filter { it.centerX in minX..maxX }
+                dots.filter { it.centerX in minX..maxX && kotlin.math.abs(it.bottom - baseline) <= referenceHeight * 0.25 }
                     .minByOrNull { kotlin.math.abs(it.bottom - baseline) }
             }
             else -> null
@@ -124,7 +126,8 @@ internal object SevenSegmentReader {
 
         val decimalAfter = digits.indexOfLast { it.centerX < dot.centerX } + 1
         if (decimalAfter !in 2..3 || digits.size - decimalAfter !in 1..2) return null
-        if (dot.centerX >= digits[decimalAfter].centerX || dot.top < baseline - height * 0.15) return null
+        val maxDotLift = maxOf(height * 0.15, referenceHeight * 0.25)
+        if (dot.centerX >= digits[decimalAfter].centerX || dot.top < baseline - maxDotLift || dot.bottom > baseline + referenceHeight * 0.18) return null
         val result = StringBuilder()
         for ((index, box) in digits.withIndex()) {
             val digit = decode(dark, width, box, referenceHeight, baseline) ?: return null

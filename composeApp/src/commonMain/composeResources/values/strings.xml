@@ -582,6 +582,12 @@
     <string name="hevy_merge_summary_format">%1$d CSV Detailed • %2$d Health Summary</string>
     <string name="hevy_import_merged_notice_format">✅ Merged %1$d new &amp; %2$d upgraded sessions (%3$d total active). Your history is preserved!</string>
     <string name="hevy_sync_from_health_button">Sync Workouts from Health</string>
+
+    <!-- Camera Viewfinder Live Auto-Scan & LED Anti-Glare -->
+    <string name="viewfinder_led_mode_on">LED Anti-Glare: ON</string>
+    <string name="viewfinder_led_mode_off">LED Mode</string>
+    <string name="viewfinder_live_detected_format">Reading %1$s — hold steady…</string>
+    <string name="viewfinder_auto_scan_hint">Auto-scans when stable • Or tap shutter</string>
 </resources>
 
 

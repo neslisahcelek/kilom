@@ -400,6 +400,54 @@ class DashboardViewModel(
         _state.update { it.copy(sheet = null) }
     }
 
+    private fun latestReferenceKg(): Double? {
+        return _state.value.hero?.latest?.entry?.kg
+            ?: _state.value.history.firstOrNull()?.entry?.kg
+            ?: weights.entries.value.maxByOrNull { it.at }?.kg
+    }
+
+    suspend fun analyzeLiveFrame(bytes: ByteArray): Double? {
+        val lines = try {
+            readText(bytes)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            return null
+        }
+        if (lines.isEmpty()) return null
+        val parsed = WeightParser.pick(
+            lines = lines,
+            preferred = _state.value.unit,
+            referenceKg = latestReferenceKg(),
+        ) ?: return null
+        return if (parsed.unit == WeightUnit.KG) parsed.value else parsed.value.lbToKg()
+    }
+
+    fun formatLiveWeight(kg: Double): String {
+        val unit = _state.value.unit
+        val suffix = if (unit == WeightUnit.KG) "kg" else "lb"
+        return "${formatWeight(kg, unit)} $suffix"
+    }
+
+    fun onLiveWeightLocked(kg: Double) {
+        scanJob?.cancel()
+        ++scanCounter
+        val unit = _state.value.unit
+        val suggestedTag = if (_state.value.cycle.isWaterRetentionActive) WeightTag.WATER_RETENTION else null
+        logOcr("live_scan_locked kg=$kg")
+        _state.update {
+            it.copy(
+                sheet = SheetState(
+                    scanning = false,
+                    input = formatWeight(kg, unit),
+                    isPrefilledFromOcr = true,
+                    selectedTag = suggestedTag,
+                )
+            )
+        }
+        feedback.scanComplete()
+    }
+
     fun onImage(bytes: ByteArray) {
         scanJob?.cancel()
         val currentScanId = ++scanCounter
@@ -439,7 +487,11 @@ class DashboardViewModel(
             }
             ensureActive()
             logOcrLines(currentScanId, lines)
-            val parsed = WeightParser.pick(lines, _state.value.unit)
+            val parsed = WeightParser.pick(
+                lines = lines,
+                preferred = _state.value.unit,
+                referenceKg = latestReferenceKg(),
+            )
             if (parsed == null) {
                 logOcr("scan=$currentScanId parser_no_result empty_recognition=${lines.isEmpty()}")
                 finishScan(currentScanId) { it.copy(scanning = false, notice = UiError.OCR_NO_RESULT) }

@@ -154,4 +154,36 @@ class WeightParserTest {
         assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("689 kg"))
         assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("689"))
     }
+
+    @Test fun referenceKgDisambiguatesAndRepairsSevenSegmentLeadingDigit() {
+        // When OCR misreads leading '7' as '1' or '2' ("12.4 kg" or "22.4 kg") and user's recent weight is 72.1 kg
+        assertEquals(
+            ParsedWeight(72.4, WeightUnit.KG),
+            WeightParser.pick(listOf("22.4 kg"), WeightUnit.KG, referenceKg = 72.1)
+        )
+        assertEquals(
+            ParsedWeight(72.4, WeightUnit.KG),
+            WeightParser.pick(listOf("12.4 kg"), WeightUnit.KG, referenceKg = 72.1)
+        )
+        // When OCR misreads leading '6' as '8' ("88.4 kg") and user's recent weight is 68.2 kg
+        assertEquals(
+            ParsedWeight(68.4, WeightUnit.KG),
+            WeightParser.pick(listOf("88.4 kg"), WeightUnit.KG, referenceKg = 68.2)
+        )
+    }
+
+    @Test fun multiPassConsensusBeatsFirstLineOutlier() {
+        assertEquals(
+            ParsedWeight(68.4, WeightUnit.KG),
+            WeightParser.pick(listOf("24.0", "68.4", "68.4"), WeightUnit.KG)
+        )
+    }
+
+    @Test fun middleDotAndExtendedSevenSegmentSubstitutions() {
+        assertEquals(ParsedWeight(72.4, WeightUnit.KG), pick("72·4 kg"))
+        assertEquals(ParsedWeight(72.4, WeightUnit.KG), pick("72•4 kg"))
+        assertEquals(ParsedWeight(68.9, WeightUnit.KG), pick("G8.9 kg"))
+        assertEquals(ParsedWeight(72.5, WeightUnit.KG), pick("T2.5 kg"))
+        assertEquals(ParsedWeight(70.5, WeightUnit.KG), pick("7Q.5 kg"))
+    }
 }

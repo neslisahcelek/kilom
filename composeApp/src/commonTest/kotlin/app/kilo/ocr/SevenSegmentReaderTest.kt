@@ -86,4 +86,17 @@ class SevenSegmentReaderTest {
         for (y in 20..27) for (x in 300..307) pixels[y * width + x] = 35
         assertEquals("49.1", SevenSegmentReader.read(pixels, width, height, .95))
     }
+
+    @Test fun recognizesDigitsInPaddedViewfinderCrop() {
+        // Simulate a viewfinder crop where digits occupy ~40% of total crop height (160px inside 400px tall crop)
+        val paddedHeight = 400
+        val paddedPixels = ByteArray(width * paddedHeight) { 200.toByte() }
+        val basePixels = display(value = "68.9")
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                paddedPixels[(y + 100) * width + x] = basePixels[y * width + x]
+            }
+        }
+        assertEquals("68.9", SevenSegmentReader.read(paddedPixels, width, paddedHeight, .95))
+    }
 }

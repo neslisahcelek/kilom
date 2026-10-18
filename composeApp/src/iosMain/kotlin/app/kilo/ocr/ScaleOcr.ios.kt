@@ -52,10 +52,10 @@ actual class ScaleOcr {
         val t1Start = TimeSource.Monotonic.markNow()
         val t1Lines = runVisionOnData(data)
         val t1Ms = t1Start.elapsedNow().inWholeMilliseconds
-        val t1Success = hasValidWeight(t1Lines)
-        logOcr("ios pass=tier1_direct ms=$t1Ms candidates=${t1Lines.size} valid=$t1Success")
-        if (t1Success) {
-            logOcr("ios vision_completed tier=tier1_direct total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
+        val t1Strong = hasStrongExplicitConsensus(t1Lines)
+        logOcr("ios pass=tier1_direct ms=$t1Ms candidates=${t1Lines.size} strong=$t1Strong")
+        if (t1Strong) {
+            logOcr("ios vision_completed tier=tier1_direct_strong total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
             return@withContext t1Lines
         }
 
@@ -71,90 +71,83 @@ actual class ScaleOcr {
             rawCiImage
         }
 
-        suspend fun tryPass(name: String, block: suspend () -> List<String>): List<String>? {
+        val ensembleLines = mutableListOf<String>()
+        ensembleLines.addAll(t1Lines)
+
+        suspend fun runPass(name: String, block: suspend () -> List<String>): List<String> {
             coroutineContext.ensureActive()
             val start = TimeSource.Monotonic.markNow()
             val lines = block()
             val ms = start.elapsedNow().inWholeMilliseconds
             val valid = hasValidWeight(lines)
             logOcr("ios pass=$name ms=$ms candidates=${lines.size} valid=$valid")
-            return if (valid) lines else null
+            return lines
         }
 
-        // Tier 2: LCD Contrast & Invert Preprocessing (Upright)
-        // 2A: High-contrast LCD + grayscale (common for home bathroom scales)
+        // Tier 2: Upright Multi-Pass Ensemble (LCD Contrast + LED Invert + Direct 7-Segment)
+        // Running these together prevents an early false-positive (e.g. "22.4" instead of "72.4") from short-circuiting the true reading.
         val enhancedLcd = baseImage.imageByApplyingFilter(
             "CIColorControls",
             withInputParameters = mapOf("inputContrast" to 2.4, "inputSaturation" to 0.0)
         )
-        tryPass("tier2_lcd_contrast") { runVisionOnCiImage(enhancedLcd) }?.let {
-            logOcr("ios vision_completed tier=tier2_lcd_contrast total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-            return@withContext it + t1Lines
-        }
+        ensembleLines += runPass("tier2_lcd_contrast") { runVisionOnCiImage(enhancedLcd) }
 
-        // 2B: Inverted polarity (for scales with white LED on black glass)
-        val inverted = baseImage.imageByApplyingFilter("CIColorInvert")
-        tryPass("tier2_invert") { runVisionOnCiImage(inverted) }?.let {
-            logOcr("ios vision_completed tier=tier2_invert total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-            return@withContext it + t1Lines
-        }
-
-        // 2C: High-contrast inverted
         val ledThresholded = baseImage
-            .imageByApplyingFilter("CIColorControls", withInputParameters = mapOf("inputContrast" to 2.8, "inputBrightness" to -0.15, "inputSaturation" to 0.0))
+            .imageByApplyingFilter("CIColorControls", withInputParameters = mapOf("inputContrast" to 2.6, "inputBrightness" to -0.18, "inputSaturation" to 0.0))
             .imageByApplyingFilter("CIColorInvert")
-        tryPass("tier2_led_contrast") { runVisionOnCiImage(ledThresholded) }?.let {
-            logOcr("ios vision_completed tier=tier2_led_contrast total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-            return@withContext it + t1Lines
+        ensembleLines += runPass("tier2_led_contrast") { runVisionOnCiImage(ledThresholded) }
+
+        ensembleLines += runPass("tier2_direct_7seg") { readSevenSegmentDirect(baseImage, ciContext) }
+
+        if (hasExplicitDecimalWeight(ensembleLines)) {
+            logOcr("ios vision_completed tier=tier2_ensemble total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
+            return@withContext ensembleLines
         }
 
-        // 2D: Morphological dilation for glowing LED digits with gaps (bridges disjointed bars like Photo 4)
+        // Tier 2B: Pure invert + Morphological passes for disjointed LED / faint LCD segments
+        val inverted = baseImage.imageByApplyingFilter("CIColorInvert")
+        ensembleLines += runPass("tier2_invert") { runVisionOnCiImage(inverted) }
+
         val ledMorphed = baseImage
-            .imageByApplyingFilter("CIColorControls", withInputParameters = mapOf("inputContrast" to 2.8, "inputBrightness" to -0.1, "inputSaturation" to 0.0))
+            .imageByApplyingFilter("CIColorControls", withInputParameters = mapOf("inputContrast" to 2.8, "inputBrightness" to -0.12, "inputSaturation" to 0.0))
             .imageByApplyingFilter("CIMorphologyMaximum", withInputParameters = mapOf("inputRadius" to 3.0))
             .imageByApplyingFilter("CIColorInvert")
-        tryPass("tier2_led_morphology") { runVisionOnCiImage(ledMorphed) }?.let {
-            logOcr("ios vision_completed tier=tier2_led_morphology total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-            return@withContext it + t1Lines
-        }
+        ensembleLines += runPass("tier2_led_morphology") { runVisionOnCiImage(ledMorphed) }
 
-        // 2E: Morphological closing for dark LCD digits (bridges faint gaps in LCD 7-segment)
         val lcdMorphed = enhancedLcd
             .imageByApplyingFilter("CIColorInvert")
             .imageByApplyingFilter("CIMorphologyMaximum", withInputParameters = mapOf("inputRadius" to 2.0))
             .imageByApplyingFilter("CIColorInvert")
-        tryPass("tier2_lcd_morphology") { runVisionOnCiImage(lcdMorphed) }?.let {
-            logOcr("ios vision_completed tier=tier2_lcd_morphology total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-            return@withContext it + t1Lines
+        ensembleLines += runPass("tier2_lcd_morphology") { runVisionOnCiImage(lcdMorphed) }
+
+        if (hasExplicitDecimalWeight(ensembleLines)) {
+            logOcr("ios vision_completed tier=tier2_morphology total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
+            return@withContext ensembleLines
         }
 
-        // Tier 3: Perspective-corrected LCD screen detection & SevenSegment fallback
-        tryPass("tier3_screen_rectangles") { readDigitalScale(baseImage, ciContext) }?.let {
+        // Tier 3: Perspective-corrected LCD screen rectangle detection & SevenSegment fallback
+        ensembleLines += runPass("tier3_screen_rectangles") { readDigitalScale(baseImage, ciContext) }
+        if (hasValidWeight(ensembleLines)) {
             logOcr("ios vision_completed tier=tier3_screen_rectangles total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-            return@withContext it + t1Lines
+            return@withContext ensembleLines
         }
 
         // Tier 4: Multi-orientation pass (180° upside-down, then 90° & 270°)
         val orientations = listOf(3 to "180", 6 to "90_cw", 8 to "270_cw")
         for ((orient, label) in orientations) {
             val rotated = baseImage.imageByApplyingOrientation(orient)
-            tryPass("tier4_rot_$label") { runVisionOnCiImage(rotated) }?.let {
+            val rotLines = runPass("tier4_rot_$label") { runVisionOnCiImage(rotated) }
+            if (hasValidWeight(rotLines)) {
                 logOcr("ios vision_completed tier=tier4_rot_$label total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-                return@withContext it + t1Lines
+                return@withContext rotLines + ensembleLines
             }
             if (orient == 3) {
-                tryPass("tier4_lcd_180") { runVisionOnCiImage(enhancedLcd.imageByApplyingOrientation(3)) }?.let {
-                    logOcr("ios vision_completed tier=tier4_lcd_180 total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-                    return@withContext it + t1Lines
-                }
-                tryPass("tier4_invert_180") { runVisionOnCiImage(inverted.imageByApplyingOrientation(3)) }?.let {
-                    logOcr("ios vision_completed tier=tier4_invert_180 total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-                    return@withContext it + t1Lines
-                }
-                tryPass("tier4_led_morph_180") { runVisionOnCiImage(ledMorphed.imageByApplyingOrientation(3)) }?.let {
-                    logOcr("ios vision_completed tier=tier4_led_morph_180 total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-                    return@withContext it + t1Lines
-                }
+                val lcd180 = runPass("tier4_lcd_180") { runVisionOnCiImage(enhancedLcd.imageByApplyingOrientation(3)) }
+                if (hasValidWeight(lcd180)) return@withContext lcd180 + ensembleLines
+                val inv180 = runPass("tier4_invert_180") { runVisionOnCiImage(inverted.imageByApplyingOrientation(3)) }
+                if (hasValidWeight(inv180)) return@withContext inv180 + ensembleLines
+                val led180 = runPass("tier4_led_morph_180") { runVisionOnCiImage(ledMorphed.imageByApplyingOrientation(3)) }
+                if (hasValidWeight(led180)) return@withContext led180 + ensembleLines
             }
         }
 
@@ -163,14 +156,31 @@ actual class ScaleOcr {
         for (deg in angles) {
             val rad = deg * PI / 180.0
             val tilted = baseImage.imageByApplyingTransform(CGAffineTransformMakeRotation(rad))
-            tryPass("tier5_tilt_$deg") { runVisionOnCiImage(tilted) }?.let {
+            val tiltLines = runPass("tier5_tilt_$deg") { runVisionOnCiImage(tilted) }
+            if (hasValidWeight(tiltLines)) {
                 logOcr("ios vision_completed tier=tier5_tilt_$deg total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-                return@withContext it + t1Lines
+                return@withContext tiltLines + ensembleLines
             }
         }
 
         logOcr("ios vision_exhausted total_ms=${totalStart.elapsedNow().inWholeMilliseconds}")
-        t1Lines
+        ensembleLines
+    }
+
+    private val explicitDecimalCheckRegex = Regex("\\b\\d{2,3}[.,]\\d{1,2}\\b")
+
+    private fun hasExplicitDecimalWeight(lines: List<String>): Boolean =
+        lines.any { explicitDecimalCheckRegex.containsMatchIn(WeightParser.normalize(it)) } && hasValidWeight(lines)
+
+    private fun hasStrongExplicitConsensus(lines: List<String>): Boolean {
+        if (!hasExplicitDecimalWeight(lines)) return false
+        val matches = lines.mapNotNull { line ->
+            val norm = WeightParser.normalize(line)
+            explicitDecimalCheckRegex.find(norm)?.value?.replace(',', '.')?.toDoubleOrNull()
+        }
+        if (matches.size < 2) return false
+        val counts = matches.groupingBy { (it * 10).toInt() }.eachCount()
+        return (counts.values.maxOrNull() ?: 0) >= 2
     }
 
     private fun hasValidWeight(lines: List<String>): Boolean =

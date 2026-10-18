@@ -44,6 +44,7 @@ import app.kilo.platform.CameraPreview
 import app.kilo.platform.ViewfinderRect
 import app.kilo.platform.rememberCameraController
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.compose.runtime.LaunchedEffect
 import kilo.composeapp.generated.resources.Res
 import kilo.composeapp.generated.resources.camera_choose_gallery
 import kilo.composeapp.generated.resources.camera_permission_denied_desc
@@ -51,7 +52,13 @@ import kilo.composeapp.generated.resources.camera_permission_denied_title
 import kilo.composeapp.generated.resources.camera_permission_open_settings
 import kilo.composeapp.generated.resources.camera_unavailable_desc
 import kilo.composeapp.generated.resources.camera_unavailable_title
+import kilo.composeapp.generated.resources.viewfinder_auto_scan_hint
 import kilo.composeapp.generated.resources.viewfinder_instruction
+import kilo.composeapp.generated.resources.viewfinder_led_mode_off
+import kilo.composeapp.generated.resources.viewfinder_led_mode_on
+import kilo.composeapp.generated.resources.viewfinder_live_detected_format
+import kotlin.math.abs
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -60,11 +67,15 @@ fun CameraViewfinderScreen(
     onDismiss: () -> Unit,
     onImageCaptured: (ByteArray) -> Unit,
     onOpenGallery: () -> Unit,
+    onAnalyzeLiveFrame: (suspend (ByteArray) -> Double?)? = null,
+    onFormatLiveWeight: ((Double) -> String)? = null,
+    onLiveWeightLocked: ((Double) -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     val controller = rememberCameraController()
     val scope = rememberCoroutineScope()
     var isCapturing by remember { mutableStateOf(false) }
+    var liveCandidateKg by remember { mutableStateOf<Double?>(null) }
 
     LifecycleResumeEffect(controller) {
         controller.refreshPermission()
@@ -106,6 +117,35 @@ fun CameraViewfinderScreen(
                     )
                 }
 
+                // Live Auto-Scan Multi-Frame Consensus Loop (2 of last 4 frames within ±0.05 kg)
+                if (onAnalyzeLiveFrame != null && onLiveWeightLocked != null) {
+                    LaunchedEffect(controller, viewfinderRect, isCapturing) {
+                        if (isCapturing) return@LaunchedEffect
+                        val recentReadings = ArrayDeque<Double>()
+                        delay(600L)
+                        while (!isCapturing) {
+                            val frameBytes = controller.sampleLiveFrame(viewfinderRect)
+                            if (frameBytes != null && frameBytes.isNotEmpty() && !isCapturing) {
+                                val detectedKg = onAnalyzeLiveFrame(frameBytes)
+                                if (detectedKg != null && !isCapturing) {
+                                    liveCandidateKg = detectedKg
+                                    recentReadings.addLast(detectedKg)
+                                    while (recentReadings.size > 4) {
+                                        recentReadings.removeFirst()
+                                    }
+                                    val matches = recentReadings.filter { abs(it - detectedKg) <= 0.05 }
+                                    if (matches.size >= 2) {
+                                        val consensusKg = matches.average()
+                                        onLiveWeightLocked(consensusKg)
+                                        return@LaunchedEffect
+                                    }
+                                }
+                            }
+                            delay(420L)
+                        }
+                    }
+                }
+
                 // 3. Dark Scrim & Cutout around Viewfinder
                 Box(
                     modifier = Modifier
@@ -138,7 +178,9 @@ fun CameraViewfinderScreen(
                         .background(Color.Black.copy(alpha = 0.55f))
                 )
 
-                // 4. Center Reticle Frame with corner highlights
+                // 4. Center Reticle Frame with live candidate highlight
+                val hasCandidate = liveCandidateKg != null
+                val reticleColor = if (hasCandidate) Color(0xFF30D158) else Color(0xFF0A84FF)
                 Box(
                     modifier = Modifier
                         .width(reticleW)
@@ -146,7 +188,11 @@ fun CameraViewfinderScreen(
                         .align(Alignment.TopCenter)
                         .padding(top = reticleTop)
                         .clip(RoundedCornerShape(18.dp))
-                        .border(2.dp, Color(0xFF0A84FF).copy(alpha = 0.85f), RoundedCornerShape(18.dp)),
+                        .border(
+                            width = if (hasCandidate) 2.5.dp else 2.dp,
+                            color = reticleColor.copy(alpha = 0.9f),
+                            shape = RoundedCornerShape(18.dp),
+                        ),
                     contentAlignment = Alignment.Center,
                 ) {
                     Box(
@@ -158,24 +204,52 @@ fun CameraViewfinderScreen(
                 }
 
                 // 5. Instruction Pill above reticle
+                val candidateValue = liveCandidateKg
+                val instructionText = if (candidateValue != null) {
+                    val formatted = onFormatLiveWeight?.invoke(candidateValue) ?: "$candidateValue kg"
+                    "✨ " + stringResource(Res.string.viewfinder_live_detected_format, formatted)
+                } else {
+                    stringResource(Res.string.viewfinder_instruction)
+                }
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .padding(top = reticleTop - 48.dp)
                         .clip(RoundedCornerShape(20.dp))
-                        .background(Color.Black.copy(alpha = 0.65f))
-                        .border(0.5.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(20.dp))
+                        .background(Color.Black.copy(alpha = 0.72f))
+                        .border(
+                            width = 0.8.dp,
+                            color = if (candidateValue != null) Color(0xFF30D158).copy(alpha = 0.6f) else Color.White.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(20.dp),
+                        )
                         .padding(horizontal = 16.dp, vertical = 6.dp)
                 ) {
                     Text(
-                        text = stringResource(Res.string.viewfinder_instruction),
-                        color = Color.White,
+                        text = instructionText,
+                        color = if (candidateValue != null) Color(0xFF30D158) else Color.White,
                         fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+
+                // Sub-hint below reticle
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = reticleTop + reticleH + 14.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Black.copy(alpha = 0.5f))
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = stringResource(Res.string.viewfinder_auto_scan_hint),
+                        color = Color.White.copy(alpha = 0.75f),
+                        fontSize = 11.5.sp,
                         fontWeight = FontWeight.Medium,
                     )
                 }
 
-                // 6. Top Bar: Close and Torch Buttons
+                // 6. Top Bar: Close, LED Low-Glare Mode, and Torch Buttons
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -187,28 +261,66 @@ fun CameraViewfinderScreen(
                 ) {
                     CloseButton(onClick = onDismiss)
 
-                    // Torch Toggle Button
-                    Box(
-                        modifier = Modifier
-                            .size(42.dp)
-                            .clip(CircleShape)
-                            .background(
-                                if (controller.isTorchActive) Color(0xFFFFCC00) else Color.Black.copy(alpha = 0.5f)
-                            )
-                            .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                role = Role.Button,
-                                onClick = { controller.toggleTorch() },
-                            ),
-                        contentAlignment = Alignment.Center,
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
-                            text = "⚡",
-                            color = if (controller.isTorchActive) Color.Black else Color.White,
-                            fontSize = 18.sp,
-                        )
+                        // LED Anti-Glare Toggle Button (reduces exposure for glowing LED scales)
+                        val isLowGlare = controller.isLowGlareMode
+                        Box(
+                            modifier = Modifier
+                                .height(42.dp)
+                                .clip(RoundedCornerShape(21.dp))
+                                .background(
+                                    if (isLowGlare) Color(0xFF0A84FF).copy(alpha = 0.88f) else Color.Black.copy(alpha = 0.5f)
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = if (isLowGlare) Color.White.copy(alpha = 0.5f) else Color.White.copy(alpha = 0.2f),
+                                    shape = RoundedCornerShape(21.dp),
+                                )
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    role = Role.Button,
+                                    onClick = { controller.toggleLowGlareMode() },
+                                )
+                                .padding(horizontal = 14.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = "🔆 " + stringResource(
+                                    if (isLowGlare) Res.string.viewfinder_led_mode_on else Res.string.viewfinder_led_mode_off
+                                ),
+                                color = Color.White,
+                                fontSize = 12.5.sp,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+
+                        // Torch Toggle Button
+                        Box(
+                            modifier = Modifier
+                                .size(42.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    if (controller.isTorchActive) Color(0xFFFFCC00) else Color.Black.copy(alpha = 0.5f)
+                                )
+                                .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    role = Role.Button,
+                                    onClick = { controller.toggleTorch() },
+                                ),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = "⚡",
+                                color = if (controller.isTorchActive) Color.Black else Color.White,
+                                fontSize = 18.sp,
+                            )
+                        }
                     }
                 }
 

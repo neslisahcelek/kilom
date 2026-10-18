@@ -442,6 +442,16 @@ fun DashboardScreen(
                     isCameraOpen = false
                     photoPicker.pickFromGallery()
                 },
+                onAnalyzeLiveFrame = { bytes ->
+                    viewModel.analyzeLiveFrame(bytes)
+                },
+                onFormatLiveWeight = { kg ->
+                    viewModel.formatLiveWeight(kg)
+                },
+                onLiveWeightLocked = { kg ->
+                    isCameraOpen = false
+                    viewModel.onLiveWeightLocked(kg)
+                },
             )
         }
 
