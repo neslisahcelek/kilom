@@ -28,9 +28,14 @@ JAVA_BASE_DIR="$HOME/jdk-17"
 JAVA_HOME_DIR="$JAVA_BASE_DIR/Contents/Home"
 
 if [ ! -x "$JAVA_HOME_DIR/bin/java" ]; then
-    echo "JDK 17 bulunamadı, Adoptium Temurin 17 indiriliyor..."
+    ARCH="$(uname -m)"
+    echo "JDK 17 bulunamadı, mimari ($ARCH) için Adoptium Temurin 17 indiriliyor..."
     mkdir -p "$JAVA_BASE_DIR"
-    curl -sL "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.12_7.tar.gz" | tar -xz -C "$JAVA_BASE_DIR" --strip-components=1
+    if [ "$ARCH" = "x86_64" ]; then
+        curl -sL "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_mac_hotspot_17.0.12_7.tar.gz" | tar -xz -C "$JAVA_BASE_DIR" --strip-components=1
+    else
+        curl -sL "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.12_7.tar.gz" | tar -xz -C "$JAVA_BASE_DIR" --strip-components=1
+    fi
 fi
 
 export JAVA_HOME="$JAVA_HOME_DIR"
