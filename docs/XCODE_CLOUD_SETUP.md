@@ -58,10 +58,13 @@ Bu adımı Windows bilgisayarınızdaki herhangi bir web tarayıcısından yapab
      - Description: `Zero-cost automated TestFlight deployment on release tags.`
    - **Primary Repository:**
      - Repository: `eager-shannon` (veya `kilom` reponuz)
-   - **Branch / Tag Changes (TETİKLEYİCİ - ÇOK ÖNEMLİ):**
-     - **Branch Changes:** Seçili ise **KALDIRIN** (Tüm push'larda boşuna kota harcamasın).
-     - **Tag Changes:** **EKLEYİN**.
-     - Tag Filter: `Starts with: v` (Örnek: `v1.0.0`, `v1.0.1`).
+   - **Branch / Tag Changes (TETİKLEYİCİ):**
+     - **Branch Changes:** **EKLEYİN**
+     - **Branch:** `master` (veya `main`)
+     - **Files and Folders:** Any changes
+   - **Build Number (OTOMATİK SÜRÜM KODU YÜKSELTME):**
+     - **Build Number:** `Automatically increment build number` seçeneğini aktif edin (Next build number: `9` veya üzeri).
+     - *Not: Depodaki `ci_scripts/ci_pre_xcodebuild.sh` betiği bu build numarasını (`$CI_BUILD_NUMBER`) derleme anında otomatik olarak `Config.xcconfig`'e işler; her master push'unda sürüm kodu otomatik olarak 1 artar.*
    - **Actions (Aksiyonlar):**
      - `+` butonuna basıp **Archive** aksiyonunu seçin.
      - Platform: **iOS**

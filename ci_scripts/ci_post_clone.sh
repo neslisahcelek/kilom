@@ -58,6 +58,15 @@ echo "JAVA_HOME=$JAVA_HOME"
 cd "$REPO_ROOT"
 ./gradlew --version
 
+# 7. Otomatik Sürüm Kodu (Build Number) Senkronizasyonu
+if [ -n "$CI_BUILD_NUMBER" ]; then
+    echo "Xcode Cloud CI_BUILD_NUMBER tespit edildi: $CI_BUILD_NUMBER"
+    perl -pi -e "s/^CURRENT_PROJECT_VERSION=.*/CURRENT_PROJECT_VERSION=$CI_BUILD_NUMBER/" "$REPO_ROOT/iosApp/Configuration/Config.xcconfig"
+    echo "Config.xcconfig güncellendi:"
+    grep "CURRENT_PROJECT_VERSION" "$REPO_ROOT/iosApp/Configuration/Config.xcconfig"
+fi
+
 echo "=========================================================="
 echo " [Kilom] ci_post_clone başarıyla tamamlandı!"
 echo "=========================================================="
+
